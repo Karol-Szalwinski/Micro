@@ -1,3 +1,5 @@
-app:
-    resource: '@AppBundle/Controller/'
-    type: annotation
+micro:
+    resource: "@MicroBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
