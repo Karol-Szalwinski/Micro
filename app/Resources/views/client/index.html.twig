@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+
+
+                <!-- END: Content-->
+                <h1>Clients list</h1>
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Shortname</th>
+                        <th>Adddate</th>
+                        <th>Buidings</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for client in clients %}
+                        <tr>
+                            <td><a href="{{ path('client_show', { 'id': client.id }) }}">{{ client.id }}</a></td>
+                            <td>{{ client.name }}</td>
+                            <td>{{ client.shortname }}</td>
+                            <td>{% if client.addDate %}{{ client.addDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                            <td>{{ client.buidings }}</td>
+                            <td>
+                                <ul>
+                                    <li>
+                                        <a href="{{ path('client_show', { 'id': client.id }) }}">show</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('client_edit', { 'id': client.id }) }}">edit</a>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <ul>
+                    <li>
+                        <a href="{{ path('client_new') }}">Create a new client</a>
+                    </li>
+                </ul>
+
+{% endblock %}
