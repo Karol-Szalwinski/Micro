@@ -433,8 +433,14 @@
                                                                                          data-i18n="nav.dash.main">Klienci</span><span
                             class="badge badge badge-info badge-pill float-right mr-2">3</span></a>
                 <ul class="menu-content">
-                    <li><a class="menu-item" href="dashboard-ecommerce.html"><i></i><span
-                                    data-i18n="nav.dash.ecommerce">Dodaj</span></a>
+                    <li><a class="menu-item" href="{{ path('client_index') }}"><i></i><span
+                                    data-i18n="nav.dash.ecommerce">Lista</span></a>
+                    </li>
+
+                </ul>
+                <ul class="menu-content">
+                    <li><a class="menu-item" href="{{ path('client_new') }}"><i></i><span
+                                    data-i18n="nav.dash.ecommerce">Dodaj nowego</span></a>
                     </li>
 
                 </ul>
@@ -447,10 +453,19 @@
 <!-- END: Main Menu-->
 
 <!-- BEGIN: Content-->
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row mb-1">
+        </div>
+        <div class="content-body">
+            {% block body %}
 
-{% block content %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
 
-{% endblock %}
+
 
 <!-- END: Content-->
 
