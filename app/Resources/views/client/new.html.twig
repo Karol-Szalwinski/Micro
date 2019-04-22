@@ -1,16 +1,66 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Dodaj klienta{% endblock %}
+
 {% block body %}
-    <h1>Client creation</h1>
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type="submit" value="Create" />
-    {{ form_end(form) }}
+       <!-- Basic form layout section start -->
+    <section id="horizontal-form-layouts">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title" id="horz-layout-basic">Formularz tworzenia nowego klienta</h4>
+                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                        <div class="heading-elements">
+                            <ul class="list-inline mb-0">
+                                <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                <li><a data-action="close"><i class="ft-x"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
 
-    <ul>
-        <li>
-            <a href="{{ path('client_index') }}">Back to the list</a>
-        </li>
-    </ul>
+                            {{ form_start(form, { 'attr': {'class': 'form form-horizontal'} }) }}
+
+
+                            <div class="form-body">
+                                <h4 class="form-section"><i class="ft-user"></i> Dane Klienta</h4>
+                                <div class="form-group row">
+                                    {{ form_label(form.name, 'Nazwa klienta', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}
+
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(form.shortname, 'Skrót', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        {{ form_widget(form.shortname, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź skrót'} }) }}
+                                    </div>
+                                </div>
+
+
+                                <div class="form-actions">
+                                    <button type="button" onClick="javascript:history.go(-1)" class="btn btn-warning mr-1">
+                                        <i class="ft-x"></i> Anuluj
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="la la-check-square-o"></i> Zapisz
+                                    </button>
+                                </div>
+                                {{ form_end(form) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
 {% endblock %}

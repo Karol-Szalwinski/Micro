@@ -1,9 +1,8 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Lista klientów{% endblock %}
+
 {% block body %}
-
-
-
 
     <!-- Default ordering table -->
     <section id="ordering">
@@ -31,7 +30,7 @@
                                     <tr>
                                         <th>Id</th>
                                         <th>Nazwa</th>
-                                        <th>Skrot/th>
+                                        <th>Skrót</th>
                                         <th>Data dodania</th>
                                         <th>Budynki</th>
                                         <th>Akcje</th>
@@ -39,20 +38,23 @@
                                     </thead>
                                     <tbody>
                                     {% for client in clients %}
-                                        <tr>
-                                            <td><a href="{{ path('client_show', { 'id': client.id }) }}">{{ client.id }}</a></td>
+                                        <tr onclick='location.href = "{{ path('client_show', { 'id': client.id }) }}";'>
+                                            <td>
+                                                <a href="{{ path('client_show', { 'id': client.id }) }}">{{ client.id }}</a>
+                                            </td>
                                             <td>{{ client.name }}</td>
                                             <td>{{ client.shortname }}</td>
                                             <td>{% if client.addDate %}{{ client.addDate|date('Y-m-d H:i:s') }}{% endif %}</td>
                                             <td>{{ client.buidings }}</td>
                                             <td>
                                                 <ul>
-                                                    <li>
-                                                        <a href="{{ path('client_show', { 'id': client.id }) }}">show</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="{{ path('client_edit', { 'id': client.id }) }}">edit</a>
-                                                    </li>
+
+                                                    <a href="{{ path('client_show', { 'id': client.id }) }}"><i
+                                                                class="la la-eye "></i></a>
+
+                                                    <a href="{{ path('client_edit', { 'id': client.id }) }}"><i
+                                                                class="la la-pencil "></i></a>
+
                                                 </ul>
                                             </td>
                                         </tr>
@@ -63,7 +65,7 @@
                                     <tr>
                                         <th>Id</th>
                                         <th>Nazwa</th>
-                                        <th>Skrot/th>
+                                        <th>Skrót</th>
                                         <th>Data dodania</th>
                                         <th>Budynki</th>
                                         <th>Akcje</th>
@@ -78,5 +80,12 @@
         </div>
     </section>
     <!--/ Default ordering table -->
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
+
+    <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>
 
 {% endblock %}

@@ -20,27 +20,29 @@
           rel="stylesheet">
 
     <!-- BEGIN: Vendor CSS-->
-    <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/vendors.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/vendors.min.css') }}">
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->
-    <link rel="stylesheet" type="text/css" href="../../../app-assets/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../../../app-assets/css/bootstrap-extended.css">
-    <link rel="stylesheet" type="text/css" href="../../../app-assets/css/colors.css">
-    <link rel="stylesheet" type="text/css" href="../../../app-assets/css/components.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/bootstrap.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/bootstrap-extended.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/colors.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/components.css') }}">
     <!-- END: Theme CSS-->
 
     <!-- BEGIN: Page CSS-->
-    <link rel="stylesheet" type="text/css" href="../../../app-assets/css/core/menu/menu-types/vertical-menu-modern.css">
-    <link rel="stylesheet" type="text/css" href="../../../app-assets/css/core/colors/palette-gradient.css">
-    <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/charts/jquery-jvectormap-2.0.3.css">
-    <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/charts/morris.css">
-    <link rel="stylesheet" type="text/css" href="../../../app-assets/fonts/simple-line-icons/style.css">
-    <link rel="stylesheet" type="text/css" href="../../../app-assets/css/core/colors/palette-gradient.css">
+    <link rel="stylesheet" type="text/css"
+          href="{{ asset('app-assets/css/core/menu/menu-types/vertical-menu-modern.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/core/colors/palette-gradient.css') }}">
+    <link rel="stylesheet" type="text/css"
+          href="{{ asset('app-assets/vendors/css/charts/jquery-jvectormap-2.0.3.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/charts/morris.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/fonts/simple-line-icons/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/core/colors/palette-gradient.css') }}">
     <!-- END: Page CSS-->
 
     <!-- BEGIN: Custom CSS-->
-    <link rel="stylesheet" type="text/css" href="../../../assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
     <!-- END: Custom CSS-->
 
 </head>
@@ -59,9 +61,10 @@
                 <li class="nav-item mobile-menu d-lg-none mr-auto"><a
                             class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i
                                 class="ft-menu font-large-1"></i></a></li>
-                <li class="nav-item mr-auto"><a class="navbar-brand" href="{{ path('micro_default_index') }}" ><img class="brand-logo"
-                                                                                            alt="modern admin logo"
-                                                                                            src="../../../app-assets/images/logo/logo.png">
+                <li class="nav-item mr-auto"><a class="navbar-brand" href="{{ path('micro_default_index') }}"><img
+                                class="brand-logo"
+                                alt="modern admin logo"
+                                src="../../../app-assets/images/logo/logo.png">
                         <h3 class="brand-text">Micro</h3>
                     </a></li>
                 <li class="nav-item d-none d-lg-block nav-toggle"><a class="nav-link modern-nav-toggle pr-0"
@@ -219,9 +222,9 @@
                                                                        id="dropdown-flag" href="#"
                                                                        data-toggle="dropdown" aria-haspopup="true"
                                                                        aria-expanded="false"><i
-                                    class="flag-icon flag-icon-gb"></i><span class="selected-language"></span></a>
+                                    class="flag-icon flag-icon-pl"></i><span class="selected-language"></span></a>
                         <div class="dropdown-menu" aria-labelledby="dropdown-flag"><a class="dropdown-item" href="#"><i
-                                        class="flag-icon flag-icon-gb"></i> English</a><a class="dropdown-item"
+                                        class="flag-icon flag-icon-pl"></i> Polish</a><a class="dropdown-item"
                                                                                           href="#"><i
                                         class="flag-icon flag-icon-fr"></i> French</a><a class="dropdown-item" href="#"><i
                                         class="flag-icon flag-icon-cn"></i> Chinese</a><a class="dropdown-item"
@@ -429,8 +432,9 @@
 <div class="main-menu menu-fixed menu-dark menu-accordion menu-shadow" data-scroll-to-active="true">
     <div class="main-menu-content">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-            <li class=" nav-item"><a href="{{ path('client_index') }}"><i class="la la-group "></i><span class="menu-title"
-                                                                                         data-i18n="nav.dash.main">Klienci</span><span
+            <li class=" nav-item"><a href="{{ path('client_index') }}"><i class="la la-group "></i><span
+                            class="menu-title"
+                            data-i18n="nav.dash.main">Klienci</span><span
                             class="badge badge badge-info badge-pill float-right mr-2">3</span></a>
                 <ul class="menu-content">
                     <li><a class="menu-item" href="{{ path('client_index') }}"><i></i><span
@@ -466,7 +470,6 @@
 </div>
 
 
-
 <!-- END: Content-->
 
 <div class="sidenav-overlay"></div>
@@ -485,25 +488,31 @@
 
 
 <!-- BEGIN: Vendor JS-->
-<script src="../../../app-assets/vendors/js/vendors.min.js"></script>
+<script src="{{ asset('app-assets/vendors/js/vendors.min.js') }}"></script>
 <!-- BEGIN Vendor JS-->
 
 <!-- BEGIN: Page Vendor JS-->
-<script src="../../../app-assets/vendors/js/charts/chart.min.js"></script>
-<script src="../../../app-assets/vendors/js/charts/raphael-min.js"></script>
-<script src="../../../app-assets/vendors/js/charts/morris.min.js"></script>
-<script src="../../../app-assets/vendors/js/charts/jvector/jquery-jvectormap-2.0.3.min.js"></script>
-<script src="../../../app-assets/vendors/js/charts/jvector/jquery-jvectormap-world-mill.js"></script>
-<script src="../../../app-assets/data/jvector/visitor-data.js"></script>
+<script src="{{ asset('app-assets/vendors/js/charts/chart.min.js') }}"></script>
+<script src="{{ asset('app-assets/vendors/js/charts/raphael-min.js') }}"></script>
+<script src="{{ asset('app-assets/vendors/js/charts/morris.min.js') }}"></script>
+<script src="{{ asset('app-assets/vendors/js/charts/jvector/jquery-jvectormap-2.0.3.min.js') }}"></script>
+<script src="{{ asset('app-assets/vendors/js/charts/jvector/jquery-jvectormap-world-mill.js') }}"></script>
+<script src="{{ asset('app-assets/data/jvector/visitor-data.js') }}"></script>
 <!-- END: Page Vendor JS-->
 
 <!-- BEGIN: Theme JS-->
-<script src="../../../app-assets/js/core/app-menu.js"></script>
-<script src="../../../app-assets/js/core/app.js"></script>
+<script src="{{ asset('app-assets/js/core/app-menu.js') }}"></script>
+<script src="{{ asset('app-assets/js/core/app.js') }}"></script>
 <!-- END: Theme JS-->
 
-<!-- BEGIN: Page JS-->
-<script src="../../../app-assets/js/scripts/pages/dashboard-sales.js"></script>
+{#<!-- BEGIN: Page JS-->#}
+{#<script src="{{ asset('app-assets/js/scripts/pages/dashboard-sales.js') }}"></script>#}
+{#<!-- END: Page JS-->#}
+
+<!-- BEGIN: Page extra JS-->
+{% block scripts %}
+
+{%  endblock %}
 <!-- END: Page JS-->
 
 </body>

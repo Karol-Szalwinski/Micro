@@ -49,6 +49,14 @@ class Client
      */
     private $buidings;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->addDate = new \DateTime();
+    }
+
 
     /**
      * Get id.
