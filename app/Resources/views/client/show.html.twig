@@ -1,44 +1,114 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Klient{% endblock %}
+
 {% block body %}
-    <h1>Client</h1>
+    <!-- Content header -->
+    <div class="content-header row">
+        <div class="content-header-left col-md-6 col-12">
+            <h3 class="content-header-title mb-0">Baza klientów</h3>
+            <div class="row breadcrumbs-top">
+                <div class="breadcrumb-wrapper col-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a
+                                    href="{{ path('micro_default_index') }}">Główna</a>
+                        </li>
+                        <li class="breadcrumb-item"><a href="{{ path('client_index') }}">Lista
+                                klientów</a>
+                        </li>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ client.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ client.name }}</td>
-            </tr>
-            <tr>
-                <th>Shortname</th>
-                <td>{{ client.shortname }}</td>
-            </tr>
-            <tr>
-                <th>Adddate</th>
-                <td>{% if client.addDate %}{{ client.addDate|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Buidings</th>
-                <td>{{ client.buidings }}</td>
-            </tr>
-        </tbody>
-    </table>
+                        <li class="breadcrumb-item active">Klient nr {{ client.id }}
+                        </li>
 
-    <ul>
-        <li>
-            <a href="{{ path('client_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('client_edit', { 'id': client.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="content-header-left col-md-6 col-12">
+            <div class="btn-group float-md-right" role="group"
+                 aria-label="Button group with nested dropdown">
+                <div class="btn-group" role="group">
+                    <a class="btn btn-outline-info round" href="{{ path('client_index') }}"><i
+                                class="la la-backward"></i> Wróć do listy klientów</a>
+
+                    <button class="btn btn-outline-info round dropdown-toggle dropdown-menu-right"
+                            id="btnGroupDrop1"
+                            type="button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"><i
+                                class="icon-cog3 icon-left"></i> Ustawienia
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1"><a class="dropdown-item"
+                                                                                  href="card-bootstrap.html">Bootstrap
+                            Cards</a><a class="dropdown-item" href="component-buttons-extended.html">Buttons
+                            Extended</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content header -->
+
+    <!-- Basic form layout section start -->
+    <section id="horizontal-form-layouts">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title" id="horz-layout-basic">Klient</h4>
+                        <a class="heading-elements-toggle"><i
+                                    class="la la-ellipsis-v font-medium-3"></i></a>
+                        <div class="heading-elements">
+                            <ul class="list-inline mb-0">
+                                <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                <li><a data-action="close"><i class="ft-x"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+
+                            <h4><i class="ft-user"></i> Dane Klienta</h4>
+
+                            <div class="col-md-8">
+                                <table class="table table-borderless table-column">
+                                    <tr>
+                                        <th>Nazwa firmy:</th>
+                                        <td>{{ client.name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Skrót:</th>
+                                        <td>{{ client.shortname }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Numer telefonu:</th>
+                                        <td>500 500 500</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Email:</th>
+                                        <td>test@wp.pl</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Data dodania:</th>
+                                        <td>{% if client.addDate %}{{ client.addDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+
+
+{% endblock %}
+
+{% block scripts %}
+    <!-- BEGIN: Page JS-->
+    <script src="{{ asset('app-assets/js/scripts/pages/hospital-patient-profile.js') }}"></script>
+    <!-- END: Page JS-->
 {% endblock %}
