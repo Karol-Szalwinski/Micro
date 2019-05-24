@@ -25,7 +25,8 @@
         <div class="content-header-left col-md-6 col-12">
             <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
                 <div class="btn-group" role="group">
-                    <a class="btn btn-outline-info round" href="{{ path('client_index') }}"><i class="la la-backward" ></i> Wróć do listy klientów</a>
+                    <a class="btn btn-outline-info round" href="{{ path('client_index') }}"><i
+                                class="la la-backward"></i> Wróć do listy klientów</a>
 
                     <button class="btn btn-outline-info round dropdown-toggle dropdown-menu-right" id="btnGroupDrop1"
                             type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
@@ -41,7 +42,7 @@
     </div>
     <!-- Content header -->
 
-       <!-- Basic form layout section start -->
+    <!-- Basic form layout section start -->
     <section id="horizontal-form-layouts">
         <div class="row">
             <div class="col-md-12">
@@ -61,7 +62,7 @@
                     <div class="card-content collpase show">
                         <div class="card-body">
 
-                            {{ form_start(form, { 'attr': {'class': 'form form-horizontal'} }) }}
+                            {{ form_start(form, { 'attr': {'class': 'form form-horizontal inputmask'} }) }}
 
 
                             <div class="form-body">
@@ -79,10 +80,23 @@
                                         {{ form_widget(form.shortname, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź skrót'} }) }}
                                     </div>
                                 </div>
+                                <div class="form-group row">
+                                    {{ form_label(form.email, 'E-mail', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        {{ form_widget(form.email, { 'attr': {'class': 'form-control email-inputmask', 'placeholder': 'Wprowadź email', 'im-insert': 'true'} }) }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(form.phoneNumber, 'Telefon', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        {{ form_widget(form.phoneNumber, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź telefon'} }) }}
+                                    </div>
+                                </div>
 
 
                                 <div class="form-actions">
-                                    <button type="button" onClick="javascript:history.go(-1)" class="btn btn-warning mr-1">
+                                    <button type="button" onClick="javascript:history.go(-1)"
+                                            class="btn btn-warning mr-1">
                                         <i class="ft-x"></i> Anuluj
                                     </button>
                                     <button type="submit" class="btn btn-primary">
@@ -100,4 +114,11 @@
 
 
 
+{% endblock %}
+
+{% block scripts %}
+    <!-- BEGIN: Page JS-->
+    <script src="{{ asset('app-assets/vendors/js/forms/extended/inputmask/jquery.inputmask.bundle.min.js') }}"></script>
+    <script src="{{ asset('app-assets/js/scripts/forms/extended/form-inputmask.js') }}"></script>
+    <!-- END: Page JS-->
 {% endblock %}

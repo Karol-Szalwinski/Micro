@@ -36,6 +36,20 @@ class Client
     private $shortname;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="email", type="string", length=100, nullable=true)
+     */
+    private $email;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="phoneNumber", type="string", length=20, nullable=true)
+     */
+    private $phoneNumber;
+
+    /**
      * @var \DateTime|null
      *
      * @ORM\Column(name="addDate", type="datetime", nullable=true)
@@ -48,6 +62,14 @@ class Client
      * @ORM\Column(name="buidings", type="string", length=255, nullable=true)
      */
     private $buidings;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->addDate = new \DateTime();
+    }
 
 
     /**

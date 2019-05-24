@@ -79,6 +79,18 @@
                                         {{ form_widget(edit_form.shortname, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź skrót'} }) }}
                                     </div>
                                 </div>
+                                <div class="form-group row">
+                                    {{ form_label(edit_form.email, 'E-mail', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        {{ form_widget(edit_form.email, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź email'} }) }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(edit_form.phoneNumber, 'Telefon', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        {{ form_widget(edit_form.phoneNumber, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź telefon'} }) }}
+                                    </div>
+                                </div>
 
 
                                 <div class="form-actions">
