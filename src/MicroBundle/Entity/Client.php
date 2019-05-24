@@ -45,14 +45,14 @@ class Client
     /**
      * @var string|null
      *
-     * @ORM\Column(name="phoneNumber", type="string", length=20, nullable=true)
+     * @ORM\Column(name="phone_number", type="string", length=20, nullable=true)
      */
     private $phoneNumber;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="addDate", type="datetime", nullable=true)
+     * @ORM\Column(name="add_date", type="datetime", nullable=true)
      */
     private $addDate;
 
