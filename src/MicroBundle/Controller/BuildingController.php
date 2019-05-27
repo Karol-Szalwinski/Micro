@@ -3,9 +3,11 @@
 namespace MicroBundle\Controller;
 
 use MicroBundle\Entity\Building;
+use MicroBundle\Entity\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+
 
 /**
  * Building controller.
@@ -34,16 +36,18 @@ class BuildingController extends Controller
     /**
      * Creates a new building entity.
      *
-     * @Route("/new", name="building_new")
+     * @Route("/new/{client}", name="building_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function newAction(Client $client, Request $request)
     {
         $building = new Building();
         $form = $this->createForm('MicroBundle\Form\BuildingType', $building);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $building->setClient($client);
+            $client->addBuilding($building);
             $em = $this->getDoctrine()->getManager();
             $em->persist($building);
             $em->flush();
@@ -53,6 +57,7 @@ class BuildingController extends Controller
 
         return $this->render('building/new.html.twig', array(
             'building' => $building,
+            'client' => $client,
             'form' => $form->createView(),
         ));
     }
@@ -88,7 +93,7 @@ class BuildingController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('building_edit', array('id' => $building->getId()));
+            return $this->redirectToRoute('building_index');
         }
 
         return $this->render('building/edit.html.twig', array(

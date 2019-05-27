@@ -6,14 +6,14 @@
     <!-- Content header -->
     <div class="content-header row">
         <div class="content-header-left col-md-6 col-12">
-            <h3 class="content-header-title mb-0">Baza klientów</h3>
+            <h3 class="content-header-title mb-0">Słownik Urządzeń PPOŻ</h3>
             <div class="row breadcrumbs-top">
                 <div class="breadcrumb-wrapper col-12">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ path('micro_default_index') }}">Główna</a>
                         </li>
 
-                        <li class="breadcrumb-item active">Lista klientów
+                        <li class="breadcrumb-item active">Słownik urządzeń
                         </li>
 
                     </ol>
@@ -23,8 +23,8 @@
         <div class="content-header-left col-md-6 col-12">
             <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
                 <div class="btn-group" role="group">
-                    <a class="btn btn-outline-info round" href="{{ path('client_new') }}"><i
-                                class="la la-user-plus"></i> Dodaj nowego</a>
+                    <a class="btn btn-outline-info round" href="{{ path('devicename_new') }}"><i
+                                class="la la-user-plus"></i> Dodaj nowe</a>
 
                     <button class="btn btn-outline-info round dropdown-toggle dropdown-menu-right" id="btnGroupDrop1"
                             type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
@@ -46,7 +46,7 @@
             <div class="card">
                 <div class="card-head">
                     <div class="card-header">
-                        <h4 class="card-title">Lista klientów</h4>
+                        <h4 class="card-title">Słownik urządzeń</h4>
                         <div class="heading-elements mt-0">
                         </div>
                     </div>
@@ -63,45 +63,28 @@
                                     <th>Id</th>
                                     <th>Nazwa</th>
                                     <th>Skrót</th>
-                                    <th>Email</th>
-                                    <th>Telefon</th>
-                                    <th>Liczba Budynków</th>
                                     <th>Akcje</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for client in clients %}
+                                {% for deviceName in deviceNames %}
                                     <tr>
-                                        <td>{{ client.id }}</td>
-                                        <td onclick='location.href = "{{ path('client_show', { 'id': client.id }) }}";'>
+                                        <td>{{ deviceName.id }}</td>
+                                        <td onclick='location.href = "{{ path('devicename_show', { 'id': deviceName.id }) }}";'>
                                             <div class="media">
-                                                <div class="media-left pr-1"><span
-                                                            class="avatar avatar-sm avatar-online rounded-circle"><img
-                                                                src="../../../app-assets/images/portrait/small/avatar-s-2.png"
-                                                                alt="avatar"><i></i></span></div>
+
                                                 <div class="media-body media-middle">
-                                                    <a class="media-heading name">{{ client.name }}</a>
+                                                    <a class="media-heading name">{{ deviceName.name }}</a>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="text-center"
-                                            onclick='location.href = "{{ path('client_show', { 'id': client.id }) }}";'>
-                                            <div>{{ client.shortname }}</div>
-                                        </td>
-                                        <td class="text-center">
-                                            <a class="email" href="mailto:email@example.com">{{ client.email }}</a>
-                                        </td>
-                                        <td class="phone"
-                                            onclick='location.href = "{{ path('client_show', { 'id': client.id }) }}";'>
-                                            {{ client.phoneNumber }}
-                                        </td>
-                                        <td>
-
-                                            {{ client.buildings|length }}
+                                            onclick='location.href = "{{ path('devicename_show', { 'id': deviceName.id }) }}";'>
+                                            <div>{{ deviceName.shortname }}</div>
                                         </td>
 
                                         <td>
-                                            <a href="{{ path('client_edit', { 'id': client.id }) }}"
+                                            <a href="{{ path('devicename_edit', { 'id': deviceName.id }) }}"
                                                class="primary edit mr-1"><i class="la la-pencil"></i></a>
                                             <a class="danger delete mr-1"><i class="la la-trash-o"></i></a>
                                             <span class="dropdown">
@@ -111,13 +94,13 @@
                                                                             class="la la-ellipsis-v"></i></a>
                                                                 <span aria-labelledby="btnSearchDrop2"
                                                                       class="dropdown-menu mt-1 dropdown-menu-right">
-                                                                    <a href="{{ path('client_edit', { 'id': client.id }) }}"
+                                                                    <a href="{{ path('devicename_edit', { 'id': deviceName.id }) }}"
                                                                        class="dropdown-item"><i
                                                                                 class="ft-edit-2"></i>
                                                                         Edytuj</a>
                                                                     <a href="#" class="dropdown-item delete"><i
                                                                                 class="ft-trash-2"></i> Usuń</a>
-                                                                    <a href="{{ path('client_new') }}"
+                                                                    <a href="{{ path('devicename_new') }}"
                                                                        class="dropdown-item"><i
                                                                                 class="ft-plus-circle warning"></i> Dodaj</a>
 
@@ -132,9 +115,6 @@
                                     <th>Id</th>
                                     <th>Nazwa</th>
                                     <th>Skrót</th>
-                                    <th>Email</th>
-                                    <th>Telefon</th>
-                                    <th>Liczba Budynków</th>
                                     <th>Akcje</th>
                                 </tr>
                                 </tfoot>

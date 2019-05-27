@@ -12,10 +12,14 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ path('micro_default_index') }}">Główna</a>
                         </li>
-                        <li class="breadcrumb-item"><a href="{{ path('building_index') }}">Lista budynków</a>
+                        <li class="breadcrumb-item"><a href="{{ path('client_index') }}">Lista
+                                klientów</a>
+                        </li>
+                        <li class="breadcrumb-item"><a href = "{{ path('client_show', { 'id': building.client.id }) }}">
+                                Klient {{ building.client.name }}</a>
                         </li>
 
-                        <li class="breadcrumb-item active">Modyfikuj budynek
+                        <li class="breadcrumb-item active">Modyfikowanie budynku
                         </li>
 
                     </ol>
@@ -25,8 +29,8 @@
         <div class="content-header-left col-md-6 col-12">
             <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
                 <div class="btn-group" role="group">
-                    <a class="btn btn-outline-info round" href="{{ path('building_index') }}"><i
-                                class="la la-backward"></i> Wróć do listy budynków</a>
+                    <a class="btn btn-outline-info round" href = "{{ path('client_show', { 'id': building.client.id }) }}"><i
+                                class="la la-backward"></i> Wróć do klienta</a>
 
                     <button class="btn btn-outline-info round dropdown-toggle dropdown-menu-right" id="btnGroupDrop1"
                             type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i

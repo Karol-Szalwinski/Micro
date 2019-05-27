@@ -71,6 +71,18 @@ class Building
      */
     private $description;
 
+    /**
+     * Many Buildings have One Client.
+     * @ORM\ManyToOne(targetEntity="Client", inversedBy="buildings", cascade={"persist"})
+     * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
+     */
+    private $client;
+
+    /**
+     * One Building has Many FireProtectionDevices.
+     * @ORM\OneToMany(targetEntity="FireProtectionDevice", mappedBy="building", cascade={"persist"})
+     */
+    private $fireProtectionDevices;
 
     /**
      * Get id.
@@ -224,5 +236,96 @@ class Building
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set postalCode.
+     *
+     * @param string $postalCode
+     *
+     * @return Building
+     */
+    public function setPostalCode($postalCode)
+    {
+        $this->postalCode = $postalCode;
+
+        return $this;
+    }
+
+    /**
+     * Get postalCode.
+     *
+     * @return string
+     */
+    public function getPostalCode()
+    {
+        return $this->postalCode;
+    }
+
+    /**
+     * Set client.
+     *
+     * @param \MicroBundle\Entity\Client|null $client
+     *
+     * @return Building
+     */
+    public function setClient(\MicroBundle\Entity\Client $client = null)
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    /**
+     * Get client.
+     *
+     * @return \MicroBundle\Entity\Client|null
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->buildings = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add building.
+     *
+     * @param \MicroBundle\Entity\FireProtectionDevice $building
+     *
+     * @return Building
+     */
+    public function addBuilding(\MicroBundle\Entity\FireProtectionDevice $building)
+    {
+        $this->buildings[] = $building;
+
+        return $this;
+    }
+
+    /**
+     * Remove building.
+     *
+     * @param \MicroBundle\Entity\FireProtectionDevice $building
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeBuilding(\MicroBundle\Entity\FireProtectionDevice $building)
+    {
+        return $this->buildings->removeElement($building);
+    }
+
+    /**
+     * Get buildings.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBuildings()
+    {
+        return $this->buildings;
     }
 }

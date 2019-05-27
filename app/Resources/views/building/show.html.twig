@@ -1,52 +1,321 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Budynek{% endblock %}
+
 {% block body %}
-    <h1>Building</h1>
+    <!-- Content header -->
+    <div class="content-header row">
+        <div class="content-header-left col-md-6 col-12">
+            <h3 class="content-header-title mb-0">Baza budynków</h3>
+            <div class="row breadcrumbs-top">
+                <div class="breadcrumb-wrapper col-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a
+                                    href="{{ path('micro_default_index') }}">Główna</a>
+                        </li>
+                        <li class="breadcrumb-item"><a href="{{ path('client_index') }}">Lista
+                                klientów</a>
+                        </li>
+                        <li class="breadcrumb-item"><a href="{{ path('client_show', { 'id': building.client.id }) }}">
+                                Klient {{ building.client.name }}</a>
+                        </li>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ building.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ building.name }}</td>
-            </tr>
-            <tr>
-                <th>Street</th>
-                <td>{{ building.street }}</td>
-            </tr>
-            <tr>
-                <th>Houseno</th>
-                <td>{{ building.houseNo }}</td>
-            </tr>
-            <tr>
-                <th>Flatno</th>
-                <td>{{ building.flatNo }}</td>
-            </tr>
-            <tr>
-                <th>City</th>
-                <td>{{ building.city }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ building.description }}</td>
-            </tr>
-        </tbody>
-    </table>
+                        <li class="breadcrumb-item active">Budynek o nazwie {{ building.name }}
+                        </li>
 
-    <ul>
-        <li>
-            <a href="{{ path('building_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('building_edit', { 'id': building.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="content-header-left col-md-6 col-12">
+            <div class="btn-group float-md-right" role="group"
+                 aria-label="Button group with nested dropdown">
+                <div class="btn-group" role="group">
+                    <a class="btn btn-outline-info round" href="{{ path('building_index') }}"><i
+                                class="la la-backward"></i> Wróć do listy budynków</a>
+
+                    <button class="btn btn-outline-info round dropdown-toggle dropdown-menu-right"
+                            id="btnGroupDrop1"
+                            type="button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"><i
+                                class="icon-cog3 icon-left"></i> Ustawienia
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1"><a class="dropdown-item"
+                                                                                  href="card-bootstrap.html">Bootstrap
+                            Cards</a><a class="dropdown-item" href="component-buttons-extended.html">Buttons
+                            Extended</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content header -->
+
+    <!-- Basic form layout section start -->
+    <section id="horizontal-form-layouts">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title" id="horz-layout-basic">Budynek</h4>
+                        <a class="heading-elements-toggle"><i
+                                    class="la la-ellipsis-v font-medium-3"></i></a>
+                        <div class="heading-elements">
+                            <ul class="list-inline mb-0">
+                                <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                <li><a data-action="close"><i class="ft-x"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+
+                            <h4><i class="ft-user"></i> Dane Budynku</h4>
+                            <hr>
+                            <div class="col-md-8">
+                                <table class="table table-borderless table-column">
+                                    <tr>
+                                        <th>Nazwa budynku:</th>
+                                        <td>{{ building.name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Adres:</th>
+                                        <td>ul.{{ building.street }} {{ building.houseNo }}/{{ building.flatNo }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <td>{{ building.city }} {{ building.postalCode }}</td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <section class="row all-contacts">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-head">
+                    <div class="card-header">
+                        <h4 class="card-title">Urządzenia PPOŻ w tym budynku</h4>
+                        <div class="heading-elements mt-0">
+                            <button class="btn btn-primary btn-sm " data-toggle="modal" data-target="#AddContactModal">
+                                <i class="d-md-none d-block ft-plus white"></i>
+                                <span class="d-md-block d-none">Dodaj nowe urządzenie</span></button>
+                            <div class="modal fade" id="AddContactModal" tabindex="-1" role="dialog"
+                                 aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+
+                                        <section class="contact-form">
+                                            <form id="form-add-contact" class="contact-input">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel1">Dodaj nowe
+                                                        urządzenie</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <fieldset class="form-group col-12">
+                                                        <input type="text" id="contact-name"
+                                                               class="contact-name form-control" placeholder="Name">
+                                                    </fieldset>
+                                                    <fieldset class="form-group col-12">
+                                                        <input type="text" id="contact-email"
+                                                               class="contact-email form-control" placeholder="Email">
+                                                    </fieldset>
+                                                    <fieldset class="form-group col-12">
+                                                        <input type="text" id="contact-phone"
+                                                               class="contact-phone form-control"
+                                                               placeholder="Phone Number">
+                                                    </fieldset>
+                                                    <fieldset class="form-group col-12">
+                                                        <input type="checkbox" id="favorite"
+                                                               class="contact-fav input-chk"> Favorite
+                                                    </fieldset>
+                                                    <fieldset class="form-group col-12">
+                                                        <input type="file" class="form-control-file" id="user-image">
+                                                    </fieldset>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <fieldset class="form-group position-relative has-icon-left mb-0">
+                                                        <button type="button" id="add-contact-item"
+                                                                class="btn btn-info add-contact-item"
+                                                                data-dismiss="modal"><i
+                                                                    class="la la-paper-plane-o d-block d-lg-none"></i>
+                                                            <span class="d-none d-lg-block">Add New</span></button>
+                                                    </fieldset>
+                                                </div>
+                                            </form>
+                                        </section>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="EditContactModal" tabindex="-1" role="dialog"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+
+                                        <section class="contact-form">
+                                            <form id="form-edit-contact" class="contact-input">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Modyfikuj
+                                                        urządzenie</h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <fieldset class="form-group col-12">
+                                                        <input type="text" id="name" class="name form-control"
+                                                               placeholder="Name">
+                                                    </fieldset>
+                                                    <fieldset class="form-group col-12">
+                                                        <input type="text" id="email" class="email form-control"
+                                                               placeholder="Email">
+                                                    </fieldset>
+                                                    <fieldset class="form-group col-12">
+                                                        <input type="text" id="phone" class="phone form-control"
+                                                               placeholder="Phone Number">
+                                                    </fieldset>
+                                                    <span id="fav" class="d-none"></span>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <fieldset class="form-group position-relative has-icon-left mb-0">
+                                                        <button type="button" id="edit-contact-item"
+                                                                class="btn btn-info edit-contact-item"
+                                                                data-dismiss="modal"><i
+                                                                    class="la la-paper-plane-o d-lg-none"></i> <span
+                                                                    class="d-none d-lg-block">Edit</span></button>
+                                                    </fieldset>
+                                                </div>
+                                            </form>
+                                        </section>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="dropdown">
+                                                <button id="btnSearchDrop1" type="button" data-toggle="dropdown"
+                                                        aria-haspopup="true" aria-expanded="true"
+                                                        class="btn btn-warning dropdown-toggle dropdown-menu-right btn-sm"><i
+                                                            class="ft-download-cloud white"></i></button>
+                                                <span aria-labelledby="btnSearchDrop1"
+                                                      class="dropdown-menu mt-1 dropdown-menu-right">
+                                                    <a href="#" class="dropdown-item"><i
+                                                                class="ft-upload"></i> Import</a>
+                                                    <a href="#" class="dropdown-item"><i class="ft-download"></i> Export</a>
+                                                    <a href="#" class="dropdown-item"><i class="ft-shuffle"></i> Find Duplicate</a>
+                                                </span>
+                                            </span>
+                            <button class="btn btn-default btn-sm"><i class="ft-settings white"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+
+                        <!-- Device List table -->
+                        <button type="button" class="btn btn-sm btn-danger delete-all mb-1">Usuń Wszystkie</button>
+                        <div class="table-responsive">
+                            <table id="users-contacts"
+                                   class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
+                                <thead>
+
+                                <tr>
+                                    <th>Nr pętli</th>
+                                    <th>Nr urządzenia</th>
+                                    <th>Nazwa</th>
+                                    <th>Skrót</th>
+                                    <th>Ostatni przegląd</th>
+                                    <th>Akcje</th>
+                                </tr>
+
+                                </thead>
+                                <tbody>
+                                {% for device in building.fireProtectionDevices %}
+                                    <tr>
+                                        <td class="text-center">
+                                            <a class="text-center" >{{ device.loopNo }}</a>
+                                        </td>
+                                        <td class="text-center">
+                                            <a class="text-center" >{{ device.number }}</a>
+                                        </td>
+                                        <td class="text-center">
+                                            <a class="text-center" >{{ device.name }}</a>
+                                        </td>
+                                        <td class="text-center">
+                                            <a class="text-center" >{{ device.shortname }}</a>
+                                        </td>
+                                        <td class="text-center">
+                                            <a class="timeline-date" >{{ device.lastServiceDate }}</a>
+                                        </td>
+
+                                        <td>
+                                            <a data-toggle="modal" data-target="#EditContactModal"
+                                               class="primary edit mr-1"><i class="la la-pencil"></i></a>
+                                            <a class="danger delete mr-1"><i class="la la-trash-o"></i></a>
+                                            <span class="dropdown">
+                                                                <a id="btnSearchDrop2" data-toggle="dropdown"
+                                                                   aria-haspopup="true" aria-expanded="true"
+                                                                   class="dropdown-toggle dropdown-menu-right"><i
+                                                                            class="la la-ellipsis-v"></i></a>
+                                                                <span aria-labelledby="btnSearchDrop2"
+                                                                      class="dropdown-menu mt-1 dropdown-menu-right">
+                                                                    <a data-toggle="modal"
+                                                                       data-target="#EditContactModal"
+                                                                       class="dropdown-item edit"><i
+                                                                                class="ft-edit-2"></i>
+                                                                        Edit</a>
+                                                                    <a href="#" class="dropdown-item delete"><i
+                                                                                class="ft-trash-2"></i> Delete</a>
+                                                                    <a href="#" class="dropdown-item"><i
+                                                                                class="ft-plus-circle primary"></i> Projects</a>
+                                                                    <a href="#" class="dropdown-item"><i
+                                                                                class="ft-plus-circle info"></i> Team</a>
+                                                                    <a href="#" class="dropdown-item"><i
+                                                                                class="ft-plus-circle warning"></i> Clients</a>
+                                                                    <a href="#" class="dropdown-item"><i
+                                                                                class="ft-plus-circle success"></i> Friends</a>
+                                                                </span>
+                                                            </span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th>Nr pętli</th>
+                                    <th>Nr urządzenia</th>
+                                    <th>Nazwa</th>
+                                    <th>Skrót</th>
+                                    <th>Ostatni przegląd</th>
+                                    <th>Akcje</th>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+{% endblock %}
+
+{% block scripts %}
+    <!-- BEGIN: Page JS-->
+    <script src="{{ asset('app-assets/js/scripts/pages/hospital-patient-profile.js') }}"></script>
+    <!-- END: Page JS-->
 {% endblock %}

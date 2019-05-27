@@ -57,11 +57,10 @@ class Client
     private $addDate;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="buidings", type="string", length=255, nullable=true)
+     * One Client has Many Building.
+     * @ORM\OneToMany(targetEntity="Building", mappedBy="client", cascade={"persist"})
      */
-    private $buidings;
+    private $buildings;
 
     /**
      * Constructor
@@ -154,30 +153,7 @@ class Client
         return $this->addDate;
     }
 
-    /**
-     * Set buidings.
-     *
-     * @param string|null $buidings
-     *
-     * @return Client
-     */
-    public function setBuidings($buidings = null)
-    {
-        $this->buidings = $buidings;
-
-        return $this;
-    }
-
-    /**
-     * Get buidings.
-     *
-     * @return string|null
-     */
-    public function getBuidings()
-    {
-        return $this->buidings;
-    }
-
+    
     /**
      * Set email.
      *
@@ -224,5 +200,41 @@ class Client
     public function getPhoneNumber()
     {
         return $this->phoneNumber;
+    }
+
+    /**
+     * Add building.
+     *
+     * @param \MicroBundle\Entity\Building $building
+     *
+     * @return Client
+     */
+    public function addBuilding(\MicroBundle\Entity\Building $building)
+    {
+        $this->buildings[] = $building;
+
+        return $this;
+    }
+
+    /**
+     * Remove building.
+     *
+     * @param \MicroBundle\Entity\Building $building
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeBuilding(\MicroBundle\Entity\Building $building)
+    {
+        return $this->buildings->removeElement($building);
+    }
+
+    /**
+     * Get buildings.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBuildings()
+    {
+        return $this->buildings;
     }
 }
