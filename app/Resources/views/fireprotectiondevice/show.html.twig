@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Fireprotectiondevice</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ fireProtectionDevice.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ fireProtectionDevice.name }}</td>
+            </tr>
+            <tr>
+                <th>Shortname</th>
+                <td>{{ fireProtectionDevice.shortname }}</td>
+            </tr>
+            <tr>
+                <th>Loopno</th>
+                <td>{{ fireProtectionDevice.loopNo }}</td>
+            </tr>
+            <tr>
+                <th>Number</th>
+                <td>{{ fireProtectionDevice.number }}</td>
+            </tr>
+            <tr>
+                <th>Lastservicedate</th>
+                <td>{% if fireProtectionDevice.lastServiceDate %}{{ fireProtectionDevice.lastServiceDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('fireprotectiondevice_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('fireprotectiondevice_edit', { 'id': fireProtectionDevice.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

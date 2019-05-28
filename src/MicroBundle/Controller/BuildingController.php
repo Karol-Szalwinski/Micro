@@ -4,9 +4,11 @@ namespace MicroBundle\Controller;
 
 use MicroBundle\Entity\Building;
 use MicroBundle\Entity\Client;
+use MicroBundle\Entity\FireProtectionDevice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
@@ -68,13 +70,42 @@ class BuildingController extends Controller
      * @Route("/{id}", name="building_show")
      * @Method("GET")
      */
-    public function showAction(Building $building)
+    public function showAction(Building $building, Request $request)
     {
         $deleteForm = $this->createDeleteForm($building);
+
+        $fireProtectionDevice = new Fireprotectiondevice();
+        $form = $this->createForm('MicroBundle\Form\FireProtectionDeviceType', $fireProtectionDevice);
+        $form->handleRequest($request);
+        $editForm = $this->createForm('MicroBundle\Form\FireProtectionDeviceEditType', $fireProtectionDevice);
+        $editForm->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $building->addFireProtectionDevice($fireProtectionDevice);
+            $fireProtectionDevice->setBuilding($building);
+            $chosenDevice = $fireProtectionDevice->getName();
+            $fireProtectionDevice->setName($chosenDevice->getName());
+            $fireProtectionDevice->setShortname($chosenDevice->getShortName());
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($fireProtectionDevice);
+            $em->flush();
+
+            return $this->redirectToRoute('building_show', array('id' => $building->getId()));
+        }
+
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('building_show', array('id' => $building->getId()));
+        }
+
 
         return $this->render('building/show.html.twig', array(
             'building' => $building,
             'delete_form' => $deleteForm->createView(),
+            'form' => $form->createView(),
+            'edit_form' => $editForm->createView()
         ));
     }
 
@@ -135,7 +166,6 @@ class BuildingController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('building_delete', array('id' => $building->getId())))
             ->setMethod('DELETE')
-            ->getForm()
-        ;
+            ->getForm();
     }
 }

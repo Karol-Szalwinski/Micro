@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Fireprotectiondevices list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Shortname</th>
+                <th>Loopno</th>
+                <th>Number</th>
+                <th>Lastservicedate</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for fireProtectionDevice in fireProtectionDevices %}
+            <tr>
+                <td><a href="{{ path('fireprotectiondevice_show', { 'id': fireProtectionDevice.id }) }}">{{ fireProtectionDevice.id }}</a></td>
+                <td>{{ fireProtectionDevice.name }}</td>
+                <td>{{ fireProtectionDevice.shortname }}</td>
+                <td>{{ fireProtectionDevice.loopNo }}</td>
+                <td>{{ fireProtectionDevice.number }}</td>
+                <td>{% if fireProtectionDevice.lastServiceDate %}{{ fireProtectionDevice.lastServiceDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('fireprotectiondevice_show', { 'id': fireProtectionDevice.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('fireprotectiondevice_edit', { 'id': fireProtectionDevice.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('fireprotectiondevice_new') }}">Create a new fireProtectionDevice</a>
+        </li>
+    </ul>
+{% endblock %}
