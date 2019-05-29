@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class FireProtectionDeviceEditType extends AbstractType
 {
@@ -15,6 +16,7 @@ class FireProtectionDeviceEditType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('id', HiddenType::class)
             ->add('name', EntityType::class, [
                 'class'=>'MicroBundle\Entity\DeviceName',
                 'choice_label'=>'name',
@@ -42,7 +44,7 @@ class FireProtectionDeviceEditType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'microbundle_fireprotectiondevice';
+        return 'microbundle_fireprotectiondevice_edit';
     }
 
 

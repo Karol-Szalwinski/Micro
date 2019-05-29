@@ -193,13 +193,17 @@
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
-                                            <div class="modal-body" >
+                                            <div class="modal-body">
                                                 <div class="form-body">
                                                     <h4 class="form-section"><i class="ft-user"></i> Dane Urządzenia
                                                     </h4>
+
+                                                    {{ form_widget(edit_form.id, { 'attr': {'class': 'form-control'} }) }}
+
+
                                                     <div class="form-group row">
                                                         {{ form_label(edit_form.name, 'Nazwa', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
-                                                        <div class="col-md-9 mx-auto" onclick="fillEditForm();">
+                                                        <div class="col-md-9 mx-auto" onclick="setShortname();">
                                                             {{ form_widget(edit_form.name, { 'attr': {'class': 'form-control'} }) }}
 
                                                         </div>
@@ -228,6 +232,7 @@
 
 
                                                 <div class="modal-footer">
+                                                    <test></test>
                                                     <div class="">
                                                         <button type="button" data-dismiss="modal"
                                                                 class="btn btn-warning mr-1">
@@ -286,16 +291,17 @@
                                 {% for device in building.fireProtectionDevices|sort %}
                                     <tr>
                                         <td class="text-center">
-                                            <a class="text-center">{{ device.loopNo }}</a>
+                                            <a class="text-center" id="loop-{{ device.id }}">{{ device.loopNo }}</a>
                                         </td>
                                         <td class="text-center">
-                                            <a class="text-center">{{ device.number }}</a>
+                                            <a class="text-center" id="number-{{ device.id }}">{{ device.number }}</a>
                                         </td>
                                         <td class="text-center">
-                                            <a class="text-center">{{ device.name }}</a>
+                                            <a class="text-center" id="name-{{ device.id }}">{{ device.name }}</a>
                                         </td>
                                         <td class="text-center">
-                                            <a class="text-center">{{ device.shortname }}</a>
+                                            <a class="text-center "
+                                               id="shortname-{{ device.id }}">{{ device.shortname }}</a>
                                         </td>
                                         <td class="text-center">
                                             <a class="timeline-date">{{ device.lastServiceDate }}</a>
@@ -303,6 +309,7 @@
 
                                         <td>
                                             <a data-toggle="modal" data-target="#EditContactModal"
+                                               id="edit-{{ device.id }}"
                                                class="primary edit mr-1"><i class="la la-pencil"></i></a>
                                             <a class="danger delete mr-1"><i class="la la-trash-o"></i></a>
                                             <span class="dropdown">
@@ -355,23 +362,44 @@
 
 {% block scripts %}
     <!-- BEGIN: Page JS-->
-    <script src="{{ asset('app-assets/js/scripts/pages/hospital-patient-profile.js') }}"></script>
+    {#<script src="{{ asset('app-assets/js/scripts/pages/hospital-patient-profile.js') }}"></script>#}
     <!-- END: Page JS-->
     <script>
         function setShortname() {
             var x = document.getElementById("microbundle_fireprotectiondevice_name").value;
             document.getElementById("microbundle_fireprotectiondevice_shortname").value = x;
         }
+
         function setName() {
             var x = document.getElementById("microbundle_fireprotectiondevice_shortname").value;
             document.getElementById("microbundle_fireprotectiondevice_name").value = x;
         }
-        function fillEditForm() {
-            document.getElementById("microbundle_fireprotectiondevice_name").value = 1;
-            document.getElementById("microbundle_fireprotectiondevice_shortname").value = 1;
-            document.getElementById("microbundle_fireprotectiondevice_loopNo").value = 4;
-            document.getElementById("microbundle_fireprotectiondevice_number").value = 5;
 
-        }
+        $("a[data-target='#EditContactModal']").on("click", function () {
+
+            var id = $(this).attr('id').substr(5);
+            $('#microbundle_fireprotectiondevice_edit_id').val(id);
+
+            var $name = $("#name-" + id).text();
+            var $namevalue = $("option:contains('" + $name + "')").val();
+            $('#microbundle_fireprotectiondevice_edit_name').val($namevalue);
+
+            var $shortname = $("#shortname-" + id).text();
+            var $shortnamevalue = $("option:contains('" + $shortname + "')").val();
+            $('#microbundle_fireprotectiondevice_edit_shortname').val($shortnamevalue);
+
+            var $loop = $("#loop-" + id).text();
+            $('#microbundle_fireprotectiondevice_edit_loopNo').val($loop);
+
+            var $number = $("#number-" + id).text();
+            $('#microbundle_fireprotectiondevice_edit_number').val($number);
+            // document.getElementById("microbundle_fireprotectiondevice_edit_shortname").value = 3;
+            // document.getElementById("microbundle_fireprotectiondevice_edit_loopNo").value =
+            //     document.getElementById("loop-" + id).innerHTML;
+            //
+            // document.getElementById("microbundle_fireprotectiondevice_edit_number").value =
+            //     document.getElementById("number-" + id).innerHTML;
+
+        });
     </script>
 {% endblock %}

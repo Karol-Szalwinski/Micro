@@ -77,7 +77,8 @@ class BuildingController extends Controller
         $fireProtectionDevice = new Fireprotectiondevice();
         $form = $this->createForm('MicroBundle\Form\FireProtectionDeviceType', $fireProtectionDevice);
         $form->handleRequest($request);
-        $editForm = $this->createForm('MicroBundle\Form\FireProtectionDeviceEditType', $fireProtectionDevice);
+        $tempFireProtectionDevice = new Fireprotectiondevice();
+        $editForm = $this->createForm('MicroBundle\Form\FireProtectionDeviceEditType', $tempFireProtectionDevice);
         $editForm->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -94,8 +95,16 @@ class BuildingController extends Controller
             return $this->redirectToRoute('building_show', array('id' => $building->getId()));
         }
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($editForm->isSubmitted() ) {
+            $em = $this->getDoctrine()->getManager();
+
+            $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')
+                ->findOneById($tempFireProtectionDevice->getId());
+            $fireProtectionDevice->setName($tempFireProtectionDevice->getName()->getName());
+            $fireProtectionDevice->setShortname($tempFireProtectionDevice->getShortname()->getShortname());
+            $fireProtectionDevice->setLoopNo($tempFireProtectionDevice->getLoopNo());
+            $fireProtectionDevice->setNumber($tempFireProtectionDevice->getNumber());
+            $em->flush();
 
             return $this->redirectToRoute('building_show', array('id' => $building->getId()));
         }
