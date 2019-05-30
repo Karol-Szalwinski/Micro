@@ -328,4 +328,40 @@ class Building
     {
         return $this->buildings;
     }
+
+    /**
+     * Add fireProtectionDevice.
+     *
+     * @param \MicroBundle\Entity\FireProtectionDevice $fireProtectionDevice
+     *
+     * @return Building
+     */
+    public function addFireProtectionDevice(\MicroBundle\Entity\FireProtectionDevice $fireProtectionDevice)
+    {
+        $this->fireProtectionDevices[] = $fireProtectionDevice;
+
+        return $this;
+    }
+
+    /**
+     * Remove fireProtectionDevice.
+     *
+     * @param \MicroBundle\Entity\FireProtectionDevice $fireProtectionDevice
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeFireProtectionDevice(\MicroBundle\Entity\FireProtectionDevice $fireProtectionDevice)
+    {
+        return $this->fireProtectionDevices->removeElement($fireProtectionDevice);
+    }
+
+    /**
+     * Get fireProtectionDevices.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFireProtectionDevices()
+    {
+        return $this->fireProtectionDevices;
+    }
 }

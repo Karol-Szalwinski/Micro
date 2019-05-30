@@ -72,7 +72,7 @@
                         <div class="card-body">
 
 
-                            <h4><i class="ft-user"></i> Dane Budynku</h4>
+                            <h4><i class="ft-home"></i> Dane Budynku</h4>
                             <hr>
                             <div class="col-md-8">
                                 <table class="table table-borderless table-column">
@@ -131,14 +131,14 @@
                                                     </h4>
                                                     <div class="form-group row">
                                                         {{ form_label(form.name, 'Nazwa', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
-                                                        <div class="col-md-9 mx-auto" onclick="setShortname();">
+                                                        <div class="col-md-9 mx-auto">
                                                             {{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}
 
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         {{ form_label(form.shortname, 'Skrót', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
-                                                        <div class="col-md-9 mx-auto" onclick="setName();">
+                                                        <div class="col-md-9 mx-auto">
                                                             {{ form_widget(form.shortname, { 'attr': {'class': 'form-control'} }) }}
                                                         </div>
                                                     </div>
@@ -157,7 +157,6 @@
                                                     </div>
 
                                                 </div>
-
 
                                                 <div class="modal-footer">
                                                     <div class="">
@@ -203,14 +202,14 @@
 
                                                     <div class="form-group row">
                                                         {{ form_label(edit_form.name, 'Nazwa', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
-                                                        <div class="col-md-9 mx-auto" onclick="setShortname();">
+                                                        <div class="col-md-9 mx-auto">
                                                             {{ form_widget(edit_form.name, { 'attr': {'class': 'form-control'} }) }}
 
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
                                                         {{ form_label(edit_form.shortname, 'Skrót', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
-                                                        <div class="col-md-9 mx-auto" onclick="setName();">
+                                                        <div class="col-md-9 mx-auto">
                                                             {{ form_widget(edit_form.shortname, { 'attr': {'class': 'form-control'} }) }}
                                                         </div>
                                                     </div>
@@ -232,7 +231,7 @@
 
 
                                                 <div class="modal-footer">
-                                                    <test></test>
+
                                                     <div class="">
                                                         <button type="button" data-dismiss="modal"
                                                                 class="btn btn-warning mr-1">
@@ -312,30 +311,7 @@
                                                id="edit-{{ device.id }}"
                                                class="primary edit mr-1"><i class="la la-pencil"></i></a>
                                             <a class="danger delete mr-1"><i class="la la-trash-o"></i></a>
-                                            <span class="dropdown">
-                                                                <a id="btnSearchDrop2" data-toggle="dropdown"
-                                                                   aria-haspopup="true" aria-expanded="true"
-                                                                   class="dropdown-toggle dropdown-menu-right"><i
-                                                                            class="la la-ellipsis-v"></i></a>
-                                                                <span aria-labelledby="btnSearchDrop2"
-                                                                      class="dropdown-menu mt-1 dropdown-menu-right">
-                                                                    <a data-toggle="modal"
-                                                                       data-target="#EditContactModal"
-                                                                       class="dropdown-item edit"><i
-                                                                                class="ft-edit-2"></i>
-                                                                        Edit</a>
-                                                                    <a href="#" class="dropdown-item delete"><i
-                                                                                class="ft-trash-2"></i> Delete</a>
-                                                                    <a href="#" class="dropdown-item"><i
-                                                                                class="ft-plus-circle primary"></i> Projects</a>
-                                                                    <a href="#" class="dropdown-item"><i
-                                                                                class="ft-plus-circle info"></i> Team</a>
-                                                                    <a href="#" class="dropdown-item"><i
-                                                                                class="ft-plus-circle warning"></i> Clients</a>
-                                                                    <a href="#" class="dropdown-item"><i
-                                                                                class="ft-plus-circle success"></i> Friends</a>
-                                                                </span>
-                                                            </span>
+
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -364,17 +340,45 @@
     <!-- BEGIN: Page JS-->
     {#<script src="{{ asset('app-assets/js/scripts/pages/hospital-patient-profile.js') }}"></script>#}
     <!-- END: Page JS-->
+    <!-- BEGIN: Vendor JS-->
+    <script src="{{ asset('app-assets/vendors/js/vendors.min.js') }}"></script>
+    <!-- BEGIN Vendor JS-->
+
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
+    <!-- END: Page Vendor JS-->
+
+    <!-- BEGIN: Theme JS-->
+    <script src="{{ asset('app-assets/js/core/app-menu.js') }}"></script>
+    <script src="{{ asset('app-assets/js/core/app.js') }}"></script>
+    <!-- END: Theme JS-->
+
+    <!-- BEGIN: Page JS-->
+    <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>
+    <!-- END: Page JS-->
+
+
+
+
     <script>
-        function setShortname() {
-            var x = document.getElementById("microbundle_fireprotectiondevice_name").value;
-            document.getElementById("microbundle_fireprotectiondevice_shortname").value = x;
-        }
+        //set same value name and shortname in form
+        $("#microbundle_fireprotectiondevice_name").on("click", function () {
+            $("#microbundle_fireprotectiondevice_shortname").val($(this).val());
+        });
 
-        function setName() {
-            var x = document.getElementById("microbundle_fireprotectiondevice_shortname").value;
-            document.getElementById("microbundle_fireprotectiondevice_name").value = x;
-        }
+        $("#microbundle_fireprotectiondevice_shortname").on("click", function () {
+            $("#microbundle_fireprotectiondevice_name").val($(this).val());
+        });
 
+        $("#microbundle_fireprotectiondevice_edit_name").on("click", function () {
+            $("#microbundle_fireprotectiondevice_edit_shortname").val($(this).val());
+        });
+
+        $("#microbundle_fireprotectiondevice_edit_shortname").on("click", function () {
+            $("#microbundle_fireprotectiondevice_edit_name").val($(this).val());
+        });
+
+        //fill edit form for FireProtectionDevice
         $("a[data-target='#EditContactModal']").on("click", function () {
 
             var id = $(this).attr('id').substr(5);
@@ -393,13 +397,18 @@
 
             var $number = $("#number-" + id).text();
             $('#microbundle_fireprotectiondevice_edit_number').val($number);
-            // document.getElementById("microbundle_fireprotectiondevice_edit_shortname").value = 3;
-            // document.getElementById("microbundle_fireprotectiondevice_edit_loopNo").value =
-            //     document.getElementById("loop-" + id).innerHTML;
-            //
-            // document.getElementById("microbundle_fireprotectiondevice_edit_number").value =
-            //     document.getElementById("number-" + id).innerHTML;
 
         });
+
+        $('#users-contacts').DataTable( {
+            "language": {
+                "lengthMenu": "Pokaż _MENU_ wierszy na stronie",
+                "zeroRecords": "Niestety brak wyników",
+                "info": "Stron _PAGE_ z _PAGES_",
+                "infoEmpty": "Brak wierszy",
+                "infoFiltered": "(znaleziono z _MAX_ wszystkich wierszy)"
+            },
+            "paging":   false,
+        } );
     </script>
 {% endblock %}
