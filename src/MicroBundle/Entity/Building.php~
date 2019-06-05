@@ -85,6 +85,12 @@ class Building
     private $fireProtectionDevices;
 
     /**
+     * One Building has Many FireInspections.
+     * @ORM\OneToMany(targetEntity="FireInspection", mappedBy="building", cascade={"persist"})
+     */
+    private $fireInspections;
+
+    /**
      * Get id.
      *
      * @return int
@@ -363,5 +369,41 @@ class Building
     public function getFireProtectionDevices()
     {
         return $this->fireProtectionDevices;
+    }
+
+    /**
+     * Add fireInspection.
+     *
+     * @param \MicroBundle\Entity\FireInspection $fireInspection
+     *
+     * @return Building
+     */
+    public function addFireInspection(\MicroBundle\Entity\FireInspection $fireInspection)
+    {
+        $this->fireInspections[] = $fireInspection;
+
+        return $this;
+    }
+
+    /**
+     * Remove fireInspection.
+     *
+     * @param \MicroBundle\Entity\FireInspection $fireInspection
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeFireInspection(\MicroBundle\Entity\FireInspection $fireInspection)
+    {
+        return $this->fireInspections->removeElement($fireInspection);
+    }
+
+    /**
+     * Get fireInspections.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFireInspections()
+    {
+        return $this->fireInspections;
     }
 }

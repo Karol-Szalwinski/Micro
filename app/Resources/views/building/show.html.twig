@@ -333,13 +333,83 @@
         </div>
     </section>
 
+    <section class="row all-contacts">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-head">
+                    <div class="card-header">
+                        <h4 class="card-title">Przeglądy PPOŻ dla tego budynku</h4>
+                        <div class="heading-elements mt-0">
+                            <button class="btn btn-primary btn-sm ">
+                                <i class="d-md-none d-block ft-plus white"></i>
+                                <span class="d-md-block d-none">Dodaj nowy przeglad</span></button>
+
+                            <span class="dropdown">
+                                                <button id="btnSearchDrop1" type="button" data-toggle="dropdown"
+                                                        aria-haspopup="true" aria-expanded="true"
+                                                        class="btn btn-warning dropdown-toggle dropdown-menu-right btn-sm"><i
+                                                            class="ft-download-cloud white"></i></button>
+                                                <span aria-labelledby="btnSearchDrop1"
+                                                      class="dropdown-menu mt-1 dropdown-menu-right">
+                                                    <a href="#" class="dropdown-item"><i
+                                                                class="ft-upload"></i> Import</a>
+                                                    <a href="#" class="dropdown-item"><i class="ft-download"></i> Export</a>
+                                                    <a href="#" class="dropdown-item"><i class="ft-shuffle"></i> Find Duplicate</a>
+                                                </span>
+                                            </span>
+                            <button class="btn btn-default btn-sm"><i class="ft-settings white"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+
+                        <!-- FieInspections table -->
+                        <button type="button" class="btn btn-sm btn-danger delete-all mb-1">Usuń Wszystkie</button>
+                        <div class="table-responsive">
+                            <table id="users-contacts"
+                                   class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
+                                <thead>
+
+                                <tr>
+                                    <th>Numer</th>
+                                    <th>Data przeglądu</th>
+                                    <th>Data następnego</th>
+                                    <th>Ilość urządzeń</th>
+
+                                </tr>
+                                {% for fireInspection in building.fireInspections|sort %}
+                                    <tr>
+                                        <td>
+                                            <a href="{{ path('fireinspection_show', { 'id': fireInspection.id }) }}">{{ fireInspection.id }}</a>
+                                        </td>
+                                        <td>{% if fireInspection.inspectionDate %}{{ fireInspection.inspectionDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                                        <td>{% if fireInspection.nextInspectionDate %}{{ fireInspection.nextInspectionDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                                        <td>{{ fireInspection.inspectedDevices|length }}</td>
+
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th>Numer</th>
+                                    <th>Data przeglądu</th>
+                                    <th>Data następnego</th>
+                                    <th>Ilość urządzeń</th>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 
 {% endblock %}
 
 {% block scripts %}
-    <!-- BEGIN: Page JS-->
-    {#<script src="{{ asset('app-assets/js/scripts/pages/hospital-patient-profile.js') }}"></script>#}
-    <!-- END: Page JS-->
+
     <!-- BEGIN: Vendor JS-->
     <script src="{{ asset('app-assets/vendors/js/vendors.min.js') }}"></script>
     <!-- BEGIN Vendor JS-->
@@ -348,10 +418,6 @@
     <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
     <!-- END: Page Vendor JS-->
 
-    <!-- BEGIN: Theme JS-->
-    <script src="{{ asset('app-assets/js/core/app-menu.js') }}"></script>
-    <script src="{{ asset('app-assets/js/core/app.js') }}"></script>
-    <!-- END: Theme JS-->
 
     <!-- BEGIN: Page JS-->
     <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>
@@ -400,7 +466,7 @@
 
         });
 
-        $('#users-contacts').DataTable( {
+        $('#users-contacts').DataTable({
             "language": {
                 "lengthMenu": "Pokaż _MENU_ wierszy na stronie",
                 "zeroRecords": "Niestety brak wyników",
@@ -408,7 +474,7 @@
                 "infoEmpty": "Brak wierszy",
                 "infoFiltered": "(znaleziono z _MAX_ wszystkich wierszy)"
             },
-            "paging":   false,
-        } );
+            "paging": false,
+        });
     </script>
 {% endblock %}

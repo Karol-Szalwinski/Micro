@@ -80,6 +80,14 @@ class FireInspection
     /**
      * @var string
      *
+     * @ORM\Column(name="conclusion", type="string", length=255)
+     */
+    private $conclusion;
+
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="inspectedDevices", type="string", length=255)
      */
     private $inspectedDevices;
@@ -90,6 +98,13 @@ class FireInspection
      * @ORM\Column(name="otherActivities", type="string", length=255)
      */
     private $otherActivities;
+
+    /**
+     * Many FireInspections have One Building.
+     * @ORM\ManyToOne(targetEntity="Building", inversedBy="fireInspections", cascade={"persist"})
+     * @ORM\JoinColumn(name="building_id", referencedColumnName="id")
+     */
+    private $building;
 
 
     /**
@@ -340,5 +355,53 @@ class FireInspection
     public function getOtherActivities()
     {
         return $this->otherActivities;
+    }
+
+    /**
+     * Set building.
+     *
+     * @param \MicroBundle\Entity\Building|null $building
+     *
+     * @return FireInspection
+     */
+    public function setBuilding(\MicroBundle\Entity\Building $building = null)
+    {
+        $this->building = $building;
+
+        return $this;
+    }
+
+    /**
+     * Get building.
+     *
+     * @return \MicroBundle\Entity\Building|null
+     */
+    public function getBuilding()
+    {
+        return $this->building;
+    }
+
+    /**
+     * Set conclusion.
+     *
+     * @param string $conclusion
+     *
+     * @return FireInspection
+     */
+    public function setConclusion($conclusion)
+    {
+        $this->conclusion = $conclusion;
+
+        return $this;
+    }
+
+    /**
+     * Get conclusion.
+     *
+     * @return string
+     */
+    public function getConclusion()
+    {
+        return $this->conclusion;
     }
 }

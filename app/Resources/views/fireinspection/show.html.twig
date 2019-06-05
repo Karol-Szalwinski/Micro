@@ -1,0 +1,458 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Klient{% endblock %}
+
+{% block body %}
+    <!-- Content header -->
+    <div class="content-header row">
+        <div class="content-header-left col-md-6 col-12">
+            <h3 class="content-header-title mb-0">Przegląd urządzeń przeciwpożarowych</h3>
+            <div class="row breadcrumbs-top">
+                <div class="breadcrumb-wrapper col-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a
+                                    href="{{ path('micro_default_index') }}">Główna</a>
+                        </li>
+
+                        <li class="breadcrumb-item"><a href="{{ path('fireinspection_index') }}">Lista
+                                przeglądów</a>
+                        </li>
+                        <li class="breadcrumb-item"><a
+                                    href="{{ path('building_show', { 'id': fireInspection.building.id }) }}">
+                                Budynek {{ fireInspection.building.name }}</a>
+                        </li>
+                        <li class="breadcrumb-item active">Przegląd z
+                            dnia {% if fireInspection.inspectionDate %}{{ fireInspection.inspectionDate|date('Y-m-d') }}{% endif %}
+                        </li>
+
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="content-header-left col-md-6 col-12">
+            <div class="btn-group float-md-right" role="group"
+                 aria-label="Button group with nested dropdown">
+                <div class="btn-group" role="group">
+                    <a class="btn btn-outline-info round"
+                       href="{{ path('building_show', { 'id' : fireInspection.building.id }) }}"><i
+                                class="la la-backward"></i> Wróć do budynku</a>
+
+                    <button class="btn btn-outline-info round dropdown-toggle dropdown-menu-right"
+                            id="btnGroupDrop1"
+                            type="button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"><i
+                                class="icon-cog3 icon-left"></i> Ustawienia
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1"><a class="dropdown-item"
+                                                                                  href="card-bootstrap.html">Bootstrap
+                            Cards</a><a class="dropdown-item" href="component-buttons-extended.html">Buttons
+                            Extended</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content header -->
+
+    <!-- Basic form layout section start -->
+    <section id="horizontal-form-layouts">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title" id="horz-layout-basic">Dane podstawowe</h4>
+                        <a class="heading-elements-toggle"><i
+                                    class="la la-ellipsis-v font-medium-3"></i></a>
+                        <div class="heading-elements">
+                            <ul class="list-inline mb-0">
+                                <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                <li><a data-action="close"><i class="ft-x"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+
+                            <h4><i class="ft-user"></i> Budynek objęty przeglądem</h4>
+                            <hr>
+                            <div class="col-md-8">
+                                <table class="table table-borderless table-column">
+                                    <tr>
+                                        <th>Nazwa budynku:</th>
+                                        <td>{{ fireInspection.building.name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Ulica:</th>
+                                        <td>{{ fireInspection.building.street }} {{ fireInspection.building.houseNo }}
+                                            {% if fireInspection.building.flatNo is not null %}/{% endif %}
+                                            {{ fireInspection.building.flatNo }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Miasto:</th>
+                                        <td>{{ fireInspection.building.city }}</td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+
+                            <h4><i class="ft-user"></i> Zakres dat</h4>
+                            <hr>
+                            <div class="col-md-8">
+                                <table class="table table-borderless table-column">
+                                    <tr>
+                                        <th>Data przeglądu:</th>
+                                        <td>{% if fireInspection.inspectionDate %}{{ fireInspection.inspectionDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Data następnego przeglądu:</th>
+                                        <td>{% if fireInspection.nextInspectionDate %}{{ fireInspection.nextInspectionDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+
+                            <h4><i class="ft-user"></i> Zakres wykonanych prac</h4>
+                            <hr>
+                            <div class="col-md-8">
+                                <p>Przykłądowy zakres <br>
+                                    i coś tam jeszcze</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+
+                            <h4><i class="ft-user"></i> Inspektorzy</h4>
+                            <hr>
+                            <div class="col-md-8">
+                                <table class="table table-borderless table-column">
+                                    <tr>
+                                        <th>Imię i nazwisko</th>
+                                        <th>Nr uprawnień</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Michał Łuczywek</td>
+                                        <td>PPOZ/123/3</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Paweł Wach</td>
+                                        <td>PPOZ/123/3</td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+
+                            <h4><i class="ft-user"></i> Podstawa opracowania</h4>
+                            <hr>
+                            <div class="col-md-8">
+                                <ul>
+                                    <li>Normy branżowe PN-EN 54-1 oraz PKN-CEN/TS 54-14:2006</li>
+                                    <li>Wytyczne CNBOP -PIB W-001 oraz producentów sprzętu</li>
+                                    <li>Rozporządzenie Ministra Spraw Wewnętrznych i Administracji z dnia 7 czerwca
+                                        2010 r.(Dz.U. nr 109/2010 poz. 719).
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+
+
+    <!-- Inspected devices section-->
+
+    <section class="row all-contacts">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-head">
+                    <div class="card-header">
+                        <h4 class="card-title">Tabela 1 - Urządzenia</h4>
+                        <div class="heading-elements">
+                            <ul class="list-inline mb-0">
+                                <li><a class="btn btn-sm btn-danger box-shadow-2 round btn-min-width pull-right"
+                                       href="#">Dodaj urządzenie</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                        <!-- Task List table -->
+                        <button type="button" class="btn btn-sm btn-danger delete-all mb-1">Delete All</button>
+                        <div class="table-responsive">
+                            <table id="users-contacts"
+                                   class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
+                                <thead>
+                                <tr>
+                                    <th>Nr Pętli</th>
+                                    <th>Nr Urządzenia</th>
+                                    <th>Typ Urządzenia</th>
+                                    <th>Status w systemie</th>
+                                    <th>Wynik testu</th>
+                                    <th>Uwagi</th>
+                                    <th>Akcje</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {#{% for building in client.buildings %}#}
+                                {#<tr>#}
+                                {#<td>{{ building.id }}</td>#}
+                                {#<td onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>#}
+                                {#<div class="media">#}
+                                {#<div class="media-left pr-1"><span#}
+                                {#class="avatar avatar-sm avatar-online rounded-circle"><img#}
+                                {#src="../../../app-assets/images/portrait/small/avatar-s-2.png"#}
+                                {#alt="avatar"><i></i></span></div>#}
+                                {#<div class="media-body media-middle">#}
+                                {#<a class="media-heading name">{{ building.name }}</a>#}
+                                {#</div>#}
+                                {#</div>#}
+                                {#</td>#}
+                                {#<td class="text-center"#}
+                                {#onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>#}
+                                {#<div>{{ building.street }} {{ building.houseNo }}#}
+                                {#/{{ building.flatNo }}</div>#}
+                                {#</td>#}
+                                {#<td class="text-center"#}
+                                {#onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>#}
+                                {#{{ building.city }}#}
+                                {#</td>#}
+
+                                {#<td>#}
+                                {#<a href="{{ path('building_edit', { 'id': building.id }) }}"#}
+                                {#class="primary edit mr-1"><i class="la la-pencil"></i></a>#}
+                                {#<a class="danger delete mr-1"><i class="la la-trash-o"></i></a>#}
+                                {#<span class="dropdown">#}
+                                {#<a id="btnSearchDrop2" data-toggle="dropdown"#}
+                                {#aria-haspopup="true" aria-expanded="true"#}
+                                {#class="dropdown-toggle dropdown-menu-right"><i#}
+                                {#class="la la-ellipsis-v"></i></a>#}
+                                {#<span aria-labelledby="btnSearchDrop2"#}
+                                {#class="dropdown-menu mt-1 dropdown-menu-right">#}
+                                {#<a href="{{ path('building_edit', { 'id': building.id }) }}"#}
+                                {#class="dropdown-item"><i#}
+                                {#class="ft-edit-2"></i>#}
+                                {#Edytuj</a>#}
+                                {#<a href="#" class="dropdown-item delete"><i#}
+                                {#class="ft-trash-2"></i> Usuń</a>#}
+                                {#<a href="{{ path('building_new', { 'client': client.id }) }}"#}
+                                {#class="dropdown-item"><i#}
+                                {#class="ft-plus-circle warning"></i> Dodaj</a>#}
+
+                                {#</span>#}
+                                {#</span>#}
+                                {#</td>#}
+                                {#</tr>#}
+                                {#{% endfor %}#}
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Other activities section-->
+
+    <section class="row all-contacts">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-head">
+                    <div class="card-header">
+                        <h4 class="card-title">Tabela 2 - Pozostałe czynności</h4>
+                        <div class="heading-elements">
+                            <ul class="list-inline mb-0">
+                                <li><a class="btn btn-sm btn-danger box-shadow-2 round btn-min-width pull-right"
+                                       href="#">Dodaj czynność</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                        <!-- Task List table -->
+                        <button type="button" class="btn btn-sm btn-danger delete-all mb-1">Delete All</button>
+                        <div class="table-responsive">
+                            <table id="users-contacts"
+                                   class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
+                                <thead>
+                                <tr>
+                                    <th>Pozostałe czynności</th>
+                                    <th>Wynik</th>
+                                    <th>Uwagi</th>
+                                    <th>Akcje</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {#{% for building in client.buildings %}#}
+                                {#<tr>#}
+                                {#<td>{{ building.id }}</td>#}
+                                {#<td onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>#}
+                                {#<div class="media">#}
+                                {#<div class="media-left pr-1"><span#}
+                                {#class="avatar avatar-sm avatar-online rounded-circle"><img#}
+                                {#src="../../../app-assets/images/portrait/small/avatar-s-2.png"#}
+                                {#alt="avatar"><i></i></span></div>#}
+                                {#<div class="media-body media-middle">#}
+                                {#<a class="media-heading name">{{ building.name }}</a>#}
+                                {#</div>#}
+                                {#</div>#}
+                                {#</td>#}
+                                {#<td class="text-center"#}
+                                {#onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>#}
+                                {#<div>{{ building.street }} {{ building.houseNo }}#}
+                                {#/{{ building.flatNo }}</div>#}
+                                {#</td>#}
+                                {#<td class="text-center"#}
+                                {#onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>#}
+                                {#{{ building.city }}#}
+                                {#</td>#}
+
+                                {#<td>#}
+                                {#<a href="{{ path('building_edit', { 'id': building.id }) }}"#}
+                                {#class="primary edit mr-1"><i class="la la-pencil"></i></a>#}
+                                {#<a class="danger delete mr-1"><i class="la la-trash-o"></i></a>#}
+                                {#<span class="dropdown">#}
+                                {#<a id="btnSearchDrop2" data-toggle="dropdown"#}
+                                {#aria-haspopup="true" aria-expanded="true"#}
+                                {#class="dropdown-toggle dropdown-menu-right"><i#}
+                                {#class="la la-ellipsis-v"></i></a>#}
+                                {#<span aria-labelledby="btnSearchDrop2"#}
+                                {#class="dropdown-menu mt-1 dropdown-menu-right">#}
+                                {#<a href="{{ path('building_edit', { 'id': building.id }) }}"#}
+                                {#class="dropdown-item"><i#}
+                                {#class="ft-edit-2"></i>#}
+                                {#Edytuj</a>#}
+                                {#<a href="#" class="dropdown-item delete"><i#}
+                                {#class="ft-trash-2"></i> Usuń</a>#}
+                                {#<a href="{{ path('building_new', { 'client': client.id }) }}"#}
+                                {#class="dropdown-item"><i#}
+                                {#class="ft-plus-circle warning"></i> Dodaj</a>#}
+
+                                {#</span>#}
+                                {#</span>#}
+                                {#</td>#}
+                                {#</tr>#}
+                                {#{% endfor %}#}
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Basic form layout section start -->
+    <section id="horizontal-form-layouts">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title" id="horz-layout-basic">Podsumowanie przeglądu</h4>
+                        <a class="heading-elements-toggle"><i
+                                    class="la la-ellipsis-v font-medium-3"></i></a>
+                        <div class="heading-elements">
+                            <ul class="list-inline mb-0">
+                                <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                <li><a data-action="close"><i class="ft-x"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+
+                            <h4><i class="ft-user"></i>Wnioski</h4>
+                            <hr>
+                            <div class="col-md-8">
+                                <ul>
+                                    <li>Normy branżowe PN-EN 54-1 oraz PKN-CEN/TS 54-14:2006</li>
+                                    <li>Wytyczne CNBOP -PIB W-001 oraz producentów sprzętu</li>
+                                    <li>Rozporządzenie Ministra Spraw Wewnętrznych i Administracji z dnia 7 czerwca
+                                        2010 r.(Dz.U. nr 109/2010 poz. 719).
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+
+                            <h4><i class="ft-user"></i>Uwagi</h4>
+                            <hr>
+                            <div class="col-md-8">
+                                <ul>
+                                    <li>Normy branżowe PN-EN 54-1 oraz PKN-CEN/TS 54-14:2006</li>
+                                    <li>Wytyczne CNBOP -PIB W-001 oraz producentów sprzętu</li>
+                                    <li>Rozporządzenie Ministra Spraw Wewnętrznych i Administracji z dnia 7 czerwca
+                                        2010 r.(Dz.U. nr 109/2010 poz. 719).
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+
+                            <h4><i class="ft-user"></i>Zalecenia</h4>
+                            <hr>
+                            <div class="col-md-8">
+                                <ul>
+                                    <li>Normy branżowe PN-EN 54-1 oraz PKN-CEN/TS 54-14:2006</li>
+                                    <li>Wytyczne CNBOP -PIB W-001 oraz producentów sprzętu</li>
+                                    <li>Rozporządzenie Ministra Spraw Wewnętrznych i Administracji z dnia 7 czerwca
+                                        2010 r.(Dz.U. nr 109/2010 poz. 719).
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}
