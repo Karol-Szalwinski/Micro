@@ -340,9 +340,8 @@
                     <div class="card-header">
                         <h4 class="card-title">Przeglądy PPOŻ dla tego budynku</h4>
                         <div class="heading-elements mt-0">
-                            <button class="btn btn-primary btn-sm ">
-                                <i class="d-md-none d-block ft-plus white"></i>
-                                <span class="d-md-block d-none">Dodaj nowy przeglad</span></button>
+                            <a class="btn btn-primary btn-sm " href="{{ path('fireinspection_new', {'building': building.id}) }}"><i
+                                        class="la la-building"></i> Dodaj nowy przeglad</a>
 
                             <span class="dropdown">
                                                 <button id="btnSearchDrop1" type="button" data-toggle="dropdown"

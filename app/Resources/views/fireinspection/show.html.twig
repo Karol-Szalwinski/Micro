@@ -60,15 +60,13 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title" id="horz-layout-basic">Dane podstawowe</h4>
+
                         <a class="heading-elements-toggle"><i
                                     class="la la-ellipsis-v font-medium-3"></i></a>
-                        <div class="heading-elements">
-                            <ul class="list-inline mb-0">
-                                <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
-                                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
-                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                                <li><a data-action="close"><i class="ft-x"></i></a></li>
-                            </ul>
+                        <div class="heading-elements mt-0">
+                            <button class="btn btn-primary btn-sm " data-toggle="modal" data-target="#AddContactModal">
+                                <i class="d-md-none d-block ft-plus white"></i>
+                                <span class="d-md-block d-none">Edytuj dane podstawowe</span></button>
                         </div>
                     </div>
                     <div class="card-content collpase show">
@@ -109,11 +107,11 @@
                                 <table class="table table-borderless table-column">
                                     <tr>
                                         <th>Data przeglądu:</th>
-                                        <td>{% if fireInspection.inspectionDate %}{{ fireInspection.inspectionDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                                        <td>{% if fireInspection.inspectionDate %}{{ fireInspection.inspectionDate|date('Y-m-d') }}{% endif %}</td>
                                     </tr>
                                     <tr>
                                         <th>Data następnego przeglądu:</th>
-                                        <td>{% if fireInspection.nextInspectionDate %}{{ fireInspection.nextInspectionDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                                        <td>{% if fireInspection.nextInspectionDate %}{{ fireInspection.nextInspectionDate|date('Y-m-d') }}{% endif %}</td>
                                     </tr>
 
                                 </table>
@@ -127,8 +125,25 @@
                             <h4><i class="ft-user"></i> Zakres wykonanych prac</h4>
                             <hr>
                             <div class="col-md-8">
-                                <p>Przykłądowy zakres <br>
-                                    i coś tam jeszcze</p>
+                                <p>{{ fireInspection.scope|nl2br  }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+
+                            <h4><i class="ft-user"></i> Wykaz urządzeń objętych przeglądem:</h4>
+                            <hr>
+                            <div class="col-md-8">
+                                <ul>
+                                    <li> Centrala ARITECH FP</li>
+                                    <li> Czujki optyczne dymu</li>
+                                    <li> Czujki termiczne</li>
+                                    <li> Sygnalizatory optyczno-akustyczne</li>
+                                    <li> Ręczne ostrzegacze pożarowe</li>
+                                </ul>
+
                             </div>
                         </div>
                     </div>
@@ -139,21 +154,23 @@
                             <h4><i class="ft-user"></i> Inspektorzy</h4>
                             <hr>
                             <div class="col-md-8">
-                                <table class="table table-borderless table-column">
-                                    <tr>
-                                        <th>Imię i nazwisko</th>
-                                        <th>Nr uprawnień</th>
-                                    </tr>
-                                    <tr>
-                                        <td>Michał Łuczywek</td>
-                                        <td>PPOZ/123/3</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Paweł Wach</td>
-                                        <td>PPOZ/123/3</td>
-                                    </tr>
+                                {% if fireInspection.documentInspectors is not empty %}
+                                    <table class="table table-borderless table-column">
+                                        <tr>
+                                            <th>Imię i nazwisko</th>
+                                            <th>Nr uprawnień</th>
+                                        </tr>
+                                        {% for inspector in fireInspection.documentInspectors %}
+                                            <tr>
+                                                <td>{{ inspector.name }} {{ inspector.surname }}</td>
+                                                <td>{{ inspector.license }}</td>
+                                            </tr>
+                                        {% endfor %}
 
-                                </table>
+                                    </table>
+                                {% else %}
+                                    <p> W tym dokumencie chwilowo brakuje inspektorów</p>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -164,13 +181,7 @@
                             <h4><i class="ft-user"></i> Podstawa opracowania</h4>
                             <hr>
                             <div class="col-md-8">
-                                <ul>
-                                    <li>Normy branżowe PN-EN 54-1 oraz PKN-CEN/TS 54-14:2006</li>
-                                    <li>Wytyczne CNBOP -PIB W-001 oraz producentów sprzętu</li>
-                                    <li>Rozporządzenie Ministra Spraw Wewnętrznych i Administracji z dnia 7 czerwca
-                                        2010 r.(Dz.U. nr 109/2010 poz. 719).
-                                    </li>
-                                </ul>
+                                <p>{{ fireInspection.legal|nl2br  }}</p>
 
                             </div>
                         </div>

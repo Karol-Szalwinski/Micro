@@ -50,11 +50,10 @@ class FireInspection
     private $nextInspectionDate;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="inspectors", type="string", length=255)
+     * One FireInspections has Many DocumentInspectors.
+     * @ORM\OneToMany(targetEntity="DocumentInspector", mappedBy="fireInspection", cascade={"persist"})
      */
-    private $inspectors;
+    private $documentInspectors;
 
     /**
      * @var string

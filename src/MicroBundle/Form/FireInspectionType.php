@@ -2,9 +2,13 @@
 
 namespace MicroBundle\Form;
 
+use MicroBundle\Entity\DocumentInspector;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+
 
 class FireInspectionType extends AbstractType
 {
@@ -13,7 +17,29 @@ class FireInspectionType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('scope')->add('deviceShortlistPosition')->add('inspectionDate')->add('nextInspectionDate')->add('inspectors')->add('comment')->add('recomendations')->add('legal')->add('inspectedDevices')->add('otherActivities');
+        $builder
+            ->add('inspectionDate',DateType::class, [
+                'widget'  => 'single_text',
+                'html5'   => false,
+            ])
+            ->add('nextInspectionDate',DateType::class, [
+                'widget'  => 'single_text',
+                'html5'   => false,
+            ])
+            ->add('scope')
+            ->add('documentInspectors', EntityType::class, [
+                // looks for choices from this entity
+                'class' => DocumentInspector::class,
+
+                // uses the User.username property as the visible option string
+                'choice_label' => 'fullname',
+
+                // used to render a select box, check boxes or radios
+                'multiple' => true,
+                 'expanded' => true,
+            ])
+            ->add('legal');
+
     }/**
      * {@inheritdoc}
      */

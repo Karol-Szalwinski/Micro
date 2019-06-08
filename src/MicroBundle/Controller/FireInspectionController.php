@@ -3,10 +3,12 @@
 namespace MicroBundle\Controller;
 
 use MicroBundle\Entity\Building;
+use MicroBundle\Entity\DocumentInspector;
 use MicroBundle\Entity\FireInspection;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Fireinspection controller.
@@ -47,7 +49,19 @@ class FireInspectionController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $building->addFireInspection($fireInspection);
             $fireInspection->setBuilding($building);
+            foreach ($fireInspection->getDocumentInspectors() as $inspector) {
+                $docInspector = new DocumentInspector();
+                $docInspector->setName($inspector->getName());
+                $docInspector->setSurname($inspector->getSurname());
+                $docInspector->setLicense($inspector->getLicense());
+                $docInspector->setFireInspection($fireInspection);
+                $fireInspection->addDocumentInspector($docInspector);
+            }
+
+
             $em = $this->getDoctrine()->getManager();
+
+
             $em->persist($fireInspection);
             $em->flush();
 
@@ -134,7 +148,6 @@ class FireInspectionController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('fireinspection_delete', array('id' => $fireInspection->getId())))
             ->setMethod('DELETE')
-            ->getForm()
-        ;
+            ->getForm();
     }
 }

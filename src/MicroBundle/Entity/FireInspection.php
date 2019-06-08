@@ -31,7 +31,7 @@ class FireInspection
     /**
      * @var string
      *
-     * @ORM\Column(name="deviceShortlistPosition", type="string", length=255)
+     * @ORM\Column(name="deviceShortlistPosition", type="string", length=255, nullable=true)
      */
     private $deviceShortlistPosition;
 
@@ -50,37 +50,36 @@ class FireInspection
     private $nextInspectionDate;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="inspectors", type="string", length=255)
+     * One FireInspections has Many DocumentInspectors.
+     * @ORM\OneToMany(targetEntity="DocumentInspector", mappedBy="fireInspection", cascade={"persist"})
      */
-    private $inspectors;
+    private $documentInspectors;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="comment", type="string", length=255)
+     * @ORM\Column(name="comment", type="string", length=255, nullable=true)
      */
     private $comment;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="recomendations", type="string", length=255)
+     * @ORM\Column(name="recomendations", type="string", length=255, nullable=true)
      */
     private $recomendations;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="legal", type="string", length=255)
+     * @ORM\Column(name="legal", type="text")
      */
     private $legal;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="conclusion", type="string", length=255)
+     * @ORM\Column(name="conclusion", type="string", length=255, nullable=true)
      */
     private $conclusion;
 
@@ -88,14 +87,14 @@ class FireInspection
     /**
      * @var string
      *
-     * @ORM\Column(name="inspectedDevices", type="string", length=255)
+     * @ORM\Column(name="inspectedDevices", type="string", length=255, nullable=true)
      */
     private $inspectedDevices;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="otherActivities", type="string", length=255)
+     * @ORM\Column(name="otherActivities", type="string", length=255, nullable=true)
      */
     private $otherActivities;
 
@@ -105,6 +104,10 @@ class FireInspection
      * @ORM\JoinColumn(name="building_id", referencedColumnName="id")
      */
     private $building;
+
+
+
+
 
 
     /**
@@ -403,5 +406,50 @@ class FireInspection
     public function getConclusion()
     {
         return $this->conclusion;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->documentInspectors = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->inspectionDate = new \DateTime();
+        $this->nextInspectionDate = new \DateTime('now + 6 month');
+    }
+
+    /**
+     * Add documentInspector.
+     *
+     * @param \MicroBundle\Entity\DocumentInspector $documentInspector
+     *
+     * @return FireInspection
+     */
+    public function addDocumentInspector(\MicroBundle\Entity\DocumentInspector $documentInspector)
+    {
+        $this->documentInspectors[] = $documentInspector;
+
+        return $this;
+    }
+
+    /**
+     * Remove documentInspector.
+     *
+     * @param \MicroBundle\Entity\DocumentInspector $documentInspector
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeDocumentInspector(\MicroBundle\Entity\DocumentInspector $documentInspector)
+    {
+        return $this->documentInspectors->removeElement($documentInspector);
+    }
+
+    /**
+     * Get documentInspectors.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDocumentInspectors()
+    {
+        return $this->documentInspectors;
     }
 }
