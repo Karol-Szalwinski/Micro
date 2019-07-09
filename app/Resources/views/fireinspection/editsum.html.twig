@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Dodaj nowy przegląd{% endblock %}
+{% block title %}Edytuj dane podstawowe{% endblock %}
 
 {% block body %}
     <!-- Content header -->
@@ -13,10 +13,10 @@
                         <li class="breadcrumb-item"><a href="{{ path('micro_default_index') }}">Główna</a>
                         </li>
                         <li class="breadcrumb-item"><a
-                                    href="{{ path('building_show',{ 'id': building.id }) }}">Budynek</a>
+                                    href="{{ path('building_show',{ 'id': fireInspection.building.id }) }}">Budynek</a>
                         </li>
 
-                        <li class="breadcrumb-item active">Dodaj nowy przegląd
+                        <li class="breadcrumb-item active">Edytuj podsumowanie
                         </li>
 
                     </ol>
@@ -26,8 +26,8 @@
         <div class="content-header-left col-md-6 col-12">
             <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
                 <div class="btn-group" role="group">
-                    <a class="btn btn-outline-info round" href="{{ path('building_show',{ 'id': building.id }) }}"><i
-                                class="la la-backward"></i> Wróć do budynku</a>
+                    <a class="btn btn-outline-info round" href="{{ path('fireinspection_show',{ 'id': fireInspection.id }) }}"><i
+                                class="la la-backward"></i> Wróć do przeglądu</a>
 
                     <button class="btn btn-outline-info round dropdown-toggle dropdown-menu-right" id="btnGroupDrop1"
                             type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
@@ -49,8 +49,8 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title" id="horz-layout-basic">Formularz tworzenia nowego przeglądu dla
-                            budynku {{ building.name }}</h4>
+                        <h4 class="card-title" id="horz-layout-basic">Formularz edycji podsumowania przeglądu dla
+                            budynku {{ fireInspection.building.name }}</h4>
                         <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">
@@ -64,40 +64,27 @@
                     <div class="card-content collpase show">
                         <div class="card-body">
 
-                            {{ form_start(form, { 'attr': {'class': 'form form-horizontal inputmask'} }) }}
+                            {{ form_start(edit_form, { 'attr': {'class': 'form form-horizontal inputmask'} }) }}
 
 
                             <div class="form-body">
-                                <h4 class="form-section"><i class="ft-user"></i> Dane podstawowe przeglądu</h4>
+                                <h4 class="form-section"><i class="ft-user"></i> Podsumowanie przeglądu</h4>
                                 <div class="form-group row">
-                                    {{ form_label(form.inspectionDate, 'Data przegladu', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
-                                    <div class="col-md-9 mx-auto">
-                                        {{ form_widget(form.inspectionDate, { 'attr': {'class': 'form-control'} }) }}
-
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    {{ form_label(form.nextInspectionDate, 'Data następnego przeglądu', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
-                                    <div class="col-md-9 mx-auto">
-                                        {{ form_widget(form.nextInspectionDate, { 'attr': {'class': 'form-control pickadate datepicker'} }) }}
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    {{ form_label(form.scope, 'Zakres wykonanych prac', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    {{ form_label(edit_form.conclusion, 'Wnioski', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 ">
-                                        {{ form_widget(form.scope, { 'attr': {'class': 'form-control ', 'placeholder': 'Wprowadź zakres'} }) }}
+                                        {{ form_widget(edit_form.conclusion, { 'attr': {'class': 'form-control textarea-autosize', 'placeholder': 'Wprowadź wnioski'} }) }}
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    {{ form_label(form.tempInspectors, 'Osoby uprawnione', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    {{ form_label(edit_form.comment, 'Uwagi', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
-                                        {{ form_widget(form.tempInspectors, { 'attr': {'class': 'form-control'} }) }}
+                                        {{ form_widget(edit_form.comment, { 'attr': {'class': 'form-control textarea-autosize', 'placeholder': 'Wprowadź uwagi'} }) }}
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    {{ form_label(form.legal, 'Podstawa prawna', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    {{ form_label(edit_form.recomendations, 'Zalecenia', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
-                                        {{ form_widget(form.legal, { 'attr': {'class': 'form-control textarea-autosize', 'placeholder': 'Wprowadź podstawę prawną'} }) }}
+                                        {{ form_widget(edit_form.recomendations, { 'attr': {'class': 'form-control textarea-autosize', 'placeholder': 'Wprowadź podstawę prawną'} }) }}
                                     </div>
                                 </div>
 
@@ -108,10 +95,10 @@
                                         <i class="ft-x"></i> Anuluj
                                     </button>
                                     <button type="submit" class="btn btn-primary">
-                                        <i class="la la-check-square-o"></i> Zapisz
+                                        <i class="la la-check-square-o"></i> Zapisz zmiany
                                     </button>
                                 </div>
-                                {{ form_end(form) }}
+                                {{ form_end(edit_form) }}
                             </div>
                         </div>
                     </div>
@@ -132,8 +119,7 @@
 
 
     <script>
-        $("#microbundle_fireinspection_inspectionDate").get(0).type = 'date';
-        $("#microbundle_fireinspection_nextInspectionDate").get(0).type = 'date';
+
         //autosize textarea
         $("textarea").keyup(function(e) {
             while($(this).outerHeight() < this.scrollHeight + parseFloat($(this).css("borderTopWidth"))

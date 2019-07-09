@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use MicroBundle\Entity\Inspector;
 
 
 class FireInspectionType extends AbstractType
@@ -27,9 +28,9 @@ class FireInspectionType extends AbstractType
                 'html5'   => false,
             ])
             ->add('scope')
-            ->add('documentInspectors', EntityType::class, [
+                      ->add('tempInspectors', EntityType::class, [
                 // looks for choices from this entity
-                'class' => DocumentInspector::class,
+                'class' => Inspector::class,
 
                 // uses the User.username property as the visible option string
                 'choice_label' => 'fullname',

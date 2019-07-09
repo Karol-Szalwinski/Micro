@@ -21,7 +21,8 @@
 
     <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/vendors.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/tables/datatable/datatables.min.css') }}">
+    <link rel="stylesheet" type="text/css"
+          href="{{ asset('app-assets/vendors/css/tables/datatable/datatables.min.css') }}">
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->
@@ -226,7 +227,7 @@
                                     class="flag-icon flag-icon-pl"></i><span class="selected-language"></span></a>
                         <div class="dropdown-menu" aria-labelledby="dropdown-flag"><a class="dropdown-item" href="#"><i
                                         class="flag-icon flag-icon-pl"></i> Polish</a><a class="dropdown-item"
-                                                                                          href="#"><i
+                                                                                         href="#"><i
                                         class="flag-icon flag-icon-fr"></i> French</a><a class="dropdown-item" href="#"><i
                                         class="flag-icon flag-icon-cn"></i> Chinese</a><a class="dropdown-item"
                                                                                           href="#"><i
@@ -436,7 +437,8 @@
             <li class=" nav-item"><a href="{{ path('client_index') }}"><i class="la la-group "></i><span
                             class="menu-title"
                             data-i18n="nav.dash.main">Klienci</span><span
-                            class="badge badge badge-info badge-pill float-right mr-2">10</span></a>
+                            id="counter-clients"
+                            class="badge badge-pill float-right mr-2"></span></a>
                 <ul class="menu-content">
                     <li><a class="menu-item" href="{{ path('client_index') }}"><i></i><span
                                     data-i18n="nav.dash.ecommerce">Lista klientów</span></a>
@@ -453,7 +455,8 @@
             <li class=" nav-item"><a href="{{ path('building_index') }}"><i class="la la-building-o"></i><span
                             class="menu-title"
                             data-i18n="nav.dash.main">Budynki</span><span
-                            class="badge badge badge-info badge-pill float-right mr-2">10</span></a>
+                            id="counter-buildings"
+                            class="badge badge-pill float-right mr-2"></span></a>
                 <ul class="menu-content">
                     <li><a class="menu-item" href="{{ path('building_index') }}"><i></i><span
                                     data-i18n="nav.dash.ecommerce">Lista budynków</span></a>
@@ -464,7 +467,8 @@
             <li class=" nav-item"><a href="{{ path('fireinspection_index') }}"><i class="la la-list-alt "></i><span
                             class="menu-title"
                             data-i18n="nav.dash.main">Przeglądy</span><span
-                            class="badge badge badge-info badge-pill float-right mr-2">10</span></a>
+                            id="counter-fire-inspections"
+                            class="badge badge-pill float-right mr-2"></span></a>
                 <ul class="menu-content">
                     <li><a class="menu-item" href="{{ path('fireinspection_index') }}"><i></i><span
                                     data-i18n="nav.dash.ecommerce">Lista przeglądów</span></a>
@@ -474,8 +478,7 @@
             </li>
             <li class=" nav-item"><a href="{{ path('building_index') }}"><i class="la la-book"></i><span
                             class="menu-title"
-                            data-i18n="nav.dash.main">Słowniki</span><span
-                            class="badge badge badge-info badge-pill float-right mr-2">10</span></a>
+                            data-i18n="nav.dash.main">Słowniki</span></a>
                 <ul class="menu-content">
                     <li><a class="menu-item" href="{{ path('devicename_index') }}"><i></i><span
                                     data-i18n="nav.dash.ecommerce">Słownik Urządzeń PPOŻ</span></a>
@@ -549,10 +552,38 @@
 {#<script src="{{ asset('app-assets/js/scripts/pages/dashboard-sales.js') }}"></script>#}
 {#<!-- END: Page JS-->#}
 
+<!-- BEGIN: AJAX menu -->
+<script>
+    function fillBadges() {
+        $.ajax({
+            url: '/ajax',
+            type: 'POST',
+            dataType: 'json',
+            async: true,
+
+            success: function (data, status) {
+
+                $('#counter-clients').addClass("badge-info").text(data['clients']);
+                $('#counter-buildings').addClass("badge-info").text(data['buildings']);
+                $('#counter-fire-inspections').addClass("badge-info").text(data['fireInspections']);
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Ajax request failed.');
+            }
+        });
+    }
+
+    fillBadges();
+    setInterval(fillBadges, 60000);
+
+</script>
+
+<!-- END: AJAX menu-->
 <!-- BEGIN: Page extra JS-->
 {% block scripts %}
 
-{%  endblock %}
+{% endblock %}
 <!-- END: Page JS-->
 
 </body>

@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Inspecteddevice</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ inspectedDevice.id }}</td>
+            </tr>
+            <tr>
+                <th>Loopno</th>
+                <td>{{ inspectedDevice.loopNo }}</td>
+            </tr>
+            <tr>
+                <th>Number</th>
+                <td>{{ inspectedDevice.number }}</td>
+            </tr>
+            <tr>
+                <th>Shortname</th>
+                <td>{{ inspectedDevice.shortname }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{% if inspectedDevice.status %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Test</th>
+                <td>{% if inspectedDevice.test %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Comment</th>
+                <td>{{ inspectedDevice.comment }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('inspecteddevice_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('inspecteddevice_edit', { 'id': inspectedDevice.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

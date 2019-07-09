@@ -37,6 +37,11 @@ class DocumentInspector
 
     /**
      * @var string
+     */
+    private $fullname;
+
+    /**
+     * @var string
      *
      * @ORM\Column(name="license", type="string", length=255)
      */
@@ -48,6 +53,14 @@ class DocumentInspector
      * @ORM\JoinColumn(name="fire_inspection_id", referencedColumnName="id")
      */
     private $fireInspection;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="prototype", type="integer", nullable=true)
+     */
+    private $prototype;
+
 
 
     /**
@@ -109,6 +122,16 @@ class DocumentInspector
     }
 
     /**
+     * Get fullname.
+     *
+     * @return string
+     */
+    public function getFullname()
+    {
+        return $this->name . ' ' . $this->surname .' ';
+    }
+
+    /**
      * Set license.
      *
      * @param string $license
@@ -130,5 +153,53 @@ class DocumentInspector
     public function getLicense()
     {
         return $this->license;
+    }
+
+    /**
+     * Set fireInspection.
+     *
+     * @param \MicroBundle\Entity\FireInspection|null $fireInspection
+     *
+     * @return DocumentInspector
+     */
+    public function setFireInspection(\MicroBundle\Entity\FireInspection $fireInspection = null)
+    {
+        $this->fireInspection = $fireInspection;
+
+        return $this;
+    }
+
+    /**
+     * Get fireInspection.
+     *
+     * @return \MicroBundle\Entity\FireInspection|null
+     */
+    public function getFireInspection()
+    {
+        return $this->fireInspection;
+    }
+
+    /**
+     * Set prototype.
+     *
+     * @param int|null $prototype
+     *
+     * @return DocumentInspector
+     */
+    public function setPrototype($prototype = null)
+    {
+        $this->prototype = $prototype;
+
+        return $this;
+    }
+
+    /**
+     * Get prototype.
+     *
+     * @return int|null
+     */
+    public function getPrototype()
+    {
+        return $this->prototype;
     }
 }

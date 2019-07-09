@@ -3,6 +3,7 @@
 namespace MicroBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Client
@@ -62,14 +63,17 @@ class Client
      */
     private $buildings;
 
+
+    
+
     /**
      * Constructor
      */
     public function __construct()
     {
+        $this->buildings = new \Doctrine\Common\Collections\ArrayCollection();
         $this->addDate = new \DateTime();
     }
-
 
     /**
      * Get id.
@@ -130,31 +134,6 @@ class Client
     }
 
     /**
-     * Set addDate.
-     *
-     * @param \DateTime|null $addDate
-     *
-     * @return Client
-     */
-    public function setAddDate($addDate = null)
-    {
-        $this->addDate = $addDate;
-
-        return $this;
-    }
-
-    /**
-     * Get addDate.
-     *
-     * @return \DateTime|null
-     */
-    public function getAddDate()
-    {
-        return $this->addDate;
-    }
-
-    
-    /**
      * Set email.
      *
      * @param string|null $email
@@ -200,6 +179,30 @@ class Client
     public function getPhoneNumber()
     {
         return $this->phoneNumber;
+    }
+
+    /**
+     * Set addDate.
+     *
+     * @param \DateTime|null $addDate
+     *
+     * @return Client
+     */
+    public function setAddDate($addDate = null)
+    {
+        $this->addDate = $addDate;
+
+        return $this;
+    }
+
+    /**
+     * Get addDate.
+     *
+     * @return \DateTime|null
+     */
+    public function getAddDate()
+    {
+        return $this->addDate;
     }
 
     /**

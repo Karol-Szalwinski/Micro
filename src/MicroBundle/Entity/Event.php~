@@ -1,0 +1,144 @@
+<?php
+
+namespace MicroBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+/**
+ * Event
+ *
+ * @ORM\Table(name="event")
+ * @ORM\Entity(repositoryClass="MicroBundle\Repository\EventRepository")
+ */
+class Event
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="Name", type="string", length=255)
+     */
+    private $name;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="time", type="datetime", nullable=true)
+     */
+    private $time;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Client", inversedBy="events")
+     * @ORM\JoinTable(name="events_clients")
+     */
+    private $clients;
+
+    public function __construct()
+    {
+
+        $this->clients = new ArrayCollection();
+    }
+
+    /**
+     * Get id.
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name.
+     *
+     * @param string $name
+     *
+     * @return Event
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set time.
+     *
+     * @param \DateTime|null $time
+     *
+     * @return Event
+     */
+    public function setTime($time = null)
+    {
+        $this->time = $time;
+
+        return $this;
+    }
+
+    /**
+     * Get time.
+     *
+     * @return \DateTime|null
+     */
+    public function getTime()
+    {
+        return $this->time;
+    }
+
+    /**
+     * Add client.
+     *
+     * @param \MicroBundle\Entity\Client $client
+     *
+     * @return Event
+     */
+    public function addClient(\MicroBundle\Entity\Client $client)
+    {
+        $this->clients[] = $client;
+
+        return $this;
+    }
+
+    /**
+     * Remove client.
+     *
+     * @param \MicroBundle\Entity\Client $client
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeClient(\MicroBundle\Entity\Client $client)
+    {
+        return $this->clients->removeElement($client);
+    }
+
+    /**
+     * Get clients.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getClients()
+    {
+        return $this->clients;
+    }
+}

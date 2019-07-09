@@ -1,21 +1,146 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Edytuj dane podstawowe{% endblock %}
+
 {% block body %}
-    <h1>Fireinspection edit</h1>
+    <!-- Content header -->
+    <div class="content-header row">
+        <div class="content-header-left col-md-6 col-12">
+            <h3 class="content-header-title mb-0">Przegląd urządzeń PPOŻ</h3>
+            <div class="row breadcrumbs-top">
+                <div class="breadcrumb-wrapper col-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ path('micro_default_index') }}">Główna</a>
+                        </li>
+                        <li class="breadcrumb-item"><a
+                                    href="{{ path('building_show',{ 'id': fireInspection.building.id }) }}">Budynek</a>
+                        </li>
 
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
-    {{ form_end(edit_form) }}
+                        <li class="breadcrumb-item active">Edytuj dane podstawowe
+                        </li>
 
-    <ul>
-        <li>
-            <a href="{{ path('fireinspection_index') }}">Back to the list</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="content-header-left col-md-6 col-12">
+            <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
+                <div class="btn-group" role="group">
+                    <a class="btn btn-outline-info round" href="{{ path('fireinspection_show',{ 'id': fireInspection.id }) }}"><i
+                                class="la la-backward"></i> Wróć do przeglądu</a>
+
+                    <button class="btn btn-outline-info round dropdown-toggle dropdown-menu-right" id="btnGroupDrop1"
+                            type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                                class="icon-cog3 icon-left"></i> Ustawienia
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1"><a class="dropdown-item"
+                                                                                  href="card-bootstrap.html">Bootstrap
+                            Cards</a><a class="dropdown-item" href="component-buttons-extended.html">Buttons
+                            Extended</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content header -->
+
+    <!-- Basic form layout section start -->
+    <section id="horizontal-form-layouts">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title" id="horz-layout-basic">Formularz edycji danych podstawowych przeglądu dla
+                            budynku {{ fireInspection.building.name }}</h4>
+                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                        <div class="heading-elements">
+                            <ul class="list-inline mb-0">
+                                <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                <li><a data-action="close"><i class="ft-x"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+                            {{ form_start(edit_form, { 'attr': {'class': 'form form-horizontal inputmask'} }) }}
+
+
+                            <div class="form-body">
+                                <h4 class="form-section"><i class="ft-user"></i> Dane podstawowe przeglądu</h4>
+                                <div class="form-group row">
+                                    {{ form_label(edit_form.inspectionDate, 'Data przegladu', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        {{ form_widget(edit_form.inspectionDate, { 'attr': {'class': 'form-control'} }) }}
+
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(edit_form.nextInspectionDate, 'Data następnego przeglądu', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        {{ form_widget(edit_form.nextInspectionDate, { 'attr': {'class': 'form-control pickadate datepicker'} }) }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(edit_form.scope, 'Zakres wykonanych prac', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 ">
+                                        {{ form_widget(edit_form.scope, { 'attr': {'class': 'form-control ', 'placeholder': 'Wprowadź zakres'} }) }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(edit_form.tempInspectors, 'Osoby uprawnione', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        {{ form_widget(edit_form.tempInspectors, { 'attr': {'class': 'form-control'} }) }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(edit_form.legal, 'Podstawa prawna', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        {{ form_widget(edit_form.legal, { 'attr': {'class': 'form-control textarea-autosize', 'placeholder': 'Wprowadź podstawę prawną'} }) }}
+                                    </div>
+                                </div>
+
+
+                                <div class="form-actions">
+                                    <button type="button" onClick="javascript:history.go(-1)"
+                                            class="btn btn-warning mr-1">
+                                        <i class="ft-x"></i> Anuluj
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="la la-check-square-o"></i> Zapisz zmiany
+                                    </button>
+                                </div>
+                                {{ form_end(edit_form) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+    <!-- BEGIN: Page JS-->
+    <script src="{{ asset('app-assets/vendors/js/forms/extended/inputmask/jquery.inputmask.bundle.min.js') }}"></script>
+    <script src="{{ asset('app-assets/js/scripts/forms/extended/form-inputmask.js') }}"></script>
+
+
+    <script>
+        $("#microbundle_fireinspection_inspectionDate").get(0).type = 'date';
+        $("#microbundle_fireinspection_nextInspectionDate").get(0).type = 'date';
+        //autosize textarea
+        $("textarea").keyup(function(e) {
+            while($(this).outerHeight() < this.scrollHeight + parseFloat($(this).css("borderTopWidth"))
+            + parseFloat($(this).css("borderBottomWidth"))) {
+                $(this).height($(this).height()+1);
+            };
+        });
+    </script>
+    <!-- END: Page JS-->
 {% endblock %}

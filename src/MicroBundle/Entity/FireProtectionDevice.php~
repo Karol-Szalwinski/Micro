@@ -63,6 +63,21 @@ class FireProtectionDevice
      */
     private $building;
 
+    /**
+     * One FireProtectionDevices has Many inspectedDevices.
+     * @ORM\OneToMany(targetEntity="MicroBundle\Entity\InspectedDevice", mappedBy="fireProtectionDevice")
+     */
+    private $inspectedDevices;
+
+
+   
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->inspectedDevices = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id.
@@ -71,20 +86,6 @@ class FireProtectionDevice
      */
     public function getId()
     {
-        return $this->id;
-    }
-
-    /**
-     * Set id.
-     *
-     * @param integer $id
-     *
-     * @return int
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
         return $this->id;
     }
 
@@ -230,5 +231,41 @@ class FireProtectionDevice
     public function getBuilding()
     {
         return $this->building;
+    }
+
+    /**
+     * Add inspectedDevice.
+     *
+     * @param \MicroBundle\Entity\InspectedDevice $inspectedDevice
+     *
+     * @return FireProtectionDevice
+     */
+    public function addInspectedDevice(\MicroBundle\Entity\InspectedDevice $inspectedDevice)
+    {
+        $this->inspectedDevices[] = $inspectedDevice;
+
+        return $this;
+    }
+
+    /**
+     * Remove inspectedDevice.
+     *
+     * @param \MicroBundle\Entity\InspectedDevice $inspectedDevice
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeInspectedDevice(\MicroBundle\Entity\InspectedDevice $inspectedDevice)
+    {
+        return $this->inspectedDevices->removeElement($inspectedDevice);
+    }
+
+    /**
+     * Get inspectedDevices.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInspectedDevices()
+    {
+        return $this->inspectedDevices;
     }
 }

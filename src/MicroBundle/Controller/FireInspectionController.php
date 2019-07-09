@@ -5,10 +5,16 @@ namespace MicroBundle\Controller;
 use MicroBundle\Entity\Building;
 use MicroBundle\Entity\DocumentInspector;
 use MicroBundle\Entity\FireInspection;
+use MicroBundle\Entity\InspectedDevice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * Fireinspection controller.
@@ -49,18 +55,17 @@ class FireInspectionController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $building->addFireInspection($fireInspection);
             $fireInspection->setBuilding($building);
-            foreach ($fireInspection->getDocumentInspectors() as $inspector) {
+            foreach ($fireInspection->getTempInspectors() as $inspector) {
                 $docInspector = new DocumentInspector();
                 $docInspector->setName($inspector->getName());
                 $docInspector->setSurname($inspector->getSurname());
                 $docInspector->setLicense($inspector->getLicense());
                 $docInspector->setFireInspection($fireInspection);
                 $fireInspection->addDocumentInspector($docInspector);
+                $fireInspection->removeTempInspector($inspector);
             }
 
-
             $em = $this->getDoctrine()->getManager();
-
 
             $em->persist($fireInspection);
             $em->flush();
@@ -99,22 +104,188 @@ class FireInspectionController extends Controller
      */
     public function editAction(Request $request, FireInspection $fireInspection)
     {
-        $deleteForm = $this->createDeleteForm($fireInspection);
+
         $editForm = $this->createForm('MicroBundle\Form\FireInspectionType', $fireInspection);
+
+//        dump($fireInspection); die();
         $editForm->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        $em = $this->getDoctrine()->getManager();
 
-            return $this->redirectToRoute('fireinspection_edit', array('id' => $fireInspection->getId()));
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
+            //clear Document Inspectors
+            foreach ($fireInspection->getDocumentInspectors() as $documentInspector) {
+
+                $fireInspection->removeDocumentInspector($documentInspector);
+
+                $em->remove($documentInspector);
+
+            }
+            //add Document Inspectors
+            foreach ($fireInspection->getTempInspectors() as $inspector) {
+                $docInspector = new DocumentInspector();
+                $docInspector->setName($inspector->getName());
+                $docInspector->setSurname($inspector->getSurname());
+                $docInspector->setLicense($inspector->getLicense());
+                $docInspector->setFireInspection($fireInspection);
+                $fireInspection->addDocumentInspector($docInspector);
+                $fireInspection->removeTempInspector($inspector);
+            }
+
+            $em->flush();
+            return $this->redirectToRoute('fireinspection_show', array('id' => $fireInspection->getId()));
         }
 
         return $this->render('fireinspection/edit.html.twig', array(
             'fireInspection' => $fireInspection,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+        ));
+
+    }
+
+    /**
+     * Displays a form to edit an existing fireInspection entity summary.
+     *
+     * @Route("/{id}/editsum", name="fireinspection_edit_summary")
+     * @Method({"GET", "POST"})
+     */
+    public function editSumAction(Request $request, FireInspection $fireInspection)
+    {
+
+        $editForm = $this->createForm('MicroBundle\Form\FireInspectionSummaryType', $fireInspection);
+
+        $editForm->handleRequest($request);
+
+        $em = $this->getDoctrine()->getManager();
+
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
+
+            $em->flush();
+
+            return $this->redirectToRoute('fireinspection_show', array('id' => $fireInspection->getId()));
+        }
+
+        return $this->render('fireinspection/editsum.html.twig', array(
+            'fireInspection' => $fireInspection,
+            'edit_form' => $editForm->createView(),
         ));
     }
+
+    /**
+     * Create list of Inspected Devices.
+     *
+     * @Route("/{id}/loaddevices", name="fireinspection_load_devices")
+     * @Method({"GET", "POST"})
+     */
+    public function loadDevicesAction(Request $request, FireInspection $fireInspection)
+    {
+        if ($fireInspection->getInspectedDevices()->isEmpty()) {
+
+            $em = $this->getDoctrine()->getManager();
+
+            $fireProtectionDevices = $fireInspection->getBuilding()->getFireProtectionDevices();
+
+            foreach ($fireProtectionDevices as $device) {
+                $inspectedDevice = new InspectedDevice();
+                $inspectedDevice->setShortname($device->getShortname());
+                $inspectedDevice->setLoopNo($device->getLoopNo());
+                $inspectedDevice->setNumber($device->getNumber());
+                $inspectedDevice->setFireProtectionDevice($device);
+                $inspectedDevice->setFireInspection($fireInspection);
+                $device->addInspectedDevice($inspectedDevice);
+                $fireInspection->addInspectedDevice($inspectedDevice);
+                $em->persist($inspectedDevice);
+
+
+            }
+            $em->flush();
+
+        }
+        return $this->redirectToRoute('fireinspection_show', array('id' => $fireInspection->getId()));
+
+
+    }
+
+    /**
+     * Create list of Inspected Devices.
+     *
+     * @Route("/{fireInspection}/loadmissdevices", name="fireinspection_load_missed_devices")
+     * @Method({"GET", "POST"})
+     */
+    public function loadMissedDevicesAction( $fireInspection, Request $request) {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $fireInspection = $em->getRepository('MicroBundle:FireInspection')->findOneById($fireInspection);
+            //all devices in building
+        $fireProtectionDevices = $fireInspection->getBuilding()->getFireProtectionDevices();
+
+        $missingInspectedDevices = [];
+        $encoders = [new XmlEncoder(), new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+
+
+
+        foreach ($fireProtectionDevices as $device) {
+            $success = true;
+            foreach ($fireInspection->getInspectedDevices() as $insDevice) {
+                if ($device == $insDevice->getFireProtectionDevice()) {
+                    $success = false;
+                }
+            }
+            if ($success) {
+                $inspectedDevices = new InspectedDevice();
+                $inspectedDevices->setId($device->getId());
+                $inspectedDevices->setLoopNo($device->getLoopNo());
+                $inspectedDevices->setNumber($device->getNumber());
+                $inspectedDevices->setShortname($device->getShortname());
+
+                array_push($missingInspectedDevices, $serializer->serialize($inspectedDevices, 'json'));
+
+            }
+
+        }
+
+
+        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+
+            $jsonData['missing-devices'] = $missingInspectedDevices;
+
+            return new JsonResponse($jsonData);
+        }
+
+
+    }
+
+    /**
+     * Deletes a InspectedDevice entity.
+     *
+     * @Route("/{id}/delete/{device}", name="fireinspection_delete_device")
+     * @Method("DELETE")
+     */
+    public function deleteDeviceAction(Request $request, FireInspection $fireInspection, $device)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $inspectedDevice = $em->getRepository('MicroBundle:InspectedDevice')->findOneById($device);
+
+        $fireInspection = $inspectedDevice->getFireInspection();
+        $fireInspection->removeInspectedDevice($inspectedDevice);
+
+        $em->remove($inspectedDevice);
+        $em->flush();
+
+
+        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+            $success = ($em->getRepository('MicroBundle:InspectedDevice')->findOneById($device)) ? true : false;
+            $jsonData['success'] = $success;
+
+            return new JsonResponse($jsonData);
+        }
+    }
+
 
     /**
      * Deletes a fireInspection entity.
@@ -150,4 +321,6 @@ class FireInspectionController extends Controller
             ->setMethod('DELETE')
             ->getForm();
     }
+
+
 }

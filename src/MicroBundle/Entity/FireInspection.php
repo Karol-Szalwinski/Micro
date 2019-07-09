@@ -56,16 +56,26 @@ class FireInspection
     private $documentInspectors;
 
     /**
+     * Many FireInspectors have Many Inspectors.
+     * @ORM\ManyToMany(targetEntity="Inspector")
+     * @ORM\JoinTable(name="fire_inspection_temp_inspectors",
+     *      joinColumns={@ORM\JoinColumn(name="fire_inspection_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="temp_inspectors_id", referencedColumnName="id", unique=true)}
+     *      )
+     */
+    private $tempInspectors;
+
+    /**
      * @var string
      *
-     * @ORM\Column(name="comment", type="string", length=255, nullable=true)
+     * @ORM\Column(name="comment", type="text", nullable=true)
      */
     private $comment;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="recomendations", type="string", length=255, nullable=true)
+     * @ORM\Column(name="recomendations", type="text", nullable=true)
      */
     private $recomendations;
 
@@ -79,15 +89,14 @@ class FireInspection
     /**
      * @var string
      *
-     * @ORM\Column(name="conclusion", type="string", length=255, nullable=true)
+     * @ORM\Column(name="conclusion", type="text", nullable=true)
      */
     private $conclusion;
 
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="inspectedDevices", type="string", length=255, nullable=true)
+     * One Fire Inspection has Many inspectedDevices.
+     * @ORM\OneToMany(targetEntity="MicroBundle\Entity\InspectedDevice", mappedBy="fireInspection", cascade={"persist"})
      */
     private $inspectedDevices;
 
@@ -107,8 +116,17 @@ class FireInspection
 
 
 
-
-
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->documentInspectors = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tempInspectors = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->inspectedDevices = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->inspectionDate = new \DateTime();
+        $this->nextInspectionDate = new \DateTime('now + 6 month');
+    }
 
     /**
      * Get id.
@@ -147,11 +165,11 @@ class FireInspection
     /**
      * Set deviceShortlistPosition.
      *
-     * @param string $deviceShortlistPosition
+     * @param string|null $deviceShortlistPosition
      *
      * @return FireInspection
      */
-    public function setDeviceShortlistPosition($deviceShortlistPosition)
+    public function setDeviceShortlistPosition($deviceShortlistPosition = null)
     {
         $this->deviceShortlistPosition = $deviceShortlistPosition;
 
@@ -161,7 +179,7 @@ class FireInspection
     /**
      * Get deviceShortlistPosition.
      *
-     * @return string
+     * @return string|null
      */
     public function getDeviceShortlistPosition()
     {
@@ -217,37 +235,13 @@ class FireInspection
     }
 
     /**
-     * Set inspectors.
-     *
-     * @param string $inspectors
-     *
-     * @return FireInspection
-     */
-    public function setInspectors($inspectors)
-    {
-        $this->inspectors = $inspectors;
-
-        return $this;
-    }
-
-    /**
-     * Get inspectors.
-     *
-     * @return string
-     */
-    public function getInspectors()
-    {
-        return $this->inspectors;
-    }
-
-    /**
      * Set comment.
      *
-     * @param string $comment
+     * @param string|null $comment
      *
      * @return FireInspection
      */
-    public function setComment($comment)
+    public function setComment($comment = null)
     {
         $this->comment = $comment;
 
@@ -257,7 +251,7 @@ class FireInspection
     /**
      * Get comment.
      *
-     * @return string
+     * @return string|null
      */
     public function getComment()
     {
@@ -267,11 +261,11 @@ class FireInspection
     /**
      * Set recomendations.
      *
-     * @param string $recomendations
+     * @param string|null $recomendations
      *
      * @return FireInspection
      */
-    public function setRecomendations($recomendations)
+    public function setRecomendations($recomendations = null)
     {
         $this->recomendations = $recomendations;
 
@@ -281,7 +275,7 @@ class FireInspection
     /**
      * Get recomendations.
      *
-     * @return string
+     * @return string|null
      */
     public function getRecomendations()
     {
@@ -313,85 +307,13 @@ class FireInspection
     }
 
     /**
-     * Set inspectedDevices.
-     *
-     * @param string $inspectedDevices
-     *
-     * @return FireInspection
-     */
-    public function setInspectedDevices($inspectedDevices)
-    {
-        $this->inspectedDevices = $inspectedDevices;
-
-        return $this;
-    }
-
-    /**
-     * Get inspectedDevices.
-     *
-     * @return string
-     */
-    public function getInspectedDevices()
-    {
-        return $this->inspectedDevices;
-    }
-
-    /**
-     * Set otherActivities.
-     *
-     * @param string $otherActivities
-     *
-     * @return FireInspection
-     */
-    public function setOtherActivities($otherActivities)
-    {
-        $this->otherActivities = $otherActivities;
-
-        return $this;
-    }
-
-    /**
-     * Get otherActivities.
-     *
-     * @return string
-     */
-    public function getOtherActivities()
-    {
-        return $this->otherActivities;
-    }
-
-    /**
-     * Set building.
-     *
-     * @param \MicroBundle\Entity\Building|null $building
-     *
-     * @return FireInspection
-     */
-    public function setBuilding(\MicroBundle\Entity\Building $building = null)
-    {
-        $this->building = $building;
-
-        return $this;
-    }
-
-    /**
-     * Get building.
-     *
-     * @return \MicroBundle\Entity\Building|null
-     */
-    public function getBuilding()
-    {
-        return $this->building;
-    }
-
-    /**
      * Set conclusion.
      *
-     * @param string $conclusion
+     * @param string|null $conclusion
      *
      * @return FireInspection
      */
-    public function setConclusion($conclusion)
+    public function setConclusion($conclusion = null)
     {
         $this->conclusion = $conclusion;
 
@@ -401,20 +323,35 @@ class FireInspection
     /**
      * Get conclusion.
      *
-     * @return string
+     * @return string|null
      */
     public function getConclusion()
     {
         return $this->conclusion;
     }
+
     /**
-     * Constructor
+     * Set otherActivities.
+     *
+     * @param string|null $otherActivities
+     *
+     * @return FireInspection
      */
-    public function __construct()
+    public function setOtherActivities($otherActivities = null)
     {
-        $this->documentInspectors = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->inspectionDate = new \DateTime();
-        $this->nextInspectionDate = new \DateTime('now + 6 month');
+        $this->otherActivities = $otherActivities;
+
+        return $this;
+    }
+
+    /**
+     * Get otherActivities.
+     *
+     * @return string|null
+     */
+    public function getOtherActivities()
+    {
+        return $this->otherActivities;
     }
 
     /**
@@ -451,5 +388,101 @@ class FireInspection
     public function getDocumentInspectors()
     {
         return $this->documentInspectors;
+    }
+
+    /**
+     * Add tempInspector.
+     *
+     * @param \MicroBundle\Entity\Inspector $tempInspector
+     *
+     * @return FireInspection
+     */
+    public function addTempInspector(\MicroBundle\Entity\Inspector $tempInspector)
+    {
+        $this->tempInspectors[] = $tempInspector;
+
+        return $this;
+    }
+
+    /**
+     * Remove tempInspector.
+     *
+     * @param \MicroBundle\Entity\Inspector $tempInspector
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeTempInspector(\MicroBundle\Entity\Inspector $tempInspector)
+    {
+        return $this->tempInspectors->removeElement($tempInspector);
+    }
+
+    /**
+     * Get tempInspectors.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTempInspectors()
+    {
+        return $this->tempInspectors;
+    }
+
+    /**
+     * Add inspectedDevice.
+     *
+     * @param \MicroBundle\Entity\InspectedDevice $inspectedDevice
+     *
+     * @return FireInspection
+     */
+    public function addInspectedDevice(\MicroBundle\Entity\InspectedDevice $inspectedDevice)
+    {
+        $this->inspectedDevices[] = $inspectedDevice;
+
+        return $this;
+    }
+
+    /**
+     * Remove inspectedDevice.
+     *
+     * @param \MicroBundle\Entity\InspectedDevice $inspectedDevice
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeInspectedDevice(\MicroBundle\Entity\InspectedDevice $inspectedDevice)
+    {
+        return $this->inspectedDevices->removeElement($inspectedDevice);
+    }
+
+    /**
+     * Get inspectedDevices.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInspectedDevices()
+    {
+        return $this->inspectedDevices;
+    }
+
+    /**
+     * Set building.
+     *
+     * @param \MicroBundle\Entity\Building|null $building
+     *
+     * @return FireInspection
+     */
+    public function setBuilding(\MicroBundle\Entity\Building $building = null)
+    {
+        $this->building = $building;
+
+        return $this;
+    }
+
+    /**
+     * Get building.
+     *
+     * @return \MicroBundle\Entity\Building|null
+     */
+    public function getBuilding()
+    {
+        return $this->building;
     }
 }

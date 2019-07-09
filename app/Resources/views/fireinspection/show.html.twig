@@ -64,10 +64,11 @@
                         <a class="heading-elements-toggle"><i
                                     class="la la-ellipsis-v font-medium-3"></i></a>
                         <div class="heading-elements mt-0">
-                            <button class="btn btn-primary btn-sm " data-toggle="modal" data-target="#AddContactModal">
-                                <i class="d-md-none d-block ft-plus white"></i>
-                                <span class="d-md-block d-none">Edytuj dane podstawowe</span></button>
+                            <a class="btn btn-primary btn-sm "
+                               href="{{ path('fireinspection_edit', {'id': fireInspection.id}) }}"><i
+                                        class="la la-edit"></i> Edytuj dane podstawowe</a>
                         </div>
+
                     </div>
                     <div class="card-content collpase show">
                         <div class="card-body">
@@ -125,7 +126,7 @@
                             <h4><i class="ft-user"></i> Zakres wykonanych prac</h4>
                             <hr>
                             <div class="col-md-8">
-                                <p>{{ fireInspection.scope|nl2br  }}</p>
+                                <p>{{ fireInspection.scope|nl2br }}</p>
                             </div>
                         </div>
                     </div>
@@ -181,7 +182,7 @@
                             <h4><i class="ft-user"></i> Podstawa opracowania</h4>
                             <hr>
                             <div class="col-md-8">
-                                <p>{{ fireInspection.legal|nl2br  }}</p>
+                                <p>{{ fireInspection.legal|nl2br }}</p>
 
                             </div>
                         </div>
@@ -205,7 +206,15 @@
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">
                                 <li><a class="btn btn-sm btn-danger box-shadow-2 round btn-min-width pull-right"
-                                       href="#">Dodaj urządzenie</a></li>
+                                       href="{{ path('fireinspection_load_devices', {'id': fireInspection.id}) }}">
+                                        Załaduj wszystkie urządzenia z budynku</a>
+                                </li>
+                                <li>
+                                    <button id="load-miss-device"
+                                            class="btn btn-sm btn-info box-shadow-2 round btn-min-width pull-right">
+                                        Dodaj do listy brakujące urządzenie
+                                    </button>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -215,71 +224,80 @@
                         <!-- Task List table -->
                         <button type="button" class="btn btn-sm btn-danger delete-all mb-1">Delete All</button>
                         <div class="table-responsive">
-                            <table id="users-contacts"
+                            <table id="inspected-devices"
                                    class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
                                 <thead>
                                 <tr>
-                                    <th>Nr Pętli</th>
-                                    <th>Nr Urządzenia</th>
-                                    <th>Typ Urządzenia</th>
-                                    <th>Status w systemie</th>
+                                    <th>Pętli</th>
+                                    <th>Urządzenie</th>
+                                    <th>Typ</th>
+                                    <th>Status</th>
                                     <th>Wynik testu</th>
                                     <th>Uwagi</th>
                                     <th>Akcje</th>
 
+
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {#{% for building in client.buildings %}#}
-                                {#<tr>#}
-                                {#<td>{{ building.id }}</td>#}
-                                {#<td onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>#}
-                                {#<div class="media">#}
-                                {#<div class="media-left pr-1"><span#}
-                                {#class="avatar avatar-sm avatar-online rounded-circle"><img#}
-                                {#src="../../../app-assets/images/portrait/small/avatar-s-2.png"#}
-                                {#alt="avatar"><i></i></span></div>#}
-                                {#<div class="media-body media-middle">#}
-                                {#<a class="media-heading name">{{ building.name }}</a>#}
-                                {#</div>#}
-                                {#</div>#}
-                                {#</td>#}
-                                {#<td class="text-center"#}
-                                {#onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>#}
-                                {#<div>{{ building.street }} {{ building.houseNo }}#}
-                                {#/{{ building.flatNo }}</div>#}
-                                {#</td>#}
-                                {#<td class="text-center"#}
-                                {#onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>#}
-                                {#{{ building.city }}#}
-                                {#</td>#}
+                                {% for device in fireInspection.inspectedDevices|sort %}
+                                    <tr id="row-{{ device.id }}">
+                                        <td>
+                                            <div>
+                                                <a class="media-heading name">{{ device.loopNo }}</a>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <div>{{ device.number }} </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <div>{{ device.shortname }}</div>
+                                        </td>
+                                        <td class="text-center">
+                                            {% set checked = false %}
+                                            {% if device.status == 1 %}
+                                                {% set checked = true %}
+                                            {% endif %}
+                                            <input type="checkbox" class="column_filter status-checkbox switch"
+                                                   id="s{{ device.id }}" {% if checked %}checked{% endif %}
+                                                   data-icon-cls="fa" data-off-icon-cls="fa ft-thumbs-down"
+                                                   data-on-icon-cls="fa ft-thumbs-up"
+                                                   data-off-label="OFF"
+                                                   data-on-label="ON"
+                                            >
 
-                                {#<td>#}
-                                {#<a href="{{ path('building_edit', { 'id': building.id }) }}"#}
-                                {#class="primary edit mr-1"><i class="la la-pencil"></i></a>#}
-                                {#<a class="danger delete mr-1"><i class="la la-trash-o"></i></a>#}
-                                {#<span class="dropdown">#}
-                                {#<a id="btnSearchDrop2" data-toggle="dropdown"#}
-                                {#aria-haspopup="true" aria-expanded="true"#}
-                                {#class="dropdown-toggle dropdown-menu-right"><i#}
-                                {#class="la la-ellipsis-v"></i></a>#}
-                                {#<span aria-labelledby="btnSearchDrop2"#}
-                                {#class="dropdown-menu mt-1 dropdown-menu-right">#}
-                                {#<a href="{{ path('building_edit', { 'id': building.id }) }}"#}
-                                {#class="dropdown-item"><i#}
-                                {#class="ft-edit-2"></i>#}
-                                {#Edytuj</a>#}
-                                {#<a href="#" class="dropdown-item delete"><i#}
-                                {#class="ft-trash-2"></i> Usuń</a>#}
-                                {#<a href="{{ path('building_new', { 'client': client.id }) }}"#}
-                                {#class="dropdown-item"><i#}
-                                {#class="ft-plus-circle warning"></i> Dodaj</a>#}
+                                        </td>
+                                        <td class="text-center">
+                                            {% set checked = false %}
+                                            {% if device.test == 1 %}
+                                                {% set checked = true %}
+                                            {% endif %}
+                                            <input type="checkbox" class="column_filter status-checkbox switch"
+                                                   id="t{{ device.id }}" {% if checked %}checked{% endif %}
+                                                   data-icon-cls="fa" data-off-icon-cls="fa ft-thumbs-down"
+                                                   data-on-icon-cls="fa ft-thumbs-up"
+                                                   data-off-label="NEG"
+                                                   data-on-label="POZ"
+                                            >
 
-                                {#</span>#}
-                                {#</span>#}
-                                {#</td>#}
-                                {#</tr>#}
-                                {#{% endfor %}#}
+                                        </td>
+                                        <td class="text-center hidden-input">
+                                            <p id="p{{ device.id }}">{{ device.comment }}</p>
+                                            <input id="c{{ device.id }}"
+                                                   type="hidden" value="">
+                                        </td>
+
+                                        <td>
+                                            <a data-toggle="modal" data-target="#EditContactModal"
+                                               id="edit-{{ device.id }}"
+                                               class="primary edit mr-1"><i class="la la-pencil"></i></a>
+                                            <a id="del-{{ device.id }}" class="danger delete mr-1 del-device"><i
+                                                        class="la la-trash-o"></i></a>
+
+                                        </td>
+
+                                    </tr>
+                                {% endfor %}
                                 </tbody>
 
                             </table>
@@ -392,13 +410,10 @@
                         <h4 class="card-title" id="horz-layout-basic">Podsumowanie przeglądu</h4>
                         <a class="heading-elements-toggle"><i
                                     class="la la-ellipsis-v font-medium-3"></i></a>
-                        <div class="heading-elements">
-                            <ul class="list-inline mb-0">
-                                <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
-                                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
-                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                                <li><a data-action="close"><i class="ft-x"></i></a></li>
-                            </ul>
+                        <div class="heading-elements mt-0">
+                            <a class="btn btn-primary btn-sm "
+                               href="{{ path('fireinspection_edit_summary', {'id': fireInspection.id}) }}"><i
+                                        class="la la-edit"></i> Edytuj podsumowanie</a>
                         </div>
                     </div>
                     <div class="card-content collpase show">
@@ -408,13 +423,7 @@
                             <h4><i class="ft-user"></i>Wnioski</h4>
                             <hr>
                             <div class="col-md-8">
-                                <ul>
-                                    <li>Normy branżowe PN-EN 54-1 oraz PKN-CEN/TS 54-14:2006</li>
-                                    <li>Wytyczne CNBOP -PIB W-001 oraz producentów sprzętu</li>
-                                    <li>Rozporządzenie Ministra Spraw Wewnętrznych i Administracji z dnia 7 czerwca
-                                        2010 r.(Dz.U. nr 109/2010 poz. 719).
-                                    </li>
-                                </ul>
+                                <p>{{ fireInspection.conclusion|nl2br }}</p>
 
                             </div>
                         </div>
@@ -426,13 +435,7 @@
                             <h4><i class="ft-user"></i>Uwagi</h4>
                             <hr>
                             <div class="col-md-8">
-                                <ul>
-                                    <li>Normy branżowe PN-EN 54-1 oraz PKN-CEN/TS 54-14:2006</li>
-                                    <li>Wytyczne CNBOP -PIB W-001 oraz producentów sprzętu</li>
-                                    <li>Rozporządzenie Ministra Spraw Wewnętrznych i Administracji z dnia 7 czerwca
-                                        2010 r.(Dz.U. nr 109/2010 poz. 719).
-                                    </li>
-                                </ul>
+                                <p>{{ fireInspection.comment|nl2br }}</p>
 
                             </div>
                         </div>
@@ -444,14 +447,7 @@
                             <h4><i class="ft-user"></i>Zalecenia</h4>
                             <hr>
                             <div class="col-md-8">
-                                <ul>
-                                    <li>Normy branżowe PN-EN 54-1 oraz PKN-CEN/TS 54-14:2006</li>
-                                    <li>Wytyczne CNBOP -PIB W-001 oraz producentów sprzętu</li>
-                                    <li>Rozporządzenie Ministra Spraw Wewnętrznych i Administracji z dnia 7 czerwca
-                                        2010 r.(Dz.U. nr 109/2010 poz. 719).
-                                    </li>
-                                </ul>
-
+                                <p>{{ fireInspection.recomendations|nl2br }}</p>
                             </div>
                         </div>
                     </div>
@@ -465,5 +461,155 @@
 {% endblock %}
 
 {% block scripts %}
+
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
+    <!-- END: Page Vendor JS-->
+
+    <!-- BEGIN: Page JS-->
+    <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>
+    <!-- END: Page JS-->
+
+    <!-- BEGIN: AJAX change status and test -->
+    <script>
+        $('.status-checkbox').change(function () {
+
+            $.ajax({
+                url: '/inspecteddevice/' + this.id.substring(1) + '/changestatus/' + this.id.substring(0, 1),
+                type: 'POST',
+                dataType: 'json',
+                async: true,
+
+                success: function (data, status) {
+
+
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert('Błąd requestu ajax.');
+                }
+            });
+        })
+
+
+    </script>
+
+    <!-- BEGIN: AJAX change comment -->
+    <script>
+        $(document).ready(function () {
+            $(".hidden-input").click(function () {
+
+                var comment = $(this).find('p').text();
+
+                $(this).find("input").attr('type', 'text').val(comment).focus();
+                $(this).find('p').text('');
+            });
+        });
+
+        $(document).ready(function () {
+            $(".hidden-input").find("input").blur(function () {
+                $(this).attr('type', 'hidden');
+                var comm = ($(this).val().toString() == "") ? null : $(this).val();
+
+                $.ajax({
+                    url: '/inspecteddevice/' + this.id.substring(1) + '/changecomment/' + comm,
+                    type: 'POST',
+                    dataType: 'json',
+                    async: true,
+
+                    success: function (data) {
+                        var id = data['id'];
+                        $("#p" + id).text(data['comm']);
+
+                    },
+                    error: function () {
+                        $(this).parent().find('p').text('Wprowadź ponownie');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- BEGIN: AJAX delete device -->
+    <script>
+        $(document).ready(function () {
+            $('.del-device').click(function () {
+                var device = this.id.substring(4);
+                $.ajax({
+                    url: '/fireinspection/' + {{ fireInspection.id }} +'/delete/' + device,
+                    type: 'DELETE',
+                    dataType: 'json',
+                    async: true,
+
+                    success: function (data) {
+                        $('#row-' + device).remove();
+                        if (data['success'] == false) {
+                            alert("Pomyślnie usunięto urządzenie");
+                        } else {
+                            alert("Wystąpił problem z usunięciem tego urządzenia z bazy!");
+                        }
+                        ;
+
+
+                    },
+                    error: function () {
+                        alert('Błąd usuwania - spróbuj przeładować stronę');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- BEGIN: AJAX delete device -->
+    <script>
+        $(document).ready(function () {
+            $('#load-miss-device').click(function () {
+                var device = this.id.substring(4);
+                $.ajax({
+                    url: '/fireinspection/' + {{ fireInspection.id }} +'/loadmissdevices',
+                    type: 'POST',
+                    dataType: 'json',
+                    async: true,
+
+                    success: function (data) {
+
+                        console.log(data['missing-devices']);
+
+
+
+
+                    },
+                    error: function () {
+                        alert('Błąd ładowania');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+
+        $('#inspected-devices').DataTable({
+            "order": [[0, 'asc'], [1, 'asc'], [2, 'asc']],
+            "language": {
+                "lengthMenu": "Pokaż _MENU_ wierszy na stronie",
+                "zeroRecords": "Niestety brak wyników",
+                "info": "Stron _PAGE_ z _PAGES_",
+                "infoEmpty": "Brak wierszy",
+                "infoFiltered": "(znaleziono z _MAX_ wszystkich wierszy)"
+            },
+            "paging": false,
+        });
+
+    </script>
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-switch.min.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/forms/toggle/switchery.min.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-checkbox.min.js') }}"></script>
+
+
+    <!-- END: Page Vendor JS-->
+    <script src="{{ asset('app-assets/js/scripts/forms/switch.js') }}"></script>
+
+
 
 {% endblock %}

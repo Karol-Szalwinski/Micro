@@ -2,14 +2,16 @@
 
 namespace MicroBundle\Form;
 
+use MicroBundle\Entity\DocumentInspector;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use MicroBundle\Entity\Inspector;
 
-class ClientType extends AbstractType
+
+class FireInspectionSummaryType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -17,19 +19,19 @@ class ClientType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('shortname')
-            ->add('email', TextType::class, ['required' => false])
-            ->add('phoneNumber', TelType::class, ['required' => false])
 
+            ->add('conclusion')
+            ->add('comment')
+            ->add('recomendations')
         ;
+
     }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'MicroBundle\Entity\Client'
+            'data_class' => 'MicroBundle\Entity\FireInspection'
         ));
     }
 
@@ -38,7 +40,7 @@ class ClientType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'microbundle_client';
+        return 'microbundle_fireinspection';
     }
 
 

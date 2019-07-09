@@ -54,6 +54,14 @@ class DocumentInspector
      */
     private $fireInspection;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="prototype", type="integer", nullable=true)
+     */
+    private $prototype;
+
+
 
     /**
      * Get id.
@@ -169,5 +177,29 @@ class DocumentInspector
     public function getFireInspection()
     {
         return $this->fireInspection;
+    }
+
+    /**
+     * Set prototype.
+     *
+     * @param int|null $prototype
+     *
+     * @return DocumentInspector
+     */
+    public function setPrototype($prototype = null)
+    {
+        $this->prototype = $prototype;
+
+        return $this;
+    }
+
+    /**
+     * Get prototype.
+     *
+     * @return int|null
+     */
+    public function getPrototype()
+    {
+        return $this->prototype;
     }
 }

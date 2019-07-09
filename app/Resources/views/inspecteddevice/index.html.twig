@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Inspecteddevices list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Loopno</th>
+                <th>Number</th>
+                <th>Shortname</th>
+                <th>Status</th>
+                <th>Test</th>
+                <th>Comment</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for inspectedDevice in inspectedDevices %}
+            <tr>
+                <td><a href="{{ path('inspecteddevice_show', { 'id': inspectedDevice.id }) }}">{{ inspectedDevice.id }}</a></td>
+                <td>{{ inspectedDevice.loopNo }}</td>
+                <td>{{ inspectedDevice.number }}</td>
+                <td>{{ inspectedDevice.shortname }}</td>
+                <td>{% if inspectedDevice.status %}Yes{% else %}No{% endif %}</td>
+                <td>{% if inspectedDevice.test %}Yes{% else %}No{% endif %}</td>
+                <td>{{ inspectedDevice.comment }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('inspecteddevice_show', { 'id': inspectedDevice.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('inspecteddevice_edit', { 'id': inspectedDevice.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('inspecteddevice_new') }}">Create a new inspectedDevice</a>
+        </li>
+    </ul>
+{% endblock %}

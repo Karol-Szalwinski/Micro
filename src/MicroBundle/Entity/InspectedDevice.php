@@ -1,0 +1,304 @@
+<?php
+
+namespace MicroBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * InspectedDevice
+ *
+ * @ORM\Table(name="inspected_device")
+ * @ORM\Entity(repositoryClass="MicroBundle\Repository\InspectedDeviceRepository")
+ */
+class InspectedDevice
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="loopNo", type="integer")
+     */
+    private $loopNo;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="number", type="integer")
+     */
+    private $number;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="shortname", type="string", length=255)
+     */
+    private $shortname;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="status", type="boolean")
+     */
+    private $status;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="test", type="boolean")
+     */
+    private $test;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comment", type="string", length=255, nullable=true)
+     */
+    private $comment;
+
+    /**
+     * Many InspectedDevices have One Fire Inspection
+     * @ORM\ManyToOne(targetEntity="MicroBundle\Entity\FireInspection", inversedBy="inspectedDevices", cascade={"persist"})
+     * @ORM\JoinColumn(name="fire_inspection_id", referencedColumnName="id")
+     */
+    private $fireInspection;
+
+    /**
+     * Many InspectedDevices have One FireProtectionDevice
+     * @ORM\ManyToOne(targetEntity="MicroBundle\Entity\FireProtectionDevice", inversedBy="inspectedDevices")
+     * @ORM\JoinColumn(name="fire_protection_device_id", referencedColumnName="id")
+     */
+    private $fireProtectionDevice;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->status = true;
+        $this->test = true;
+    }
+
+    /**
+     * Set id.
+     *
+     * @param int $id
+     *
+     * @return InspectedDevice
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get id.
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set loopNo.
+     *
+     * @param int $loopNo
+     *
+     * @return InspectedDevice
+     */
+    public function setLoopNo($loopNo)
+    {
+        $this->loopNo = $loopNo;
+
+        return $this;
+    }
+
+    /**
+     * Get loopNo.
+     *
+     * @return int
+     */
+    public function getLoopNo()
+    {
+        return $this->loopNo;
+    }
+
+    /**
+     * Set number.
+     *
+     * @param int $number
+     *
+     * @return InspectedDevice
+     */
+    public function setNumber($number)
+    {
+        $this->number = $number;
+
+        return $this;
+    }
+
+    /**
+     * Get number.
+     *
+     * @return int
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+
+    /**
+     * Set shortname.
+     *
+     * @param string $shortname
+     *
+     * @return InspectedDevice
+     */
+    public function setShortname($shortname)
+    {
+        $this->shortname = $shortname;
+
+        return $this;
+    }
+
+    /**
+     * Get shortname.
+     *
+     * @return string
+     */
+    public function getShortname()
+    {
+        return $this->shortname;
+    }
+
+    /**
+     * Set status.
+     *
+     * @param bool $status
+     *
+     * @return InspectedDevice
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status.
+     *
+     * @return bool
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set test.
+     *
+     * @param string $test
+     *
+     * @return InspectedDevice
+     */
+    public function setTest($test)
+    {
+        $this->test = $test;
+
+        return $this;
+    }
+
+    /**
+     * Get test.
+     *
+     * @return string
+     */
+    public function getTest()
+    {
+        return $this->test;
+    }
+
+    /**
+     * Set comment.
+     *
+     * @param string $comment
+     *
+     * @return InspectedDevice
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get comment.
+     *
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    /**
+     * Set fireInspection.
+     *
+     * @param \MicroBundle\Entity\FireInspection|null $fireInspection
+     *
+     * @return InspectedDevice
+     */
+    public function setFireInspection(\MicroBundle\Entity\FireInspection $fireInspection = null)
+    {
+        $this->fireInspection = $fireInspection;
+
+        return $this;
+    }
+
+    /**
+     * Get fireInspection.
+     *
+     * @return \MicroBundle\Entity\FireInspection|null
+     */
+    public function getFireInspection()
+    {
+        return $this->fireInspection;
+    }
+
+    /**
+     * Set fireProtectionDevice.
+     *
+     * @param \MicroBundle\Entity\FireProtectionDevice|null $fireProtectionDevice
+     *
+     * @return InspectedDevice
+     */
+    public function setFireProtectionDevice(\MicroBundle\Entity\FireProtectionDevice $fireProtectionDevice = null)
+    {
+        $this->fireProtectionDevice = $fireProtectionDevice;
+
+        return $this;
+    }
+
+    /**
+     * Get fireProtectionDevice.
+     *
+     * @return \MicroBundle\Entity\FireProtectionDevice|null
+     */
+    public function getFireProtectionDevice()
+    {
+        return $this->fireProtectionDevice;
+    }
+}

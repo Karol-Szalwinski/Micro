@@ -90,6 +90,16 @@ class Building
      */
     private $fireInspections;
 
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->fireProtectionDevices = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fireInspections = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * Get id.
      *
@@ -175,11 +185,11 @@ class Building
     /**
      * Set flatNo.
      *
-     * @param string $flatNo
+     * @param string|null $flatNo
      *
      * @return Building
      */
-    public function setFlatNo($flatNo)
+    public function setFlatNo($flatNo = null)
     {
         $this->flatNo = $flatNo;
 
@@ -189,7 +199,7 @@ class Building
     /**
      * Get flatNo.
      *
-     * @return string
+     * @return string|null
      */
     public function getFlatNo()
     {
@@ -221,30 +231,6 @@ class Building
     }
 
     /**
-     * Set description.
-     *
-     * @param string|null $description
-     *
-     * @return Building
-     */
-    public function setDescription($description = null)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description.
-     *
-     * @return string|null
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
      * Set postalCode.
      *
      * @param string $postalCode
@@ -269,6 +255,30 @@ class Building
     }
 
     /**
+     * Set description.
+     *
+     * @param string|null $description
+     *
+     * @return Building
+     */
+    public function setDescription($description = null)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description.
+     *
+     * @return string|null
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
      * Set client.
      *
      * @param \MicroBundle\Entity\Client|null $client
@@ -290,49 +300,6 @@ class Building
     public function getClient()
     {
         return $this->client;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->buildings = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add building.
-     *
-     * @param \MicroBundle\Entity\FireProtectionDevice $building
-     *
-     * @return Building
-     */
-    public function addBuilding(\MicroBundle\Entity\FireProtectionDevice $building)
-    {
-        $this->buildings[] = $building;
-
-        return $this;
-    }
-
-    /**
-     * Remove building.
-     *
-     * @param \MicroBundle\Entity\FireProtectionDevice $building
-     *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeBuilding(\MicroBundle\Entity\FireProtectionDevice $building)
-    {
-        return $this->buildings->removeElement($building);
-    }
-
-    /**
-     * Get buildings.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getBuildings()
-    {
-        return $this->buildings;
     }
 
     /**

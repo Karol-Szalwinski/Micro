@@ -124,4 +124,14 @@ class Inspector
     {
         return $this->license;
     }
+
+    /**
+     * Get fullname.
+     *
+     * @return string
+     */
+    public function getFullname()
+    {
+        return $this->name . ' ' . $this->surname .' ';
+    }
 }

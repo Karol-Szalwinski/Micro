@@ -5,31 +5,22 @@ namespace MicroBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TelType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-class ClientType extends AbstractType
+class InspectedDeviceType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('name')
-            ->add('shortname')
-            ->add('email', TextType::class, ['required' => false])
-            ->add('phoneNumber', TelType::class, ['required' => false])
-
-        ;
+        $builder->add('loopNo')->add('number')->add('shortname')->add('status')->add('test')->add('comment')->add('fireInspection')->add('fireProtectionDevice');
     }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'MicroBundle\Entity\Client'
+            'data_class' => 'MicroBundle\Entity\InspectedDevice'
         ));
     }
 
@@ -38,7 +29,7 @@ class ClientType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'microbundle_client';
+        return 'microbundle_inspecteddevice';
     }
 
 

@@ -64,8 +64,10 @@
                                 <tr>
                                     <th>Id</th>
                                     <th>Nazwa</th>
+                                    <th>Klient</th>
                                     <th>Ulica</th>
                                     <th>Miasto</th>
+                                    <th>Liczba przeglądów</th>
                                     <th>Akcje</th>
 
                                 </tr>
@@ -87,12 +89,20 @@
                                         </td>
                                         <td class="text-center"
                                             onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>
+                                            <div>{{ building.client.name }}</div>
+                                        </td>
+                                        <td class="text-center"
+                                            onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>
                                             <div>{{ building.street }} {{ building.houseNo }}
                                                 /{{ building.flatNo }}</div>
                                         </td>
                                         <td class="text-center"
                                             onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>
                                             {{ building.city }}
+                                        </td>
+                                        <td class="text-center"
+                                            onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>
+                                            {{ building.fireInspections|length }}
                                         </td>
 
                                         <td>
@@ -126,8 +136,10 @@
                                 <tr>
                                     <th>Id</th>
                                     <th>Nazwa</th>
+                                    <th>Klient</th>
                                     <th>Ulica</th>
                                     <th>Miasto</th>
+                                    <th>Liczba przeglądów</th>
                                     <th>Akcje</th>
                                 </tr>
                                 </tfoot>
