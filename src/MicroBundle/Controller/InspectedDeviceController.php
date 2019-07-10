@@ -2,108 +2,39 @@
 
 namespace MicroBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use MicroBundle\Entity\FireInspection;
 use MicroBundle\Entity\InspectedDevice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+
 
 /**
  * Inspecteddevice controller.
  *
- * @Route("inspecteddevice")
+ * @Route("inspdev")
  */
 class InspectedDeviceController extends Controller
 {
-    /**
-     * Lists all inspectedDevice entities.
-     *
-     * @Route("/", name="inspecteddevice_index")
-     * @Method("GET")
-     */
-    public function indexAction()
-    {
-        $em = $this->getDoctrine()->getManager();
 
-        $inspectedDevices = $em->getRepository('MicroBundle:InspectedDevice')->findAll();
-
-        return $this->render('inspecteddevice/index.html.twig', array(
-            'inspectedDevices' => $inspectedDevices,
-        ));
-    }
 
     /**
-     * Creates a new inspectedDevice entity.
-     *
-     * @Route("/new", name="inspecteddevice_new")
+     * Change status or test in InspectedDevice
      * @Method({"GET", "POST"})
-     */
-    public function newAction(Request $request)
-    {
-        $inspectedDevice = new Inspecteddevice();
-        $form = $this->createForm('MicroBundle\Form\InspectedDeviceType', $inspectedDevice);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($inspectedDevice);
-            $em->flush();
-
-            return $this->redirectToRoute('inspecteddevice_show', array('id' => $inspectedDevice->getId()));
-        }
-
-        return $this->render('inspecteddevice/new.html.twig', array(
-            'inspectedDevice' => $inspectedDevice,
-            'form' => $form->createView(),
-        ));
-    }
-
-    /**
-     * Finds and displays a inspectedDevice entity.
-     *
-     * @Route("/{id}", name="inspecteddevice_show")
-     * @Method("GET")
-     */
-    public function showAction(InspectedDevice $inspectedDevice)
-    {
-        $deleteForm = $this->createDeleteForm($inspectedDevice);
-
-        return $this->render('inspecteddevice/show.html.twig', array(
-            'inspectedDevice' => $inspectedDevice,
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
-
-    /**
-     * Displays a form to edit an existing inspectedDevice entity.
-     *
-     * @Route("/{id}/edit", name="inspecteddevice_edit")
-     * @Method({"GET", "POST"})
-     */
-    public function editAction(Request $request, InspectedDevice $inspectedDevice)
-    {
-        $deleteForm = $this->createDeleteForm($inspectedDevice);
-        $editForm = $this->createForm('MicroBundle\Form\InspectedDeviceType', $inspectedDevice);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('inspecteddevice_edit', array('id' => $inspectedDevice->getId()));
-        }
-
-        return $this->render('inspecteddevice/edit.html.twig', array(
-            'inspectedDevice' => $inspectedDevice,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
-
-    /**
      * @Route("/{id}/changestatus/{type}")
+     * @param Request $request
+     * @param $id
+     * @param $type
+     * @return JsonResponse
      */
-    public function changeStatusAction(Request $request, $id, String $type)
+    public function changeStatusAction(Request $request, $id, $type)
     {
         $em = $this->getDoctrine()->getManager();
         $inspectedDevice = $em->getRepository('MicroBundle:InspectedDevice')->findOneById($id);
@@ -136,13 +67,17 @@ class InspectedDeviceController extends Controller
             $jsonData['id'] = $inspectedDevice->getId();
 
             return new JsonResponse($jsonData);
-//        } else {
-//            return $this->render('student/ajax.html.twig');
         }
     }
 
     /**
+     * Change comment Inspected Device
+     *
      * @Route("/{id}/changecomment/{comm}", name="inspected_device_change_comment")
+     * @param Request $request
+     * @param $id
+     * @param $comm
+     * @return JsonResponse
      */
     public function changeCommentAction(Request $request, $id, $comm)
     {
@@ -163,37 +98,167 @@ class InspectedDeviceController extends Controller
     }
 
     /**
-     * Deletes a inspectedDevice entity.
+     * Create list of Inspected Devices.
      *
-     * @Route("/{id}", name="inspecteddevice_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/loaddevices", name="fireinspection_load_devices")
+     * @Method({"GET", "POST"})
+     * @param FireInspection $fireInspection
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction(Request $request, InspectedDevice $inspectedDevice)
+    public function loadDevicesAction(FireInspection $fireInspection)
     {
-        $form = $this->createDeleteForm($inspectedDevice);
-        $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        $fireInspection->setInspectedDevicesVisible();
+        $fireProtectionDevices = $fireInspection->getBuilding()->getFireProtectionDevices();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($inspectedDevice);
-            $em->flush();
+
+        foreach ($fireProtectionDevices as $device) {
+            $success = true;
+            foreach ($fireInspection->getInspectedDevices() as $insDevice) {
+                if ($device === $insDevice->getFireProtectionDevice()) {
+                    $success = false;
+                }
+            }
+
+            //If I find it , I create objects of inspectedDevices and push them into the array
+            if ($success) {
+                $inspectedDevices = new InspectedDevice();
+                $inspectedDevices->setLoopNo($device->getLoopNo());
+                $inspectedDevices->setNumber($device->getNumber());
+                $inspectedDevices->setShortname($device->getShortname());
+
+                $inspectedDevices->setFireProtectionDevice($device);
+                $device->addInspectedDevice($inspectedDevices);
+
+                $inspectedDevices->setFireInspection($fireInspection);
+                $fireInspection->addInspectedDevice($inspectedDevices);
+
+                $em->persist($inspectedDevices);
+
+
+            }
+
         }
+        $em->flush();
 
-        return $this->redirectToRoute('inspecteddevice_index');
+
+        return $this->redirectToRoute('fireinspection_show', array('id' => $fireInspection->getId()));
+
+
     }
 
     /**
-     * Creates a form to delete a inspectedDevice entity.
-     *
-     * @param InspectedDevice $inspectedDevice The inspectedDevice entity
-     *
-     * @return \Symfony\Component\Form\Form The form
+     * @Route("/{id}/deldevices", name="fireinspection_del_devices")
+     * @param FireInspection $fireInspection
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    private function createDeleteForm(InspectedDevice $inspectedDevice)
+    public function deleteDeviceAction(FireInspection $fireInspection)
     {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('inspecteddevice_delete', array('id' => $inspectedDevice->getId())))
-            ->setMethod('DELETE')
-            ->getForm();
+        if (!$fireInspection->getInspectedDevices()->isEmpty()) {
+
+            $em = $this->getDoctrine()->getManager();
+
+            foreach ($fireInspection->getInspectedDevices() as $device) {
+                $fireInspection->removeInspectedDevice($device);
+                $em->remove($device);
+            }
+            $em->flush();
+        }
+        return $this->redirectToRoute('fireinspection_show', array('id' => $fireInspection->getId()));
     }
+
+    /**
+     * @Route("/{id}/changevisible", name="inspecteddevice_change_visible")
+     * @param Request $request
+     * @param $id
+     * @return JsonResponse
+     */
+    public function inspectedDeviceChangeVisibleAction(Request $request, $id)
+    {
+
+
+        $em = $this->getDoctrine()->getManager();
+        $inspectedDevice = $em->getRepository("MicroBundle:InspectedDevice")->findOneBy(["id" => $id]);
+
+
+        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+
+            $response = $inspectedDevice->changeVisible();
+
+            $em->flush();
+
+            $jsonData['response'] = $response;
+
+            return new JsonResponse($jsonData);
+        }
+    }
+
+
+    /**
+     * Create list of Inspected Devices.
+     *
+     * @Route("/{fireInspection}/loadmissdevices", name="fireinspection_load_missed_devices")
+     * @Method({"GET", "POST"})
+     */
+    public function loadMissedDevicesAction($fireInspection, Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $fireInspection = $em->getRepository('MicroBundle:FireInspection')->findOneById($fireInspection);
+        //all devices in building
+        $fireProtectionDevices = $fireInspection->getBuilding()->getFireProtectionDevices();
+
+        $missingInspectedDevices = [];
+
+        //prepare serializer
+        $encoders = [new XmlEncoder(), new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+
+
+//looking for $fireProtectionDevices that have no equivalents in the document fireInspection
+        foreach ($fireProtectionDevices as $device) {
+            $success = true;
+            foreach ($fireInspection->getInspectedDevices() as $insDevice) {
+                if ($device == $insDevice->getFireProtectionDevice()) {
+                    $success = false;
+                }
+            }
+
+            //If I find it , I create objects of inspectedDevices and push them into the array
+            if ($success) {
+                $inspectedDevices = new InspectedDevice();
+                $inspectedDevices->setLoopNo($device->getLoopNo());
+                $inspectedDevices->setNumber($device->getNumber());
+                $inspectedDevices->setShortname($device->getShortname());
+
+                $inspectedDevices->setFireProtectionDevice($device);
+                $device->addInspectedDevice($inspectedDevices);
+
+                array_push($missingInspectedDevices, $serializer->serialize($inspectedDevices, 'json'));
+
+                $inspectedDevices->setFireInspection($fireInspection);
+                $fireInspection->addInspectedDevice($inspectedDevices);
+
+
+                $em->persist($inspectedDevices);
+                $em->flush();
+
+            }
+
+        }
+
+
+        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+
+            $jsonData['missing-devices'] = $missingInspectedDevices;
+
+            return new JsonResponse($jsonData);
+        }
+
+
+    }
+
+
 }

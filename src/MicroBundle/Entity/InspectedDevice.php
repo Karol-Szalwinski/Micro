@@ -64,6 +64,13 @@ class InspectedDevice
     private $comment;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="visible", type="boolean")
+     */
+    private $visible;
+
+    /**
      * Many InspectedDevices have One Fire Inspection
      * @ORM\ManyToOne(targetEntity="MicroBundle\Entity\FireInspection", inversedBy="inspectedDevices", cascade={"persist"})
      * @ORM\JoinColumn(name="fire_inspection_id", referencedColumnName="id")
@@ -84,6 +91,7 @@ class InspectedDevice
     {
         $this->status = true;
         $this->test = true;
+        $this->visible = true;
     }
 
     /**
@@ -300,5 +308,41 @@ class InspectedDevice
     public function getFireProtectionDevice()
     {
         return $this->fireProtectionDevice;
+    }
+
+    /**
+     * Set visible.
+     *
+     * @param bool $visible
+     *
+     * @return InspectedDevice
+     */
+    public function setVisible($visible)
+    {
+        $this->visible = $visible;
+
+        return $this;
+    }
+
+    /**
+     * Get visible.
+     *
+     * @return bool
+     */
+    public function getVisible()
+    {
+        return $this->visible;
+    }
+
+    /**
+     * Change visible.
+     *
+     * @return bool
+     */
+    public function changeVisible()
+    {
+        $this->visible = !$this->visible;
+
+        return $this->visible;
     }
 }

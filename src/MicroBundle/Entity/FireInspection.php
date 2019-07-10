@@ -463,6 +463,20 @@ class FireInspection
     }
 
     /**
+     * Set All inspectedDevices Visible.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function setInspectedDevicesVisible()
+    {
+        foreach ( $this->inspectedDevices as $inspectedDevice) {
+            $inspectedDevice->setVisible(true);
+        }
+
+        return $this->inspectedDevices;
+    }
+
+    /**
      * Set building.
      *
      * @param \MicroBundle\Entity\Building|null $building

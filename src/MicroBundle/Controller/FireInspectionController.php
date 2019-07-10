@@ -10,11 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
+
 
 /**
  * Fireinspection controller.
@@ -169,121 +165,6 @@ class FireInspectionController extends Controller
             'fireInspection' => $fireInspection,
             'edit_form' => $editForm->createView(),
         ));
-    }
-
-    /**
-     * Create list of Inspected Devices.
-     *
-     * @Route("/{id}/loaddevices", name="fireinspection_load_devices")
-     * @Method({"GET", "POST"})
-     */
-    public function loadDevicesAction(Request $request, FireInspection $fireInspection)
-    {
-        if ($fireInspection->getInspectedDevices()->isEmpty()) {
-
-            $em = $this->getDoctrine()->getManager();
-
-            $fireProtectionDevices = $fireInspection->getBuilding()->getFireProtectionDevices();
-
-            foreach ($fireProtectionDevices as $device) {
-                $inspectedDevice = new InspectedDevice();
-                $inspectedDevice->setShortname($device->getShortname());
-                $inspectedDevice->setLoopNo($device->getLoopNo());
-                $inspectedDevice->setNumber($device->getNumber());
-                $inspectedDevice->setFireProtectionDevice($device);
-                $inspectedDevice->setFireInspection($fireInspection);
-                $device->addInspectedDevice($inspectedDevice);
-                $fireInspection->addInspectedDevice($inspectedDevice);
-                $em->persist($inspectedDevice);
-
-
-            }
-            $em->flush();
-
-        }
-        return $this->redirectToRoute('fireinspection_show', array('id' => $fireInspection->getId()));
-
-
-    }
-
-    /**
-     * Create list of Inspected Devices.
-     *
-     * @Route("/{fireInspection}/loadmissdevices", name="fireinspection_load_missed_devices")
-     * @Method({"GET", "POST"})
-     */
-    public function loadMissedDevicesAction( $fireInspection, Request $request) {
-
-        $em = $this->getDoctrine()->getManager();
-
-        $fireInspection = $em->getRepository('MicroBundle:FireInspection')->findOneById($fireInspection);
-            //all devices in building
-        $fireProtectionDevices = $fireInspection->getBuilding()->getFireProtectionDevices();
-
-        $missingInspectedDevices = [];
-        $encoders = [new XmlEncoder(), new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
-
-
-
-        foreach ($fireProtectionDevices as $device) {
-            $success = true;
-            foreach ($fireInspection->getInspectedDevices() as $insDevice) {
-                if ($device == $insDevice->getFireProtectionDevice()) {
-                    $success = false;
-                }
-            }
-            if ($success) {
-                $inspectedDevices = new InspectedDevice();
-                $inspectedDevices->setId($device->getId());
-                $inspectedDevices->setLoopNo($device->getLoopNo());
-                $inspectedDevices->setNumber($device->getNumber());
-                $inspectedDevices->setShortname($device->getShortname());
-
-                array_push($missingInspectedDevices, $serializer->serialize($inspectedDevices, 'json'));
-
-            }
-
-        }
-
-
-        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
-
-            $jsonData['missing-devices'] = $missingInspectedDevices;
-
-            return new JsonResponse($jsonData);
-        }
-
-
-    }
-
-    /**
-     * Deletes a InspectedDevice entity.
-     *
-     * @Route("/{id}/delete/{device}", name="fireinspection_delete_device")
-     * @Method("DELETE")
-     */
-    public function deleteDeviceAction(Request $request, FireInspection $fireInspection, $device)
-    {
-
-        $em = $this->getDoctrine()->getManager();
-
-        $inspectedDevice = $em->getRepository('MicroBundle:InspectedDevice')->findOneById($device);
-
-        $fireInspection = $inspectedDevice->getFireInspection();
-        $fireInspection->removeInspectedDevice($inspectedDevice);
-
-        $em->remove($inspectedDevice);
-        $em->flush();
-
-
-        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
-            $success = ($em->getRepository('MicroBundle:InspectedDevice')->findOneById($device)) ? true : false;
-            $jsonData['success'] = $success;
-
-            return new JsonResponse($jsonData);
-        }
     }
 
 
