@@ -118,6 +118,28 @@ class UserController extends Controller
         return $this->redirectToRoute('user_index');
     }
 
+
+    /**
+     * Displays a form to change password of an existing user entity.
+     *
+     * @Route("/{id}/changepass", name="change_user_password")
+     * @Method({"GET", "POST"})
+     */
+    public function changeUserPasswordAction(Request $request, User $user)
+    {
+        $changePasswordForm = $this->createForm('MicroBundle\Form\ChangeUserPasswordType', $user);
+        $changePasswordForm->handleRequest($request);
+        if ($changePasswordForm->isSubmitted() && $changePasswordForm->isValid()) {
+            $userManager = $this->container->get('fos_user.user_manager');
+            $userManager->updatePassword($user);
+            $this->getDoctrine()->getManager()->flush();
+            return $this->redirectToRoute('user_show', array('id' => $user->getId()));
+        }
+        return $this->render('user/changePassword.html.twig', array(
+            'user' => $user,
+            'change_password_form' => $changePasswordForm->createView(),
+        ));
+    }
     /**
      * Creates a form to delete a user entity.
      *
