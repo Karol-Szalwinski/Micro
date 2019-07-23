@@ -1,40 +1,138 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Użytkownik{% endblock %}
+
 {% block body %}
-    <h1>User</h1>
+    <!-- Content header -->
+    <div class="content-header row">
+        <div class="content-header-left col-md-6 col-12">
+            <h3 class="content-header-title mb-0">Baza Użytkowników</h3>
+            <div class="row breadcrumbs-top">
+                <div class="breadcrumb-wrapper col-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a
+                                    href="{{ path('micro_default_index') }}">Główna</a>
+                        </li>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ user.name }}</td>
-            </tr>
-            <tr>
-                <th>Surname</th>
-                <td>{{ user.surname }}</td>
-            </tr>
-            <tr>
-                <th>Icon</th>
-                <td>{{ user.icon }}</td>
-            </tr>
-        </tbody>
-    </table>
+                        <li class="breadcrumb-item"><a href="{{ path('user_index') }}">Lista
+                                Użytkowników</a>
+                        </li>
 
-    <ul>
-        <li>
-            <a href="{{ path('user_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('user_edit', { 'id': user.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+                        <li class="breadcrumb-item active">Użytkownik {{ user.name }}
+                        </li>
+
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="content-header-left col-md-6 col-12">
+            <div class="btn-group float-md-right" role="group"
+                 aria-label="Button group with nested dropdown">
+                <div class="btn-group" role="group">
+                    <a class="btn btn-outline-info round" href="{{ path('user_index') }}"><i
+                                class="la la-backward"></i> Wróć do listy Użytkowników</a>
+
+                    <button class="btn btn-outline-info round dropdown-toggle dropdown-menu-right"
+                            id="btnGroupDrop1"
+                            type="button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"><i
+                                class="icon-cog3 icon-left"></i> Ustawienia
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1"><a class="dropdown-item"
+                                                                                  href="card-bootstrap.html">Bootstrap
+                            Cards</a><a class="dropdown-item" href="component-buttons-extended.html">Buttons
+                            Extended</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content header -->
+
+    <!-- Basic form layout section start -->
+    <section id="horizontal-form-layouts">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+
+                            <h4><i class="ft-user"></i> Dane Użytkownika</h4>
+                            <hr>
+                            <div class="col-md-12">
+                                <table class="table table-borderless table-column">
+
+                                    <tr>
+                                        <th>Login</th>
+                                        <td>{{ user.username }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Imię</th>
+                                        <td>{{ user.name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Nazwisko</th>
+                                        <td>{{ user.surname }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Email</th>
+                                        <td>{{ user.email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Logowanie</th>
+                                        <td> {% if user.enabled == true %}
+                                                włączone
+                                            {% else %}
+                                                wyłączone
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Przypisane role</th>
+                                        <td>
+                                            {% for roles in user.roles %}
+                                                {% if roles == "ROLE_ADMIN" %}
+                                                    admin&nbsp
+                                                {% elseif roles == "ROLE_USER" %}
+                                                    user&nbsp
+                                                {% elseif roles == "ROLE_EDITOR" %}
+                                                    editor&nbsp
+                                                {% elseif roles == "ROLE_SUPER_ADMIN" %}
+                                                    superadmin&nbsp
+                                                {% else %}
+                                                    {{ roles }}&nbsp
+                                                {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Zablokowany</th>
+                                        <td>
+                                            {% if user.enabled == true %}
+                                                nie
+                                            {% else %}
+                                                tak
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- users buildings section-->
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+    <!-- BEGIN: Page JS-->
+    {#<script src="{{ asset('app-assets/js/scripts/pages/hospital-patient-profile.js') }}"></script>#}
+    <!-- END: Page JS-->
 {% endblock %}

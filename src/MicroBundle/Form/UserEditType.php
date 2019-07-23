@@ -7,11 +7,9 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
 
-class UserType extends AbstractType
+class UserEditType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -19,26 +17,18 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $permissions = array(
-            'ROLE_USER' => 'Użytkownik',
-            'ROLE_EDITOR' => 'Edytor',
-            'ROLE_ADMIN' => 'Administrator'
+            'Użytkownik |' => 'ROLE_USER',
+            'Administrator ' => 'ROLE_ADMIN'
+        );
+
+        $yesNo = array(
+            'Tak ' => 1 ,
+            'Nie ' => 0
         );
 
         $builder
             ->add('email', EmailType::class, array('label' => 'form.email', 'translation_domain' => 'FOSUserBundle'))
             ->add('username', null, array('label' => 'form.username', 'translation_domain' => 'FOSUserBundle'))
-            ->add('plainPassword', RepeatedType::class, array(
-                'type' => PasswordType::class,
-                'options' => array(
-                    'translation_domain' => 'FOSUserBundle',
-                    'attr' => array(
-                        'autocomplete' => 'new-password',
-                    ),
-                ),
-                'first_options' => array('label' => 'form.password'),
-                'second_options' => array('label' => 'form.password_confirmation'),
-                'invalid_message' => 'fos_user.password.mismatch',
-            ))
             ->add('roles', ChoiceType::class, array(
                     'label' => 'Roles',
                     'choices' => $permissions,
@@ -48,6 +38,12 @@ class UserType extends AbstractType
             )
             ->add('name')
             ->add('surname')
+            ->add('enabled', ChoiceType::class, array(
+                    'choices' => $yesNo,
+                    'multiple' => false,
+                    'expanded' => false
+                )
+            )
         ;
     }/**
      * {@inheritdoc}
