@@ -24,21 +24,21 @@ class FireProtectionDevice
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="shortname", type="string", length=5)
+     * @ORM\Column(name="shortname", type="string", length=5, nullable=true)
      */
     private $shortname;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="loopNo", type="integer")
+     * @ORM\Column(name="loopNo", type="integer", nullable=true)
      */
     private $loopNo;
 
@@ -57,11 +57,11 @@ class FireProtectionDevice
     private $lastServiceDate;
 
     /**
-     * Many FireProtectionDevices have One Building.
-     * @ORM\ManyToOne(targetEntity="Building", inversedBy="fireProtectionDevices", cascade={"persist"})
-     * @ORM\JoinColumn(name="building_id", referencedColumnName="id")
+     * Many FireProtectionDevices have One LoopDev.
+     * @ORM\ManyToOne(targetEntity="LoopDev", inversedBy="fireProtectionDevices", cascade={"persist"})
+     * @ORM\JoinColumn(name="loop_dev_id", referencedColumnName="id")
      */
-    private $building;
+    private $loopDev;
 
     /**
      * One FireProtectionDevices has Many inspectedDevices.
@@ -223,29 +223,7 @@ class FireProtectionDevice
         return $this->lastServiceDate;
     }
 
-    /**
-     * Set building.
-     *
-     * @param \MicroBundle\Entity\Building|null $building
-     *
-     * @return FireProtectionDevice
-     */
-    public function setBuilding(\MicroBundle\Entity\Building $building = null)
-    {
-        $this->building = $building;
 
-        return $this;
-    }
-
-    /**
-     * Get building.
-     *
-     * @return \MicroBundle\Entity\Building|null
-     */
-    public function getBuilding()
-    {
-        return $this->building;
-    }
 
     /**
      * Add inspectedDevice.
@@ -272,6 +250,17 @@ class FireProtectionDevice
     {
         return $this->inspectedDevices->removeElement($inspectedDevice);
     }
+    /**
+     * Remove all inspectedDevice.
+     */
+
+    public function removeAllInspectedDevices()
+    {
+        foreach ($this->inspectedDevices as $inspectedDevice) {
+            $this->inspectedDevices->removeElement($inspectedDevice);
+        }
+        return $this;
+    }
 
     /**
      * Get inspectedDevices.
@@ -281,5 +270,29 @@ class FireProtectionDevice
     public function getInspectedDevices()
     {
         return $this->inspectedDevices;
+    }
+
+    /**
+     * Set loopDev.
+     *
+     * @param \MicroBundle\Entity\LoopDev|null $loopDev
+     *
+     * @return FireProtectionDevice
+     */
+    public function setLoopDev(\MicroBundle\Entity\LoopDev $loopDev = null)
+    {
+        $this->loopDev = $loopDev;
+
+        return $this;
+    }
+
+    /**
+     * Get loopDev.
+     *
+     * @return \MicroBundle\Entity\LoopDev|null
+     */
+    public function getLoopDev()
+    {
+        return $this->loopDev;
     }
 }

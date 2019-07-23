@@ -1,0 +1,185 @@
+<?php
+
+namespace MicroBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * LoopDev
+ *
+ * @ORM\Table(name="loop_dev")
+ * @ORM\Entity(repositoryClass="MicroBundle\Repository\LoopDevRepository")
+ */
+class LoopDev
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="number", type="string", length=255)
+     */
+    private $number;
+
+    /**
+     * Many LoopDevs have One Building.
+     * @ORM\ManyToOne(targetEntity="Building", inversedBy="loopDevs", cascade={"persist"})
+     * @ORM\JoinColumn(name="building_id", referencedColumnName="id")
+     */
+    private $building;
+
+    /**
+     * One LoopDev has Many FireProtectionDevices.
+     * @ORM\OneToMany(targetEntity="FireProtectionDevice", mappedBy="loopDev", cascade={"persist"})
+     */
+    private $fireProtectionDevices;
+
+    /**
+     * @var int
+     *
+     */
+    private $quantityDevices;
+
+    /**
+     * Get id.
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set number.
+     *
+     * @param string $number
+     *
+     * @return LoopDev
+     */
+    public function setNumber($number)
+    {
+        $this->number = $number;
+
+        return $this;
+    }
+
+    /**
+     * Get number.
+     *
+     * @return string
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+
+    /**
+     * Set building.
+     *
+     * @param string $building
+     *
+     * @return LoopDev
+     */
+    public function setBuilding($building)
+    {
+        $this->building = $building;
+
+        return $this;
+    }
+
+    /**
+     * Get building.
+     *
+     * @return string
+     */
+    public function getBuilding()
+    {
+        return $this->building;
+    }
+
+    /**
+     * Set fireProtectionDevices.
+     *
+     * @param string $fireProtectionDevices
+     *
+     * @return LoopDev
+     */
+    public function setFireProtectionDevices($fireProtectionDevices)
+    {
+        $this->fireProtectionDevices = $fireProtectionDevices;
+
+        return $this;
+    }
+
+    /**
+     * Get fireProtectionDevices.
+     *
+     * @return string
+     */
+    public function getFireProtectionDevices()
+    {
+        return $this->fireProtectionDevices;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->fireProtectionDevices = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add fireProtectionDevice.
+     *
+     * @param \MicroBundle\Entity\FireProtectionDevice $fireProtectionDevice
+     *
+     * @return LoopDev
+     */
+    public function addFireProtectionDevice(\MicroBundle\Entity\FireProtectionDevice $fireProtectionDevice)
+    {
+        $this->fireProtectionDevices[] = $fireProtectionDevice;
+
+        return $this;
+    }
+
+    /**
+     * Remove fireProtectionDevice.
+     *
+     * @param \MicroBundle\Entity\FireProtectionDevice $fireProtectionDevice
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeFireProtectionDevice(\MicroBundle\Entity\FireProtectionDevice $fireProtectionDevice)
+    {
+        return $this->fireProtectionDevices->removeElement($fireProtectionDevice);
+    }
+
+
+    /**
+     * @param $quantityDevices
+     * @return $this
+     */
+    public function setQuantityDevices($quantityDevices)
+    {
+        $this->quantityDevices = $quantityDevices;
+
+        return $this;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getQuantityDevices()
+    {
+        return $this->quantityDevices;
+    }
+}

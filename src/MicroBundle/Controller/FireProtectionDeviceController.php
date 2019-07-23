@@ -5,7 +5,13 @@ namespace MicroBundle\Controller;
 use MicroBundle\Entity\FireProtectionDevice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * Fireprotectiondevice controller.
@@ -26,9 +32,7 @@ class FireProtectionDeviceController extends Controller
 
         $fireProtectionDevices = $em->getRepository('MicroBundle:FireProtectionDevice')->findAll();
 
-        return $this->render('fireprotectiondevice/index.html.twig', array(
-            'fireProtectionDevices' => $fireProtectionDevices,
-        ));
+        return $this->render('fireprotectiondevice/index.html.twig', array('fireProtectionDevices' => $fireProtectionDevices,));
     }
 
     /**
@@ -51,10 +55,7 @@ class FireProtectionDeviceController extends Controller
             return $this->redirectToRoute('fireprotectiondevice_show', array('id' => $fireProtectionDevice->getId()));
         }
 
-        return $this->render('fireprotectiondevice/new.html.twig', array(
-            'fireProtectionDevice' => $fireProtectionDevice,
-            'form' => $form->createView(),
-        ));
+        return $this->render('fireprotectiondevice/new.html.twig', array('fireProtectionDevice' => $fireProtectionDevice, 'form' => $form->createView(),));
     }
 
     /**
@@ -67,10 +68,7 @@ class FireProtectionDeviceController extends Controller
     {
         $deleteForm = $this->createDeleteForm($fireProtectionDevice);
 
-        return $this->render('fireprotectiondevice/show.html.twig', array(
-            'fireProtectionDevice' => $fireProtectionDevice,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('fireprotectiondevice/show.html.twig', array('fireProtectionDevice' => $fireProtectionDevice, 'delete_form' => $deleteForm->createView(),));
     }
 
     /**
@@ -91,11 +89,7 @@ class FireProtectionDeviceController extends Controller
             return $this->redirectToRoute('fireprotectiondevice_edit', array('id' => $fireProtectionDevice->getId()));
         }
 
-        return $this->render('fireprotectiondevice/edit.html.twig', array(
-            'fireProtectionDevice' => $fireProtectionDevice,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('fireprotectiondevice/edit.html.twig', array('fireProtectionDevice' => $fireProtectionDevice, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView(),));
     }
 
     /**
@@ -127,10 +121,56 @@ class FireProtectionDeviceController extends Controller
      */
     private function createDeleteForm(FireProtectionDevice $fireProtectionDevice)
     {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('fireprotectiondevice_delete', array('id' => $fireProtectionDevice->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
+        return $this->createFormBuilder()->setAction($this->generateUrl('fireprotectiondevice_delete', array('id' => $fireProtectionDevice->getId())))->setMethod('DELETE')->getForm();
+
+    }
+
+    /**
+     * Change status or test in InspectedDevice
+     * @Method({"GET", "POST"})
+     * @Route("/return-fire-protection-device/{id}")
+     * @param Request $request
+     * @param $id
+     * @return JsonResponse
+     */
+    public function returnFireProtectionDeviceAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['id' => $id]);
+        $nameVal = $em->getRepository('MicroBundle:DeviceName')
+            ->findOneBy(['name' => $fireProtectionDevice->getName()]);
+       if ($nameVal==null){
+           $nameVal='1';
+       } else
+       {
+           $nameVal=$nameVal->getId();
+       }
+
+        $fireProtectionDevice->setName($nameVal);
+        //remove refference
+        $fireProtectionDevice->removeAllInspectedDevices()->setLoopDev(null);
+
+//        dump($fireProtectionDevice);die();
+
+        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+
+            //prepare serializer
+            $normalizer = new ObjectNormalizer();
+            $normalizer->setCircularReferenceLimit(0);
+            // Add Circular reference handler
+            $normalizer->setCircularReferenceHandler(function ($object) {
+                return $object->getId();
+            });
+
+            $normalizers = [$normalizer];
+            $encoders = [new XmlEncoder(), new JsonEncoder()];
+            $serializer = new Serializer($normalizers, $encoders);
+            $serializeDevice = $serializer->serialize($fireProtectionDevice, 'json');
+
+            $jsonData['device'] = $serializeDevice;
+
+
+            return new JsonResponse($jsonData);
+        }
     }
 }

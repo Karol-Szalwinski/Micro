@@ -79,10 +79,10 @@ class Building
     private $client;
 
     /**
-     * One Building has Many FireProtectionDevices.
-     * @ORM\OneToMany(targetEntity="FireProtectionDevice", mappedBy="building", cascade={"persist"})
+     * One Building has Many LoopDev.
+     * @ORM\OneToMany(targetEntity="LoopDev", mappedBy="building", cascade={"persist"})
      */
-    private $fireProtectionDevices;
+    private $loopDevs;
 
     /**
      * One Building has Many FireInspections.
@@ -90,13 +90,13 @@ class Building
      */
     private $fireInspections;
 
-    
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->fireProtectionDevices = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->loopDevs = new \Doctrine\Common\Collections\ArrayCollection();
         $this->fireInspections = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -302,41 +302,6 @@ class Building
         return $this->client;
     }
 
-    /**
-     * Add fireProtectionDevice.
-     *
-     * @param \MicroBundle\Entity\FireProtectionDevice $fireProtectionDevice
-     *
-     * @return Building
-     */
-    public function addFireProtectionDevice(\MicroBundle\Entity\FireProtectionDevice $fireProtectionDevice)
-    {
-        $this->fireProtectionDevices[] = $fireProtectionDevice;
-
-        return $this;
-    }
-
-    /**
-     * Remove fireProtectionDevice.
-     *
-     * @param \MicroBundle\Entity\FireProtectionDevice $fireProtectionDevice
-     *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeFireProtectionDevice(\MicroBundle\Entity\FireProtectionDevice $fireProtectionDevice)
-    {
-        return $this->fireProtectionDevices->removeElement($fireProtectionDevice);
-    }
-
-    /**
-     * Get fireProtectionDevices.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFireProtectionDevices()
-    {
-        return $this->fireProtectionDevices;
-    }
 
     /**
      * Add fireInspection.
@@ -372,5 +337,41 @@ class Building
     public function getFireInspections()
     {
         return $this->fireInspections;
+    }
+
+    /**
+     * Add loopDev.
+     *
+     * @param \MicroBundle\Entity\LoopDev $loopDev
+     *
+     * @return Building
+     */
+    public function addLoopDev(\MicroBundle\Entity\LoopDev $loopDev)
+    {
+        $this->loopDevs[] = $loopDev;
+
+        return $this;
+    }
+
+    /**
+     * Remove loopDev.
+     *
+     * @param \MicroBundle\Entity\LoopDev $loopDev
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeLoopDev(\MicroBundle\Entity\LoopDev $loopDev)
+    {
+        return $this->loopDevs->removeElement($loopDev);
+    }
+
+    /**
+     * Get loopDevs.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLoopDevs()
+    {
+        return $this->loopDevs;
     }
 }

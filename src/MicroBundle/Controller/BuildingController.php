@@ -5,6 +5,7 @@ namespace MicroBundle\Controller;
 use MicroBundle\Entity\Building;
 use MicroBundle\Entity\Client;
 use MicroBundle\Entity\FireProtectionDevice;
+use MicroBundle\Entity\LoopDev;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -68,44 +69,68 @@ class BuildingController extends Controller
     {
         $deleteForm = $this->createDeleteForm($building);
 
-        $fireProtectionDevice = new Fireprotectiondevice();
-        $form = $this->createForm('MicroBundle\Form\FireProtectionDeviceType', $fireProtectionDevice);
-        $form->handleRequest($request);
+        $loopDev = new LoopDev();
+        $loopForm = $this->createForm('MicroBundle\Form\LoopDevType', $loopDev);
+        $loopForm->handleRequest($request);
+        //do usunięcia
         $tempFireProtectionDevice = new Fireprotectiondevice();
         $editForm = $this->createForm('MicroBundle\Form\FireProtectionDeviceEditType', $tempFireProtectionDevice);
         $editForm->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        //Form to add Loop
+        if ($loopForm->isSubmitted() && $loopForm->isValid()) {
 
-            $building->addFireProtectionDevice($fireProtectionDevice);
-            $fireProtectionDevice->setBuilding($building);
-            $chosenDevice = $fireProtectionDevice->getName();
-            $fireProtectionDevice->setName($chosenDevice->getName());
-            $fireProtectionDevice->setShortname($chosenDevice->getShortName());
+            $building->addLoopDev($loopDev);
+            $loopDev->setBuilding($building);
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($fireProtectionDevice);
+
+            for ($i = 1; $i <= $loopDev->getQuantityDevices(); $i++) {
+                $fireProtectionDevice = new FireProtectionDevice();
+                $fireProtectionDevice->setNumber($i);
+                $fireProtectionDevice->setLoopDev($loopDev);
+                $loopDev->addFireProtectionDevice($fireProtectionDevice);
+                $em->persist($fireProtectionDevice);
+            }
+
+
+            $em->persist($loopDev);
             $em->flush();
 
             return $this->redirectToRoute('building_show', array('id' => $building->getId()));
         }
-
-        if ($editForm->isSubmitted()) {
-            $em = $this->getDoctrine()->getManager();
-
-            $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneById($tempFireProtectionDevice->getId());
-            $fireProtectionDevice->setName($tempFireProtectionDevice->getName()->getName());
-            $fireProtectionDevice->setShortname($tempFireProtectionDevice->getShortname()->getShortname());
-            $fireProtectionDevice->setLoopNo($tempFireProtectionDevice->getLoopNo());
-            $fireProtectionDevice->setNumber($tempFireProtectionDevice->getNumber());
-            $em->flush();
-
-            return $this->redirectToRoute('building_show', array('id' => $building->getId()));
-        }
+//        Form to add FireProtectionDevice
+//        if ($form->isSubmitted() && $form->isValid()) {
+//
+//            $building->addFireProtectionDevice($fireProtectionDevice);
+//            $fireProtectionDevice->setBuilding($building);
+//            $chosenDevice = $fireProtectionDevice->getName();
+//            $fireProtectionDevice->setName($chosenDevice->getName());
+//            $fireProtectionDevice->setShortname($chosenDevice->getShortName());
+//            $em = $this->getDoctrine()->getManager();
+//            $em->persist($fireProtectionDevice);
+//            $em->flush();
+//
+//            return $this->redirectToRoute('building_show', array('id' => $building->getId()));
+//        }
+        //Form to edit FireProtectionDevice
+//        if ($editForm->isSubmitted()) {
+//            $em = $this->getDoctrine()->getManager();
+//
+//            $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneById($tempFireProtectionDevice->getId());
+//            $fireProtectionDevice->setName($tempFireProtectionDevice->getName()->getName());
+//            $fireProtectionDevice->setShortname($tempFireProtectionDevice->getShortname()->getShortname());
+//            $fireProtectionDevice->setLoopNo($tempFireProtectionDevice->getLoopNo());
+//            $fireProtectionDevice->setNumber($tempFireProtectionDevice->getNumber());
+//            $em->flush();
+//
+//            return $this->redirectToRoute('building_show', array('id' => $building->getId()));
+//        }
 
 //
-        $this->container->get('micro')->updateLastServiceDate($building);
+//        $this->container->get('micro')->updateLastServiceDate($building);
 
-        return $this->render('building/show.html.twig', array('building' => $building, 'delete_form' => $deleteForm->createView(), 'form' => $form->createView(), 'edit_form' => $editForm->createView()));
+        return $this->render('building/show.html.twig', array('building' => $building, 'delete_form' => $deleteForm->createView(), 'loop_form' => $loopForm->createView(), 'edit_form' => $editForm->createView()));
     }
 
     /**

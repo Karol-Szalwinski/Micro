@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Loopdevs list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Number</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for loopDev in loopDevs %}
+            <tr>
+                <td><a href="{{ path('loopdev_show', { 'id': loopDev.id }) }}">{{ loopDev.id }}</a></td>
+                <td>{{ loopDev.number }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('loopdev_show', { 'id': loopDev.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('loopdev_edit', { 'id': loopDev.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('loopdev_new') }}">Create a new loopDev</a>
+        </li>
+    </ul>
+{% endblock %}
