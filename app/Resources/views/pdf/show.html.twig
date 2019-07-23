@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <title>Podgląd wydruku</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            font-family: Georgia, "Times New Roman", Times, serif;
+            font-size: 18px;
+        }
+
+        .table-striped {
+            font-size: 14px;
+        }
+
+        table.table-bordered {
+            border: 1px solid black;
+            margin-top: 20px;
+        }
+
+        table.table-bordered > thead > tr > th {
+            border: 1px solid black;
+        }
+
+        table.table-bordered > tbody > tr > td {
+            border: 1px solid black;
+        }
+
+        .table-striped > tbody > tr:nth-child(odd) > td,
+        .table-striped > tbody > tr:nth-child(odd) > th {
+            background-color: darkgrey;
+        / / Choose your own color here
+        }
+
+        .header, .header-space,
+        .footer, .footer-space {
+            height: 120px;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+        }
+
+        .logo {
+
+            top: 5px;
+        }
+
+        .logo2 {
+
+            top: 50px;
+        }
+
+        .pieczatka {
+
+            top: 10px;
+        }
+
+        hr {
+            display: block;
+            height: 1px;
+            background: transparent;
+            width: 100%;
+            border: none;
+            border-top: solid 1px #940e1f;
+        }
+
+        @media print {
+            .table-striped > tbody > tr:nth-child(odd) > td,
+            .table-striped > tbody > tr:nth-child(odd) > th {
+                background-color: darkgrey !important;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+{% set page = 0 %}
+<!--------------------->
+<table class="col-sm-12">
+    <thead>
+    <tr>
+        <td>
+            <div class="header-space">&nbsp;</div>
+        </td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+
+            <!--------------------->
+            <div class="content">
+
+                <div class="container-fluid">
+
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <p></p>
+                        </div>
+                        <div class="col-sm-3">
+                            <p class="text-right">Skierniewice, {{ "now"|date('d.m.Y') }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p class="text-center"><b>Protokół z przeglądu systemu SSP</b></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p><b>Obiekt: </b><br>
+                                <b>{{ fireInspection.building.name }}</b><br/>
+                                <span>ul. {{ fireInspection.building.street }} {{ fireInspection.building.houseNo }}
+                                    {% if  fireInspection.building.flatNo  is not null %} / {{ fireInspection.building.flatNo }}
+                                    {% endif %}<br/>
+                                    {{ fireInspection.building.city }} {{ fireInspection.building.postalCode }}
+                                </span></p>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p><b>Zakres wykonanych prac: </b><br>{{ fireInspection.scope|nl2br }}</p>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p><b>Wykaz urządzeń objętych
+                                    przeglądem: </b><br>{{ fireInspection.deviceShortlistPosition|nl2br }}</p>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p><b>Data wykonania przeglądu: {{ fireInspection.inspectionDate|date('d.m.Y') }}</b><br>
+                                <b>Data następnego przeglądu: {{ fireInspection.nextInspectionDate|date('d.m.Y') }}</b>
+                            </p>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p><b>Wnioski:</b><br>
+                                <b>{{ fireInspection.conclusion }}</b></p>
+
+                        </div>
+                    </div>
+                    <div class="row" style="page-break-inside: avoid">
+                        <div class="col-sm-12">
+                            <p><b>Osoby uprawnione do przeprowadzania przeglądu
+                                    okresowego</b></p>
+                            <table class="table table-bordered col-sm-9">
+                                <thead>
+                                <tr>
+                                    <th>Imię i nazwisko</th>
+                                    <th>Uprawnienia</th>
+                                    <th>Podpis</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for inspector in fireInspection.documentInspectors %}
+                                    <tr>
+                                        <td style="width: 33%">{{ inspector.fullname }}</td>
+                                        <td style="width: 33%">{{ inspector.license }}</td>
+                                        <td style="width: 33%"></td>
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                    <div class="row" style="page-break-inside: avoid">
+                        <div class="col-sm-12">
+                            <p><b>Uwagi:</b><br>
+                                {{ fireInspection.comment|nl2br }}</p>
+
+                        </div>
+                    </div>
+                    <div class="row" style="page-break-inside: avoid">
+                        <div class="col-sm-12">
+                            <p><b>Zalecenia:</b><br>
+                                {{ fireInspection.recomendations|nl2br }}</p>
+
+                        </div>
+                    </div>
+                    <div class="row" style="page-break-inside: avoid">
+                        <div class="col-sm-12">
+                            <p><b>Podstawa opracowania:</b><br>
+                                {{ fireInspection.legal|nl2br }}</p>
+
+                        </div>
+                    </div>
+
+                    <br>
+                    <div class="row" style="page-break-inside: avoid">
+                        <div class="col-sm-12">
+                            <p class="text-center" ><b>Tabela nr 1</b></p>
+                            <table class="table table-bordered table-striped text-center col-sm-12 table-sm"
+                                   >
+                                <thead >
+                                <tr >
+                                    <th class="align-middle">L.p.</th>
+                                    <th class="align-middle">Nr pętli</th>
+                                    <th class="align-middle">Nr urządzena</th>
+                                    <th class="align-middle">Typ urządzena</th>
+                                    <th class="align-middle">Status w systemie</th>
+                                    <th class="align-middle">Wynik testu</th>
+                                    <th class="align-middle">Uwagi</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for device in fireInspection.inspectedDevices %}
+                                    <tr>
+                                        <td style="width: 6%">{{ loop.index }}</td>
+                                        <td style="width: 10%">{{ device.loopNo }}</td>
+                                        <td style="width: 10%">{{ device.number }}</td>
+                                        <td style="width: 10%">{{ device.shortname }}</td>
+                                        <td style="width: 10%">
+                                            {% if device.status==1 %}Włączony{% else %}Wyłączony{% endif %}
+                                        </td>
+                                        <td style="width: 10%">
+                                            {% if device.test==1 %}Pozytywny{% else %}Negatywny{% endif %}
+                                        </td>
+                                        <td>{{ device.comment }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <br>
+                    <div class="row" style="page-break-inside: avoid">
+                        <div class="col-sm-12">
+                            <p class="text-center" style="page-break-before: avoid"><b>Tabela nr 2</b></p>
+                            <table class="table table-bordered table-striped text-center col-sm-12 table-sm">
+                                <thead>
+                                <tr>
+                                    <th>L.p.</th>
+                                    <th>Pozostałe czynności</th>
+                                    <th>Wynik testu</th>
+                                    <th>Uwagi</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for testPosition in fireInspection.testPositions %}
+                                    <tr>
+                                        <td style="width: 6%">{{ loop.index }}</td>
+                                        <td style="width: 44%">{{ testPosition.name }}</td>
+                                        <td style="width: 10%">
+                                            {% if testPosition.test==1 %}Pozytywny{% else %}Negatywny{% endif %}
+                                        </td>
+                                        <td>{{ testPosition.comment }}</td>
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <!--------------------->
+        </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <td>
+            <div class="footer-space">&nbsp;</div>
+        </td>
+    </tr>
+    </tfoot>
+</table>
+<div class="header col-sm-12">
+
+    <img class="logo " src="{{ asset('assets/images/logo-micro.png') }}" width="90px"
+         height="90px"/>
+
+
+    <img class="logo2 " src="{{ asset('assets/images/logo2-micro.png') }}" width="250px"
+         height="25px"/>
+
+    <div class="float-right pieczatka">
+        <p
+                style="color:#000000;font-size:12px;"><b>MICRO-TECH Michał Łuczywek<br>ul. Senatorska 15<br>96-100
+                Skierniewice<br>NIP: 8361650077<br>tel.600830063</b></p>
+    </div>
+    <hr>
+</div>
+
+<div class="footer col-sm-12">
+    <hr>
+
+    <span class="center">www.microelektronik.pl  mail: michal.luczywek@gmail.com</span>
+
+</div>
+
+
+</body>
+</html>
+
+

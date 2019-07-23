@@ -57,17 +57,18 @@
                             <!-- Task List table -->
                             {#<button type="button" class="btn btn-sm btn-danger delete-all mb-1">Delete All</button>#}
                             <div class="table-responsive">
-                                <table id="users-contacts"
+                                <table id="table-documents"
                                        class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
                                     <thead>
                                     <tr>
-                                        <th>Id</th>
-                                        <th>Deviceshortlistposition</th>
-                                        <th>Inspectiondate</th>
-                                        <th>Nextinspectiondate</th>
-                                        <th>Comment</th>
-                                        <th>Otheractivities</th>
-                                        <th>Actions</th>
+                                        <th>Numer</th>
+                                        <th>Klient</th>
+                                        <th>Budynek</th>
+                                        <th>Data przeglądu</th>
+                                        <th>Data następnego</th>
+                                        <th>Ilość urządzeń</th>
+
+                                        <th>Akcje</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -76,13 +77,11 @@
                                             <td>
                                                 <a href="{{ path('fireinspection_show', { 'id': fireInspection.id }) }}">{{ fireInspection.id }}</a>
                                             </td>
-                                            <td>{{ fireInspection.deviceShortlistPosition }}</td>
-                                            <td>{% if fireInspection.inspectionDate %}{{ fireInspection.inspectionDate|date('Y-m-d H:i:s') }}{% endif %}</td>
-                                            <td>{% if fireInspection.nextInspectionDate %}{{ fireInspection.nextInspectionDate|date('Y-m-d H:i:s') }}{% endif %}</td>
-                                            <td>{{ fireInspection.comment }}</td>
-                                            <td>{{ fireInspection.otherActivities }}</td>
-
-
+                                            <td>{{ fireInspection.building.client.name }}</td>
+                                            <td>{{ fireInspection.building.name }}</td>
+                                            <td>{% if fireInspection.inspectionDate %}{{ fireInspection.inspectionDate|date('d-m-Y') }}{% endif %}</td>
+                                            <td>{% if fireInspection.nextInspectionDate %}{{ fireInspection.nextInspectionDate|date('d-m-Y') }}{% endif %}</td>
+                                            <td>{{ fireInspection.inspectedDevices|length }}</td>
                                             <td>
                                                 <a href="{{ path('fireinspection_edit', { 'id': fireInspection.id }) }}"
                                                    class="primary edit mr-1"><i class="la la-pencil"></i></a>
@@ -94,13 +93,14 @@
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <th>Id</th>
-                                        <th>Deviceshortlistposition</th>
-                                        <th>Inspectiondate</th>
-                                        <th>Nextinspectiondate</th>
-                                        <th>Comment</th>
-                                        <th>Otheractivities</th>
-                                        <th>Actions</th>
+                                        <th>Numer</th>
+                                        <th>Klient</th>
+                                        <th>Budynek</th>
+                                        <th>Data przeglądu</th>
+                                        <th>Data następnego</th>
+                                        <th>Ilość urządzeń</th>
+
+                                        <th>Akcje</th>
                                     </tr>
                                     </tfoot>
                                 </table>
@@ -117,5 +117,17 @@
         <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
 
         <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>
-
+        <script>
+            $('#table-documents').DataTable({
+                "language": {
+                    "lengthMenu": "Pokaż _MENU_ wierszy na stronie",
+                    "zeroRecords": "Niestety brak wyników",
+                    "info": "Stron _PAGE_ z _PAGES_",
+                    "infoEmpty": "Brak wierszy",
+                    "infoFiltered": "(znaleziono z _MAX_ wszystkich wierszy)",
+                    "search": "Szukaj"
+                },
+                "paging": false,
+            });
+        </script>
     {% endblock %}

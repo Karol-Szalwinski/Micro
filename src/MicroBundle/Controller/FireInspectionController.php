@@ -6,6 +6,7 @@ use MicroBundle\Entity\Building;
 use MicroBundle\Entity\DocumentInspector;
 use MicroBundle\Entity\FireInspection;
 use MicroBundle\Entity\InspectedDevice;
+use MicroBundle\Entity\Inspector;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -29,11 +30,9 @@ class FireInspectionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $fireInspections = $em->getRepository('MicroBundle:FireInspection')->findAll();
+        $fireInspections = $em->getRepository('MicroBundle:FireInspection')->findAllExceptId(1);
 
-        return $this->render('fireinspection/index.html.twig', array(
-            'fireInspections' => $fireInspections,
-        ));
+        return $this->render('fireinspection/index.html.twig', array('fireInspections' => $fireInspections,));
     }
 
     /**
@@ -44,7 +43,14 @@ class FireInspectionController extends Controller
      */
     public function newAction(Building $building, Request $request)
     {
-        $fireInspection = new Fireinspection();
+
+        $em = $this->getDoctrine()->getManager();
+        $defaultFireInspection = $em->getRepository('MicroBundle:FireInspection')->findOneBy(['id' => 1]);
+        $fireInspection = clone $defaultFireInspection;
+        $fireInspection->setInspectionDate(new \DateTime());
+        $fireInspection->setNextInspectionDate(new \DateTime('now + 6 month'));
+
+
         $form = $this->createForm('MicroBundle\Form\FireInspectionType', $fireInspection);
         $form->handleRequest($request);
 
@@ -63,17 +69,19 @@ class FireInspectionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
+            foreach ($defaultFireInspection->getTestPositions() as $defTestPosition) {
+                $testPosition = clone $defTestPosition;
+                $testPosition->setFireInspection($fireInspection);
+                $fireInspection->addTestPosition($testPosition);
+                $em->persist($testPosition);
+            }
             $em->persist($fireInspection);
             $em->flush();
 
             return $this->redirectToRoute('fireinspection_show', array('id' => $fireInspection->getId()));
         }
 
-        return $this->render('fireinspection/new.html.twig', array(
-            'fireInspection' => $fireInspection,
-            'building' => $building,
-            'form' => $form->createView(),
-        ));
+        return $this->render('fireinspection/new.html.twig', array('fireInspection' => $fireInspection, 'building' => $building, 'form' => $form->createView(),));
     }
 
     /**
@@ -86,10 +94,7 @@ class FireInspectionController extends Controller
     {
         $deleteForm = $this->createDeleteForm($fireInspection);
 
-        return $this->render('fireinspection/show.html.twig', array(
-            'fireInspection' => $fireInspection,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('fireinspection/show.html.twig', array('fireInspection' => $fireInspection, 'delete_form' => $deleteForm->createView(),));
     }
 
     /**
@@ -100,13 +105,22 @@ class FireInspectionController extends Controller
      */
     public function editAction(Request $request, FireInspection $fireInspection)
     {
+        $em = $this->getDoctrine()->getManager();
+
+        foreach ($fireInspection->getDocumentInspectors() as $inspector) {
+            if ($inspector->getPrototype()) {
+                $prototypeId = $inspector->getPrototype();
+                $prototype = $em->getRepository('MicroBundle:Inspector')->findOneBy(['id' => $prototypeId]);
+                 if ($prototype instanceof Inspector) {
+                     $fireInspection->addTempInspector($prototype);
+                 }
+                }
+        }
 
         $editForm = $this->createForm('MicroBundle\Form\FireInspectionType', $fireInspection);
 
-//        dump($fireInspection); die();
         $editForm->handleRequest($request);
 
-        $em = $this->getDoctrine()->getManager();
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             //clear Document Inspectors
@@ -124,6 +138,7 @@ class FireInspectionController extends Controller
                 $docInspector->setSurname($inspector->getSurname());
                 $docInspector->setLicense($inspector->getLicense());
                 $docInspector->setFireInspection($fireInspection);
+                $docInspector->setPrototype($inspector->getId());
                 $fireInspection->addDocumentInspector($docInspector);
                 $fireInspection->removeTempInspector($inspector);
             }
@@ -132,10 +147,7 @@ class FireInspectionController extends Controller
             return $this->redirectToRoute('fireinspection_show', array('id' => $fireInspection->getId()));
         }
 
-        return $this->render('fireinspection/edit.html.twig', array(
-            'fireInspection' => $fireInspection,
-            'edit_form' => $editForm->createView(),
-        ));
+        return $this->render('fireinspection/edit.html.twig', array('fireInspection' => $fireInspection, 'edit_form' => $editForm->createView(),));
 
     }
 
@@ -161,10 +173,7 @@ class FireInspectionController extends Controller
             return $this->redirectToRoute('fireinspection_show', array('id' => $fireInspection->getId()));
         }
 
-        return $this->render('fireinspection/editsum.html.twig', array(
-            'fireInspection' => $fireInspection,
-            'edit_form' => $editForm->createView(),
-        ));
+        return $this->render('fireinspection/editsum.html.twig', array('fireInspection' => $fireInspection, 'edit_form' => $editForm->createView(),));
     }
 
 
@@ -197,10 +206,7 @@ class FireInspectionController extends Controller
      */
     private function createDeleteForm(FireInspection $fireInspection)
     {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('fireinspection_delete', array('id' => $fireInspection->getId())))
-            ->setMethod('DELETE')
-            ->getForm();
+        return $this->createFormBuilder()->setAction($this->generateUrl('fireinspection_delete', array('id' => $fireInspection->getId())))->setMethod('DELETE')->getForm();
     }
 
 

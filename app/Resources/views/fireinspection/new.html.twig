@@ -71,33 +71,35 @@
                                 <h4 class="form-section"><i class="ft-user"></i> Dane podstawowe przeglądu</h4>
                                 <div class="form-group row">
                                     {{ form_label(form.inspectionDate, 'Data przegladu', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
-                                    <div class="col-md-9 mx-auto">
+                                    <div class="col-md-3">
                                         {{ form_widget(form.inspectionDate, { 'attr': {'class': 'form-control'} }) }}
 
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(form.nextInspectionDate, 'Data następnego przeglądu', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
-                                    <div class="col-md-9 mx-auto">
+                                    <div class="col-md-3">
                                         {{ form_widget(form.nextInspectionDate, { 'attr': {'class': 'form-control pickadate datepicker'} }) }}
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(form.scope, 'Zakres wykonanych prac', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 ">
-                                        {{ form_widget(form.scope, { 'attr': {'class': 'form-control ', 'placeholder': 'Wprowadź zakres'} }) }}
+                                        {{ form_widget(form.scope, { 'attr': {'class': 'form-control ', 'placeholder': 'Wprowadź zakres','rows': '5'} }) }}
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(form.tempInspectors, 'Osoby uprawnione', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
-                                        {{ form_widget(form.tempInspectors, { 'attr': {'class': 'form-control'} }) }}
+                                        {{ form_widget(form.tempInspectors, { 'attr': {'class': 'form-control mr-3 '}}) }}
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(form.legal, 'Podstawa prawna', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
-                                        {{ form_widget(form.legal, { 'attr': {'class': 'form-control textarea-autosize', 'placeholder': 'Wprowadź podstawę prawną'} }) }}
+                                        {{ form_widget(form.legal, { 'attr':
+                                            {'class': 'form-control textarea-autosize', 'placeholder': 'Wprowadź podstawę prawną','rows': '5'}
+                                        }) }}
                                     </div>
                                 </div>
 
@@ -140,6 +142,15 @@
             + parseFloat($(this).css("borderBottomWidth"))) {
                 $(this).height($(this).height()+1);
             };
+        });
+    </script>
+//autocheck all checkboxes
+    <script>
+        $(':checkbox').next().addClass('pr-2');
+        $(':checkbox').each(function() {
+            this.checked = true;
+
+
         });
     </script>
     <!-- END: Page JS-->

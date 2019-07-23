@@ -1,0 +1,395 @@
+body
+{
+   background-color: #FFFFFF;
+   color: #000000;
+   font-family: "Times New Roman";
+   font-weight: normal;
+   font-size: 17px;
+   line-height: 1.1875;
+   margin: 0;
+   padding: 0;
+}
+#PageHeader1
+{
+   background-color: #F5F5F5;
+   background-image: none;
+   box-sizing: border-box;
+}
+#wb_miasto-data 
+{
+   background-color: transparent;
+   background-image: none;
+   border: 0px solid #000000;
+   padding: 0;
+   margin: 0;
+   text-align: left;
+}
+#wb_miasto-data
+{
+   color: #000000;
+   font-family: "Times New Roman";
+   font-weight: normal;
+   font-size: 17px;
+   line-height: 20px;
+}
+#wb_miasto-data p, #wb_miasto-data ul
+{
+   margin: 0;
+   padding: 0;
+}
+#wb_Tytul 
+{
+   background-color: transparent;
+   background-image: none;
+   border: 0px solid #000000;
+   padding: 0;
+   margin: 0;
+   text-align: center;
+}
+#wb_Tytul div
+{
+   text-align: center;
+}
+#wb_Obiekt 
+{
+   background-color: transparent;
+   background-image: none;
+   border: 0px solid #000000;
+   padding: 0;
+   margin: 0;
+   text-align: left;
+}
+#wb_Obiekt div
+{
+   text-align: left;
+}
+#wb_Zakres 
+{
+   background-color: transparent;
+   background-image: none;
+   border: 0px solid #000000;
+   padding: 0;
+   margin: 0;
+   text-align: left;
+}
+#wb_Zakres div
+{
+   text-align: left;
+}
+#wb_Wykaz 
+{
+   background-color: transparent;
+   background-image: none;
+   border: 0px solid #000000;
+   padding: 0;
+   margin: 0;
+   text-align: left;
+}
+#wb_Wykaz div
+{
+   text-align: left;
+}
+#wb_Data 
+{
+   background-color: transparent;
+   background-image: none;
+   border: 0px solid #000000;
+   padding: 0;
+   margin: 0;
+   text-align: left;
+}
+#wb_Data div
+{
+   text-align: left;
+}
+#wb_Wnioski 
+{
+   background-color: transparent;
+   background-image: none;
+   border: 0px solid #000000;
+   padding: 0;
+   margin: 0;
+   text-align: left;
+}
+#wb_Wnioski div
+{
+   text-align: left;
+}
+#wb_Osoby 
+{
+   background-color: transparent;
+   background-image: none;
+   border: 0px solid #000000;
+   padding: 0;
+   margin: 0;
+   text-align: left;
+}
+#wb_Osoby div
+{
+   text-align: left;
+}
+#Tabela-osoby
+{
+   border: 1px solid #000000;
+   background-color: transparent;
+   background-image: none;
+   border-collapse: collapse;
+   border-spacing: 1px;
+   margin: 0;
+}
+#Tabela-osoby td
+{
+   padding: 1px 1px 1px 1px;
+}
+#Tabela-osoby td div
+{
+   white-space: nowrap;
+}
+#Tabela-osoby p, #Tabela-osoby ul
+{
+   margin: 0;
+   padding: 0;
+}
+#Tabela-osoby .cell0
+{
+   background-color: transparent;
+   background-image: none;
+   border: 1px #000000 solid;
+   text-align: left;
+   vertical-align: middle;
+   width: 179px;
+   height: 29px;
+   color: #000000;
+   font-family: Arial;
+   font-size: 13px;
+   line-height: 16px;
+}
+#Tabela-osoby .cell1
+{
+   background-color: transparent;
+   background-image: none;
+   border: 1px #000000 solid;
+   text-align: left;
+   vertical-align: middle;
+   width: 213px;
+   height: 29px;
+   color: #000000;
+   font-family: Arial;
+   font-size: 13px;
+   line-height: 16px;
+}
+#Tabela-osoby .cell2
+{
+   background-color: transparent;
+   background-image: none;
+   border: 1px #000000 solid;
+   text-align: left;
+   vertical-align: top;
+   width: 213px;
+   height: 29px;
+   color: #000000;
+   font-family: Arial;
+   font-size: 13px;
+   line-height: 16px;
+}
+#wb_Uwagi 
+{
+   background-color: transparent;
+   background-image: none;
+   border: 0px solid #000000;
+   padding: 0;
+   margin: 0;
+   text-align: left;
+}
+#wb_Uwagi div
+{
+   text-align: left;
+}
+#wb_Zalecenia 
+{
+   background-color: transparent;
+   background-image: none;
+   border: 0px solid #000000;
+   padding: 0;
+   margin: 0;
+   text-align: left;
+}
+#wb_Zalecenia div
+{
+   text-align: left;
+}
+#wb_Podstawa 
+{
+   background-color: transparent;
+   background-image: none;
+   border: 0px solid #000000;
+   padding: 0;
+   margin: 0;
+   text-align: left;
+}
+#wb_Podstawa div
+{
+   text-align: left;
+}
+#wb_Tabela1 
+{
+   background-color: transparent;
+   background-image: none;
+   border: 0px solid #000000;
+   padding: 0;
+   margin: 0;
+   text-align: center;
+}
+#wb_Tabela1 div
+{
+   text-align: center;
+}
+#Table1
+{
+   border: 1px solid #000000;
+   background-color: transparent;
+   background-image: none;
+   border-collapse: collapse;
+   border-spacing: 1px;
+   margin: 0;
+}
+#Table1 td
+{
+   padding: 1px 1px 1px 1px;
+}
+#Table1 td div
+{
+   white-space: nowrap;
+}
+#Table1 p, #Table1 ul
+{
+   margin: 0;
+   padding: 0;
+}
+#Table1 .cell0
+{
+   background-color: transparent;
+   background-image: none;
+   border: 1px #000000 solid;
+   text-align: center;
+   vertical-align: middle;
+   color: #000000;
+   font-family: "Times New Roman";
+   font-size: 17px;
+   line-height: 20px;
+}
+#Table1 .cell1
+{
+   background-color: transparent;
+   background-image: none;
+   border: 1px #000000 solid;
+   text-align: center;
+   vertical-align: middle;
+   color: #000000;
+   font-family: "Times New Roman";
+   font-size: 13px;
+   line-height: 15.5px;
+}
+#Table1 .cell2
+{
+   background-color: transparent;
+   background-image: none;
+   border: 1px #000000 solid;
+   text-align: left;
+   vertical-align: top;
+   color: #000000;
+   font-family: "Times New Roman";
+   font-size: 17px;
+   line-height: 20px;
+}
+#Table1 tr:nth-child(odd)
+{
+   background-color: #DCDCDC;
+}
+#wb_Text1 
+{
+   background-color: transparent;
+   background-image: none;
+   border: 0px solid #000000;
+   padding: 0;
+   margin: 0;
+   text-align: center;
+}
+#wb_Text1 div
+{
+   text-align: center;
+}
+#Table2
+{
+   border: 1px solid #000000;
+   background-color: transparent;
+   background-image: none;
+   border-collapse: collapse;
+   border-spacing: 1px;
+   margin: 0;
+}
+#Table2 td
+{
+   padding: 1px 1px 1px 1px;
+}
+#Table2 td div
+{
+   white-space: nowrap;
+}
+#Table2 p, #Table2 ul
+{
+   margin: 0;
+   padding: 0;
+}
+#Table2 .cell0
+{
+   background-color: transparent;
+   background-image: none;
+   border: 1px #000000 solid;
+   text-align: center;
+   vertical-align: middle;
+   color: #000000;
+   font-family: "Times New Roman";
+   font-size: 13px;
+   line-height: 15.5px;
+}
+#Table2 .cell1
+{
+   background-color: transparent;
+   background-image: none;
+   border: 1px #000000 solid;
+   text-align: center;
+   vertical-align: middle;
+   color: #000000;
+   font-family: "Times New Roman";
+   font-size: 17px;
+   line-height: 20px;
+}
+#Table2 .cell2
+{
+   background-color: transparent;
+   background-image: none;
+   border: 1px #000000 solid;
+   text-align: left;
+   vertical-align: middle;
+   color: #000000;
+   font-family: "Times New Roman";
+   font-size: 17px;
+   line-height: 20px;
+}
+#Table2 .cell3
+{
+   background-color: transparent;
+   background-image: none;
+   border: 1px #000000 solid;
+   text-align: left;
+   vertical-align: middle;
+   color: #000000;
+   font-family: "Times New Roman";
+   font-size: 13px;
+   line-height: 15.5px;
+}
+#Table2 tr:nth-child(odd)
+{
+   background-color: #DCDCDC;
+}

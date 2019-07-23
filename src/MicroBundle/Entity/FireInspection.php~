@@ -31,7 +31,7 @@ class FireInspection
     /**
      * @var string
      *
-     * @ORM\Column(name="deviceShortlistPosition", type="string", length=255, nullable=true)
+     * @ORM\Column(name="deviceShortlistPosition", type="text", nullable=true)
      */
     private $deviceShortlistPosition;
 
@@ -101,11 +101,10 @@ class FireInspection
     private $inspectedDevices;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="otherActivities", type="string", length=255, nullable=true)
+     * One Fire Inspection has Many testPositions.
+     * @ORM\OneToMany(targetEntity="MicroBundle\Entity\TestPosition", mappedBy="fireInspection", cascade={"persist"})
      */
-    private $otherActivities;
+    private $testPositions;
 
     /**
      * Many FireInspections have One Building.
@@ -463,6 +462,20 @@ class FireInspection
     }
 
     /**
+     * Set All inspectedDevices Visible.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function setInspectedDevicesVisible()
+    {
+        foreach ( $this->inspectedDevices as $inspectedDevice) {
+            $inspectedDevice->setVisible(true);
+        }
+
+        return $this->inspectedDevices;
+    }
+
+    /**
      * Set building.
      *
      * @param \MicroBundle\Entity\Building|null $building
@@ -484,5 +497,41 @@ class FireInspection
     public function getBuilding()
     {
         return $this->building;
+    }
+
+    /**
+     * Add testPosition.
+     *
+     * @param \MicroBundle\Entity\TestPosition $testPosition
+     *
+     * @return FireInspection
+     */
+    public function addTestPosition(\MicroBundle\Entity\TestPosition $testPosition)
+    {
+        $this->testPositions[] = $testPosition;
+
+        return $this;
+    }
+
+    /**
+     * Remove testPosition.
+     *
+     * @param \MicroBundle\Entity\TestPosition $testPosition
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeTestPosition(\MicroBundle\Entity\TestPosition $testPosition)
+    {
+        return $this->testPositions->removeElement($testPosition);
+    }
+
+    /**
+     * Get testPositions.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTestPositions()
+    {
+        return $this->testPositions;
     }
 }

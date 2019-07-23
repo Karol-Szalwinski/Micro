@@ -155,7 +155,7 @@
                                         <td class="text-center"
                                             onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>
                                             <div>{{ building.street }} {{ building.houseNo }}
-                                                /{{ building.flatNo }}</div>
+                                                {% if building.flatNo is not null %}/ {{ building.flatNo }}{%  endif %}</div>
                                         </td>
                                         <td class="text-center"
                                             onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>

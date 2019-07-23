@@ -20,6 +20,8 @@ class DefaultController extends Controller
 
     /**
      * @Route("/ajax")
+     * @param Request $request
+     * @return JsonResponse
      */
     public function ajaxAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -32,10 +34,8 @@ class DefaultController extends Controller
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
             $jsonData['buildings'] = $buildingsCount;
             $jsonData['clients'] = $clientsCount;
-            $jsonData['fireInspections'] = $fireInspectionCount;
+            $jsonData['fireInspections'] = $fireInspectionCount - 1; //except one default
             return new JsonResponse($jsonData);
-//        } else {
-//            return $this->render('student/ajax.html.twig');
         }
 
 

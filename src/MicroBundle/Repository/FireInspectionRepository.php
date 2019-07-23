@@ -1,7 +1,6 @@
 <?php
 
 namespace MicroBundle\Repository;
-
 /**
  * FireInspectionRepository
  *
@@ -9,5 +8,19 @@ namespace MicroBundle\Repository;
  * repository methods below.
  */
 class FireInspectionRepository extends \Doctrine\ORM\EntityRepository
+
 {
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function findAllExceptId($id) {
+        $qb = $this->createQueryBuilder('FireInspection');
+        $qb->add('select', 'f')
+            ->add('from', 'MicroBundle:FireInspection f')
+            ->add('where', 'f != :id')
+            ->setParameter('id', $id);
+        return $qb->getQuery()->getResult();
+    }
+
 }

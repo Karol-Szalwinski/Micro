@@ -26,12 +26,20 @@ class User extends BaseUser
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
     private $name;
+
     /**
      * @var string
      *
      * @ORM\Column(name="surname", type="string", length=255, nullable=true)
      */
     private $surname;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="icon", type="string", length=255, nullable=true)
+     */
+    private $icon;
 
     public function __construct()
     {

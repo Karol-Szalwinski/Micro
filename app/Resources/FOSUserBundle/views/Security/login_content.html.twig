@@ -1,0 +1,96 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% if error %}
+    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+{% endif %}
+<div class="content-body">
+    <section class="flexbox-container">
+        <div class="col-12 d-flex align-items-center justify-content-center">
+            <div class="col-lg-4 col-md-8 col-10 box-shadow-2 p-0">
+                <div class="card border-grey border-lighten-3 px-1 py-1 m-0">
+                    <div class="card-header border-0">
+                        <div class="card-title text-center">
+                            <img src="{{  asset('assets/images/logo-micro.png') }}" alt="branding logo" width="55" height="55">
+                            <img src="{{  asset('assets/images/logo2-micro.png') }}" alt="branding logo" width="200" height="20">
+                        </div>
+                        <h6 class="card-subtitle line-on-side text-muted text-center font-small-3 pt-2"><span>Micro App</span></h6>
+                    </div>
+                    <div class="card-content">
+                        <div class="text-center">
+                            <a href="#" class="btn btn-social-icon mr-1 mb-1 btn-outline-facebook"><span class="la la-facebook"></span></a>
+                            <a href="#" class="btn btn-social-icon mr-1 mb-1 btn-outline-twitter"><span class="la la-twitter"></span></a>
+                            <a href="#" class="btn btn-social-icon mr-1 mb-1 btn-outline-linkedin"><span class="la la-linkedin font-medium-4"></span></a>
+                            <a href="#" class="btn btn-social-icon mr-1 mb-1 btn-outline-github"><span class="la la-github font-medium-4"></span></a>
+                        </div>
+                        {#<p class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1"><span>OR Using Account Details</span></p>#}
+                        <div class="card-body">
+                            <form class="form-horizontal" action="{{ path("fos_user_security_check") }}" novalidate method="post">
+                                {% if csrf_token %}
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
+                                {% endif %}
+                                <fieldset class="form-group position-relative has-icon-left">
+                                    {#<input type="text" class="form-control"  placeholder="Twój Login" required>#}
+                                    <input type="text" placeholder="Login" class="form-control" id="user-name" name="_username"
+                                           value="{{ last_username }}" required="required"/>
+                                    <div class="form-control-position">
+                                        <i class="ft-user"></i>
+                                    </div>
+                                </fieldset>
+                                <fieldset class="form-group position-relative has-icon-left">
+                                    {#<input type="password" class="form-control" id="user-password" placeholder="Enter Password" required>#}
+                                    <input type="password" placeholder="Hasło" class="form-control" id="user-password"  name="_password"
+                                           required="required"/>
+                                    <div class="form-control-position">
+                                        <i class="la la-key"></i>
+                                    </div>
+                                </fieldset>
+                                <div class="form-group row">
+                                    <div class="col-sm-6 col-12 text-center text-sm-left pr-0">
+                                        <fieldset>
+                                            {#<input type="checkbox" id="remember-me" >#}
+                                            <input type="checkbox" id="remember-me" name="_remember_me" value="on" class="chk-remember"/>
+                                            <label for="remember-me"> Pamiętaj Mnie</label>
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-sm-6 col-12 float-sm-left text-center text-sm-right">
+                                        <a id="forgot-password" class="card-link">Zapomniałeś hasła?</a>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-outline-info btn-block"><i class="ft-unlock"></i> Zaloguj</button>
+                            </form>
+                            {#<form action="{{ path("fos_user_security_check") }}" method="post">#}
+                                {#{% if csrf_token %}#}
+                                    {#<input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>#}
+                                {#{% endif %}#}
+                                {#<p class="text-muted text-center">#}
+                                    {#Wprowadź login i hasło#}
+                                {#</p>#}
+
+                                {#<input type="text" placeholder="Login" class="form-control top" id="username" name="_username"#}
+                                       {#value="{{ last_username }}" required="required"/>#}
+
+                                {#<input type="password" placeholder="Hasło" class="form-control bottom" id="password" name="_password"#}
+                                       {#required="required"/>#}
+
+                                {#<div class="checkbox">#}
+                                    {#<label for="remember_me">#}
+                                        {#<input type="checkbox" id="remember_me" name="_remember_me" value="on"/>#}
+                                        {#Pamiętaj mnie#}
+                                    {#</label>#}
+                                {#</div>#}
+
+                                {#<input type="submit" id="_submit" class="btn btn-lg btn-primary btn-block" name="_submit"#}
+                                       {#value="Zaloguj mnie"/>#}
+                            {#</form>#}
+                        </div>
+                        {#<p class="card-subtitle line-on-side text-muted text-center font-small-3 mx-2 my-1"><span>New to Modern ?</span></p>#}
+                        {#<div class="card-body">#}
+                            {#<a href="register-with-bg-image.html" class="btn btn-outline-danger btn-block"><i class="ft-user"></i> Register</a>#}
+                        {#</div>#}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>

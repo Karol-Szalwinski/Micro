@@ -26,14 +26,14 @@
                     <a class="btn btn-outline-info round" href="{{ path('client_new') }}"><i
                                 class="la la-user-plus"></i> Dodaj nowego</a>
 
-                    <button class="btn btn-outline-info round dropdown-toggle dropdown-menu-right" id="btnGroupDrop1"
-                            type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
-                                class="icon-cog3 icon-left"></i> Ustawienia
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1"><a class="dropdown-item"
-                                                                                  href="card-bootstrap.html">Bootstrap
-                            Cards</a><a class="dropdown-item" href="component-buttons-extended.html">Buttons
-                            Extended</a></div>
+                    {#<button class="btn btn-outline-info round dropdown-toggle dropdown-menu-right" id="btnGroupDrop1"#}
+                            {#type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i#}
+                                {#class="icon-cog3 icon-left"></i> Ustawienia#}
+                    {#</button>#}
+                    {#<div class="dropdown-menu" aria-labelledby="btnGroupDrop1"><a class="dropdown-item"#}
+                                                                                  {#href="card-bootstrap.html">Bootstrap#}
+                            {#Cards</a><a class="dropdown-item" href="component-buttons-extended.html">Buttons#}
+                            {#Extended</a></div>#}
                 </div>
             </div>
         </div>
@@ -56,7 +56,7 @@
                         <!-- Task List table -->
                         {#<button type="button" class="btn btn-sm btn-danger delete-all mb-1">Delete All</button>#}
                         <div class="table-responsive">
-                            <table id="users-contacts"
+                            <table id="table-clients"
                                    class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
                                 <thead>
                                 <tr>
@@ -65,7 +65,7 @@
                                     <th>Skrót</th>
                                     <th>Email</th>
                                     <th>Telefon</th>
-                                    <th>Liczba Budynków</th>
+                                    <th>Budynków</th>
                                     <th>Akcje</th>
                                 </tr>
                                 </thead>
@@ -75,10 +75,10 @@
                                         <td>{{ client.id }}</td>
                                         <td onclick='location.href = "{{ path('client_show', { 'id': client.id }) }}";'>
                                             <div class="media">
-                                                <div class="media-left pr-1"><span
-                                                            class="avatar avatar-sm avatar-online rounded-circle"><img
-                                                                src="../../../app-assets/images/portrait/small/avatar-s-2.png"
-                                                                alt="avatar"><i></i></span></div>
+                                                {#<div class="media-left pr-1"><span#}
+                                                            {#class="avatar avatar-sm avatar-online rounded-circle"><img#}
+                                                                {#src="../../../app-assets/images/portrait/small/avatar-s-2.png"#}
+                                                                {#alt="avatar"><i></i></span></div>#}
                                                 <div class="media-body media-middle">
                                                     <a class="media-heading name">{{ client.name }}</a>
                                                 </div>
@@ -152,5 +152,19 @@
     <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
 
     <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>
+
+    <script>
+        $('#table-clients').DataTable({
+            "language": {
+                "lengthMenu": "Pokaż _MENU_ wierszy na stronie",
+                "zeroRecords": "Niestety brak wyników",
+                "info": "Stron _PAGE_ z _PAGES_",
+                "infoEmpty": "Brak wierszy",
+                "infoFiltered": "(znaleziono z _MAX_ wszystkich wierszy)",
+                "search": "Szukaj"
+            },
+            "paging": false,
+        });
+    </script>
 
 {% endblock %}

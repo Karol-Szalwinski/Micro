@@ -90,6 +90,20 @@ class FireProtectionDevice
     }
 
     /**
+     * Set id.
+     *
+     * @param $id
+     *
+     * @return FireProtectionDevice
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * Set name.
      *
      * @param string $name

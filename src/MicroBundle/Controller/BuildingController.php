@@ -30,9 +30,7 @@ class BuildingController extends Controller
 
         $buildings = $em->getRepository('MicroBundle:Building')->findAll();
 
-        return $this->render('building/index.html.twig', array(
-            'buildings' => $buildings,
-        ));
+        return $this->render('building/index.html.twig', array('buildings' => $buildings,));
     }
 
     /**
@@ -57,11 +55,7 @@ class BuildingController extends Controller
             return $this->redirectToRoute('building_show', array('id' => $building->getId()));
         }
 
-        return $this->render('building/new.html.twig', array(
-            'building' => $building,
-            'client' => $client,
-            'form' => $form->createView(),
-        ));
+        return $this->render('building/new.html.twig', array('building' => $building, 'client' => $client, 'form' => $form->createView(),));
     }
 
     /**
@@ -95,11 +89,10 @@ class BuildingController extends Controller
             return $this->redirectToRoute('building_show', array('id' => $building->getId()));
         }
 
-        if ($editForm->isSubmitted() ) {
+        if ($editForm->isSubmitted()) {
             $em = $this->getDoctrine()->getManager();
 
-            $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')
-                ->findOneById($tempFireProtectionDevice->getId());
+            $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneById($tempFireProtectionDevice->getId());
             $fireProtectionDevice->setName($tempFireProtectionDevice->getName()->getName());
             $fireProtectionDevice->setShortname($tempFireProtectionDevice->getShortname()->getShortname());
             $fireProtectionDevice->setLoopNo($tempFireProtectionDevice->getLoopNo());
@@ -109,13 +102,10 @@ class BuildingController extends Controller
             return $this->redirectToRoute('building_show', array('id' => $building->getId()));
         }
 
+//
+        $this->container->get('micro')->updateLastServiceDate($building);
 
-        return $this->render('building/show.html.twig', array(
-            'building' => $building,
-            'delete_form' => $deleteForm->createView(),
-            'form' => $form->createView(),
-            'edit_form' => $editForm->createView()
-        ));
+        return $this->render('building/show.html.twig', array('building' => $building, 'delete_form' => $deleteForm->createView(), 'form' => $form->createView(), 'edit_form' => $editForm->createView()));
     }
 
     /**
@@ -136,11 +126,7 @@ class BuildingController extends Controller
             return $this->redirectToRoute('building_index');
         }
 
-        return $this->render('building/edit.html.twig', array(
-            'building' => $building,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('building/edit.html.twig', array('building' => $building, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView(),));
     }
 
     /**
@@ -172,9 +158,6 @@ class BuildingController extends Controller
      */
     private function createDeleteForm(Building $building)
     {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('building_delete', array('id' => $building->getId())))
-            ->setMethod('DELETE')
-            ->getForm();
+        return $this->createFormBuilder()->setAction($this->generateUrl('building_delete', array('id' => $building->getId())))->setMethod('DELETE')->getForm();
     }
 }

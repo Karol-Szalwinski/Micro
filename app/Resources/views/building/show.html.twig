@@ -82,7 +82,10 @@
                                     </tr>
                                     <tr>
                                         <th>Adres:</th>
-                                        <td>ul.{{ building.street }} {{ building.houseNo }}/{{ building.flatNo }}</td>
+                                        <td>ul.{{ building.street }}
+                                            {{ building.houseNo }}
+                                            {% if building.flatNo is not null %}/ {{ building.flatNo }}{% endif %}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th></th>
@@ -270,7 +273,7 @@
                     <div class="card-body">
 
                         <!-- Device List table -->
-                        <button type="button" class="btn btn-sm btn-danger delete-all mb-1">Usuń Wszystkie</button>
+                        {#<button type="button" class="btn btn-sm btn-danger delete-all mb-1">Usuń Wszystkie</button>#}
                         <div class="table-responsive">
                             <table id="users-contacts"
                                    class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
@@ -303,7 +306,9 @@
                                                id="shortname-{{ device.id }}">{{ device.shortname }}</a>
                                         </td>
                                         <td class="text-center">
-                                            <a class="timeline-date">{{ device.lastServiceDate }}</a>
+                                            <a class="timeline-date">
+                                                {{ device.lastServiceDate is empty ? "Brak" : device.lastServiceDate| date('Y/m/d') }}
+                                            </a>
                                         </td>
 
                                         <td>
@@ -340,7 +345,8 @@
                     <div class="card-header">
                         <h4 class="card-title">Przeglądy PPOŻ dla tego budynku</h4>
                         <div class="heading-elements mt-0">
-                            <a class="btn btn-primary btn-sm " href="{{ path('fireinspection_new', {'building': building.id}) }}"><i
+                            <a class="btn btn-primary btn-sm "
+                               href="{{ path('fireinspection_new', {'building': building.id}) }}"><i
                                         class="la la-building"></i> Dodaj nowy przeglad</a>
 
                             <span class="dropdown">
@@ -364,7 +370,7 @@
                     <div class="card-body">
 
                         <!-- FieInspections table -->
-                        <button type="button" class="btn btn-sm btn-danger delete-all mb-1">Usuń Wszystkie</button>
+                        {#<button type="button" class="btn btn-sm btn-danger delete-all mb-1">Usuń Wszystkie</button>#}
                         <div class="table-responsive">
                             <table id="users-contacts"
                                    class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
@@ -378,12 +384,12 @@
 
                                 </tr>
                                 {% for fireInspection in building.fireInspections|sort %}
-                                    <tr>
+                                    <tr onclick='location.href = "{{ path('fireinspection_show', { 'id': fireInspection.id }) }}";'>
                                         <td>
                                             <a href="{{ path('fireinspection_show', { 'id': fireInspection.id }) }}">{{ fireInspection.id }}</a>
                                         </td>
-                                        <td>{% if fireInspection.inspectionDate %}{{ fireInspection.inspectionDate|date('Y-m-d H:i:s') }}{% endif %}</td>
-                                        <td>{% if fireInspection.nextInspectionDate %}{{ fireInspection.nextInspectionDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                                        <td>{% if fireInspection.inspectionDate %}{{ fireInspection.inspectionDate|date('d-m-Y') }}{% endif %}</td>
+                                        <td>{% if fireInspection.nextInspectionDate %}{{ fireInspection.nextInspectionDate|date('d-m-Y') }}{% endif %}</td>
                                         <td>{{ fireInspection.inspectedDevices|length }}</td>
 
                                     </tr>

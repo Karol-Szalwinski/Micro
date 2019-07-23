@@ -1,0 +1,469 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Domyślne ustawienia{% endblock %}
+
+{% block body %}
+    <!-- Content header -->
+    <div class="content-header row">
+        <div class="content-header-left col-md-6 col-12">
+            <h3 class="content-header-title mb-0">Domyślne ustawienia Przeglądu urządzeń PPOŹ</h3>
+        </div>
+
+    </div>
+    <!-- Content header -->
+
+    <!-- Basic form layout section start -->
+    <section id="horizontal-form-layouts">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title" id="horz-layout-basic">Dane podstawowe - domyślne</h4><hr>
+                        <div class="alert alert-danger" role="alert">
+                            Uwaga zdefiniowane poniżej wartości pojawią się jako domyślne w każdym nowo utworzonym dokumencie przeglądu PPOŻ
+                        </div>
+                        <a class="heading-elements-toggle"><i
+                                    class="la la-ellipsis-v font-medium-3"></i></a>
+                        <div class="heading-elements mt-0">
+                            <a class="btn btn-primary btn-sm "
+                               href="{{ path('def_fireinspection_edit') }}"><i
+                                        class="la la-edit"></i> Edytuj domyślne dane podstawowe</a>
+                        </div>
+
+                    </div>
+
+
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+
+                            <h4><i class="ft-user"></i> Zakres wykonanych prac</h4>
+                            <hr>
+                            <div class="col-md-8">
+                                <p>{{ fireInspection.scope|nl2br }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+
+                            <h4><i class="ft-user"></i> Wykaz urządzeń objętych przeglądem:</h4>
+                            <hr>
+                            <div class="col-md-8">
+                               <p> {{ fireInspection.deviceShortlistPosition|nl2br }} </p>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+
+                            <h4><i class="ft-user"></i> Podstawa opracowania</h4>
+                            <hr>
+                            <div class="col-md-8">
+                                <p>{{ fireInspection.legal|nl2br }}</p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+
+
+
+    <!-- Other activities section-->
+
+    <section class="row all-contacts">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-head">
+                    <div class="card-header">
+                        <h4 class="card-title">Tabela 2 - Pozostałe czynności - domyślne</h4><hr>
+                        <div class="alert alert-danger" role="alert">
+                            Każda dodana domyślna czynność pojawi się w każdym nowym dokumencie przeglądu
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                        <!-- Task List table -->
+                        <button id="add-test-position" type="button" class="btn btn-sm btn-info mb-1">
+                            Dodaj pozycję
+                        </button>
+
+                        <div class="table-responsive">
+                            <table id="users-contacts"
+                                   class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
+                                <thead>
+                                <tr>
+                                    <th>Pozostałe czynności</th>
+                                    <th>Wynik</th>
+                                    <th>Uwagi</th>
+                                    <th>Akcje</th>
+
+                                </tr>
+                                </thead>
+                                <tbody id='tbody-tests'>
+
+                                {% for test in fireInspection.testpositions %}
+                                    <tr id="terow-{{ test.id }}">
+
+                                        <td class="text-center test-hidden-input">
+                                            <p id="namep-{{ test.id }}">{{ test.name }}</p>
+                                            <input id="namei-{{ test.id }}"
+                                                   type="hidden" value="">
+                                        </td>
+                                        <td class="text-center">
+                                            {% set checked = false %}
+                                            {% if test.test == 1 %}
+                                                {% set checked = true %}
+                                            {% endif %}
+                                            <input type="checkbox" class="column_filter test-checkbox-switch switch "
+                                                   id="testc-{{ test.id }}" {% if checked %}checked{% endif %}
+                                                   data-icon-cls="fa" data-off-icon-cls="fa ft-thumbs-down"
+                                                   data-on-icon-cls="fa ft-thumbs-up"
+                                                   data-off-label="NEG"
+                                                   data-on-label="POZ"
+                                                   data-group-cls="btn-group-sm"
+                                            >
+
+                                        </td>
+                                        <td class="text-center test-hidden-input">
+                                            <p id="commp-{{ test.id }}">{{ test.comment }}</p>
+                                            <input id="commi-{{ test.id }}"
+                                                   type="hidden" value="">
+                                        </td>
+
+                                        <td>
+                                            <a
+                                                    id="tedel-{{ test.id }}"
+                                                    class="test-delete-row btn btn-sm btn-danger mr-1">Usuń<i
+                                                        class="la la-add"></i></a>
+
+
+                                        </td>
+
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Basic form layout section start -->
+    <section id="horizontal-form-layouts">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title" id="horz-layout-basic">Podsumowanie przeglądu - domyślne</h4>
+                        <a class="heading-elements-toggle"><i
+                                    class="la la-ellipsis-v font-medium-3"></i></a>
+                        <div class="heading-elements mt-0">
+                            <a class="btn btn-primary btn-sm "
+                               href="{{ path('def_fireinspection_edit_summary') }}"><i
+                                        class="la la-edit"></i> Edytuj domyślne podsumowanie</a>
+                        </div>
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+
+                            <h4><i class="ft-user"></i>Wnioski</h4>
+                            <hr>
+                            <div class="col-md-8">
+                                <p>{{ fireInspection.conclusion|nl2br }}</p>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+
+                            <h4><i class="ft-user"></i>Uwagi</h4>
+                            <hr>
+                            <div class="col-md-8">
+                                <p>{{ fireInspection.comment|nl2br }}</p>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+
+                            <h4><i class="ft-user"></i>Zalecenia</h4>
+                            <hr>
+                            <div class="col-md-8">
+                                <p>{{ fireInspection.recomendations|nl2br }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
+    <!-- END: Page Vendor JS-->
+
+    <!-- BEGIN: Page JS-->
+    <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>
+    <!-- END: Page JS-->
+
+    <!-- BEGIN: AJAX change status and test in InspectionDevice-->
+    <script>
+        $('.status-checkbox').change(function () {
+
+            $.ajax({
+                url: '/inspdev/' + this.id.substring(1) + '/changestatus/' + this.id.substring(0, 1),
+                type: 'POST',
+                dataType: 'json',
+                async: true,
+
+                success: function (data, status) {
+
+
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    alert('Błąd requestu ajax.');
+                }
+            });
+        })
+
+
+    </script>
+
+    <!-- BEGIN: AJAX change comment -->
+    <script>
+        $(document).ready(function () {
+            $(".hidden-input").click(function () {
+
+                var comment = $(this).find('p').text();
+
+                $(this).find("input").attr('type', 'text').val(comment).focus();
+                $(this).find('p').text('');
+            });
+        });
+
+        $(document).ready(function () {
+            $(".hidden-input").find("input").blur(function () {
+                $(this).attr('type', 'hidden');
+                var comm = ($(this).val().toString() == "") ? null : $(this).val();
+
+                $.ajax({
+                    url: '/inspdev/' + this.id.substring(1) + '/changecomment/' + comm,
+                    type: 'POST',
+                    dataType: 'json',
+                    async: true,
+
+                    success: function (data) {
+                        var id = data['id'];
+                        $("#p" + id).text(data['comm']);
+
+                    },
+                    error: function () {
+                        $(this).parent().find('p').text('Wprowadź ponownie');
+                    }
+                });
+            });
+        });
+    </script>
+
+    {#<!-- BEGIN: AJAX delete device -->#}
+    <script>
+        $(document).ready(function () {
+            $('.device-row').click(function () {
+                var device = this.id.substring(4);
+                $.ajax({
+                    url: '/inspdev/' + device + '/changevisible',
+                    type: 'POST',
+                    dataType: 'json',
+                    async: true,
+
+                    success: function (data) {
+
+                        if (data['response'] == false) {
+                            alert("Pomyślnie usunięto urządzenie");
+
+                        } else if (data['response'] == true) {
+                            alert("Pomyślnie dodano urządzenie");
+
+                        }
+                        else {
+                            alert("Wystąpił problem z połączeniem do bazy!");
+                        }
+                        $('#row-' + device).toggle();
+                        $('#mod-' + device).toggle();
+                        ;
+
+
+                    },
+                    error: function () {
+                        alert('Błąd usuwania - spróbuj przeładować stronę');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!-- BEGIN: Show hidden inputs in last tests table -->
+    <script>
+        $(document).on('click', '.test-hidden-input', function () {
+
+            var comment = $(this).find('p').text();
+
+            $(this).find("input").attr('type', 'text').val(comment).focus();
+            $(this).find('p').text('');
+        });
+    </script>
+
+    <!-- Update Inputs after blur -->
+    <script>
+        $(document).on('blur', '.test-hidden-input input', function () {
+//            $(".test-hidden-input").find("input").blur(function () {
+            $(this).attr('type', 'hidden');
+            var value = $(this).val().toString();
+            updateAjax(value, this.id);
+        });
+
+
+        $(document).on('change', '.test-checkbox-switch', function () {
+//            $('.test-checkbox-switch').change(function () {
+            updateAjax(null, this.id);
+        });
+
+        <!-- Function to update test position by Ajax -->
+
+        function updateAjax(value, id) {
+
+            value = (value === "") ? null : value;
+
+            $.ajax({
+                url: '/testposition/' + id + '/update/' + value,
+                type: 'POST',
+                dataType: 'json',
+                async: true,
+
+                success: function (data) {
+                    var id = data['id'];
+                    var type = data['type'];
+                    var text = data['text'];
+
+                    switch (type) {
+                        case ('namei-'):
+                            $("#namep-" + id).text(text);
+
+                            break;
+
+                        case ('commi-'):
+
+                            $("#commp-" + id).text(text);
+
+                    }
+                },
+                error: function () {
+                    alert('Niestety wystąpił błąd połączenia. Spróbuj przeładować stronę');
+                }
+            });
+        }
+    </script>
+
+    {#<!-- BEGIN: AJAX add test position -->#}
+    <script>
+        $(document).ready(function () {
+            $('#add-test-position').click(function () {
+
+                $.ajax({
+                    url: '/testposition/add/' + {{ fireInspection.id }},
+                    type: 'POST',
+                    dataType: 'json',
+                    async: true,
+
+                    success: function (data) {
+                        var id = data['id'];
+
+                        var row = "<tr id='terow-" + id + "'><td class='text-center test-hidden-input'>" +
+
+                            "<p id='namep-" + id + "'></p>" +
+                            "<input id='namei-" + id + "' type='hidden' value=''></td>" +
+                            "<td class='text-center'>" +
+                            "<input type='checkbox' class='column_filter test-checkbox-switch switch' checked " +
+                            "id='testc-" + id + "' " +
+                            "data-icon-cls='fa' data-off-icon-cls='fa ft-thumbs-down'" +
+                            "data-on-icon-cls='fa ft-thumbs-up'" +
+                            "data-off-label='NEG'" +
+                            "data-on-label='POZ'" +
+                            "data-group-cls='btn-group-sm'></td>" +
+
+                            "<td class='text-center test-hidden-input'>" +
+                            "<p id='commp-" + id + "'></p> " +
+                            "<input id='commi-" + id + "' type='hidden' value=''></td>" +
+                            "<td><a id='tedel-" + id + "'" +
+                            "class='test-delete-row btn btn-sm btn-danger mr-1'>Usuń<i" +
+                            "class='la la-add'></i></a></td></tr>";
+                        $("#tbody-tests").append(row);
+                        var swth = $('#testc-' + id);
+                        setTimeout(() => {
+                            swth.checkboxpicker();
+                        }, 100);
+                    },
+                    error: function () {
+                        alert('Błąd dodawania pozycji');
+                    }
+                });
+            });
+        });
+
+
+        $(document).on('click', '.test-delete-row ', function () {
+            $.ajax({
+                url: '/testposition/delete/' + this.id,
+                type: 'POST',
+                dataType: 'json',
+                async: true,
+
+                success: function (data) {
+                   var id = data['id'];
+                   $('#terow-'+ id).remove();
+                }
+            });
+        });
+
+
+    </script>
+
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-switch.min.js') }}"></script>
+    {#<script src="{{ asset('app-assets/vendors/js/forms/toggle/switchery.min.js') }}"></script>#}
+    <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-checkbox.min.js') }}"></script>
+
+
+    <!-- END: Page Vendor JS-->
+    <script src="{{ asset('app-assets/js/scripts/forms/switch.js') }}"></script>
+
+
+
+{% endblock %}

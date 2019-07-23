@@ -40,7 +40,7 @@ twig:
 # Doctrine Configuration
 doctrine:
     dbal:
-        driver: pdo_mysql
+        driver: mysqli
         host: '%database_host%'
         port: '%database_port%'
         dbname: '%database_name%'
@@ -83,3 +83,4 @@ fos_user:
     from_email:
         address: "%mailer_user%"
         sender_name: "%mailer_user%"
+

@@ -37,16 +37,20 @@
                        href="{{ path('building_show', { 'id' : fireInspection.building.id }) }}"><i
                                 class="la la-backward"></i> Wróć do budynku</a>
 
-                    <button class="btn btn-outline-info round dropdown-toggle dropdown-menu-right"
-                            id="btnGroupDrop1"
-                            type="button" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false"><i
-                                class="icon-cog3 icon-left"></i> Ustawienia
+                    {#<a class="btn btn-outline-info round"#}
+                       {#href="{{ path('fire_inspection_pdf', { 'fireInspection' : fireInspection.id }) }}"><i#}
+                                {#class="la la-backward"></i> PDF</a>#}
+                    {#<a class="btn btn-outline-info round"#}
+                       {#href="{{ path('fire_inspection_print', { 'fireInspection' : fireInspection.id }) }}"><i#}
+                                {#class="la la-backward"></i> Podgląd</a>#}
+                    <iframe src="{{ path('fire_inspection_print', { 'fireInspection' : fireInspection.id }) }}" name="frame" style="display: none"></iframe>
+
+                    <button class="btn btn-outline-info round" type="submit" onclick="frames['frame'].print()" value="Drukuj">
+                        <i
+                                class="la la-print"></i> Drukuj
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1"><a class="dropdown-item"
-                                                                                  href="card-bootstrap.html">Bootstrap
-                            Cards</a><a class="dropdown-item" href="component-buttons-extended.html">Buttons
-                            Extended</a></div>
+
+
                 </div>
             </div>
         </div>
@@ -137,13 +141,7 @@
                             <h4><i class="ft-user"></i> Wykaz urządzeń objętych przeglądem:</h4>
                             <hr>
                             <div class="col-md-8">
-                                <ul>
-                                    <li> Centrala ARITECH FP</li>
-                                    <li> Czujki optyczne dymu</li>
-                                    <li> Czujki termiczne</li>
-                                    <li> Sygnalizatory optyczno-akustyczne</li>
-                                    <li> Ręczne ostrzegacze pożarowe</li>
-                                </ul>
+                                <p> {{ fireInspection.deviceShortlistPosition|nl2br }} </p>
 
                             </div>
                         </div>
@@ -215,7 +213,7 @@
                            href="{{ path('fireinspection_load_devices', {'id': fireInspection.id}) }}">
                             Załaduj wszystkie urządzenia</a>
                         <a type="button" id="load-miss-device"
-                                class="btn btn-sm btn-warning mb-1">
+                           class="btn btn-sm btn-warning mb-1" data-toggle="modal" data-target="#add-device-modal">
                             Dodaj do listy usunięte urządzenie
                         </a>
                         <div class="table-responsive">
@@ -262,6 +260,7 @@
                                                    data-on-icon-cls="fa ft-thumbs-up"
                                                    data-off-label="OFF"
                                                    data-on-label="ON"
+                                                   data-group-cls="btn-group-sm"
                                             >
 
                                         </td>
@@ -276,6 +275,7 @@
                                                    data-on-icon-cls="fa ft-thumbs-up"
                                                    data-off-label="NEG"
                                                    data-on-label="POZ"
+                                                   data-group-cls="btn-group-sm"
                                             >
 
                                         </td>
@@ -307,72 +307,78 @@
     <!-- Other activities section-->
 
     <!-- Inspected devices modal-->
+    <!-- Modal -->
+    <div id="add-device-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
 
-    <section class="row all-contacts">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-head">
-                    <div class="card-header">
-                        <h4 class="card-title">Wybierz urządzenie ktore chcesz dodać do dokumentu</h4>
-                    </div>
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h4 class="modal-title">Wybierz urządzenie ktore chcesz dodać do dokumentu</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <div class="card-content">
-                    <div class="card-body">
-                        <!-- Task List table -->
-                        <div class="table-responsive">
-                            <table id="inspected-devices"
-                                   class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
-                                <thead>
-                                <tr>
-                                    <th>Pętla</th>
-                                    <th>Urządzenie</th>
-                                    <th>Typ</th>
-                                    <th>Data ostatniego przeglądu</th>
-                                    <th>Akcje</th>
+                <div class="modal-body">
 
+                    <!-- Task List table -->
+                    <div class="table-responsive">
+                        <table id="inspected-devices"
+                               class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
+                            <thead>
+                            <tr>
+                                <th>Pętla</th>
+                                <th>Urządzenie</th>
+                                <th>Typ</th>
+                                {#<th>Data ostatniego przeglądu</th>#}
+                                <th>Akcje</th>
+
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for device in fireInspection.inspectedDevices|sort %}
+                                <tr
+                                        id="mod-{{ device.id }}"
+                                        style="{% if device.visible %}display:none{% endif %}">
+
+                                    <td>
+                                        <div>
+                                            <a class="media-heading name">{{ device.loopNo }}</a>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div>{{ device.number }} </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div>{{ device.shortname }}</div>
+                                    </td>
+                                    {#<td>#}
+                                    {#</td>#}
+
+                                    <td>
+                                        <a
+                                                id="add-{{ device.id }}"
+                                                class="device-row btn btn-sm btn-warning mr-1">Dodaj<i
+                                                    class="la la-add"></i></a>
+
+
+                                    </td>
 
                                 </tr>
-                                </thead>
-                                <tbody>
-                                {% for device in fireInspection.inspectedDevices|sort %}
-                                    <tr
-                                            id="mod-{{ device.id }}"
-                                            style="{% if device.visible %}display:none{% endif %}">
+                            {% endfor %}
+                            </tbody>
 
-                                        <td>
-                                            <div>
-                                                <a class="media-heading name">{{ device.loopNo }}</a>
-                                            </div>
-                                        </td>
-                                        <td class="text-center">
-                                            <div>{{ device.number }} </div>
-                                        </td>
-                                        <td class="text-center">
-                                            <div>{{ device.shortname }}</div>
-                                        </td>
-                                        <td>
-                                        </td>
-
-                                        <td>
-                                            <a
-                                               id="add-{{ device.id }}"
-                                               class="device-row btn btn-sm btn-warning mr-1">Dodaj<i class="la la-add"></i></a>
-
-
-                                        </td>
-
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-
-                            </table>
-                        </div>
+                        </table>
                     </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
                 </div>
             </div>
         </div>
-    </section>
-
+    </div>
     <!-- Other activities section-->
 
     <section class="row all-contacts">
@@ -381,18 +387,21 @@
                 <div class="card-head">
                     <div class="card-header">
                         <h4 class="card-title">Tabela 2 - Pozostałe czynności</h4>
-                        <div class="heading-elements">
-                            <ul class="list-inline mb-0">
-                                <li><a class="btn btn-sm btn-danger box-shadow-2 round btn-min-width pull-right"
-                                       href="#">Dodaj czynność</a></li>
-                            </ul>
-                        </div>
+                        {#<div class="heading-elements">#}
+                            {#<ul class="list-inline mb-0">#}
+                                {#<li><a class="btn btn-sm btn-danger box-shadow-2 round btn-min-width pull-right"#}
+                                       {#href="#">Dodaj czynność</a></li>#}
+                            {#</ul>#}
+                        {#</div>#}
                     </div>
                 </div>
                 <div class="card-content">
                     <div class="card-body">
                         <!-- Task List table -->
-                        <button type="button" class="btn btn-sm btn-danger delete-all mb-1">Usuń Wszystkie</button>
+                        <button id="add-test-position" type="button" class="btn btn-sm btn-info mb-1">
+                            Dodaj pozycję
+                        </button>
+
                         <div class="table-responsive">
                             <table id="users-contacts"
                                    class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
@@ -405,57 +414,49 @@
 
                                 </tr>
                                 </thead>
-                                <tbody>
-                                {#{% for building in client.buildings %}#}
-                                {#<tr>#}
-                                {#<td>{{ building.id }}</td>#}
-                                {#<td onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>#}
-                                {#<div class="media">#}
-                                {#<div class="media-left pr-1"><span#}
-                                {#class="avatar avatar-sm avatar-online rounded-circle"><img#}
-                                {#src="../../../app-assets/images/portrait/small/avatar-s-2.png"#}
-                                {#alt="avatar"><i></i></span></div>#}
-                                {#<div class="media-body media-middle">#}
-                                {#<a class="media-heading name">{{ building.name }}</a>#}
-                                {#</div>#}
-                                {#</div>#}
-                                {#</td>#}
-                                {#<td class="text-center"#}
-                                {#onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>#}
-                                {#<div>{{ building.street }} {{ building.houseNo }}#}
-                                {#/{{ building.flatNo }}</div>#}
-                                {#</td>#}
-                                {#<td class="text-center"#}
-                                {#onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>#}
-                                {#{{ building.city }}#}
-                                {#</td>#}
+                                <tbody id='tbody-tests'>
 
-                                {#<td>#}
-                                {#<a href="{{ path('building_edit', { 'id': building.id }) }}"#}
-                                {#class="primary edit mr-1"><i class="la la-pencil"></i></a>#}
-                                {#<a class="danger delete mr-1"><i class="la la-trash-o"></i></a>#}
-                                {#<span class="dropdown">#}
-                                {#<a id="btnSearchDrop2" data-toggle="dropdown"#}
-                                {#aria-haspopup="true" aria-expanded="true"#}
-                                {#class="dropdown-toggle dropdown-menu-right"><i#}
-                                {#class="la la-ellipsis-v"></i></a>#}
-                                {#<span aria-labelledby="btnSearchDrop2"#}
-                                {#class="dropdown-menu mt-1 dropdown-menu-right">#}
-                                {#<a href="{{ path('building_edit', { 'id': building.id }) }}"#}
-                                {#class="dropdown-item"><i#}
-                                {#class="ft-edit-2"></i>#}
-                                {#Edytuj</a>#}
-                                {#<a href="#" class="dropdown-item delete"><i#}
-                                {#class="ft-trash-2"></i> Usuń</a>#}
-                                {#<a href="{{ path('building_new', { 'client': client.id }) }}"#}
-                                {#class="dropdown-item"><i#}
-                                {#class="ft-plus-circle warning"></i> Dodaj</a>#}
+                                {% for test in fireInspection.testpositions %}
+                                    <tr id="terow-{{ test.id }}">
 
-                                {#</span>#}
-                                {#</span>#}
-                                {#</td>#}
-                                {#</tr>#}
-                                {#{% endfor %}#}
+                                        <td class="text-center test-hidden-input">
+                                            <p id="namep-{{ test.id }}">{{ test.name }}</p>
+                                            <input id="namei-{{ test.id }}"
+                                                   type="hidden" value="">
+                                        </td>
+                                        <td class="text-center">
+                                            {% set checked = false %}
+                                            {% if test.test == 1 %}
+                                                {% set checked = true %}
+                                            {% endif %}
+                                            <input type="checkbox" class="column_filter test-checkbox-switch switch "
+                                                   id="testc-{{ test.id }}" {% if checked %}checked{% endif %}
+                                                   data-icon-cls="fa" data-off-icon-cls="fa ft-thumbs-down"
+                                                   data-on-icon-cls="fa ft-thumbs-up"
+                                                   data-off-label="NEG"
+                                                   data-on-label="POZ"
+                                                   data-group-cls="btn-group-sm"
+                                            >
+
+                                        </td>
+                                        <td class="text-center test-hidden-input">
+                                            <p id="commp-{{ test.id }}">{{ test.comment }}</p>
+                                            <input id="commi-{{ test.id }}"
+                                                   type="hidden" value="">
+                                        </td>
+
+                                        <td>
+                                            <a
+                                                    id="tedel-{{ test.id }}"
+                                                    class="test-delete-row btn btn-sm btn-danger mr-1">Usuń<i
+                                                        class="la la-add"></i></a>
+
+
+                                        </td>
+
+                                    </tr>
+                                {% endfor %}
+
                                 </tbody>
 
                             </table>
@@ -535,7 +536,7 @@
     <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>
     <!-- END: Page JS-->
 
-    <!-- BEGIN: AJAX change status and test -->
+    <!-- BEGIN: AJAX change status and test in InspectionDevice-->
     <script>
         $('.status-checkbox').change(function () {
 
@@ -610,15 +611,15 @@
                         if (data['response'] == false) {
                             alert("Pomyślnie usunięto urządzenie");
 
-                        } else if  (data['response'] == true) {
+                        } else if (data['response'] == true) {
                             alert("Pomyślnie dodano urządzenie");
 
                         }
                         else {
                             alert("Wystąpił problem z połączeniem do bazy!");
                         }
-                        $('#row-'+ device).toggle();
-                        $('#mod-'+ device).toggle();
+                        $('#row-' + device).toggle();
+                        $('#mod-' + device).toggle();
                         ;
 
 
@@ -631,51 +632,135 @@
         });
     </script>
 
-    <!-- BEGIN: AJAX delete device -->
-    {#<script>#}
-    {#$(document).ready(function () {#}
-    {#$('#load-miss-device').click(function () {#}
-    {#var device = this.id.substring(4);#}
-    {#$.ajax({#}
-    {#url: '/fireinspection/' + {{ fireInspection.id }} +'/loadmissdevices',#}
-    {#type: 'POST',#}
-    {#dataType: 'json',#}
-    {#async: true,#}
+    <!-- BEGIN: Show hidden inputs in last tests table -->
+    <script>
+        $(document).on('click', '.test-hidden-input', function () {
 
-    {#success: function (data) {#}
+            var comment = $(this).find('p').text();
 
-    {#console.log(data['missing-devices']);#}
+            $(this).find("input").attr('type', 'text').val(comment).focus();
+            $(this).find('p').text('');
+        });
+    </script>
+
+    <!-- Update Inputs after blur -->
+    <script>
+        $(document).on('blur', '.test-hidden-input input', function () {
+//            $(".test-hidden-input").find("input").blur(function () {
+            $(this).attr('type', 'hidden');
+            var value = $(this).val().toString();
+            updateAjax(value, this.id);
+        });
 
 
+        $(document).on('change', '.test-checkbox-switch', function () {
+//            $('.test-checkbox-switch').change(function () {
+            updateAjax(null, this.id);
+        });
+
+        <!-- Function to update test position by Ajax -->
+
+        function updateAjax(value, id) {
+
+            value = (value === "") ? null : value;
+
+            $.ajax({
+                url: '/testposition/' + id + '/update/' + value,
+                type: 'POST',
+                dataType: 'json',
+                async: true,
+
+                success: function (data) {
+                    var id = data['id'];
+                    var type = data['type'];
+                    var text = data['text'];
+
+                    switch (type) {
+                        case ('namei-'):
+                            $("#namep-" + id).text(text);
+
+                            break;
+
+                        case ('commi-'):
+
+                            $("#commp-" + id).text(text);
+
+                    }
+                },
+                error: function () {
+                    alert('Niestety wystąpił błąd połączenia. Spróbuj przeładować stronę');
+                }
+            });
+        }
+    </script>
+
+    {#<!-- BEGIN: AJAX add test position -->#}
+    <script>
+        $(document).ready(function () {
+            $('#add-test-position').click(function () {
+
+                $.ajax({
+                    url: '/testposition/add/' + {{ fireInspection.id }},
+                    type: 'POST',
+                    dataType: 'json',
+                    async: true,
+
+                    success: function (data) {
+                        var id = data['id'];
+
+                        var row = "<tr id='terow-" + id + "'><td class='text-center test-hidden-input'>" +
+
+                            "<p id='namep-" + id + "'></p>" +
+                            "<input id='namei-" + id + "' type='hidden' value=''></td>" +
+                            "<td class='text-center'>" +
+                            "<input type='checkbox' class='column_filter test-checkbox-switch switch' checked " +
+                            "id='testc-" + id + "' " +
+                            "data-icon-cls='fa' data-off-icon-cls='fa ft-thumbs-down'" +
+                            "data-on-icon-cls='fa ft-thumbs-up'" +
+                            "data-off-label='NEG'" +
+                            "data-on-label='POZ'" +
+                            "data-group-cls='btn-group-sm'></td>" +
+
+                            "<td class='text-center test-hidden-input'>" +
+                            "<p id='commp-" + id + "'></p> " +
+                            "<input id='commi-" + id + "' type='hidden' value=''></td>" +
+                            "<td><a id='tedel-" + id + "'" +
+                            "class='test-delete-row btn btn-sm btn-danger mr-1'>Usuń<i" +
+                            "class='la la-add'></i></a></td></tr>";
+                        $("#tbody-tests").append(row);
+                        var swth = $('#testc-' + id);
+                        setTimeout(() => {
+                            swth.checkboxpicker();
+                        }, 100);
+                    },
+                    error: function () {
+                        alert('Błąd dodawania pozycji');
+                    }
+                });
+            });
+        });
 
 
-    {#},#}
-    {#error: function () {#}
-    {#alert('Błąd ładowania');#}
-    {#}#}
-    {#});#}
-    {#});#}
-    {#});#}
-    {#</script>#}
+        $(document).on('click', '.test-delete-row ', function () {
+            $.ajax({
+                url: '/testposition/delete/' + this.id,
+                type: 'POST',
+                dataType: 'json',
+                async: true,
 
-    {#<script>#}
+                success: function (data) {
+                   var id = data['id'];
+                   $('#terow-'+ id).remove();
+                }
+            });
+        });
 
-    {#$('#inspected-devices').DataTable({#}
-    {#"order": [[0, 'asc'], [1, 'asc'], [2, 'asc']],#}
-    {#"language": {#}
-    {#"lengthMenu": "Pokaż _MENU_ wierszy na stronie",#}
-    {#"zeroRecords": "Niestety brak wyników",#}
-    {#"info": "Stron _PAGE_ z _PAGES_",#}
-    {#"infoEmpty": "Brak wierszy",#}
-    {#"infoFiltered": "(znaleziono z _MAX_ wszystkich wierszy)"#}
-    {#},#}
-    {#"paging": false,#}
-    {#});#}
 
-    {#//    </script>#}
+    </script>
+
     <!-- BEGIN: Page Vendor JS-->
     <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-switch.min.js') }}"></script>
-    <script src="{{ asset('app-assets/vendors/js/forms/toggle/switchery.min.js') }}"></script>
+    {#<script src="{{ asset('app-assets/vendors/js/forms/toggle/switchery.min.js') }}"></script>#}
     <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-checkbox.min.js') }}"></script>
 
 

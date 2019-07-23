@@ -66,7 +66,7 @@
                 <li class="nav-item mr-auto"><a class="navbar-brand" href="{{ path('micro_default_index') }}"><img
                                 class="brand-logo"
                                 alt="modern admin logo"
-                                src="../../../app-assets/images/logo/logo.png">
+                                src="../../../assets/images/logo-micro.png">
                         <h3 class="brand-text">Micro</h3>
                     </a></li>
                 <li class="nav-item d-none d-lg-block nav-toggle"><a class="nav-link modern-nav-toggle pr-0"
@@ -171,7 +171,7 @@
                                             <div class="col-sm-9">
                                                 <div class="position-relative has-icon-left">
                                                     <input class="form-control" type="text" id="inputName1"
-                                                           placeholder="John Doe">
+                                                           placeholder="Michał Łuczywek">
                                                     <div class="form-control-position pl-1"><i class="la la-user"></i>
                                                     </div>
                                                 </div>
@@ -404,7 +404,7 @@
                     </li>
                     <li class="dropdown dropdown-user nav-item"><a class="dropdown-toggle nav-link dropdown-user-link"
                                                                    href="#" data-toggle="dropdown"><span
-                                    class="mr-1 user-name text-bold-700">John Doe</span><span
+                                    class="mr-1 user-name text-bold-700">Michał Łuczywek</span><span
                                     class="avatar avatar-online"><img
                                         src="../../../app-assets/images/portrait/small/avatar-s-19.png"
                                         alt="avatar"><i></i></span></a>
@@ -418,7 +418,7 @@
                                                                                 href="app-chat.html"><i
                                         class="ft-message-square"></i> Chats</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="login-with-bg-image.html"><i class="ft-power"></i> Logout</a>
+                            <a class="dropdown-item"  href="{{ path('fos_user_security_logout') }}"><i class="ft-power"></i> Logout</a>
                         </div>
                     </li>
                 </ul>
@@ -488,6 +488,11 @@
                 <ul class="menu-content">
                     <li><a class="menu-item" href="{{ path('inspector_index') }}"><i></i><span
                                     data-i18n="nav.dash.ecommerce">Inspektorzy</span></a>
+                    </li>
+
+                </ul><ul class="menu-content">
+                    <li><a class="menu-item" href="{{ path('def_fireinspection_show') }}"><i></i><span
+                                    data-i18n="nav.dash.ecommerce">Szablon Przeglądu</span></a>
                     </li>
 
                 </ul>
