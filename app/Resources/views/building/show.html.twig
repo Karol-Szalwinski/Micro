@@ -153,7 +153,7 @@
                                     </thead>
                                     <tbody id="tbody-{{ loopDev.id }}">
                                     {% for device in loopDev.fireProtectionDevices|sort %}
-                                        <tr>
+                                        <tr id="row-{{ loopDev.id }}-{{ device.id }}">
                                             <td class="text-center">
                                                 <a class="text-center"
                                                    id="number-{{ device.id }}">{{ device.number }}</a>
@@ -188,7 +188,8 @@
                                                 <a data-toggle="modal" data-target="#EditDeviceModal"
                                                    id="edit-{{ device.id }}"
                                                    class="primary edit-row mr-1"><i class="la la-pencil"></i></a>
-                                                <a class="danger delete mr-1"><i class="la la-trash-o"></i></a>
+                                                <a id="delete-{{ device.id }}"
+                                                   class="danger delete-row mr-1"><i class="la la-trash-o"></i></a>
 
                                             </td>
                                         </tr>
@@ -764,6 +765,24 @@
 
     </script>
     <!-- END: AJAX update object device -->
+    <!-- BEGIN: AJAX delete object device -->
+    <script>
 
+        $(document).on('click', '.delete-row ', function () {
+            var id = this.id.substr(7);
+            $.ajax({
+                url: '../fireprotectiondevice/delete-device/' + id,
+                type: 'POST',
+                dataType: 'json',
+                async: true,
 
+                success: function (data) {
+                    var id = data['id'];
+                    var loop = data['loop'];
+                    $('#row-' + loop + '-' + id ).remove();
+                }
+            });
+        });
+    </script>
+    <!-- BEGIN: AJAX delete object device -->
 {% endblock %}
