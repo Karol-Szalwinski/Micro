@@ -126,14 +126,14 @@ class FireProtectionDeviceController extends Controller
     }
 
     /**
-     * Change status or test in InspectedDevice
+     * Get FireProtectionDevice object
      * @Method({"GET", "POST"})
-     * @Route("/return-fire-protection-device/{id}")
+     * @Route("/get-device/{id}")
      * @param Request $request
      * @param $id
      * @return JsonResponse
      */
-    public function returnFireProtectionDeviceAction(Request $request, $id)
+    public function getFireProtectionDeviceAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
         $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['id' => $id]);
@@ -168,6 +168,84 @@ class FireProtectionDeviceController extends Controller
             $serializeDevice = $serializer->serialize($fireProtectionDevice, 'json');
 
             $jsonData['device'] = $serializeDevice;
+
+
+            return new JsonResponse($jsonData);
+        }
+    }
+
+
+    /**
+     * Update Fire Protection Device
+     * @Method({"GET", "POST"})
+     * @Route("/update-device/{id}/{loop}/{number}/{name}/{serial}/{address}/{desc}")
+     * @param Request $request
+     * @param $id
+     * @return JsonResponse
+     */
+    public function updateFireProtectionDeviceAction(Request $request, $id, $loop, $number, $name, $serial, $address, $desc)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        if ($id == "null") {
+            $fireProtectionDevice = new FireProtectionDevice();
+            $loop = $em->getRepository('MicroBundle:LoopDev')->findOneBy(['id' => $loop]);
+
+            $loop->addFireProtectionDevice($fireProtectionDevice);
+
+
+            $fireProtectionDevice->setLoopDev($loop);
+            $fireProtectionDevice->setnumber($number);
+
+        }
+        else {
+            $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['id' => $id]);
+
+        }
+        $deviceName = $em->getRepository('MicroBundle:DeviceName')
+            ->findOneBy(['id' => $name]);
+
+       $name = $deviceName->getName();
+       $shortname = $deviceName->getShortname();
+
+       //chane nulles
+        $serial = ($serial=="null") ? "" : $serial;
+        $address = ($address=="null") ? "" : $address;
+        $desc = ($desc=="null") ? "" : $desc;
+
+        $fireProtectionDevice->setNumber($number);
+        $fireProtectionDevice->setName($name);
+        $fireProtectionDevice->setShortname($shortname);
+        $fireProtectionDevice->setSerial($serial);
+        $fireProtectionDevice->setAddress($address);
+        $fireProtectionDevice->setDesc($desc);
+        $em->flush();
+
+
+        //remove refference
+        $fireProtectionDevice->removeAllInspectedDevices()->setLoopDev(null);
+        //get loop id if it possible
+        $loopid = ($loop=="null") ? "null" : $loop->getId();
+
+//        dump($fireProtectionDevice);die();
+
+        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+
+            //prepare serializer
+            $normalizer = new ObjectNormalizer();
+            $normalizer->setCircularReferenceLimit(0);
+            // Add Circular reference handler
+            $normalizer->setCircularReferenceHandler(function ($object) {
+                return $object->getId();
+            });
+
+            $normalizers = [$normalizer];
+            $encoders = [new XmlEncoder(), new JsonEncoder()];
+            $serializer = new Serializer($normalizers, $encoders);
+            $serializeDevice = $serializer->serialize($fireProtectionDevice, 'json');
+
+            $jsonData['device'] = $serializeDevice;
+            $jsonData['loopid'] = $loopid;
 
 
             return new JsonResponse($jsonData);

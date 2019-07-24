@@ -70,12 +70,15 @@ class BuildingController extends Controller
         $deleteForm = $this->createDeleteForm($building);
 
         $loopDev = new LoopDev();
+        //setting new loop number
+        $loopDev->setNumber($building->getLoopDevs()->count() + 1);
         $loopForm = $this->createForm('MicroBundle\Form\LoopDevType', $loopDev);
         $loopForm->handleRequest($request);
-        //do usunięcia
+
         $tempFireProtectionDevice = new Fireprotectiondevice();
         $editForm = $this->createForm('MicroBundle\Form\FireProtectionDeviceEditType', $tempFireProtectionDevice);
-        $editForm->handleRequest($request);
+        $addForm = $this->createForm('MicroBundle\Form\FireProtectionDeviceType', $tempFireProtectionDevice);
+
 
         //Form to add Loop
         if ($loopForm->isSubmitted() && $loopForm->isValid()) {
@@ -130,7 +133,11 @@ class BuildingController extends Controller
 //
 //        $this->container->get('micro')->updateLastServiceDate($building);
 
-        return $this->render('building/show.html.twig', array('building' => $building, 'delete_form' => $deleteForm->createView(), 'loop_form' => $loopForm->createView(), 'edit_form' => $editForm->createView()));
+        return $this->render('building/show.html.twig', array(
+            'building' => $building,
+            'form' => $addForm->createView(),
+            'loop_form' => $loopForm->createView(),
+            'edit_form' => $editForm->createView()));
     }
 
     /**

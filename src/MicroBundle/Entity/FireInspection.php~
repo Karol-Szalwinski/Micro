@@ -329,29 +329,6 @@ class FireInspection
         return $this->conclusion;
     }
 
-    /**
-     * Set otherActivities.
-     *
-     * @param string|null $otherActivities
-     *
-     * @return FireInspection
-     */
-    public function setOtherActivities($otherActivities = null)
-    {
-        $this->otherActivities = $otherActivities;
-
-        return $this;
-    }
-
-    /**
-     * Get otherActivities.
-     *
-     * @return string|null
-     */
-    public function getOtherActivities()
-    {
-        return $this->otherActivities;
-    }
 
     /**
      * Add documentInspector.

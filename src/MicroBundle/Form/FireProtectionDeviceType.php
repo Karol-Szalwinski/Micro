@@ -3,6 +3,7 @@
 namespace MicroBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -15,6 +16,8 @@ class FireProtectionDeviceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('id', HiddenType::class)
+            ->add('loopDev', HiddenType::class)
             ->add('name', EntityType::class, [
                 'class'=>'MicroBundle\Entity\DeviceName',
                 'choice_label'=>'name',
@@ -23,7 +26,9 @@ class FireProtectionDeviceType extends AbstractType
                 'class'=>'MicroBundle\Entity\DeviceName',
                 'choice_label'=>'shortname',
             ])
-            ->add('loopNo')
+            ->add('serial')
+            ->add('address')
+            ->add('desc')
             ->add('number');
     }
 

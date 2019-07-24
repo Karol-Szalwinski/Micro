@@ -93,7 +93,6 @@
                 </div>
             </div>
         </div>
-        </div>
     </section>
 
     {% for loopDev in building.loopDevs|sort %}
@@ -105,10 +104,12 @@
                         <div class="card-header">
                             <h4 class="card-title">Pętla urządzeń nr {{ loopDev.number }}</h4>
                             <div class="heading-elements mt-0">
-                                <button class="btn btn-primary btn-sm " data-toggle="modal"
+                                <button id="add-button-{{ loopDev.id }}"
+                                        class="btn btn-primary btn-sm add-device-button " data-toggle="modal"
                                         data-target="#AddDeviceModal" id="{{ loopDev.id }}">
                                     <i class="d-md-none d-block ft-plus white"></i>
-                                    <span class="d-md-block d-none">Dodaj nowe urządzenie</span></button>
+                                    <span class="d-md-block d-none ">Dodaj nowe urządzenie</span>
+                                </button>
 
 
                                 <span class="dropdown">
@@ -135,35 +136,47 @@
                             {#<button type="button" class="btn btn-sm btn-danger delete-all mb-1">Usuń Wszystkie</button>#}
                             <div class="table-responsive">
                                 <table id="users-contacts"
-                                       class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
+                                       class="table table-white-space table-sm table-bordered row-grouping display no-wrap icheck table-middle text-center">
                                     <thead>
 
                                     <tr>
-                                        <th>Nr pętli</th>
                                         <th>Nr urządzenia</th>
                                         <th>Nazwa</th>
                                         <th>Skrót</th>
+                                        <th>Serial</th>
+                                        <th>Adress</th>
+                                        <th>Opis</th>
                                         <th>Ostatni przegląd</th>
                                         <th>Akcje</th>
                                     </tr>
 
                                     </thead>
-                                    <tbody>
+                                    <tbody id="tbody-{{ loopDev.id }}">
                                     {% for device in loopDev.fireProtectionDevices|sort %}
                                         <tr>
-                                            <td class="text-center">
-                                                <a class="text-center" id="loop-{{ device.id }}">{{ device.loopNo }}</a>
-                                            </td>
                                             <td class="text-center">
                                                 <a class="text-center"
                                                    id="number-{{ device.id }}">{{ device.number }}</a>
                                             </td>
                                             <td class="text-center">
-                                                <a class="text-center" id="name-{{ device.id }}">{{ device.name }}</a>
+                                                <a class="text-center"
+                                                   id="name-{{ device.id }}">{{ device.name }}</a>
                                             </td>
                                             <td class="text-center">
                                                 <a class="text-center "
                                                    id="shortname-{{ device.id }}">{{ device.shortname }}</a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a class="text-center "
+                                                   id="serial-{{ device.id }}">{{ device.serial }}</a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a class="text-center "
+                                                   id="address-{{ device.id }}">{{ device.address }}</a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a class="text-center "
+                                                   id="desc-{{ device.id }}">{{ device.desc }}</a>
                                             </td>
                                             <td class="text-center">
                                                 <a class="timeline-date">
@@ -172,7 +185,7 @@
                                             </td>
 
                                             <td>
-                                                <a data-toggle="modal" data-target="#EditContactModal"
+                                                <a data-toggle="modal" data-target="#EditDeviceModal"
                                                    id="edit-{{ device.id }}"
                                                    class="primary edit-row mr-1"><i class="la la-pencil"></i></a>
                                                 <a class="danger delete mr-1"><i class="la la-trash-o"></i></a>
@@ -183,10 +196,12 @@
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <th>Nr pętli</th>
                                         <th>Nr urządzenia</th>
                                         <th>Nazwa</th>
                                         <th>Skrót</th>
+                                        <th>Serial</th>
+                                        <th>Adress</th>
+                                        <th>Opis</th>
                                         <th>Ostatni przegląd</th>
                                         <th>Akcje</th>
                                     </tfoot>
@@ -236,7 +251,7 @@
                         {#<button type="button" class="btn btn-sm btn-danger delete-all mb-1">Usuń Wszystkie</button>#}
                         <div class="table-responsive">
                             <table id="users-contacts"
-                                   class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
+                                   class="table table-sm table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
                                 <thead>
 
                                 <tr>
@@ -335,78 +350,98 @@
     <!--------------End AddDeviceModal---------->
 
     <!--------------Begin AdDeviceModal---------->
-    {#<div class="modal fade" id="AddDeviceModal" tabindex="-1" role="dialog"#}
-         {#aria-labelledby="exampleModalLabel1" aria-hidden="true">#}
-        {#<div class="modal-dialog" role="document">#}
-            {#<div class="modal-content">#}
+    <div class="modal fade" id="AddDeviceModal" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
 
-                {#<section class="contact-form">#}
-                    {#{{ form_start(form, { 'attr': {'class': 'form form-horizontal inputmask contact-input'} }) }}#}
+                <section class="contact-form">
+                    {{ form_start(form, { 'attr': {'class': 'form form-horizontal inputmask contact-input', 'name' : 'test'} }) }}
 
-                    {#<div class="modal-header">#}
-                        {#<h5 class="modal-title" id="exampleModalLabel1">Dodaj nowe#}
-                            {#urządzenie</h5>#}
-                        {#<button type="button" class="close" data-dismiss="modal"#}
-                                {#aria-label="Close">#}
-                            {#<span aria-hidden="true">&times;</span>#}
-                        {#</button>#}
-                    {#</div>#}
-                    {#<div class="modal-body">#}
-                        {#<div class="form-body">#}
-                            {#<h4 class="form-section"><i class="ft-user"></i> Dane Urządzenia#}
-                            {#</h4>#}
-                            {#<div class="form-group row">#}
-                                {#{{ form_label(form.name, 'Nazwa', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
-                                {#<div class="col-md-9 mx-auto">#}
-                                    {#{{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}#}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"> Dodaj nowe
+                            urządzenie</h5>
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-body">
+                            <h4 class="form-section"><i class="ft-clipboard"></i> Dane urządzenia <span
+                                        id="add-form-id"></span>
+                            </h4>
 
-                                {#</div>#}
-                            {#</div>#}
-                            {#<div class="form-group row">#}
-                                {#{{ form_label(form.shortname, 'Skrót', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
-                                {#<div class="col-md-9 mx-auto">#}
-                                    {#{{ form_widget(form.shortname, { 'attr': {'class': 'form-control'} }) }}#}
-                                {#</div>#}
-                            {#</div>#}
-                            {#<div class="form-group row">#}
-                                {#{{ form_label(form.loopNo, 'Nr pętli', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
-                                {#<div class="col-md-9 ">#}
-                                    {#{{ form_widget(form.loopNo, { 'attr': {'class': 'form-control ', 'placeholder': 'Wprowadź numer pętli'} }) }}#}
-                                {#</div>#}
+                            {{ form_widget(form.id, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_widget(form.loopDev, { 'attr': {'class': 'form-control'} }) }}
 
-                            {#</div>#}
-                            {#<div class="form-group row">#}
-                                {#{{ form_label(form.number, 'Numer', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
-                                {#<div class="col-md-9 mx-auto">#}
-                                    {#{{ form_widget(form.number, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź numer'} }) }}#}
-                                {#</div>#}
-                            {#</div>#}
+                            <div class="form-group row">
+                                {{ form_label(form.number, 'Numer', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                <div class="col-md-9 mx-auto">
+                                    {{ form_widget(form.number, { 'attr': {'class': 'form-control'} }) }}
 
-                        {#</div>#}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                {{ form_label(form.name, 'Nazwa', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                <div class="col-md-9 mx-auto">
+                                    {{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}
 
-                        {#<div class="modal-footer">#}
-                            {#<div class="">#}
-                                {#<button type="button" data-dismiss="modal"#}
-                                        {#class="btn btn-warning mr-1">#}
-                                    {#<i class="ft-x"></i> Anuluj#}
-                                {#</button>#}
-                                {#<button type="submit" class="btn btn-primary">#}
-                                    {#<i class="la la-check-square-o"></i> Zapisz#}
-                                {#</button>#}
-                            {#</div>#}
-                        {#</div>#}
-                        {#{{ form_end(form) }}#}
-                    {#</div>#}
-                {#</section>#}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                {{ form_label(form.shortname, 'Skrót', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                <div class="col-md-9 mx-auto">
+                                    {{ form_widget(form.shortname, { 'attr': {'class': 'form-control'} }) }}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                {{ form_label(form.serial, 'Nr seryjny', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                <div class="col-md-9 ">
+                                    {{ form_widget(form.serial, { 'attr': {'class': 'form-control '} }) }}
+                                </div>
 
-            {#</div>#}
-        {#</div>#}
-    {#</div>#}
+                            </div>
+                            <div class="form-group row">
+                                {{ form_label(form.address, 'Adres', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                <div class="col-md-9 mx-auto">
+                                    {{ form_widget(form.address, { 'attr': {'class': 'form-control'} }) }}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                {{ form_label(form.desc, 'Opis', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                <div class="col-md-9 mx-auto">
+                                    {{ form_widget(form.desc, { 'attr': {'class': 'form-control', 'rows' : 10} }) }}
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="modal-footer">
+
+                            <div class="">
+                                <button type="button" data-dismiss="modal"
+                                        class="btn btn-warning mr-1">
+                                    <i class="ft-x"></i> Anuluj
+                                </button>
+                                <button id="submit-add" type="button" class="btn btn-primary" data-dismiss="modal">
+                                    <i class="la la-check-square-o"></i> Dodaj urządzenie
+                                </button>
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </div>
     <!--------------End AddDeviceModal---------->
 
     <!--------------Begin EditDeviceModal---------->
 
-    <div class="modal fade" id="EditContactModal" tabindex="-1" role="dialog"
+    <div class="modal fade" id="EditDeviceModal" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -424,7 +459,8 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-body">
-                            <h4 class="form-section"><i class="ft-user"></i> Dane Urządzenia <span id="edit-form-id"></span>
+                            <h4 class="form-section"><i class="ft-clipboard"></i> Dane urządzenia Nr <span
+                                        id="edit-form-id"></span>
                             </h4>
 
                             {{ form_widget(edit_form.id, { 'attr': {'class': 'form-control'} }) }}
@@ -443,19 +479,25 @@
                                     {{ form_widget(edit_form.shortname, { 'attr': {'class': 'form-control'} }) }}
                                 </div>
                             </div>
-                            {#<div class="form-group row">#}
-                                {#{{ form_label(edit_form.loopNo, 'Nr pętli', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
-                                {#<div class="col-md-9 ">#}
-                                    {#{{ form_widget(edit_form.loopNo, { 'attr': {'class': 'form-control '} }) }}#}
-                                {#</div>#}
+                            <div class="form-group row">
+                                {{ form_label(edit_form.serial, 'Nr seryjny', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                <div class="col-md-9 ">
+                                    {{ form_widget(edit_form.serial, { 'attr': {'class': 'form-control '} }) }}
+                                </div>
 
-                            {#</div>#}
-                            {#<div class="form-group row">#}
-                                {#{{ form_label(edit_form.number, 'Numer', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
-                                {#<div class="col-md-9 mx-auto">#}
-                                    {#{{ form_widget(edit_form.number, { 'attr': {'class': 'form-control'} }) }}#}
-                                {#</div>#}
-                            {#</div>#}
+                            </div>
+                            <div class="form-group row">
+                                {{ form_label(edit_form.address, 'Adres', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                <div class="col-md-9 mx-auto">
+                                    {{ form_widget(edit_form.address, { 'attr': {'class': 'form-control'} }) }}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                {{ form_label(edit_form.desc, 'Opis', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                <div class="col-md-9 mx-auto">
+                                    {{ form_widget(edit_form.desc, { 'attr': {'class': 'form-control', 'rows' : 10} }) }}
+                                </div>
+                            </div>
 
                         </div>
 
@@ -554,37 +596,174 @@
         });
 
     </script>
-        {#<!-- BEGIN: AJAX get object device -->#}
-        <script>
+    <!-- BEGIN: AJAX get object device -->
+    <script>
+        $(document).on('click', '.edit-row', function () {
+            var id = this.id.substring(5);
+            $.ajax({
+                url: '../fireprotectiondevice/get-device/' + id,
+                type: 'POST',
+                dataType: 'json',
+                async: true,
+
+                success: function (data) {
+
+                    var device = JSON.parse(data['device']);
+                    $('#microbundle_fireprotectiondevice_edit_id').val(device.id);
+                    $('#microbundle_fireprotectiondevice_edit_name').val(device.name);
+                    $('#microbundle_fireprotectiondevice_edit_serial').val(device.serial);
+                    $('#microbundle_fireprotectiondevice_edit_address').val(device.address);
+                    $('#microbundle_fireprotectiondevice_edit_desc').val(device.desc);
+                    $('#edit-form-id').text(device.number);
+
+
+                },
+                error: function () {
+                    alert('Błąd przesyłania');
+                }
+            });
+        });
+    </script>
+
+    <!-- END: AJAX get object device -->
+
+
+
+    <!-- BEGIN: set loop id to add form -->
+    <script>
         $(document).ready(function () {
-            $('.edit-row').click(function () {
-                var id = this.id.substring(5);
+            $('.add-device-button').click(function () {
+                var loop = this.id.substring(11);
+                $('#microbundle_fireprotectiondevice_loopDev').val(loop);
+                alert(loop);
+            });
+        });
+
+    </script>
+
+    <!-- END: set loop id to add form -->
+
+    <!-- BEGIN: AJAX add object device -->
+
+    <script>
+        $(document).ready(function () {
+            $('#submit-add').click(function () {
+                var id = null;
+                var loop = $('#microbundle_fireprotectiondevice_loopDev').val();
+                var number = $('#microbundle_fireprotectiondevice_number').val();
+                var name = $('#microbundle_fireprotectiondevice_name').val();
+                var serial = $('#microbundle_fireprotectiondevice_serial').val();
+                var address = $('#microbundle_fireprotectiondevice_address').val();
+                var desc = $('#microbundle_fireprotectiondevice_desc').val();
+
+
+                loop = (loop !== "") ? loop : null;
+                number = (number !== "") ? number : null;
+                name = (name !== "") ? name : null;
+                serial = (serial !== "") ? serial : null;
+                address = (address !== "") ? address : null;
+                desc = (desc !== "") ? desc : null;
+
+
                 $.ajax({
-                    url: '../fireprotectiondevice/return-fire-protection-device/' + id,
+                    url: '../fireprotectiondevice/update-device/' +
+                    id + '/' + loop + '/' + number + '/' + name + '/' + serial + '/' + address + '/' + desc,
                     type: 'POST',
                     dataType: 'json',
                     async: true,
 
                     success: function (data) {
-
+                        var loop = data["loopid"];
                         var device = JSON.parse(data['device']);
-                        $('#microbundle_fireprotectiondevice_edit_name').val(device.name);
-                        $('#edit-form-id').text(device.id);
+                        alert(device);
+                        var id = device.id;
 
+                        var row = "<tr><td class='text-center'><a class='text-center' id='number-" + id + "'></a></td>" +
+                            "<td class='text-center'><a class='text-center' id='name-" + id + "'></a></td>" +
+                            "<td class='text-center'><a class='text-center ' id='shortname-" + id + "'></a></td>" +
+                            "<td class='text-center'><a class='text-center ' id='serial-" + id + "'></a></td>" +
+                            "<td class='text-center'><a class='text-center ' id='address-" + id + "'></a></td>" +
+                            "<td class='text-center'><a class='text-center ' id='desc-" + id + "'></a></td>" +
+                            "<td class='text-center'><a class='timeline-date'></a></td>" +
+                            "<td><a data-toggle='modal' data-target='#EditDeviceModal' id='edit-" + id + "'" +
+                            "class='primary edit-row mr-1'><i class='la la-pencil'></i></a>" +
+                            "<a class='danger delete mr-1'><i class='la la-trash-o'></i></a></td></tr>";
+                        $("#tbody-" + loop).append(row);
 
+                        // update row
+
+                        $('#name-' + id).text(device.name);
+                        $('#number-' + id).text(device.number);
+                        $('#shortname-' + id).text(device.shortname);
+                        var serial = (device.serial !== null) ? device.serial : "";
+                        $('#serial-' + id).text(serial);
+                        var address = (device.address !== null) ? device.address : "";
+                        $('#address-' + id).text(address);
+                        var desc = (device.desc !== null) ? device.desc : "";
+                        $('#desc-' + id).text(desc);
 
 
                     },
                     error: function () {
-                        alert('Błąd przesyłania');
+                        alert('Błąd add device');
                     }
                 });
             });
         });
     </script>
+    <!-- END: AJAX add object device -->
+
+    <!-- BEGIN: AJAX update object device -->
+
+    <script>
+        $(document).on('click', '#submit-edit', function () {
+
+            var id = $('#microbundle_fireprotectiondevice_edit_id').val();
+            var loop = null;
+            var number = null;
+            var name = $('#microbundle_fireprotectiondevice_edit_name').val();
+            var serial = $('#microbundle_fireprotectiondevice_edit_serial').val();
+            var address = $('#microbundle_fireprotectiondevice_edit_address').val();
+            var desc = $('#microbundle_fireprotectiondevice_edit_desc').val();
+
+            id = (id !== "") ? id : null;
+            loop = (loop !== "") ? loop : null;
+            name = (name !== "") ? name : null;
+            serial = (serial !== "") ? serial : null;
+            address = (address !== "") ? address : null;
+            desc = (desc !== "") ? desc : null;
 
 
+            $.ajax({
+                url: '../fireprotectiondevice/update-device/' +
+                id + '/' + loop + '/' + number + '/' + name + '/' + serial + '/' + address + '/' + desc,
+                type: 'POST',
+                dataType: 'json',
+                async: true,
 
+                success: function (data) {
+                    // update row
+                    var device = JSON.parse(data['device']);
+                    var id = device.id;
+                    $('#name-' + id).text(device.name);
+                    $('#shortname-' + id).text(device.shortname);
+                    var serial = (device.serial !== null) ? device.serial : "";
+                    $('#serial-' + id).text(serial);
+                    var address = (device.address !== null) ? device.address : "";
+                    $('#address-' + id).text(address);
+                    var desc = (device.desc !== null) ? device.desc : "";
+                    $('#desc-' + id).text(desc);
+
+
+                },
+                error: function () {
+                    alert('Błąd update device');
+                }
+            });
+        });
+
+    </script>
+    <!-- END: AJAX update object device -->
 
 
 {% endblock %}

@@ -41,6 +41,11 @@ class LoopDev
      */
     private $fireProtectionDevices;
 
+    /**
+     * @var int
+     *
+     */
+    private $quantityDevices;
 
     /**
      * Get id.
@@ -155,5 +160,26 @@ class LoopDev
     public function removeFireProtectionDevice(\MicroBundle\Entity\FireProtectionDevice $fireProtectionDevice)
     {
         return $this->fireProtectionDevices->removeElement($fireProtectionDevice);
+    }
+
+
+    /**
+     * @param $quantityDevices
+     * @return $this
+     */
+    public function setQuantityDevices($quantityDevices)
+    {
+        $this->quantityDevices = $quantityDevices;
+
+        return $this;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getQuantityDevices()
+    {
+        return $this->quantityDevices;
     }
 }

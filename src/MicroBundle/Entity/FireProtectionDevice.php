@@ -50,6 +50,28 @@ class FireProtectionDevice
     private $number;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="serial", type="string", length=100, nullable=true)
+     */
+    private $serial;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="address", type="string", length=100, nullable=true)
+     */
+    private $address;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $desc;
+
+
+    /**
      * @var \DateTime|null
      *
      * @ORM\Column(name="lastServiceDate", type="datetime", nullable=true)
@@ -294,5 +316,79 @@ class FireProtectionDevice
     public function getLoopDev()
     {
         return $this->loopDev;
+    }
+
+    /**
+     * Set serial.
+     *
+     * @param string|null $serial
+     *
+     * @return FireProtectionDevice
+     */
+    public function setSerial($serial = null)
+    {
+        $this->serial = $serial;
+
+        return $this;
+    }
+
+    /**
+     * Get serial.
+     *
+     * @return string|null
+     */
+    public function getSerial()
+    {
+        return $this->serial;
+    }
+
+    /**
+     * Set address.
+     *
+     * @param string|null $address
+     *
+     * @return FireProtectionDevice
+     */
+    public function setAddress($address = null)
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Get address.
+     *
+     * @return string|null
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+
+
+    /**
+     * Set desc.
+     *
+     * @param string|null $desc
+     *
+     * @return FireProtectionDevice
+     */
+    public function setDesc($desc = null)
+    {
+        $this->desc = $desc;
+
+        return $this;
+    }
+
+    /**
+     * Get desc.
+     *
+     * @return string|null
+     */
+    public function getDesc()
+    {
+        return $this->desc;
     }
 }

@@ -24,7 +24,11 @@ class FireProtectionDeviceEditType extends AbstractType
             ->add('shortname', EntityType::class, [
                 'class'=>'MicroBundle\Entity\DeviceName',
                 'choice_label'=>'shortname',
-            ]);
+            ])
+            ->add('serial')
+            ->add('address')
+            ->add('desc')
+        ;
     }
 
     /**

@@ -90,19 +90,13 @@ class Building
      */
     private $fireInspections;
 
-    /**
-     * @var int
-     *
-     */
-    private $quantityDevices;
 
-    
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->fireProtectionDevices = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->loopDevs = new \Doctrine\Common\Collections\ArrayCollection();
         $this->fireInspections = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
