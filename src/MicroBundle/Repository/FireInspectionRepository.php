@@ -23,4 +23,22 @@ class FireInspectionRepository extends \Doctrine\ORM\EntityRepository
         return $qb->getQuery()->getResult();
     }
 
+
+    public function findDevicesByFireInspection($document, $loopId) {
+        $result = $this->createQueryBuilder('Device');
+
+        $dql = $result->select('f','i')
+            ->from('MicroBundle:FireProtectionDevice', 'f')
+            ->leftJoin('f.inspectedDevices', 'i')
+            ->where('i.fireInspection =:document')
+            ->andWhere('f.loopDev =:loopid')
+            ->setParameter('document', $document)
+            ->setParameter('loopid', $loopId)
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+
+        return $dql;
+    }
+
 }

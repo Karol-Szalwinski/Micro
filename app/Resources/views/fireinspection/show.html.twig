@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Klient{% endblock %}
+{% block title %}Przegląd{% endblock %}
 
 {% block body %}
     <!-- Content header -->
@@ -195,12 +195,13 @@
 
     <!-- Inspected devices section-->
 
+    {% for key, loopDev in loopDevs %}
     <section class="row all-contacts">
         <div class="col-12">
             <div class="card">
                 <div class="card-head">
                     <div class="card-header">
-                        <h4 class="card-title">Tabela 1 - Urządzenia</h4>
+                        <h4 class="card-title">Pętla Numer {{ key + 1 }} </h4>
 
                     </div>
                 </div>
@@ -221,41 +222,38 @@
                                    class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
                                 <thead>
                                 <tr>
-                                    <th>Pętli</th>
-                                    <th>Urządzenie</th>
+                                    <th>Nr</th>
                                     <th>Typ</th>
                                     <th>Status</th>
                                     <th>Wynik testu</th>
                                     <th>Uwagi</th>
+                                    <th>Nr seryjny</th>
                                     <th>Akcje</th>
 
 
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for device in fireInspection.inspectedDevices|sort %}
+                                {% for device in loopDev %}
                                     <tr
-                                            id="row-{{ device.id }}"
-                                            style="{% if not device.visible %}display:none{% endif %}">
+                                            id="row-{{ device.inspectedDevices|first.id }}"
+                                            style="{% if not device.inspectedDevices|first.visible %}display:none{% endif %}"
+                                    >
 
-                                        <td>
-                                            <div>
-                                                <a class="media-heading name">{{ device.loopNo }}</a>
-                                            </div>
+
+                                        <td class="text-center">
+                                            <div>{{ device.inspectedDevices|first.number }} </div>
                                         </td>
                                         <td class="text-center">
-                                            <div>{{ device.number }} </div>
-                                        </td>
-                                        <td class="text-center">
-                                            <div>{{ device.shortname }}</div>
+                                            <div>{{ device.inspectedDevices|first.shortname }}</div>
                                         </td>
                                         <td class="text-center">
                                             {% set checked = false %}
-                                            {% if device.status == 1 %}
+                                            {% if device.inspectedDevices|first.status == 1 %}
                                                 {% set checked = true %}
                                             {% endif %}
                                             <input type="checkbox" class="column_filter status-checkbox switch"
-                                                   id="s{{ device.id }}" {% if checked %}checked{% endif %}
+                                                   id="s{{ device.inspectedDevices|first.id }}" {% if checked %}checked{% endif %}
                                                    data-icon-cls="fa" data-off-icon-cls="fa ft-thumbs-down"
                                                    data-on-icon-cls="fa ft-thumbs-up"
                                                    data-off-label="OFF"
@@ -266,11 +264,11 @@
                                         </td>
                                         <td class="text-center">
                                             {% set checked = false %}
-                                            {% if device.test == 1 %}
+                                            {% if device.inspectedDevices|first.test == 1 %}
                                                 {% set checked = true %}
                                             {% endif %}
                                             <input type="checkbox" class="column_filter status-checkbox switch"
-                                                   id="t{{ device.id }}" {% if checked %}checked{% endif %}
+                                                   id="t{{ device.inspectedDevices|first.id }}" {% if checked %}checked{% endif %}
                                                    data-icon-cls="fa" data-off-icon-cls="fa ft-thumbs-down"
                                                    data-on-icon-cls="fa ft-thumbs-up"
                                                    data-off-label="NEG"
@@ -280,14 +278,16 @@
 
                                         </td>
                                         <td class="text-center hidden-input">
-                                            <p id="p{{ device.id }}">{{ device.comment }}</p>
-                                            <input id="c{{ device.id }}"
+                                            <p id="p{{ device.inspectedDevices|first.id }}">{{ device.inspectedDevices|first.comment }}</p>
+                                            <input id="c{{ device.inspectedDevices|first.id }}"
                                                    type="hidden" value="">
                                         </td>
-
+                                        <td class="text-center">
+                                            <div>{{ device.serial }}</div>
+                                        </td>
                                         <td>
 
-                                            <a id="del-{{ device.id }}" class="device-row danger delete mr-1 "><i
+                                            <a id="del-{{ device.inspectedDevices|first.id }}" class="device-row danger delete mr-1 "><i
                                                         class="la la-trash-o "></i></a>
 
                                         </td>
@@ -304,9 +304,12 @@
         </div>
     </section>
 
+    {% endfor %}
+
     <!-- Other activities section-->
 
     <!-- Inspected devices modal-->
+
     <!-- Modal -->
     <div id="add-device-modal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-lg">

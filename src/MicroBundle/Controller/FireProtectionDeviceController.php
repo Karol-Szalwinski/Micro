@@ -215,7 +215,7 @@ class FireProtectionDeviceController extends Controller
         $address = ($address == "null") ? "" : $address;
         $desc = ($desc == "null") ? "" : $desc;
 
-        $fireProtectionDevice->setNumber($number);
+
         $fireProtectionDevice->setName($name);
         $fireProtectionDevice->setShortname($shortname);
         $fireProtectionDevice->setSerial($serial);

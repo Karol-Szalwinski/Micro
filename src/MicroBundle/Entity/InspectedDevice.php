@@ -24,7 +24,7 @@ class InspectedDevice
     /**
      * @var int
      *
-     * @ORM\Column(name="loopNo", type="integer")
+     * @ORM\Column(name="loopNo", type="integer", nullable=true)
      */
     private $loopNo;
 

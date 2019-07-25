@@ -57,6 +57,7 @@ class FireInspectionController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $building->addFireInspection($fireInspection);
             $fireInspection->setBuilding($building);
+            //add inspectors to document
             foreach ($fireInspection->getTempInspectors() as $inspector) {
                 $docInspector = new DocumentInspector();
                 $docInspector->setName($inspector->getName());
@@ -68,13 +69,37 @@ class FireInspectionController extends Controller
             }
 
             $em = $this->getDoctrine()->getManager();
-
+            //add test position to document
             foreach ($defaultFireInspection->getTestPositions() as $defTestPosition) {
                 $testPosition = clone $defTestPosition;
                 $testPosition->setFireInspection($fireInspection);
                 $fireInspection->addTestPosition($testPosition);
                 $em->persist($testPosition);
             }
+
+            //add InspectedDevice to document
+            $loopDevs = $building->getLoopDevs();
+            foreach ($loopDevs as $loopDev) {
+                foreach ($loopDev->getFireProtectionDevices() as $device) {
+                    $inspectedDevices = new InspectedDevice();
+                    $inspectedDevices->setNumber($device->getNumber());
+                    $inspectedDevices->setShortname($device->getShortname());
+
+                    $inspectedDevices->setFireProtectionDevice($device);
+                    $device->addInspectedDevice($inspectedDevices);
+
+                    $inspectedDevices->setFireInspection($fireInspection);
+                    $fireInspection->addInspectedDevice($inspectedDevices);
+
+                    $em->persist($inspectedDevices);
+                }
+
+            }
+
+
+
+
+
             $em->persist($fireInspection);
             $em->flush();
 
@@ -92,9 +117,20 @@ class FireInspectionController extends Controller
      */
     public function showAction(FireInspection $fireInspection)
     {
-        $deleteForm = $this->createDeleteForm($fireInspection);
+        $em = $this->getDoctrine()->getManager();
+        $loopDevs=[];
+        foreach ( $fireInspection->getBuilding()->getLoopDevs() as $loop) {;
 
-        return $this->render('fireinspection/show.html.twig', array('fireInspection' => $fireInspection, 'delete_form' => $deleteForm->createView(),));
+            $loopDev = $em->getRepository('MicroBundle:FireInspection')->findDevicesByFireInspection($fireInspection->getId(), $loop->getId());
+            $loopDevs[] = $loopDev;
+
+        }
+//        dump($devices);die();
+
+        return $this->render('fireinspection/show.html.twig',
+            array('fireInspection' => $fireInspection,
+                'loopDevs' => $loopDevs,
+                ));
     }
 
     /**
