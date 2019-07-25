@@ -95,6 +95,14 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    {{ form_label(edit_form.deviceShortlistPosition, 'Lista urządzeń', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        {{ form_widget(edit_form.deviceShortlistPosition, { 'attr':
+                                            {'class': 'form-control textarea-autosize','rows': '10'}
+                                        }) }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     {{ form_label(edit_form.legal, 'Podstawa prawna', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(edit_form.legal, { 'attr': {'class': 'form-control textarea-autosize', 'placeholder': 'Wprowadź podstawę prawną','rows': '5'} }) }}

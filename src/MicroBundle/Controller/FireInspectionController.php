@@ -47,6 +47,7 @@ class FireInspectionController extends Controller
         $em = $this->getDoctrine()->getManager();
         $defaultFireInspection = $em->getRepository('MicroBundle:FireInspection')->findOneBy(['id' => 1]);
         $fireInspection = clone $defaultFireInspection;
+        $fireInspection->setDeviceShortlistPosition($building->getDeviceShortlistPosition());
         $fireInspection->setInspectionDate(new \DateTime());
         $fireInspection->setNextInspectionDate(new \DateTime('now + 6 month'));
 

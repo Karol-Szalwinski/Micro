@@ -39,6 +39,7 @@ class FireInspectionType extends AbstractType
                 'multiple' => true,
                  'expanded' => true,
             ])
+            ->add('deviceShortlistPosition')
             ->add('legal');
 
     }/**
