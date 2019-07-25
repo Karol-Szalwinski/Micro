@@ -1,2 +1,2 @@
 *.php linguist-language=PHP
-*.twig linguist-language=PHP
+*.* linguist-language=PHP
