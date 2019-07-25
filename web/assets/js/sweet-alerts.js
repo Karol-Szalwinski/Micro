@@ -14,7 +14,7 @@ $(document).ready(function(){
         swal("No to sorry!", "Jeśli chcesz odzyskać hasło skontaktuj się z adminem!", "warning");
     });
 
-    $('.cancel-delete').on('click',function(){
+    $(document).on('click', '.cancel-delete', function(){
         var id = this.id.substr(7);
         alert(id);
         swal({
@@ -39,13 +39,13 @@ $(document).ready(function(){
             }
         })
             .then((isConfirm) => {
-            if (isConfirm) {
-                deleteDevice(id);
-                swal("Usunięte!", "Tego urządzenia już nie zobaczysz.", "success");
-            } else {
-                swal("Anulowano", "Twoje urządzenie pozostało", "error");
-    }
-    });
+                if (isConfirm) {
+                    deleteDevice(id);
+                    swal("Usunięte!", "Tego urządzenia już nie zobaczysz.", "success");
+                } else {
+                    swal("Anulowano", "Twoje urządzenie pozostało", "error");
+                }
+            })
 
     });
 

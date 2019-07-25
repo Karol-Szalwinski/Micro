@@ -367,4 +367,28 @@ class FireProtectionDevice
     }
 
 
+
+    /**
+     * Set desc.
+     *
+     * @param string|null $desc
+     *
+     * @return FireProtectionDevice
+     */
+    public function setDesc($desc = null)
+    {
+        $this->desc = $desc;
+
+        return $this;
+    }
+
+    /**
+     * Get desc.
+     *
+     * @return string|null
+     */
+    public function getDesc()
+    {
+        return $this->desc;
+    }
 }

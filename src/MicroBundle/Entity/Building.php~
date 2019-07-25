@@ -90,6 +90,13 @@ class Building
      */
     private $fireInspections;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="deviceShortlistPosition", type="text", nullable=true)
+     */
+    private $deviceShortlistPosition;
+
 
     /**
      * Constructor

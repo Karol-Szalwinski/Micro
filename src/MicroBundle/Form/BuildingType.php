@@ -21,7 +21,8 @@ class BuildingType extends AbstractType
             ->add('flatNo')
             ->add('city')
             ->add('postalCode')
-            ->add('description');
+            ->add('description')
+            ->add('deviceShortlistPosition');
     }/**
      * {@inheritdoc}
      */

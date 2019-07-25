@@ -43,6 +43,10 @@ class BuildingController extends Controller
     public function newAction(Client $client, Request $request)
     {
         $building = new Building();
+        $building->setDeviceShortlistPosition(
+          "Centrala NAZWA \nCzujki optyczne dymu\nCzujki termiczne\nSygnalizatory optyczno-akustyczne\n" .
+           "Ręczne ostrzegacze pożarowe\nDrukarki termiczne"
+        );
         $form = $this->createForm('MicroBundle\Form\BuildingType', $building);
         $form->handleRequest($request);
 

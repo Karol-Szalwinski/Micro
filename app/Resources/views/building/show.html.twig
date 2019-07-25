@@ -47,7 +47,7 @@
     <!-- Basic form layout section start -->
     <section id="horizontal-form-layouts">
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title" id="horz-layout-basic">Budynek</h4>
@@ -73,16 +73,17 @@
                                     <tr>
                                         <th>Nazwa budynku:</th>
                                         <td>{{ building.name }}</td>
+                                        <th rowspan="3">Lista urządzeń:</th>
+                                        <td rowspan="3">{{ building.deviceShortlistPosition|nl2br }}</td>
                                     </tr>
                                     <tr>
-                                        <th>Adres:</th>
+                                        <th rowspan="2">Adres:</th>
                                         <td>ul.{{ building.street }}
                                             {{ building.houseNo }}
                                             {% if building.flatNo is not null %}/ {{ building.flatNo }}{% endif %}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th></th>
                                         <td>{{ building.city }} {{ building.postalCode }}</td>
                                     </tr>
 
@@ -140,7 +141,7 @@
                                     <thead>
 
                                     <tr>
-                                        <th>Nr urządzenia</th>
+                                        <th>Nr</th>
                                         <th>Nazwa</th>
                                         <th>Skrót</th>
                                         <th>Serial</th>
@@ -197,7 +198,7 @@
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <th>Nr urządzenia</th>
+                                        <th>Nr</th>
                                         <th>Nazwa</th>
                                         <th>Skrót</th>
                                         <th>Serial</th>
@@ -597,6 +598,7 @@
                 "zeroRecords": "Niestety brak wyników",
                 "info": "Stron _PAGE_ z _PAGES_",
                 "infoEmpty": "Brak wierszy",
+                "search": "Szukaj w każdej kolumnie:",
                 "infoFiltered": "(znaleziono z _MAX_ wszystkich wierszy)"
             },
             "paging": false,
@@ -685,7 +687,7 @@
                         alert(device);
                         var id = device.id;
 
-                        var row = "<tr><td class='text-center'><a class='text-center' id='number-" + id + "'></a></td>" +
+                        var row = "<tr id='row-" + loop + "-" + id + "' ><td class='text-center'><a class='text-center' id='number-" + id + "'></a></td>" +
                             "<td class='text-center'><a class='text-center' id='name-" + id + "'></a></td>" +
                             "<td class='text-center'><a class='text-center ' id='shortname-" + id + "'></a></td>" +
                             "<td class='text-center'><a class='text-center ' id='serial-" + id + "'></a></td>" +
@@ -694,7 +696,7 @@
                             "<td class='text-center'><a class='timeline-date'></a></td>" +
                             "<td><a data-toggle='modal' data-target='#EditDeviceModal' id='edit-" + id + "'" +
                             "class='primary edit-row mr-1'><i class='la la-pencil'></i></a>" +
-                            "<a id='delete-" + id + "' class='danger delete mr-1'><i class='la la-trash-o'></i></a></td></tr>";
+                            "<a id='delete-" + id + "' class='cancel-delete danger delete mr-1'><i class='la la-trash-o'></i></a></td></tr>";
                         $("#tbody-" + loop).append(row);
 
                         // update row

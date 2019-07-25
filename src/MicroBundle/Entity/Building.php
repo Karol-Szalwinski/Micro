@@ -90,6 +90,13 @@ class Building
      */
     private $fireInspections;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="deviceShortlistPosition", type="text", nullable=true)
+     */
+    private $deviceShortlistPosition;
+
 
     /**
      * Constructor
@@ -373,5 +380,29 @@ class Building
     public function getLoopDevs()
     {
         return $this->loopDevs;
+    }
+
+    /**
+     * Set deviceShortlistPosition.
+     *
+     * @param string|null $deviceShortlistPosition
+     *
+     * @return Building
+     */
+    public function setDeviceShortlistPosition($deviceShortlistPosition = null)
+    {
+        $this->deviceShortlistPosition = $deviceShortlistPosition;
+
+        return $this;
+    }
+
+    /**
+     * Get deviceShortlistPosition.
+     *
+     * @return string|null
+     */
+    public function getDeviceShortlistPosition()
+    {
+        return $this->deviceShortlistPosition;
     }
 }
