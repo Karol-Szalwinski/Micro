@@ -137,14 +137,12 @@ class FireProtectionDeviceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['id' => $id]);
-        $nameVal = $em->getRepository('MicroBundle:DeviceName')
-            ->findOneBy(['name' => $fireProtectionDevice->getName()]);
-       if ($nameVal==null){
-           $nameVal='1';
-       } else
-       {
-           $nameVal=$nameVal->getId();
-       }
+        $nameVal = $em->getRepository('MicroBundle:DeviceName')->findOneBy(['name' => $fireProtectionDevice->getName()]);
+        if ($nameVal == null) {
+            $nameVal = '1';
+        } else {
+            $nameVal = $nameVal->getId();
+        }
 
         $fireProtectionDevice->setName($nameVal);
         //remove refference
@@ -176,11 +174,17 @@ class FireProtectionDeviceController extends Controller
 
 
     /**
-     * Update Fire Protection Device
+     * Add or Update Fire Protection Device
      * @Method({"GET", "POST"})
      * @Route("/update-device/{id}/{loop}/{number}/{name}/{serial}/{address}/{desc}")
      * @param Request $request
      * @param $id
+     * @param $loop
+     * @param $number
+     * @param $name
+     * @param $serial
+     * @param $address
+     * @param $desc
      * @return JsonResponse
      */
     public function updateFireProtectionDeviceAction(Request $request, $id, $loop, $number, $name, $serial, $address, $desc)
@@ -197,21 +201,19 @@ class FireProtectionDeviceController extends Controller
             $fireProtectionDevice->setLoopDev($loop);
             $fireProtectionDevice->setnumber($number);
 
-        }
-        else {
+        } else {
             $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['id' => $id]);
 
         }
-        $deviceName = $em->getRepository('MicroBundle:DeviceName')
-            ->findOneBy(['id' => $name]);
+        $deviceName = $em->getRepository('MicroBundle:DeviceName')->findOneBy(['id' => $name]);
 
-       $name = $deviceName->getName();
-       $shortname = $deviceName->getShortname();
+        $name = $deviceName->getName();
+        $shortname = $deviceName->getShortname();
 
-       //chane nulles
-        $serial = ($serial=="null") ? "" : $serial;
-        $address = ($address=="null") ? "" : $address;
-        $desc = ($desc=="null") ? "" : $desc;
+        //chane nulles
+        $serial = ($serial == "null") ? "" : $serial;
+        $address = ($address == "null") ? "" : $address;
+        $desc = ($desc == "null") ? "" : $desc;
 
         $fireProtectionDevice->setNumber($number);
         $fireProtectionDevice->setName($name);
@@ -225,9 +227,7 @@ class FireProtectionDeviceController extends Controller
         //remove refference
         $fireProtectionDevice->removeAllInspectedDevices()->setLoopDev(null);
         //get loop id if it possible
-        $loopid = ($loop=="null") ? "null" : $loop->getId();
-
-//        dump($fireProtectionDevice);die();
+        $loopid = ($loop == "null") ? "null" : $loop->getId();
 
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
 
@@ -246,6 +246,41 @@ class FireProtectionDeviceController extends Controller
 
             $jsonData['device'] = $serializeDevice;
             $jsonData['loopid'] = $loopid;
+
+
+            return new JsonResponse($jsonData);
+        }
+    }
+
+    /**
+     * Add or Update Fire Protection Device
+     * @Method({"GET", "POST"})
+     * @Route("/delete-device/{id}")
+     * @param Request $request
+     * @param $id
+     * @return JsonResponse
+     */
+    public function deleteFireProtectionDeviceAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['id' => $id]);
+
+        $loopDev = $fireProtectionDevice->getLoopDev();
+        $loopId = $loopDev->getId();
+
+        $loopDev->removeFireProtectionDevice($fireProtectionDevice);
+        $fireProtectionDevice->setLoopDev(null);
+
+        $em->remove($fireProtectionDevice);
+        $em->flush();
+
+
+        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+
+
+            $jsonData['id'] = $id;
+            $jsonData['loop'] = $loopId;
 
 
             return new JsonResponse($jsonData);

@@ -135,8 +135,8 @@
                             <!-- Device List table -->
                             {#<button type="button" class="btn btn-sm btn-danger delete-all mb-1">Usuń Wszystkie</button>#}
                             <div class="table-responsive">
-                                <table id="users-contacts"
-                                       class="table table-white-space table-sm table-bordered row-grouping display no-wrap icheck table-middle text-center">
+                                <table
+                                       class=" devices-table table table-white-space table-sm table-bordered row-grouping display no-wrap icheck table-middle text-center">
                                     <thead>
 
                                     <tr>
@@ -189,7 +189,7 @@
                                                    id="edit-{{ device.id }}"
                                                    class="primary edit-row mr-1"><i class="la la-pencil"></i></a>
                                                 <a id="delete-{{ device.id }}"
-                                                   class="danger delete-row mr-1"><i class="la la-trash-o"></i></a>
+                                                   class="danger delete-row mr-1 cancel-delete"><i class="la la-trash-o"></i></a>
 
                                             </td>
                                         </tr>
@@ -542,6 +542,12 @@
     <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>
     <!-- END: Page JS-->
 
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="{{ asset('app-assets/vendors/js/extensions/sweetalert.min.js') }}"></script>
+    <!-- END: Page Vendor JS-->
+    <!-- BEGIN: Page JS-->
+    <script src="{{ asset('assets/js/sweet-alerts.js') }}"></script>
+    <!-- END: Page JS-->
 
 
 
@@ -585,7 +591,7 @@
 
         });
 
-        $('#users-contacts').DataTable({
+        $('.devices-table').DataTable({
             "language": {
                 "lengthMenu": "Pokaż _MENU_ wierszy na stronie",
                 "zeroRecords": "Niestety brak wyników",
@@ -688,7 +694,7 @@
                             "<td class='text-center'><a class='timeline-date'></a></td>" +
                             "<td><a data-toggle='modal' data-target='#EditDeviceModal' id='edit-" + id + "'" +
                             "class='primary edit-row mr-1'><i class='la la-pencil'></i></a>" +
-                            "<a class='danger delete mr-1'><i class='la la-trash-o'></i></a></td></tr>";
+                            "<a id='delete-" + id + "' class='danger delete mr-1'><i class='la la-trash-o'></i></a></td></tr>";
                         $("#tbody-" + loop).append(row);
 
                         // update row
@@ -765,11 +771,12 @@
 
     </script>
     <!-- END: AJAX update object device -->
+
     <!-- BEGIN: AJAX delete object device -->
     <script>
 
-        $(document).on('click', '.delete-row ', function () {
-            var id = this.id.substr(7);
+         function deleteDevice(id) {
+
             $.ajax({
                 url: '../fireprotectiondevice/delete-device/' + id,
                 type: 'POST',
@@ -780,9 +787,12 @@
                     var id = data['id'];
                     var loop = data['loop'];
                     $('#row-' + loop + '-' + id ).remove();
+                },
+                error: function () {
+                    alert('Błąd delete device');
                 }
             });
-        });
+        }
     </script>
     <!-- BEGIN: AJAX delete object device -->
 {% endblock %}
