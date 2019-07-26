@@ -1,0 +1,74 @@
+<!-- Inspected devices modal-->
+
+<!-- Modal -->
+<div id="add-device-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h4 class="modal-title">Wybierz urządzenie ktore chcesz dodać do dokumentu</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+
+                <!-- Task List table -->
+                <div class="table-responsive">
+                    <table id="inspected-devices"
+                           class="table table-sm table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
+                        <thead>
+                        <tr>
+                            <th>Pętla</th>
+                            <th>Urządzenie</th>
+                            <th>Typ</th>
+                            {#<th>Data ostatniego przeglądu</th>#}
+                            <th>Akcje</th>
+
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for device in fireInspection.inspectedDevices|sort %}
+                            <tr
+                                    id="mod-{{ device.id }}"
+                                    style="{% if device.visible %}display:none{% endif %}">
+
+                                <td>
+                                    <div>
+                                        <a class="media-heading name">{{ device.loopNo }}</a>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <div>{{ device.number }} </div>
+                                </td>
+                                <td class="text-center">
+                                    <div>{{ device.shortname }}</div>
+                                </td>
+                                {#<td>#}
+                                {#</td>#}
+
+                                <td>
+                                    <a
+                                            id="add-{{ device.id }}"
+                                            class="device-row btn btn-sm btn-warning mr-1">Dodaj<i
+                                                class="la la-add"></i></a>
+
+
+                                </td>
+
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+            </div>
+        </div>
+    </div>
+</div>

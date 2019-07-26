@@ -38,14 +38,16 @@
                                 class="la la-backward"></i> Wróć do budynku</a>
 
                     {#<a class="btn btn-outline-info round"#}
-                       {#href="{{ path('fire_inspection_pdf', { 'fireInspection' : fireInspection.id }) }}"><i#}
-                                {#class="la la-backward"></i> PDF</a>#}
+                    {#href="{{ path('fire_inspection_pdf', { 'fireInspection' : fireInspection.id }) }}"><i#}
+                    {#class="la la-backward"></i> PDF</a>#}
                     {#<a class="btn btn-outline-info round"#}
-                       {#href="{{ path('fire_inspection_print', { 'fireInspection' : fireInspection.id }) }}"><i#}
-                                {#class="la la-backward"></i> Podgląd</a>#}
-                    <iframe src="{{ path('fire_inspection_print', { 'fireInspection' : fireInspection.id }) }}" name="frame" style="display: none"></iframe>
+                    {#href="{{ path('fire_inspection_print', { 'fireInspection' : fireInspection.id }) }}"><i#}
+                    {#class="la la-backward"></i> Podgląd</a>#}
+                    <iframe src="{{ path('fire_inspection_print', { 'fireInspection' : fireInspection.id }) }}"
+                            name="frame" style="display: none"></iframe>
 
-                    <button class="btn btn-outline-info round" type="submit" onclick="frames['frame'].print()" value="Drukuj">
+                    <button class="btn btn-outline-info round" type="submit" onclick="frames['frame'].print()"
+                            value="Drukuj">
                         <i
                                 class="la la-print"></i> Drukuj
                     </button>
@@ -196,192 +198,124 @@
     <!-- Inspected devices section-->
 
     {% for key, loopDev in loopDevs %}
-    <section class="row all-contacts">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-head">
-                    <div class="card-header">
-                        <h4 class="card-title">Pętla Numer {{ key + 1 }} </h4>
+        <section class="row all-contacts">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-head">
+                        <div class="card-header">
+                            <h4 class="card-title">Pętla Numer {{ key + 1 }} </h4>
 
+                        </div>
                     </div>
-                </div>
-                <div class="card-content">
-                    <div class="card-body">
-                        <!-- Task List table -->
-                        <a type="button" class="btn btn-sm btn-danger mb-1"
-                           href="{{ path('fireinspection_del_devices', {'id': fireInspection.id}) }}">Usuń Wszystkie</a>
-                        <a type="button" class="btn btn-sm btn-info mb-1"
-                           href="{{ path('fireinspection_load_devices', {'id': fireInspection.id}) }}">
-                            Załaduj wszystkie urządzenia</a>
-                        <a type="button" id="load-miss-device"
-                           class="btn btn-sm btn-warning mb-1" data-toggle="modal" data-target="#add-device-modal">
-                            Dodaj do listy usunięte urządzenie
-                        </a>
-                        <div class="table-responsive">
-                            <table id="inspected-devices"
-                                   class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
-                                <thead>
-                                <tr>
-                                    <th>Nr</th>
-                                    <th>Typ</th>
-                                    <th>Status</th>
-                                    <th>Wynik testu</th>
-                                    <th>Uwagi</th>
-                                    <th>Nr seryjny</th>
-                                    <th>Akcje</th>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <!-- Task List table -->
+                            <a type="button" class="btn btn-sm btn-danger mb-1"
+                               href="{{ path('fireinspection_del_devices', {'id': fireInspection.id}) }}">Usuń
+                                Wszystkie</a>
+                            <a type="button" class="btn btn-sm btn-info mb-1"
+                               href="{{ path('fireinspection_load_devices', {'id': fireInspection.id}) }}">
+                                Załaduj wszystkie urządzenia</a>
+                            <a type="button" id="load-miss-device"
+                               class="btn btn-sm btn-warning mb-1" data-toggle="modal" data-target="#add-device-modal">
+                                Dodaj do listy usunięte urządzenie
+                            </a>
+                            <div class="table-responsive">
+                                <table id="inspected-devices"
+                                       class="table table-sm table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
+                                    <thead>
+                                    <tr>
+                                        <th>Nr</th>
+                                        <th>Typ</th>
+                                        <th>Status</th>
+                                        <th>Wynik testu</th>
+                                        <th>Uwagi</th>
+                                        <th>Nr seryjny</th>
+                                        <th>Akcje</th>
 
-
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for device in loopDev %}
-                                    <tr
-                                            id="row-{{ device.inspectedDevices|first.id }}"
-                                            style="{% if not device.inspectedDevices|first.visible %}display:none{% endif %}"
-                                    >
-
-
-                                        <td class="text-center">
-                                            <div>{{ device.inspectedDevices|first.number }} </div>
-                                        </td>
-                                        <td class="text-center">
-                                            <div>{{ device.inspectedDevices|first.shortname }}</div>
-                                        </td>
-                                        <td class="text-center">
-                                            {% set checked = false %}
-                                            {% if device.inspectedDevices|first.status == 1 %}
-                                                {% set checked = true %}
-                                            {% endif %}
-                                            <input type="checkbox" class="column_filter status-checkbox switch"
-                                                   id="s{{ device.inspectedDevices|first.id }}" {% if checked %}checked{% endif %}
-                                                   data-icon-cls="fa" data-off-icon-cls="fa ft-thumbs-down"
-                                                   data-on-icon-cls="fa ft-thumbs-up"
-                                                   data-off-label="OFF"
-                                                   data-on-label="ON"
-                                                   data-group-cls="btn-group-sm"
-                                            >
-
-                                        </td>
-                                        <td class="text-center">
-                                            {% set checked = false %}
-                                            {% if device.inspectedDevices|first.test == 1 %}
-                                                {% set checked = true %}
-                                            {% endif %}
-                                            <input type="checkbox" class="column_filter status-checkbox switch"
-                                                   id="t{{ device.inspectedDevices|first.id }}" {% if checked %}checked{% endif %}
-                                                   data-icon-cls="fa" data-off-icon-cls="fa ft-thumbs-down"
-                                                   data-on-icon-cls="fa ft-thumbs-up"
-                                                   data-off-label="NEG"
-                                                   data-on-label="POZ"
-                                                   data-group-cls="btn-group-sm"
-                                            >
-
-                                        </td>
-                                        <td class="text-center hidden-input">
-                                            <p id="p{{ device.inspectedDevices|first.id }}">{{ device.inspectedDevices|first.comment }}</p>
-                                            <input id="c{{ device.inspectedDevices|first.id }}"
-                                                   type="hidden" value="">
-                                        </td>
-                                        <td class="text-center">
-                                            <div>{{ device.serial }}</div>
-                                        </td>
-                                        <td>
-
-                                            <a id="del-{{ device.inspectedDevices|first.id }}" class="device-row danger delete mr-1 "><i
-                                                        class="la la-trash-o "></i></a>
-
-                                        </td>
 
                                     </tr>
-                                {% endfor %}
-                                </tbody>
+                                    </thead>
+                                    <tbody>
+                                    {% for device in loopDev %}
+                                        <tr
+                                                id="row-{{ device.inspectedDevices|first.id }}"
+                                                style="{% if not device.inspectedDevices|first.visible %}display:none{% endif %}"
+                                        >
 
-                            </table>
+
+                                            <td class="text-center">
+                                                <div>{{ device.inspectedDevices|first.number }} </div>
+                                            </td>
+                                            <td class="text-center">
+                                                <div>{{ device.inspectedDevices|first.shortname }}</div>
+                                            </td>
+                                            <td class="text-center">
+                                                {% set checked = false %}
+                                                {% if device.inspectedDevices|first.status == 1 %}
+                                                    {% set checked = true %}
+                                                {% endif %}
+                                                <input type="checkbox" class="column_filter status-checkbox switch"
+                                                       id="s{{ device.inspectedDevices|first.id }}"
+                                                       {% if checked %}checked{% endif %}
+                                                       data-icon-cls="fa" data-off-icon-cls="fa ft-thumbs-down"
+                                                       data-on-icon-cls="fa ft-thumbs-up"
+                                                       data-off-label="OFF"
+                                                       data-on-label="ON"
+                                                       data-group-cls="btn-group-sm"
+                                                >
+
+                                            </td>
+                                            <td class="text-center">
+                                                {% set checked = false %}
+                                                {% if device.inspectedDevices|first.test == 1 %}
+                                                    {% set checked = true %}
+                                                {% endif %}
+                                                <input type="checkbox" class="column_filter status-checkbox switch"
+                                                       id="t{{ device.inspectedDevices|first.id }}"
+                                                       {% if checked %}checked{% endif %}
+                                                       data-icon-cls="fa" data-off-icon-cls="fa ft-thumbs-down"
+                                                       data-on-icon-cls="fa ft-thumbs-up"
+                                                       data-off-label="NEG"
+                                                       data-on-label="POZ"
+                                                       data-group-cls="btn-group-sm"
+                                                >
+
+                                            </td>
+                                            <td class="text-center hidden-input">
+                                                <p id="p{{ device.inspectedDevices|first.id }}">{{ device.inspectedDevices|first.comment }}</p>
+                                                <input id="c{{ device.inspectedDevices|first.id }}"
+                                                       type="hidden" value="">
+                                            </td>
+                                            <td class="text-center">
+                                                <div>{{ device.serial }}</div>
+                                            </td>
+                                            <td>
+
+                                                <a id="del-{{ device.inspectedDevices|first.id }}"
+                                                   class="device-row danger delete mr-1 "><i
+                                                            class="la la-trash-o "></i></a>
+
+                                            </td>
+
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
     {% endfor %}
 
     <!-- Other activities section-->
 
-    <!-- Inspected devices modal-->
+   
 
-    <!-- Modal -->
-    <div id="add-device-modal" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-lg">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-
-                    <h4 class="modal-title">Wybierz urządzenie ktore chcesz dodać do dokumentu</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-
-                    <!-- Task List table -->
-                    <div class="table-responsive">
-                        <table id="inspected-devices"
-                               class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
-                            <thead>
-                            <tr>
-                                <th>Pętla</th>
-                                <th>Urządzenie</th>
-                                <th>Typ</th>
-                                {#<th>Data ostatniego przeglądu</th>#}
-                                <th>Akcje</th>
-
-
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for device in fireInspection.inspectedDevices|sort %}
-                                <tr
-                                        id="mod-{{ device.id }}"
-                                        style="{% if device.visible %}display:none{% endif %}">
-
-                                    <td>
-                                        <div>
-                                            <a class="media-heading name">{{ device.loopNo }}</a>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <div>{{ device.number }} </div>
-                                    </td>
-                                    <td class="text-center">
-                                        <div>{{ device.shortname }}</div>
-                                    </td>
-                                    {#<td>#}
-                                    {#</td>#}
-
-                                    <td>
-                                        <a
-                                                id="add-{{ device.id }}"
-                                                class="device-row btn btn-sm btn-warning mr-1">Dodaj<i
-                                                    class="la la-add"></i></a>
-
-
-                                    </td>
-
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-
-                        </table>
-                    </div>
-                </div>
-
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- Other activities section-->
 
     <section class="row all-contacts">
@@ -391,23 +325,23 @@
                     <div class="card-header">
                         <h4 class="card-title">Tabela 2 - Pozostałe czynności</h4>
                         {#<div class="heading-elements">#}
-                            {#<ul class="list-inline mb-0">#}
-                                {#<li><a class="btn btn-sm btn-danger box-shadow-2 round btn-min-width pull-right"#}
-                                       {#href="#">Dodaj czynność</a></li>#}
-                            {#</ul>#}
+                        {#<ul class="list-inline mb-0">#}
+                        {#<li><a class="btn btn-sm btn-danger box-shadow-2 round btn-min-width pull-right"#}
+                        {#href="#">Dodaj czynność</a></li>#}
+                        {#</ul>#}
                         {#</div>#}
                     </div>
                 </div>
                 <div class="card-content">
                     <div class="card-body">
                         <!-- Task List table -->
-                        <button id="add-test-position" type="button" class="btn btn-sm btn-info mb-1">
+                        <button id="add-test-position-{{ fireInspection.id }}" type="button" class="add-test-position btn btn-sm btn-info mb-1">
                             Dodaj pozycję
                         </button>
 
                         <div class="table-responsive">
                             <table id="users-contacts"
-                                   class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
+                                   class="table table-sm table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
                                 <thead>
                                 <tr>
                                     <th>Pozostałe czynności</th>
@@ -524,8 +458,9 @@
                 </div>
             </div>
         </div>
-        </div>
     </section>
+
+    {% include 'fireinspection/modals.html.twig' %}
 
 {% endblock %}
 
@@ -533,243 +468,27 @@
 
     <!-- BEGIN: Page Vendor JS-->
     <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-switch.min.js') }}"></script>
+    {#<script src="{{ asset('app-assets/vendors/js/forms/toggle/switchery.min.js') }}"></script>#}
+    <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-checkbox.min.js') }}"></script>
+    <script src="{{ asset('app-assets/js/scripts/forms/switch.js') }}"></script>
+
     <!-- END: Page Vendor JS-->
 
     <!-- BEGIN: Page JS-->
     <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>
     <!-- END: Page JS-->
 
-    <!-- BEGIN: AJAX change status and test in InspectionDevice-->
+
+    <!-- BEGIN: My JS-->
+    <script src="{{ asset('assets/js/fire-inspection.js') }}"></script>
+    <!-- END: My JS-->
+
+
+
+
+    <!-- BEGIN: AJAX add test position -->
     <script>
-        $('.status-checkbox').change(function () {
-
-            $.ajax({
-                url: '/inspdev/' + this.id.substring(1) + '/changestatus/' + this.id.substring(0, 1),
-                type: 'POST',
-                dataType: 'json',
-                async: true,
-
-                success: function (data, status) {
-
-
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    alert('Błąd requestu ajax.');
-                }
-            });
-        })
-
 
     </script>
-
-    <!-- BEGIN: AJAX change comment -->
-    <script>
-        $(document).ready(function () {
-            $(".hidden-input").click(function () {
-
-                var comment = $(this).find('p').text();
-
-                $(this).find("input").attr('type', 'text').val(comment).focus();
-                $(this).find('p').text('');
-            });
-        });
-
-        $(document).ready(function () {
-            $(".hidden-input").find("input").blur(function () {
-                $(this).attr('type', 'hidden');
-                var comm = ($(this).val().toString() == "") ? null : $(this).val();
-
-                $.ajax({
-                    url: '/inspdev/' + this.id.substring(1) + '/changecomment/' + comm,
-                    type: 'POST',
-                    dataType: 'json',
-                    async: true,
-
-                    success: function (data) {
-                        var id = data['id'];
-                        $("#p" + id).text(data['comm']);
-
-                    },
-                    error: function () {
-                        $(this).parent().find('p').text('Wprowadź ponownie');
-                    }
-                });
-            });
-        });
-    </script>
-
-    {#<!-- BEGIN: AJAX delete device -->#}
-    <script>
-        $(document).ready(function () {
-            $('.device-row').click(function () {
-                var device = this.id.substring(4);
-                $.ajax({
-                    url: '/inspdev/' + device + '/changevisible',
-                    type: 'POST',
-                    dataType: 'json',
-                    async: true,
-
-                    success: function (data) {
-
-                        if (data['response'] == false) {
-                            alert("Pomyślnie usunięto urządzenie");
-
-                        } else if (data['response'] == true) {
-                            alert("Pomyślnie dodano urządzenie");
-
-                        }
-                        else {
-                            alert("Wystąpił problem z połączeniem do bazy!");
-                        }
-                        $('#row-' + device).toggle();
-                        $('#mod-' + device).toggle();
-                        ;
-
-
-                    },
-                    error: function () {
-                        alert('Błąd usuwania - spróbuj przeładować stronę');
-                    }
-                });
-            });
-        });
-    </script>
-
-    <!-- BEGIN: Show hidden inputs in last tests table -->
-    <script>
-        $(document).on('click', '.test-hidden-input', function () {
-
-            var comment = $(this).find('p').text();
-
-            $(this).find("input").attr('type', 'text').val(comment).focus();
-            $(this).find('p').text('');
-        });
-    </script>
-
-    <!-- Update Inputs after blur -->
-    <script>
-        $(document).on('blur', '.test-hidden-input input', function () {
-//            $(".test-hidden-input").find("input").blur(function () {
-            $(this).attr('type', 'hidden');
-            var value = $(this).val().toString();
-            updateAjax(value, this.id);
-        });
-
-
-        $(document).on('change', '.test-checkbox-switch', function () {
-//            $('.test-checkbox-switch').change(function () {
-            updateAjax(null, this.id);
-        });
-
-        <!-- Function to update test position by Ajax -->
-
-        function updateAjax(value, id) {
-
-            value = (value === "") ? null : value;
-
-            $.ajax({
-                url: '/testposition/' + id + '/update/' + value,
-                type: 'POST',
-                dataType: 'json',
-                async: true,
-
-                success: function (data) {
-                    var id = data['id'];
-                    var type = data['type'];
-                    var text = data['text'];
-
-                    switch (type) {
-                        case ('namei-'):
-                            $("#namep-" + id).text(text);
-
-                            break;
-
-                        case ('commi-'):
-
-                            $("#commp-" + id).text(text);
-
-                    }
-                },
-                error: function () {
-                    alert('Niestety wystąpił błąd połączenia. Spróbuj przeładować stronę');
-                }
-            });
-        }
-    </script>
-
-    {#<!-- BEGIN: AJAX add test position -->#}
-    <script>
-        $(document).ready(function () {
-            $('#add-test-position').click(function () {
-
-                $.ajax({
-                    url: '/testposition/add/' + {{ fireInspection.id }},
-                    type: 'POST',
-                    dataType: 'json',
-                    async: true,
-
-                    success: function (data) {
-                        var id = data['id'];
-
-                        var row = "<tr id='terow-" + id + "'><td class='text-center test-hidden-input'>" +
-
-                            "<p id='namep-" + id + "'></p>" +
-                            "<input id='namei-" + id + "' type='hidden' value=''></td>" +
-                            "<td class='text-center'>" +
-                            "<input type='checkbox' class='column_filter test-checkbox-switch switch' checked " +
-                            "id='testc-" + id + "' " +
-                            "data-icon-cls='fa' data-off-icon-cls='fa ft-thumbs-down'" +
-                            "data-on-icon-cls='fa ft-thumbs-up'" +
-                            "data-off-label='NEG'" +
-                            "data-on-label='POZ'" +
-                            "data-group-cls='btn-group-sm'></td>" +
-
-                            "<td class='text-center test-hidden-input'>" +
-                            "<p id='commp-" + id + "'></p> " +
-                            "<input id='commi-" + id + "' type='hidden' value=''></td>" +
-                            "<td><a id='tedel-" + id + "'" +
-                            "class='test-delete-row btn btn-sm btn-danger mr-1'>Usuń<i" +
-                            "class='la la-add'></i></a></td></tr>";
-                        $("#tbody-tests").append(row);
-//                        var swth = $('#testc-' + id);
-//                        setTimeout(() => {
-//                            swth.checkboxpicker();
-//                        }, 100);
-                    },
-                    error: function () {
-                        alert('Błąd dodawania pozycji');
-                    }
-                });
-            });
-        });
-
-
-        $(document).on('click', '.test-delete-row ', function () {
-            $.ajax({
-                url: '/testposition/delete/' + this.id,
-                type: 'POST',
-                dataType: 'json',
-                async: true,
-
-                success: function (data) {
-                   var id = data['id'];
-                   $('#terow-'+ id).remove();
-                }
-            });
-        });
-
-
-    </script>
-
-    <!-- BEGIN: Page Vendor JS-->
-    <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-switch.min.js') }}"></script>
-    {#<script src="{{ asset('app-assets/vendors/js/forms/toggle/switchery.min.js') }}"></script>#}
-    <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-checkbox.min.js') }}"></script>
-
-
-    <!-- END: Page Vendor JS-->
-    <script src="{{ asset('app-assets/js/scripts/forms/switch.js') }}"></script>
-
-
-
 {% endblock %}

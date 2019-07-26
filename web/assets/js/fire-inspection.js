@@ -1,0 +1,220 @@
+//updata row in Loop tables after change switch (Status and Test columns)
+
+$('.status-checkbox').change(function () {
+
+    $.ajax({
+        url: '/inspdev/' + this.id.substring(1) + '/changestatus/' + this.id.substring(0, 1),
+        type: 'POST',
+        dataType: 'json',
+        async: true,
+
+        success: function (data, status) {
+
+
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            alert('Błąd requestu ajax.');
+        }
+    });
+});
+
+
+//show hiden input in text cells in Loop tables ( Comment column)
+
+$(document).ready(function () {
+    $(".hidden-input").click(function () {
+
+        var comment = $(this).find('p').text();
+
+        $(this).find("input").attr('type', 'text').val(comment).focus();
+        $(this).find('p').text('');
+    });
+});
+
+//updata row in Loop tables after blur in input ( Comment column)
+$(document).ready(function () {
+    $(".hidden-input").find("input").blur(function () {
+        $(this).attr('type', 'hidden');
+        var comm = ($(this).val().toString() == "") ? null : $(this).val();
+
+        $.ajax({
+            url: '/inspdev/' + this.id.substring(1) + '/changecomment/' + comm,
+            type: 'POST',
+            dataType: 'json',
+            async: true,
+
+            success: function (data) {
+                var id = data['id'];
+                $("#p" + id).text(data['comm']);
+
+            },
+            error: function () {
+                $(this).parent().find('p').text('Wprowadź ponownie');
+            }
+        });
+    });
+});
+
+
+//delete row in Loop tables
+
+$(document).ready(function () {
+    $('.device-row').click(function () {
+        var device = this.id.substring(4);
+        $.ajax({
+            url: '/inspdev/' + device + '/changevisible',
+            type: 'POST',
+            dataType: 'json',
+            async: true,
+
+            success: function (data) {
+
+                if (data['response'] == false) {
+                    alert("Pomyślnie usunięto urządzenie");
+
+                } else if (data['response'] == true) {
+                    alert("Pomyślnie dodano urządzenie");
+
+                }
+                else {
+                    alert("Wystąpił problem z połączeniem do bazy!");
+                }
+                $('#row-' + device).toggle();
+                $('#mod-' + device).toggle();
+                ;
+
+
+            },
+            error: function () {
+                alert('Błąd usuwania - spróbuj przeładować stronę');
+            }
+        });
+    });
+});
+
+
+//Show hidden inputs in Test position table ( Comment column)
+
+$(document).on('click', '.test-hidden-input', function () {
+
+    var comment = $(this).find('p').text();
+
+    $(this).find("input").attr('type', 'text').val(comment).focus();
+    $(this).find('p').text('');
+});
+
+
+//Update Inputs after blur in Test position table ( Comment column)
+
+$(document).on('blur', '.test-hidden-input input', function () {
+//            $(".test-hidden-input").find("input").blur(function () {
+    $(this).attr('type', 'hidden');
+    var value = $(this).val().toString();
+    updateAjax(value, this.id);
+});
+
+
+// update row in Test position table changing by switch ( Result column)
+$(document).on('change', '.test-checkbox-switch', function () {
+//            $('.test-checkbox-switch').change(function () {
+    updateAjax(null, this.id);
+});
+
+// Function to update test position by Ajax ( Result column)
+
+function updateAjax(value, id) {
+
+    value = (value === "") ? null : value;
+
+    $.ajax({
+        url: '/testposition/' + id + '/update/' + value,
+        type: 'POST',
+        dataType: 'json',
+        async: true,
+
+        success: function (data) {
+            var id = data['id'];
+            var type = data['type'];
+            var text = data['text'];
+
+            switch (type) {
+                case ('namei-'):
+                    $("#namep-" + id).text(text);
+
+                    break;
+
+                case ('commi-'):
+
+                    $("#commp-" + id).text(text);
+
+            }
+        },
+        error: function () {
+            alert('Niestety wystąpił błąd połączenia. Spróbuj przeładować stronę');
+        }
+    });
+}
+
+// add new row in Test position table
+$(document).ready(function () {
+    $('.add-test-position').click(function () {
+        var id = this.id.substring(18);
+
+        $.ajax({
+            url: '/testposition/add/' + id,
+            type: 'POST',
+            dataType: 'json',
+            async: true,
+
+            success: function (data) {
+                var id = data['id'];
+
+                var row = "<tr id='terow-" + id + "'><td class='text-center test-hidden-input'>" +
+                    "<p id='namep-" + id + "'></p>" +
+                    "<input id='namei-" + id + "' type='hidden' value=''></td>" +
+                    "<td class='text-center'>" +
+                    "<input type='checkbox' class='column_filter test-checkbox-switch switch' checked " +
+                    "id='testc-" + id + "' " +
+                    "data-icon-cls='fa' data-off-icon-cls='fa ft-thumbs-down'" +
+                    "data-on-icon-cls='fa ft-thumbs-up'" +
+                    "data-off-label='NEG'" +
+                        "data-on-label='POZ'" +
+                    "data-group-cls='btn-group-sm'></td>" +
+
+                    "<td class='text-center test-hidden-input'>" +
+                    "<p id='commp-" + id + "'></p> " +
+                    "<input id='commi-" + id + "' type='hidden' value=''></td>" +
+                    "<td><a id='tedel-" + id + "'" +
+                    "class='test-delete-row btn btn-sm btn-danger mr-1'>Usuń<i" +
+                    "class='la la-add'></i></a></td></tr>";
+                    $("#tbody-tests").append(row);
+
+                    $('#testc-' + id).checkboxpicker();
+
+                }
+
+            ,
+            error: function () {
+                alert('Błąd dodawania pozycji');
+            }
+        })
+        ;
+    });
+});
+
+// deleting row in Test position table
+$(document).on('click', '.test-delete-row ', function () {
+    $.ajax({
+        url: '/testposition/delete/' + this.id,
+        type: 'POST',
+        dataType: 'json',
+        async: true,
+
+        success: function (data) {
+            var id = data['id'];
+            $('#terow-' + id).remove();
+        }
+    });
+});
+
+
