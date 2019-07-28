@@ -217,4 +217,77 @@ $(document).on('click', '.test-delete-row ', function () {
     });
 });
 
+$('.inspected-devices-table').DataTable( {
+    dom: 'Bfrtip',
+    buttons: [ 'colvis',
+        {
+            text: 'Przywróć usunięte urządzenie',
+            className: 'btn-info',
+            action: function (e, dt, node, config) {
+                $('#add-device-modal').modal('show');
+            }
+        },
+    ],
+    language: {
+        buttons: {
+            colvis: 'Wybierz kolumnę'
+        },
+        "lengthMenu": "Pokaż _MENU_ wierszy na stronie",
+        "zeroRecords": "Niestety brak wyników",
+        "info": "Stron _PAGE_ z _PAGES_",
+        "infoEmpty": "Brak wierszy",
+        "search": "Szukaj w każdej kolumnie:",
+        "infoFiltered": "(znaleziono z _MAX_ wszystkich wierszy)"
+    }
+    ,
+    "paging": false,
+} );
+// $( ".animation-dialog-btn" ).on("click",function(){
+//     $( ".animation-dialog" ).dialog("open");
+// });
 
+$( ".info-modal-btn" ).on("click",function(){
+var id = this.id.substring(5);
+
+    $.ajax({
+        url: '../fireprotectiondevice/get-device/' + id,
+        type: 'POST',
+        dataType: 'json',
+        async: true,
+
+        success: function (data) {
+
+            var device = JSON.parse(data['device']);
+            $('#dialog-name').text(device.name);
+            $('#dialog-serial').text(device.serial);
+            $('#dialog-address').text(device.address);
+            $('#dialog-description').text(device.desc);
+            $('#dialog-number').text(device.number);
+            $('#info-modal').modal('show');
+
+        },
+        error: function () {
+                alert('Błąd przesyłania');
+            }
+        })
+
+
+
+    $( "#animation-dialog" ).dialog("open");
+});
+
+
+
+$( "#animation-dialog" ).dialog({
+    autoOpen: false,
+    width: 400,
+    show: {
+        effect: "fade",
+        duration: 400
+    },
+    hide: {
+        effect: "explode",
+        duration: 1000
+    },
+    modal: true
+});
