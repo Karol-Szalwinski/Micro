@@ -137,18 +137,17 @@ class FireProtectionDeviceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['id' => $id]);
-        $nameVal = $em->getRepository('MicroBundle:DeviceName')->findOneBy(['name' => $fireProtectionDevice->getName()]);
-        if ($nameVal == null) {
-            $nameVal = '1';
-        } else {
-            $nameVal = $nameVal->getId();
+        $nameId = '1';
+        $deviceName = $em->getRepository('MicroBundle:DeviceName')->findOneBy(['name' => $fireProtectionDevice->getName()]);
+
+        if (!$deviceName == null) {
+            $nameId = $deviceName->getId();
         }
 
-        $fireProtectionDevice->setName($nameVal);
+
         //remove refference
         $fireProtectionDevice->removeAllInspectedDevices()->setLoopDev(null);
 
-//        dump($fireProtectionDevice);die();
 
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
 
@@ -166,6 +165,7 @@ class FireProtectionDeviceController extends Controller
             $serializeDevice = $serializer->serialize($fireProtectionDevice, 'json');
 
             $jsonData['device'] = $serializeDevice;
+            $jsonData['nameId'] = $nameId;
 
 
             return new JsonResponse($jsonData);

@@ -66,7 +66,7 @@ $(document).on('click', '.edit-row', function () {
 
             var device = JSON.parse(data['device']);
             $('#microbundle_fireprotectiondevice_edit_id').val(device.id);
-            $('#microbundle_fireprotectiondevice_edit_name').val(device.name);
+            $('#microbundle_fireprotectiondevice_edit_name').val(data['nameId']);
             $('#microbundle_fireprotectiondevice_edit_serial').val(device.serial);
             $('#microbundle_fireprotectiondevice_edit_address').val(device.address);
             $('#microbundle_fireprotectiondevice_edit_desc').val(device.desc);
