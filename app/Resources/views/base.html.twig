@@ -570,9 +570,6 @@
 <script src="{{ asset('app-assets/js/core/app.js') }}"></script>
 <!-- END: Theme JS-->
 
-{#<!-- BEGIN: Page JS-->#}
-{#<script src="{{ asset('app-assets/js/scripts/pages/dashboard-sales.js') }}"></script>#}
-{#<!-- END: Page JS-->#}
 
 <!-- BEGIN: AJAX menu -->
 <script>
@@ -597,11 +594,12 @@
     }
 
     fillBadges();
-    setInterval(fillBadges, 60000);
+    setInterval(fillBadges, 120000);
 
 </script>
 
 <!-- END: AJAX menu-->
+
 <!-- BEGIN: Page extra JS-->
 {% block scripts %}
 
