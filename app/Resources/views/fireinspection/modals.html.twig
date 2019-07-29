@@ -108,7 +108,11 @@
                     </tr>
                     <tr>
                         <th>Opis</th>
-                        <td id="dialog-description" ></td>
+                        {#<td id="dialog-description" ></td>#}
+                        {#<td ondblclick="edit(this)"><input id="dialog-description" style="border:none" readonly onblur="readonly(this)"></td>#}
+                        <td ondblclick="edit(this)">
+                            <textarea rows=10 cols =50 id="dialog-description" style="border:none" readonly onblur="readonly(this)"></textarea>
+                        </td>
                     </tr>
                     </tbody>
                 </table>

@@ -507,8 +507,14 @@
 
 
 
-    <!-- BEGIN: AJAX add test position -->
     <script>
-
+        function edit(el) {
+            el.childNodes[0]. removeAttr("readonly");
+            el.childNodes[0].focus();
+            window.getSelection().removeAllRanges();
+        }
+        function readonly(el) {
+            el.setAttribute("readonly","");
+        }
     </script>
 {% endblock %}
