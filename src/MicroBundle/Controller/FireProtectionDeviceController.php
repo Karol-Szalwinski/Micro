@@ -205,19 +205,23 @@ class FireProtectionDeviceController extends Controller
             $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['id' => $id]);
 
         }
-        $deviceName = $em->getRepository('MicroBundle:DeviceName')->findOneBy(['id' => $name]);
 
-        $name = $deviceName->getName();
-        $shortname = $deviceName->getShortname();
-
+        if ($name != "null") {
+            $deviceName = $em->getRepository('MicroBundle:DeviceName')->findOneBy(['name' => $name]);
+            if ($deviceName instanceof DeviceName) {
+                $name = $deviceName->getName();
+                $shortname = $deviceName->getShortname();
+                $fireProtectionDevice->setName($name);
+                $fireProtectionDevice->setShortname($shortname);
+            }
+        }
         //chane nulles
         $serial = ($serial == "null") ? "" : $serial;
         $address = ($address == "null") ? "" : $address;
         $desc = ($desc == "null") ? "" : $desc;
 
 
-        $fireProtectionDevice->setName($name);
-        $fireProtectionDevice->setShortname($shortname);
+
         $fireProtectionDevice->setSerial($serial);
         $fireProtectionDevice->setAddress($address);
         $fireProtectionDevice->setDesc($desc);

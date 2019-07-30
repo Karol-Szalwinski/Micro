@@ -80,6 +80,7 @@
         <div class="modal-content ">
             <div class="modal-header">
                 <h4 class="modal-title">Informacja o urządzeniu</h4>
+                <p id="dialog-id"></p>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
 
             </div>
@@ -87,31 +88,51 @@
                 <table class ="table table-sm table-bordered ">
                     <tbody>
                     <tr>
-                        <th >Numer</th>
+                        <th >Numer w pętli</th>
                         <td id="dialog-number"></td>
+                        <td></td>
                     </tr>
                     <tr>
-                        <th>Nazwa</th>
+                        <th>Nazwa urzadzenia</th>
                         <td id="dialog-name"></td>
-                    </tr>
-                    <tr>
-                        <th>Numer Seryjny</th>
-                        <td id="dialog-serial"></td>
-                    </tr>
-                    <tr>
-                        <th>Adress</th>
-                        <td id="dialog-address"></td>
+                        <td></td>
                     </tr>
                     <tr>
                         <th>Ostatni przegląd</th>
                         <td id="dialog-lastDate"></td>
+                        <td></td>
                     </tr>
                     <tr>
+                        <th>Numer Seryjny</th>
+                        <td>
+                            <input  class="td-hidden-input" id="dialog-serial" style="border:none; width:100%" readonly>
+                            {#onblur="readonly(this)#}
+                        </td>
+                        <td> <a class=" info mr-1 edit-info-btn"><i
+                                        class="la la-edit "></i></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Adress</th>
+                        <td>
+                            <input class="td-hidden-input" id="dialog-address" style="border:none; width:100%" readonly>
+                            {#onblur="readonly(this)#}
+                        </td>
+                        <td> <a class=" info mr-1 edit-info-btn"><i
+                                        class="la la-edit "></i></a>
+                        </td>
+                    </tr>
+
+                    <tr>
                         <th>Opis</th>
-                        {#<td id="dialog-description" ></td>#}
-                        {#<td ondblclick="edit(this)"><input id="dialog-description" style="border:none" readonly onblur="readonly(this)"></td>#}
-                        <td ondblclick="edit(this)">
-                            <textarea rows=10 cols =50 id="dialog-description" style="border:none" readonly onblur="readonly(this)"></textarea>
+                        <td >
+
+                            <textarea class="td-hidden-input" rows=10 cols=50 id="dialog-description" style="border:none; width:100%" readonly>
+                            </textarea>
+                            {#onblur="readonly(this)#}
+                        </td>
+                        <td> <a class=" info mr-1 edit-info-btn"><i
+                                        class="la la-edit "></i></a>
                         </td>
                     </tr>
                     </tbody>

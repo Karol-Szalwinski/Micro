@@ -231,7 +231,6 @@
                                         <th>Status</th>
                                         <th>Wynik testu</th>
                                         <th>Uwagi</th>
-                                        <th>Nr seryjny</th>
                                         <th>Akcje</th>
 
 
@@ -287,9 +286,6 @@
                                                 <p id="p{{ device.inspectedDevices|first.id }}">{{ device.inspectedDevices|first.comment }}</p>
                                                 <input id="c{{ device.inspectedDevices|first.id }}"
                                                        type="hidden" value="">
-                                            </td>
-                                            <td class="text-center">
-                                                <div>{{ device.serial }}</div>
                                             </td>
                                             <td>
                                                 <a id="info-{{ device.id }}"
@@ -507,14 +503,5 @@
 
 
 
-    <script>
-        function edit(el) {
-            el.childNodes[0]. removeAttr("readonly");
-            el.childNodes[0].focus();
-            window.getSelection().removeAllRanges();
-        }
-        function readonly(el) {
-            el.setAttribute("readonly","");
-        }
-    </script>
+
 {% endblock %}

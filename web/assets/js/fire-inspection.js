@@ -178,7 +178,7 @@ $(document).ready(function () {
                     "data-icon-cls='fa' data-off-icon-cls='fa ft-thumbs-down'" +
                     "data-on-icon-cls='fa ft-thumbs-up'" +
                     "data-off-label='NEG'" +
-                        "data-on-label='POZ'" +
+                    "data-on-label='POZ'" +
                     "data-group-cls='btn-group-sm'></td>" +
 
                     "<td class='text-center test-hidden-input'>" +
@@ -187,11 +187,11 @@ $(document).ready(function () {
                     "<td><a id='tedel-" + id + "'" +
                     "class='test-delete-row btn btn-sm btn-danger mr-1'>Usuń<i" +
                     "class='la la-add'></i></a></td></tr>";
-                    $("#tbody-tests").append(row);
+                $("#tbody-tests").append(row);
 
-                    $('#testc-' + id).checkboxpicker();
+                $('#testc-' + id).checkboxpicker();
 
-                }
+            }
 
             ,
             error: function () {
@@ -217,9 +217,10 @@ $(document).on('click', '.test-delete-row ', function () {
     });
 });
 
-$('.inspected-devices-table').DataTable( {
+$('.inspected-devices-table').DataTable({
     dom: 'Bfrtip',
-    buttons: [ 'colvis',
+    stateSave: true,
+    buttons: ['colvis',
         {
             text: 'Przywróć usunięte urządzenie',
             className: 'btn-info',
@@ -241,13 +242,13 @@ $('.inspected-devices-table').DataTable( {
     }
     ,
     "paging": false,
-} );
+});
 // $( ".animation-dialog-btn" ).on("click",function(){
 //     $( ".animation-dialog" ).dialog("open");
 // });
 
-$( ".info-modal-btn" ).on("click",function(){
-var id = this.id.substring(5);
+$(".info-modal-btn").on("click", function () {
+    var id = this.id.substring(5);
 
     $.ajax({
         url: '../fireprotectiondevice/get-device/' + id,
@@ -258,27 +259,28 @@ var id = this.id.substring(5);
         success: function (data) {
 
             var device = JSON.parse(data['device']);
+
             $('#dialog-name').text(device.name);
-            $('#dialog-serial').text(device.serial);
-            $('#dialog-address').text(device.address);
-            $('#dialog-description').text(device.desc);
+            $('#dialog-id').text(device.id);
+            $('#dialog-serial').val(device.serial);
+            $('#dialog-address').val(device.address);
+            $('#dialog-description').val(device.desc);
             $('#dialog-number').text(device.number);
+
             $('#info-modal').modal('show');
 
         },
         error: function () {
-                alert('Błąd przesyłania');
-            }
-        })
+            alert('Błąd przesyłania');
+        }
+    })
 
 
-
-    $( "#animation-dialog" ).dialog("open");
+    $("#animation-dialog").dialog("open");
 });
 
 
-
-$( "#animation-dialog" ).dialog({
+$("#animation-dialog").dialog({
     autoOpen: false,
     width: 400,
     show: {
@@ -291,3 +293,64 @@ $( "#animation-dialog" ).dialog({
     },
     modal: true
 });
+
+
+$(document).on('click', '.edit-info-btn ', function () {
+
+    $(this).parent().prev().children().removeAttr("readonly");
+    $(this).parent().prev().children().focus();
+    $(this).parent().prev().children().css("border", "solid").css("border-color", "red");
+    window.getSelection().removeAllRanges();
+});
+
+$(document).on('blur', '.td-hidden-input ', function () {
+
+    $(".td-hidden-input ").attr('readonly', true).css("border", "none");
+});
+
+$(document).on('change', '.td-hidden-input ', function () {
+
+    var id = $('#dialog-id').text();
+    var loop = null;
+    var number = null;
+    var name = $('#dialog-name').text();
+    var serial = $('#dialog-serial').val();
+    var address = $('#dialog-address').val();
+    var desc = $('#dialog-description').val();
+
+
+    id = (id !== "") ? id : null;
+    loop = (loop !== "") ? loop : null;
+    name = (name !== "") ? name : null;
+    serial = (serial !== "") ? serial : null;
+    address = (address !== "") ? address : null;
+    desc = (desc !== "") ? encodeURIComponent(desc) : null;
+    console.log(desc);
+
+    $.ajax({
+        url: '../fireprotectiondevice/update-device/' +
+        id + '/' + loop + '/' + number + '/' + name + '/' + serial + '/' + address + '/' + desc,
+        type: 'POST',
+        dataType: 'json',
+        async: true,
+
+        success: function (data) {
+            // update row
+            var device = JSON.parse(data['device']);
+            $('#dialog-name').text(device.name);
+            $('#dialog-id').text(device.id);
+            $('#dialog-serial').val(device.serial);
+            $('#dialog-address').val(device.address);
+            $('#dialog-description').val(device.desc);
+            $('#dialog-number').text(device.number);
+
+
+        },
+        error: function () {
+            alert('Błąd update device');
+        }
+    });
+});
+
+
+//END: AJAX update object device -->

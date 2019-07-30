@@ -118,7 +118,7 @@ $(document).ready(function () {
         name = (name !== "") ? name : null;
         serial = (serial !== "") ? serial : null;
         address = (address !== "") ? address : null;
-        desc = (desc !== "") ? desc : null;
+        desc = (desc !== "") ? encodeURIComponent(desc) : null;
 
 
         $.ajax({
@@ -187,7 +187,7 @@ $(document).on('click', '#submit-edit', function () {
     name = (name !== "") ? name : null;
     serial = (serial !== "") ? serial : null;
     address = (address !== "") ? address : null;
-    desc = (desc !== "") ? desc : null;
+    desc = (desc !== "") ? encodeURIComponent(desc) : null;
 
 
     $.ajax({
