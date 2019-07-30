@@ -299,13 +299,15 @@ $(document).on('click', '.edit-info-btn ', function () {
 
     $(this).parent().prev().children().removeAttr("readonly");
     $(this).parent().prev().children().focus();
-    $(this).parent().prev().children().css("border", "solid").css("border-color", "red");
+    $(this).parent().prev().children().css("border", "solid").css("border-color", "DeepSkyBlue");
     window.getSelection().removeAllRanges();
 });
 
 $(document).on('blur', '.td-hidden-input ', function () {
 
     $(".td-hidden-input ").attr('readonly', true).css("border", "none");
+    $(".td-hidden-input:focus").css("outline", "none");
+
 });
 
 $(document).on('change', '.td-hidden-input ', function () {

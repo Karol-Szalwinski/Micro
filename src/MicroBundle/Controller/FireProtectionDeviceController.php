@@ -2,6 +2,7 @@
 
 namespace MicroBundle\Controller;
 
+use MicroBundle\Entity\DeviceName;
 use MicroBundle\Entity\FireProtectionDevice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -208,18 +209,22 @@ class FireProtectionDeviceController extends Controller
 
         if ($name != "null") {
             $deviceName = $em->getRepository('MicroBundle:DeviceName')->findOneBy(['name' => $name]);
-            if ($deviceName instanceof DeviceName) {
-                $name = $deviceName->getName();
-                $shortname = $deviceName->getShortname();
-                $fireProtectionDevice->setName($name);
-                $fireProtectionDevice->setShortname($shortname);
+            if (!$deviceName instanceof DeviceName) {
+                $deviceName = $em->getRepository('MicroBundle:DeviceName')->findOneBy(['id' => $name]);
             }
+            $name = $deviceName->getName();
+            $shortname = $deviceName->getShortname();
+            $fireProtectionDevice->setName($name);
+            $fireProtectionDevice->setShortname($shortname);
+
+
         }
-        //chane nulles
+
+
+        //chane nulles on ""
         $serial = ($serial == "null") ? "" : $serial;
         $address = ($address == "null") ? "" : $address;
         $desc = ($desc == "null") ? "" : $desc;
-
 
 
         $fireProtectionDevice->setSerial($serial);

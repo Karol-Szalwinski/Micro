@@ -1,0 +1,7 @@
+.td-hidden-input:focus {
+    outline: none;
+}
+
+input, textarea {
+    color: #6b6f82;
+}
