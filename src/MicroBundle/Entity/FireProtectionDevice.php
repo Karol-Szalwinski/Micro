@@ -79,6 +79,13 @@ class FireProtectionDevice
     private $lastServiceDate;
 
     /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="tempServiceDate", type="datetime", nullable=true)
+     */
+    private $tempServiceDate;
+
+    /**
      * Many FireProtectionDevices have One LoopDev.
      * @ORM\ManyToOne(targetEntity="LoopDev", inversedBy="fireProtectionDevices", cascade={"persist"})
      * @ORM\JoinColumn(name="loop_dev_id", referencedColumnName="id")
@@ -390,5 +397,29 @@ class FireProtectionDevice
     public function getDesc()
     {
         return $this->desc;
+    }
+
+    /**
+     * Set tempServiceDate.
+     *
+     * @param \DateTime|null $tempServiceDate
+     *
+     * @return FireProtectionDevice
+     */
+    public function setTempServiceDate($tempServiceDate = null)
+    {
+        $this->tempServiceDate = $tempServiceDate;
+
+        return $this;
+    }
+
+    /**
+     * Get tempServiceDate.
+     *
+     * @return \DateTime|null
+     */
+    public function getTempServiceDate()
+    {
+        return $this->tempServiceDate;
     }
 }

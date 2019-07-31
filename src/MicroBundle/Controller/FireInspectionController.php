@@ -118,6 +118,7 @@ class FireInspectionController extends Controller
      */
     public function showAction(FireInspection $fireInspection)
     {
+        $this->container->get('micro')->updateLastServiceDateFireInspection($fireInspection);
         $em = $this->getDoctrine()->getManager();
         $loopDevs=[];
         foreach ( $fireInspection->getBuilding()->getLoopDevs() as $loop) {;
@@ -126,7 +127,7 @@ class FireInspectionController extends Controller
             $loopDevs[] = $loopDev;
 
         }
-//        dump($devices);die();
+
 
         return $this->render('fireinspection/show.html.twig',
             array('fireInspection' => $fireInspection,

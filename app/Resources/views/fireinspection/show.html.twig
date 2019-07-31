@@ -236,6 +236,7 @@
                                         <th>Status</th>
                                         <th>Wynik testu</th>
                                         <th>Uwagi</th>
+                                        <th>Poprzedni przegląd</th>
                                         <th>Akcje</th>
 
 
@@ -292,7 +293,13 @@
                                                 <input id="c{{ device.inspectedDevices|first.id }}"
                                                        type="hidden" value="">
                                             </td>
+                                            <td class="text-center">
+                                                <div>{{ device.tempServiceDate|date('Y-m-d') }}</div>
+                                            </td>
                                             <td>
+                                                <a
+                                                   class=" info mr-1 "><i
+                                                            class="la la-sticky-note "></i></a>
                                                 <a id="info-{{ device.id }}"
                                                    class=" info mr-1 info-modal-btn"><i
                                                             class="la la-info "></i></a>

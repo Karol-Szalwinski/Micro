@@ -7,6 +7,7 @@ namespace MicroBundle\Services;
 
 
 use MicroBundle\Entity\Building;
+use MicroBundle\Entity\FireInspection;
 
 class BuildingUpdateService
 {
@@ -26,6 +27,13 @@ class BuildingUpdateService
     {
 
         return $this->em->getRepository('MicroBundle:Building')->updateLastServiceDates($building->getId());
+    }
+
+    public function updateLastServiceDateFireInspection(FireInspection $fireInspection)
+    {
+
+        return $this->em->getRepository('MicroBundle:Building')
+            ->updateLastServiceDateExceptOneDocument($fireInspection->getBuilding()->getId(), $fireInspection->getId());
     }
 
 }

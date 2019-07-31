@@ -79,6 +79,13 @@ class FireProtectionDevice
     private $lastServiceDate;
 
     /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="tempServiceDate", type="datetime", nullable=true)
+     */
+    private $tempServiceDate;
+
+    /**
      * Many FireProtectionDevices have One LoopDev.
      * @ORM\ManyToOne(targetEntity="LoopDev", inversedBy="fireProtectionDevices", cascade={"persist"})
      * @ORM\JoinColumn(name="loop_dev_id", referencedColumnName="id")
