@@ -3,7 +3,7 @@
 {% block title %}Przegląd{% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/fire-inspection.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/fire-inspection.css') }}">
 {% endblock %}
 
 
@@ -297,16 +297,33 @@
                                                 <div>{{ device.tempServiceDate|date('Y-m-d') }}</div>
                                             </td>
                                             <td>
-                                                <a
-                                                   class=" info mr-1 "><i
-                                                            class="la la-sticky-note "></i></a>
+                                                <a>
+                                                    {% set year = "now"|date('y') - device.tempServiceDate|date('y') %}
+                                                    {% set month = "now"|date('m') - device.tempServiceDate|date('m') %}
+                                                    {% set diff = year * 12 + month %}
+
+                                                    {% if  diff > 12 %}
+                                                        {% set badgecolor = "badge-danger" %}
+                                                    {% elseif  diff > 9 %}
+                                                        {% set badgecolor = "badge-warning" %}
+                                                    {% elseif  diff > 6 %}
+                                                        {% set badgecolor = "badge-primary" %}
+                                                    {% elseif  diff > 3 %}
+                                                        {% set badgecolor = "badge-info" %}
+                                                    {% elseif  diff <= 3 %}
+                                                        {% set badgecolor = "badge-success" %}
+                                                    {% endif %}
+                                                    <i class="badge badge-pill {{ badgecolor }}">{{ diff }}
+                                                        mies.
+
+
+                                                    </i></a>
                                                 <a id="info-{{ device.id }}"
                                                    class=" info mr-1 info-modal-btn"><i
                                                             class="la la-info "></i></a>
                                                 <a id="del-{{ device.inspectedDevices|first.id }}"
                                                    class="device-row danger delete mr-1 "><i
                                                             class="la la-trash-o "></i></a>
-
 
 
                                             </td>
@@ -385,7 +402,8 @@
                                             {% if test.test == 1 %}
                                                 {% set checked = true %}
                                             {% endif %}
-                                            <input type="checkbox" class="column_filter test-checkbox-switch switch "
+                                            <input type="checkbox"
+                                                   class="column_filter test-checkbox-switch switch "
                                                    id="testc-{{ test.id }}" {% if checked %}checked{% endif %}
                                                    data-icon-cls="fa" data-off-icon-cls="fa ft-thumbs-down"
                                                    data-on-icon-cls="fa ft-thumbs-up"
@@ -483,37 +501,37 @@
 
 {% endblock %}
 
-{% block scripts %}
+        {% block scripts %}
 
-    <!-- BEGIN: Page Vendor JS-->
-    <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
-    <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-switch.min.js') }}"></script>
-    {#<script src="{{ asset('app-assets/vendors/js/forms/toggle/switchery.min.js') }}"></script>#}
-    <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-checkbox.min.js') }}"></script>
-    <script src="{{ asset('app-assets/js/scripts/forms/switch.js') }}"></script>
-    <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.select.min.js') }}"></script>
+            <!-- BEGIN: Page Vendor JS-->
+            <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
+            <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-switch.min.js') }}"></script>
+            {#<script src="{{ asset('app-assets/vendors/js/forms/toggle/switchery.min.js') }}"></script>#}
+            <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-checkbox.min.js') }}"></script>
+            <script src="{{ asset('app-assets/js/scripts/forms/switch.js') }}"></script>
+            <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}"></script>
+            <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.select.min.js') }}"></script>
 
-    <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('app-assets/vendors/js/tables/datatable/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.colVis.js') }}"></script>
-    <!-- BEGIN: Page Vendor JS-->
-    <script src="{{ asset('app-assets/js/core/libraries/jquery_ui/jquery-ui.min.js') }}"></script>
-    <!-- END: Page Vendor JS-->
+            <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.buttons.min.js') }}"></script>
+            <script src="{{ asset('app-assets/vendors/js/tables/datatable/buttons.bootstrap4.min.js') }}"></script>
+            <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.colVis.js') }}"></script>
+            <!-- BEGIN: Page Vendor JS-->
+            <script src="{{ asset('app-assets/js/core/libraries/jquery_ui/jquery-ui.min.js') }}"></script>
+            <!-- END: Page Vendor JS-->
 
-    <!-- END: Page Vendor JS-->
+            <!-- END: Page Vendor JS-->
 
-    <!-- BEGIN: Page JS-->
-    {#<script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>#}
-    <!-- END: Page JS-->
-
-
-    <!-- BEGIN: My JS-->
-    <script src="{{ asset('assets/js/fire-inspection.js') }}"></script>
-    <!-- END: My JS-->
+            <!-- BEGIN: Page JS-->
+            {#<script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>#}
+            <!-- END: Page JS-->
 
 
+            <!-- BEGIN: My JS-->
+            <script src="{{ asset('assets/js/fire-inspection.js') }}"></script>
+            <!-- END: My JS-->
 
 
 
-{% endblock %}
+
+
+        {% endblock %}
