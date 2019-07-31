@@ -135,7 +135,7 @@ class BuildingController extends Controller
 //        }
 
 //
-//        $this->container->get('micro')->updateLastServiceDate($building);
+        $this->container->get('micro')->updateLastServiceDate($building);
 
         return $this->render('building/show.html.twig', array(
             'building' => $building,

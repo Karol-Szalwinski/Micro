@@ -10,4 +10,5 @@ namespace MicroBundle\Repository;
  */
 class FireProtectionDeviceRepository extends \Doctrine\ORM\EntityRepository
 {
+
 }

@@ -24,21 +24,8 @@ class BuildingUpdateService
 
     public function updateLastServiceDate(Building $building)
     {
-        $FireProtectionDevices = $building->getFireProtectionDevices();
-        foreach ($FireProtectionDevices as $FireProtectionDevice) {
-            $date = null;
-            foreach ($FireProtectionDevice->getInspectedDevices() as $inspectedDevice) {
-                if ($inspectedDevice->getVisible()) {
-                    $tempDate = $inspectedDevice->getFireInspection()->getInspectionDate();
-                    $date = ($date > $tempDate) ? $date : $tempDate;
-                }
-            }
 
-            $FireProtectionDevice->setLastServiceDate($date);
-        }
-
-        $this->em->flush();
-        return true;
+        return $this->em->getRepository('MicroBundle:Building')->updateLastServiceDates($building->getId());
     }
 
 }

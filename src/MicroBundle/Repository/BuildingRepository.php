@@ -11,5 +11,44 @@ use MicroBundle\Entity\Building;
  */
 class BuildingRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function updateLastServiceDates($building)
+    {
+        $em = $this->getEntityManager();
+        $RAW_QUERY ="UPDATE fire_protection_device AS Tabela1
+          INNER JOIN (
 
+            SELECT TabAllDevices.id, TabAllDevices.lastServiceDate, TabInspectedDevices.nowa_data FROM
+                (SELECT fire_protection_device.id, fire_protection_device.lastServiceDate FROM fire_protection_device 
+                INNER JOIN loop_dev
+                ON fire_protection_device.loop_dev_id=loop_dev.id
+                WHERE loop_dev.building_id= ?)
+                AS TabAllDevices
+        
+            LEFT JOIN (
+                SELECT fire_protection_device.id AS idd, fire_protection_device.name, fire_protection_device.lastServiceDate, 
+                MAX(fire_inspection.inspectionDate) AS nowa_data
+        
+                FROM fire_protection_device 
+                INNER JOIN inspected_device
+                ON fire_protection_device.id=inspected_device.fire_protection_device_id
+            INNER JOIN fire_inspection
+                ON fire_inspection.id=inspected_device.fire_inspection_id
+        
+                WHERE inspected_device.visible=true
+                GROUP BY fire_protection_device.id
+                ) 
+                AS TabInspectedDevices
+            ON TabAllDevices.id = TabInspectedDevices.idd
+            )AS Tabela2
+        ON Tabela1.id = Tabela2.id
+        SET Tabela1.lastServiceDate = Tabela2.nowa_data;
+        ";
+
+
+        $statement = $em->getConnection()->prepare($RAW_QUERY);
+        // Set parameters
+        $statement->bindvalue(1, $building);
+        $statement->execute();
+
+    }
 }
