@@ -266,6 +266,8 @@ $(".info-modal-btn").on("click", function () {
             $('#dialog-address').val(device.address);
             $('#dialog-description').val(device.desc);
             $('#dialog-number').text(device.number);
+            $('#dialog-temp-date').text(device.tempServiceDate);
+
 
             $('#info-modal').modal('show');
 
@@ -356,3 +358,4 @@ $(document).on('change', '.td-hidden-input ', function () {
 
 
 //END: AJAX update object device -->
+

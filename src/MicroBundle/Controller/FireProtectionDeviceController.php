@@ -148,17 +148,21 @@ class FireProtectionDeviceController extends Controller
 
         //remove refference
         $fireProtectionDevice->removeAllInspectedDevices()->setLoopDev(null);
+        //Change date to string
+
+        $tempDate = ($fireProtectionDevice->getTempServiceDate()) ? $fireProtectionDevice->getTempServiceDate()->format('Y-m-d'): "brak";
+        $fireProtectionDevice->setTempServiceDate($tempDate);
 
 
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
 
             //prepare serializer
             $normalizer = new ObjectNormalizer();
-            $normalizer->setCircularReferenceLimit(0);
-            // Add Circular reference handler
-            $normalizer->setCircularReferenceHandler(function ($object) {
-                return $object->getId();
-            });
+//            $normalizer->setCircularReferenceLimit(0);
+//            // Add Circular reference handler
+//            $normalizer->setCircularReferenceHandler(function ($object) {
+//                return $object->getId();
+//            });
 
             $normalizers = [$normalizer];
             $encoders = [new XmlEncoder(), new JsonEncoder()];
@@ -166,7 +170,9 @@ class FireProtectionDeviceController extends Controller
             $serializeDevice = $serializer->serialize($fireProtectionDevice, 'json');
 
             $jsonData['device'] = $serializeDevice;
+//            dump($serializeDevice);die();
             $jsonData['nameId'] = $nameId;
+            $jsonData['tempServiceDate'] = $fireProtectionDevice->getTempServiceDate();
 
 
             return new JsonResponse($jsonData);

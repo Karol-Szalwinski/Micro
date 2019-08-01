@@ -225,7 +225,7 @@
                             {#</a>#}
                             <div>
                                 <table id="inspected-devices-table"
-                                       class=" inspected-devices-table table table-sm table-white-space table-bordered
+                                       class=" inspected-devices-table table table-condensed table-white-space table-bordered
                                        row-grouping display no-wrap icheck table-middle text-center
                                        inspected-devices-table ">
 
@@ -235,9 +235,8 @@
                                         <th>Typ</th>
                                         <th>Status</th>
                                         <th>Wynik testu</th>
-                                        <th>Uwagi</th>
-                                        <th>Poprzedni przegląd</th>
                                         <th>Akcje</th>
+                                        <th>Uwagi</th>
 
 
                                     </tr>
@@ -288,19 +287,29 @@
                                                 >
 
                                             </td>
-                                            <td class="text-center hidden-input">
-                                                <p id="p{{ device.inspectedDevices|first.id }}">{{ device.inspectedDevices|first.comment }}</p>
-                                                <input id="c{{ device.inspectedDevices|first.id }}"
-                                                       type="hidden" value="">
-                                            </td>
-                                            <td class="text-center">
-                                                <div>{{ device.tempServiceDate|date('Y-m-d') }}</div>
-                                            </td>
+
+                                            {#<td class="text-center">#}
+                                            {#<div>#}
+                                            {#{% if device.tempServiceDate is not null %}#}
+                                            {#{{ device.tempServiceDate|date('Y-m-d') }}#}
+                                            {#{% else %}#}
+                                            {#brak#}
+                                            {#{% endif %}#}
+                                            {#</div>#}
+                                            {#</td>#}
                                             <td>
-                                                <a>
+                                                {% if device.tempServiceDate is null %}
+                                                    {% set badgecolor = "badge-secondary" %}
+                                                    {% set diff = "brak" %}
+                                                    {% set unit = "" %}
+                                                {% else %}
+
+
                                                     {% set year = "now"|date('y') - device.tempServiceDate|date('y') %}
                                                     {% set month = "now"|date('m') - device.tempServiceDate|date('m') %}
                                                     {% set diff = year * 12 + month %}
+                                                    {% set unit = "mies" %}
+
 
                                                     {% if  diff > 12 %}
                                                         {% set badgecolor = "badge-danger" %}
@@ -310,24 +319,45 @@
                                                         {% set badgecolor = "badge-primary" %}
                                                     {% elseif  diff > 3 %}
                                                         {% set badgecolor = "badge-info" %}
-                                                    {% elseif  diff <= 3 %}
+                                                    {% elseif  diff > 0 %}
                                                         {% set badgecolor = "badge-success" %}
+                                                    {% elseif  diff == 0 %}
+                                                        {% set badgecolor = "badge-success" %}
+                                                        {% set diff = "mniej niż 1" %}
+                                                    {% elseif  diff < 0 %}
+                                                        {% set badgecolor = "badge-danger" %}
+                                                        {% set diff = "zaplanowany w przyszłości" %}
+                                                        {% set unit = "" %}
+
+
                                                     {% endif %}
-                                                    <i class="badge badge-pill {{ badgecolor }}">{{ diff }}
-                                                        mies.
+                                                {% endif %}
+                                                <i data-toggle="tooltip"
+                                                   title="{% if device.tempServiceDate is not null %}
+                                                        {{ device.tempServiceDate|date('Y-m-d') }}
+                                                    {% else %}
+                                                        brak
+                                                    {% endif %}"
+                                                   class="badge badge-pill {{ badgecolor }}">{{ diff }} {{ unit }}
 
 
-                                                    </i></a>
-                                                <a id="info-{{ device.id }}"
+                                                </i>
+                                                <a>&nbsp&nbsp</a>
+                                                <a id="info-{{ device.id }}" data-toggle="tooltip" title="Pokaż info"
                                                    class=" info mr-1 info-modal-btn"><i
                                                             class="la la-info "></i></a>
-                                                <a id="del-{{ device.inspectedDevices|first.id }}"
+                                                <a id="del-{{ device.inspectedDevices|first.id }}" data-toggle="tooltip"
+                                                   title="Usuń z przeglądu"
                                                    class="device-row danger delete mr-1 "><i
                                                             class="la la-trash-o "></i></a>
 
 
                                             </td>
-
+                                            <td class="text-center hidden-input">
+                                                <p id="p{{ device.inspectedDevices|first.id }}">{{ device.inspectedDevices|first.comment }}</p>
+                                                <input id="c{{ device.inspectedDevices|first.id }}"
+                                                       type="hidden" value="">
+                                            </td>
 
                                         </tr>
 
@@ -377,7 +407,7 @@
 
                         <div class="table-responsive">
                             <table id="users-contacts"
-                                   class="table table-sm table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
+                                   class="table table-condensed table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
                                 <thead>
                                 <tr>
                                     <th>Pozostałe czynności</th>
