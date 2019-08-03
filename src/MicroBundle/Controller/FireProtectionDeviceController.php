@@ -150,7 +150,7 @@ class FireProtectionDeviceController extends Controller
         $fireProtectionDevice->removeAllInspectedDevices()->setLoopDev(null);
         //Change date to string
 
-        $tempDate = ($fireProtectionDevice->getTempServiceDate()) ? $fireProtectionDevice->getTempServiceDate()->format('Y-m-d'): "brak";
+        $tempDate = ($fireProtectionDevice->getTempServiceDate()) ? $fireProtectionDevice->getTempServiceDate()->format('Y-m-d') : "brak";
         $fireProtectionDevice->setTempServiceDate($tempDate);
 
 
@@ -199,18 +199,24 @@ class FireProtectionDeviceController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         if ($id == "null") {
-            $fireProtectionDevice = new FireProtectionDevice();
-            $loop = $em->getRepository('MicroBundle:LoopDev')->findOneBy(['id' => $loop]);
 
-            $loop->addFireProtectionDevice($fireProtectionDevice);
+            $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['number' => $number, 'loopDev'=> $loop]);
 
 
-            $fireProtectionDevice->setLoopDev($loop);
-            $fireProtectionDevice->setnumber($number);
+            if ($fireProtectionDevice instanceof FireProtectionDevice) {
+                $fireProtectionDevice->setDel(false);
+            } else {
+                $fireProtectionDevice = new FireProtectionDevice();
+
+                $loopDev = $em->getRepository('MicroBundle:LoopDev')->findOneBy(['id' => $loop]);
+                $loopDev->addFireProtectionDevice($fireProtectionDevice);
+
+                $fireProtectionDevice->setLoopDev($loop);
+                $fireProtectionDevice->setnumber($number);
+            }
 
         } else {
             $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['id' => $id]);
-
         }
 
         if ($name != "null") {
@@ -223,11 +229,11 @@ class FireProtectionDeviceController extends Controller
             $fireProtectionDevice->setName($name);
             $fireProtectionDevice->setShortname($shortname);
 
-
         }
+     //get loop id if it possible
+        $loopid = $fireProtectionDevice->getLoopDev()->getId();
 
-
-        //chane nulles on ""
+    //chane nulles on ""
         $serial = ($serial == "null") ? "" : $serial;
         $address = ($address == "null") ? "" : $address;
         $desc = ($desc == "null") ? "" : $desc;
@@ -239,10 +245,9 @@ class FireProtectionDeviceController extends Controller
         $em->flush();
 
 
-        //remove refference
+//remove refference
         $fireProtectionDevice->removeAllInspectedDevices()->setLoopDev(null);
-        //get loop id if it possible
-        $loopid = ($loop == "null") ? "null" : $loop->getId();
+
 
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
 
@@ -281,14 +286,9 @@ class FireProtectionDeviceController extends Controller
 
         $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['id' => $id]);
 
-        $loopDev = $fireProtectionDevice->getLoopDev();
-        $loopId = $loopDev->getId();
-
-        $loopDev->removeFireProtectionDevice($fireProtectionDevice);
-        $fireProtectionDevice->setLoopDev(null);
-
-        $em->remove($fireProtectionDevice);
+        $fireProtectionDevice->setDel(true);
         $em->flush();
+        $loopId = $fireProtectionDevice->getLoopDev()->getId();
 
 
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {

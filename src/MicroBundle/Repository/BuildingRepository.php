@@ -21,7 +21,8 @@ class BuildingRepository extends \Doctrine\ORM\EntityRepository
                 (SELECT fire_protection_device.id, fire_protection_device.lastServiceDate FROM fire_protection_device 
                 INNER JOIN loop_dev
                 ON fire_protection_device.loop_dev_id=loop_dev.id
-                WHERE loop_dev.building_id= ?)
+                WHERE loop_dev.building_id= ?
+                AND fire_protection_device.del = false)
                 AS TabAllDevices
         
             LEFT JOIN (
@@ -62,7 +63,8 @@ class BuildingRepository extends \Doctrine\ORM\EntityRepository
                 (SELECT fire_protection_device.id, fire_protection_device.tempServiceDate FROM fire_protection_device 
                 INNER JOIN loop_dev
                 ON fire_protection_device.loop_dev_id=loop_dev.id
-                WHERE loop_dev.building_id= ?)
+                WHERE loop_dev.building_id= ?
+                AND fire_protection_device.del = false)
                 AS TabAllDevices
         
             LEFT JOIN (

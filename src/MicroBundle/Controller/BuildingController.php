@@ -106,35 +106,6 @@ class BuildingController extends Controller
 
             return $this->redirectToRoute('building_show', array('id' => $building->getId()));
         }
-//        Form to add FireProtectionDevice
-//        if ($form->isSubmitted() && $form->isValid()) {
-//
-//            $building->addFireProtectionDevice($fireProtectionDevice);
-//            $fireProtectionDevice->setBuilding($building);
-//            $chosenDevice = $fireProtectionDevice->getName();
-//            $fireProtectionDevice->setName($chosenDevice->getName());
-//            $fireProtectionDevice->setShortname($chosenDevice->getShortName());
-//            $em = $this->getDoctrine()->getManager();
-//            $em->persist($fireProtectionDevice);
-//            $em->flush();
-//
-//            return $this->redirectToRoute('building_show', array('id' => $building->getId()));
-//        }
-        //Form to edit FireProtectionDevice
-//        if ($editForm->isSubmitted()) {
-//            $em = $this->getDoctrine()->getManager();
-//
-//            $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneById($tempFireProtectionDevice->getId());
-//            $fireProtectionDevice->setName($tempFireProtectionDevice->getName()->getName());
-//            $fireProtectionDevice->setShortname($tempFireProtectionDevice->getShortname()->getShortname());
-//            $fireProtectionDevice->setLoopNo($tempFireProtectionDevice->getLoopNo());
-//            $fireProtectionDevice->setNumber($tempFireProtectionDevice->getNumber());
-//            $em->flush();
-//
-//            return $this->redirectToRoute('building_show', array('id' => $building->getId()));
-//        }
-
-//
         $this->container->get('micro')->updateLastServiceDate($building);
 
         return $this->render('building/show.html.twig', array(

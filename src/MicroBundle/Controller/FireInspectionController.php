@@ -82,23 +82,22 @@ class FireInspectionController extends Controller
             $loopDevs = $building->getLoopDevs();
             foreach ($loopDevs as $loopDev) {
                 foreach ($loopDev->getFireProtectionDevices() as $device) {
-                    $inspectedDevices = new InspectedDevice();
-                    $inspectedDevices->setNumber($device->getNumber());
-                    $inspectedDevices->setShortname($device->getShortname());
+                    if (!$device->getDel()) {
+                        $inspectedDevices = new InspectedDevice();
+                        $inspectedDevices->setNumber($device->getNumber());
+                        $inspectedDevices->setShortname($device->getShortname());
 
-                    $inspectedDevices->setFireProtectionDevice($device);
-                    $device->addInspectedDevice($inspectedDevices);
+                        $inspectedDevices->setFireProtectionDevice($device);
+                        $device->addInspectedDevice($inspectedDevices);
 
-                    $inspectedDevices->setFireInspection($fireInspection);
-                    $fireInspection->addInspectedDevice($inspectedDevices);
+                        $inspectedDevices->setFireInspection($fireInspection);
+                        $fireInspection->addInspectedDevice($inspectedDevices);
 
-                    $em->persist($inspectedDevices);
+                        $em->persist($inspectedDevices);
+                    }
                 }
 
             }
-
-
-
 
 
             $em->persist($fireInspection);
@@ -120,8 +119,9 @@ class FireInspectionController extends Controller
     {
         $this->container->get('micro')->updateLastServiceDateFireInspection($fireInspection);
         $em = $this->getDoctrine()->getManager();
-        $loopDevs=[];
-        foreach ( $fireInspection->getBuilding()->getLoopDevs() as $loop) {;
+        $loopDevs = [];
+        foreach ($fireInspection->getBuilding()->getLoopDevs() as $loop) {
+            ;
 
             $loopDev = $em->getRepository('MicroBundle:FireInspection')->findDevicesByFireInspection($fireInspection->getId(), $loop->getId());
             $loopDevs[] = $loopDev;
@@ -129,10 +129,7 @@ class FireInspectionController extends Controller
         }
 
 
-        return $this->render('fireinspection/show.html.twig',
-            array('fireInspection' => $fireInspection,
-                'loopDevs' => $loopDevs,
-                ));
+        return $this->render('fireinspection/show.html.twig', array('fireInspection' => $fireInspection, 'loopDevs' => $loopDevs,));
     }
 
     /**
@@ -149,10 +146,10 @@ class FireInspectionController extends Controller
             if ($inspector->getPrototype()) {
                 $prototypeId = $inspector->getPrototype();
                 $prototype = $em->getRepository('MicroBundle:Inspector')->findOneBy(['id' => $prototypeId]);
-                 if ($prototype instanceof Inspector) {
-                     $fireInspection->addTempInspector($prototype);
-                 }
+                if ($prototype instanceof Inspector) {
+                    $fireInspection->addTempInspector($prototype);
                 }
+            }
         }
 
         $editForm = $this->createForm('MicroBundle\Form\FireInspectionType', $fireInspection);

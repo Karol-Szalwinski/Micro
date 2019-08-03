@@ -91,7 +91,6 @@ $(document).ready(function () {
     $('.add-device-button').click(function () {
         var loop = this.id.substring(11);
         $('#microbundle_fireprotectiondevice_loopDev').val(loop);
-        alert(loop);
     });
 });
 
@@ -221,7 +220,7 @@ $(document).on('click', '#submit-edit', function () {
 
 //END: AJAX update object device -->
 
-//BEGIN: AJAX delete object device -->
+//BEGIN: AJAX set device as deleted-->
 
 
 function deleteDevice(id) {
@@ -243,4 +242,4 @@ function deleteDevice(id) {
     });
 }
 
-//BEGIN: AJAX delete object device -->
+//BEGIN: AJAX set device as deleted-->

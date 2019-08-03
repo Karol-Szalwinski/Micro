@@ -212,17 +212,6 @@
                     </div>
                     <div class="card-content">
                         <div class="card-body">
-                            <!-- Task List table -->
-                            {#<a type="button" class="btn btn-sm btn-danger mb-1"#}
-                            {#href="{{ path('fireinspection_del_devices', {'id': fireInspection.id}) }}">Usuń#}
-                            {#Wszystkie</a>#}
-                            {#<a type="button" class="btn btn-sm btn-info mb-1"#}
-                            {#href="{{ path('fireinspection_load_devices', {'id': fireInspection.id}) }}">#}
-                            {#Załaduj wszystkie urządzenia</a>#}
-                            {#<a type="button" id="load-miss-device"#}
-                            {#class="btn btn-sm btn-warning mb-1" data-toggle="modal" data-target="#add-device-modal">#}
-                            {#Dodaj do listy usunięte urządzenie#}
-                            {#</a>#}
                             <div>
                                 <table id="inspected-devices-table"
                                        class=" inspected-devices-table table table-condensed table-white-space table-bordered
@@ -288,15 +277,6 @@
 
                                             </td>
 
-                                            {#<td class="text-center">#}
-                                            {#<div>#}
-                                            {#{% if device.tempServiceDate is not null %}#}
-                                            {#{{ device.tempServiceDate|date('Y-m-d') }}#}
-                                            {#{% else %}#}
-                                            {#brak#}
-                                            {#{% endif %}#}
-                                            {#</div>#}
-                                            {#</td>#}
                                             <td>
                                                 {% if device.tempServiceDate is null %}
                                                     {% set badgecolor = "badge-secondary" %}

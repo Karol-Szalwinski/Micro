@@ -70,6 +70,13 @@ class FireProtectionDevice
      */
     private $desc;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="del", type="boolean")
+     */
+    private $del;
+
 
     /**
      * @var \DateTime|null
@@ -106,6 +113,7 @@ class FireProtectionDevice
     public function __construct()
     {
         $this->inspectedDevices = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->del = false;
     }
 
     /**
@@ -421,5 +429,29 @@ class FireProtectionDevice
     public function getTempServiceDate()
     {
         return $this->tempServiceDate;
+    }
+
+    /**
+     * Set del.
+     *
+     * @param bool $del
+     *
+     * @return FireProtectionDevice
+     */
+    public function setDel($del)
+    {
+        $this->del = $del;
+
+        return $this;
+    }
+
+    /**
+     * Get del.
+     *
+     * @return bool
+     */
+    public function getDel()
+    {
+        return $this->del;
     }
 }

@@ -107,7 +107,7 @@
                             <div class="heading-elements mt-0">
                                 <button id="add-button-{{ loopDev.id }}"
                                         class="btn btn-primary btn-sm add-device-button " data-toggle="modal"
-                                        data-target="#AddDeviceModal" >
+                                        data-target="#AddDeviceModal">
                                     <i class="d-md-none d-block ft-plus white"></i>
                                     <span class="d-md-block d-none ">Dodaj nowe urządzenie</span>
                                 </button>
@@ -137,7 +137,7 @@
                             {#<button type="button" class="btn btn-sm btn-danger delete-all mb-1">Usuń Wszystkie</button>#}
                             <div class="table-responsive">
                                 <table
-                                       class=" devices-table table table-white-space table-sm table-bordered row-grouping display no-wrap icheck table-middle text-center">
+                                        class=" devices-table table table-white-space table-sm table-bordered row-grouping display no-wrap icheck table-middle text-center">
                                     <thead>
 
                                     <tr>
@@ -154,46 +154,49 @@
                                     </thead>
                                     <tbody id="tbody-{{ loopDev.id }}">
                                     {% for device in loopDev.fireProtectionDevices|sort %}
-                                        <tr id="row-{{ loopDev.id }}-{{ device.id }}">
-                                            <td class="text-center">
-                                                <a class="text-center"
-                                                   id="number-{{ device.id }}">{{ device.number }}</a>
-                                            </td>
-                                            <td class="text-center">
-                                                <a class="text-center"
-                                                   id="name-{{ device.id }}">{{ device.name }}</a>
-                                            </td>
-                                            <td class="text-center">
-                                                <a class="text-center "
-                                                   id="shortname-{{ device.id }}">{{ device.shortname }}</a>
-                                            </td>
-                                            <td class="text-center">
-                                                <a class="text-center "
-                                                   id="serial-{{ device.id }}">{{ device.serial }}</a>
-                                            </td>
-                                            <td class="text-center">
-                                                <a class="text-center "
-                                                   id="address-{{ device.id }}">{{ device.address }}</a>
-                                            </td>
-                                            <td class="text-center">
-                                                <a class="text-center "
-                                                   id="desc-{{ device.id }}">{{ device.desc }}</a>
-                                            </td>
-                                            <td class="text-center">
-                                                <a class="timeline-date">
-                                                    {{ device.lastServiceDate is empty ? "Brak" : device.lastServiceDate| date('Y/m/d') }}
-                                                </a>
-                                            </td>
+                                        {% if device.del != true %}
+                                            <tr id="row-{{ loopDev.id }}-{{ device.id }}">
+                                                <td class="text-center">
+                                                    <a class="text-center"
+                                                       id="number-{{ device.id }}">{{ device.number }}</a>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a class="text-center"
+                                                       id="name-{{ device.id }}">{{ device.name }}</a>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a class="text-center "
+                                                       id="shortname-{{ device.id }}">{{ device.shortname }}</a>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a class="text-center "
+                                                       id="serial-{{ device.id }}">{{ device.serial }}</a>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a class="text-center "
+                                                       id="address-{{ device.id }}">{{ device.address }}</a>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a class="text-center "
+                                                       id="desc-{{ device.id }}">{{ device.desc }}</a>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a class="timeline-date">
+                                                        {{ device.lastServiceDate is empty ? "Brak" : device.lastServiceDate| date('Y/m/d') }}
+                                                    </a>
+                                                </td>
 
-                                            <td>
-                                                <a data-toggle="modal" data-target="#EditDeviceModal"
-                                                   id="edit-{{ device.id }}"
-                                                   class="primary edit-row mr-1"><i class="la la-pencil"></i></a>
-                                                <a id="delete-{{ device.id }}"
-                                                   class="danger delete-row mr-1 cancel-delete"><i class="la la-trash-o"></i></a>
+                                                <td>
+                                                    <a data-toggle="modal" data-target="#EditDeviceModal"
+                                                       id="edit-{{ device.id }}"
+                                                       class="primary edit-row mr-1"><i class="la la-pencil"></i></a>
+                                                    <a id="delete-{{ device.id }}"
+                                                       class="danger delete-row mr-1 cancel-delete"><i
+                                                                class="la la-trash-o"></i></a>
 
-                                            </td>
-                                        </tr>
+                                                </td>
+                                            </tr>
+                                        {% endif %}
                                     {% endfor %}
                                     </tbody>
                                     <tfoot>

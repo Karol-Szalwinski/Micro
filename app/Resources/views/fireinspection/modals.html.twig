@@ -14,49 +14,50 @@
 
                 <!-- Task List table -->
                 <div class="table-responsive">
+
                     <table id="inspected-devices"
-                           class="table table-sm table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
+                           class="table table-condensed table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
                         <thead>
+                        <h4 class="card-title"> </h4>
                         <tr>
                             <th>Pętla</th>
                             <th>Urządzenie</th>
                             <th>Typ</th>
-                            {#<th>Data ostatniego przeglądu</th>#}
                             <th>Akcje</th>
 
 
                         </tr>
                         </thead>
                         <tbody>
-                        {% for device in fireInspection.inspectedDevices|sort %}
-                            <tr
-                                    id="mod-{{ device.id }}"
-                                    style="{% if device.visible %}display:none{% endif %}">
+                        {% for key, loopDev in loopDevs %}
+                            <tr><th colspan="4">Pętla Numer {{ key + 1 }}</th></tr>
+                            {% for device in loopDev %}
+                                <tr
+                                        id="mod-{{ device.inspectedDevices|first.id }}"
+                                        style="{% if device.inspectedDevices|first.visible %}display:none{% endif %}">
 
-                                <td>
-                                    <div>
-                                        <a class="media-heading name">{{ device.loopNo }}</a>
-                                    </div>
-                                </td>
-                                <td class="text-center">
-                                    <div>{{ device.number }} </div>
-                                </td>
-                                <td class="text-center">
-                                    <div>{{ device.shortname }}</div>
-                                </td>
-                                {#<td>#}
-                                {#</td>#}
+                                    <td>
+                                        <div>
+                                            <a class="media-heading name">{{ key + 1 }}</a>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div>{{ device.inspectedDevices|first.number }} </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div>{{ device.inspectedDevices|first.shortname }}</div>
+                                    </td>
 
-                                <td>
-                                    <a
-                                            id="add-{{ device.id }}"
-                                            class="device-row btn btn-sm btn-warning mr-1">Dodaj<i
-                                                class="la la-add"></i></a>
+                                    <td>
+                                        <a
+                                                id="add-{{ device.inspectedDevices|first.id  }}"
+                                                class="device-row btn btn-sm btn-warning mr-1">Dodaj<i
+                                                    class="la la-add"></i></a>
 
+                                    </td>
 
-                                </td>
-
-                            </tr>
+                                </tr>
+                            {% endfor %}
                         {% endfor %}
                         </tbody>
 
@@ -85,10 +86,10 @@
             </div>
             <p id="dialog-id" style="visibility:hidden"></p>
             <div class="modal-body table-responsive">
-                <table class ="table table-sm table-bordered ">
+                <table class="table table-sm table-bordered ">
                     <tbody>
                     <tr>
-                        <th >Numer w pętli</th>
+                        <th>Numer w pętli</th>
                         <td id="dialog-number"></td>
                         <td></td>
                     </tr>
@@ -105,10 +106,11 @@
                     <tr>
                         <th>Numer Seryjny</th>
                         <td>
-                            <input  class="td-hidden-input" id="dialog-serial" style="border:none; width:100%; " readonly>
+                            <input class="td-hidden-input" id="dialog-serial" style="border:none; width:100%; "
+                                   readonly>
                             {#onblur="readonly(this)#}
                         </td>
-                        <td> <a class=" info mr-1 edit-info-btn"><i
+                        <td><a class=" info mr-1 edit-info-btn"><i
                                         class="la la-edit "></i></a>
                         </td>
                     </tr>
@@ -118,20 +120,21 @@
                             <input class="td-hidden-input" id="dialog-address" style="border:none; width:100%" readonly>
                             {#onblur="readonly(this)#}
                         </td>
-                        <td> <a class=" info mr-1 edit-info-btn"><i
+                        <td><a class=" info mr-1 edit-info-btn"><i
                                         class="la la-edit "></i></a>
                         </td>
                     </tr>
 
                     <tr>
                         <th>Opis</th>
-                        <td >
+                        <td>
 
-                            <textarea class="td-hidden-input" rows=12 cols=50 id="dialog-description" style="border:none; width:100%" readonly>
+                            <textarea class="td-hidden-input" rows=12 cols=50 id="dialog-description"
+                                      style="border:none; width:100%" readonly>
                             </textarea>
                             {#onblur="readonly(this)#}
                         </td>
-                        <td> <a class=" info mr-1 edit-info-btn"><i
+                        <td><a class=" info mr-1 edit-info-btn"><i
                                         class="la la-edit "></i></a>
                         </td>
                     </tr>
