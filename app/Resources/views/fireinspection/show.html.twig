@@ -224,6 +224,7 @@
                                         <th>Typ</th>
                                         <th>Status</th>
                                         <th>Wynik testu</th>
+                                        <th>Poprzedni</th>
                                         <th>Akcje</th>
                                         <th>Uwagi</th>
 
@@ -303,7 +304,7 @@
                                                         {% set badgecolor = "badge-success" %}
                                                     {% elseif  diff == 0 %}
                                                         {% set badgecolor = "badge-success" %}
-                                                        {% set diff = "mniej niż 1" %}
+                                                        {% set diff = "< 1" %}
                                                     {% elseif  diff < 0 %}
                                                         {% set badgecolor = "badge-danger" %}
                                                         {% set diff = "zaplanowany w przyszłości" %}
@@ -320,8 +321,9 @@
                                                     {% endif %}"
                                                    class="badge badge-pill {{ badgecolor }}">{{ diff }} {{ unit }}
 
-
                                                 </i>
+                                            </td>
+                                            <td>
                                                 <a>&nbsp&nbsp</a>
                                                 <a id="info-{{ device.id }}" data-toggle="tooltip" title="Pokaż info"
                                                    class=" info mr-1 info-modal-btn"><i
@@ -330,6 +332,12 @@
                                                    title="Usuń z przeglądu"
                                                    class="device-row danger delete mr-1 "><i
                                                             class="la la-trash-o "></i></a>
+                                                {% if device.del %}
+                                                <a data-toggle="tooltip"
+                                                   title="Urządzenie usunięte z budynku!" class=" warning mr-1 info-modal-btn"><i
+                                                            class="la la-exclamation-triangle"></i>
+                                                    {% endif %}
+                                                </a>
 
 
                                             </td>
