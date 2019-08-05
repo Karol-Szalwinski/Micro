@@ -35,10 +35,11 @@ class InspectedDevice
      */
     private $number;
 
+
     /**
      * @var string
      *
-     * @ORM\Column(name="shortname", type="string", length=255)
+     * @ORM\Column(name="shortname", type="string", length=20)
      */
     private $shortname;
 

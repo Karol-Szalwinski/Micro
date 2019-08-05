@@ -324,7 +324,6 @@
                                                 </i>
                                             </td>
                                             <td>
-                                                <a>&nbsp&nbsp</a>
                                                 <a id="info-{{ device.id }}" data-toggle="tooltip" title="Pokaż info"
                                                    class=" info mr-1 info-modal-btn"><i
                                                             class="la la-info "></i></a>
@@ -332,11 +331,19 @@
                                                    title="Usuń z przeglądu"
                                                    class="device-row danger delete mr-1 "><i
                                                             class="la la-trash-o "></i></a>
-                                                {% if device.del %}
+
                                                 <a data-toggle="tooltip"
-                                                   title="Urządzenie usunięte z budynku!" class=" warning mr-1 info-modal-btn"><i
+                                                        {% if device.del %}
+
+                                                            title="Urządzenie usunięte z budynku!" class="warning mr-1"
+                                                        {% elseif device.shortname != device.inspectedDevices|first.shortname %}
+                                                            title="Typ urządzenia zmieniono na {{ device.shortname }}" class="warning mr-1"
+                                                        {% else %}
+                                                            title="" class="muted mr-1"
+                                                        {% endif %}
+                                                ><i
                                                             class="la la-exclamation-triangle"></i>
-                                                    {% endif %}
+
                                                 </a>
 
 

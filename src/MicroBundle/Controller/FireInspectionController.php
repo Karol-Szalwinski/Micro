@@ -121,7 +121,7 @@ class FireInspectionController extends Controller
         $em = $this->getDoctrine()->getManager();
         $loopDevs = [];
         foreach ($fireInspection->getBuilding()->getLoopDevs() as $loop) {
-            ;
+
 
             $loopDev = $em->getRepository('MicroBundle:FireInspection')->findDevicesByFireInspection($fireInspection->getId(), $loop->getId());
             $loopDevs[] = $loopDev;
