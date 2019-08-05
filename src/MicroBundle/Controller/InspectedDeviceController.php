@@ -260,5 +260,32 @@ class InspectedDeviceController extends Controller
 
     }
 
+    /**
+     * Update InspectedDevice
+     *
+     * @Route("/{id}/update", name="inspected_device_update")
+     * @param Request $request
+     * @param $id
+     * @return JsonResponse
+     */
+    public function updateAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $inspectedDevice = $em->getRepository('MicroBundle:InspectedDevice')->findOneById($id);
+        $shortname = $inspectedDevice->getFireProtectionDevice()->getShortname();
+        $inspectedDevice->setShortname($shortname);
+
+        $em->flush();
+
+
+
+        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+            $jsonData['row_id'] = $id;
+            $jsonData['shortname'] = $shortname;
+
+            return new JsonResponse($jsonData);
+        }
+    }
+
 
 }

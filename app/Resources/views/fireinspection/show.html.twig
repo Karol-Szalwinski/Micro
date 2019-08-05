@@ -240,10 +240,10 @@
 
 
                                             <td class="text-center">
-                                                <div>{{ device.inspectedDevices|first.number }} </div>
+                                               {{ device.inspectedDevices|first.number }}
                                             </td>
-                                            <td class="text-center">
-                                                <div>{{ device.inspectedDevices|first.shortname }}</div>
+                                            <td id="shortname-{{ device.inspectedDevices|first.id }}" class="text-center" >
+                                                {{ device.inspectedDevices|first.shortname }}
                                             </td>
                                             <td class="text-center">
                                                 {% set checked = false %}
@@ -343,6 +343,17 @@
                                                         {% endif %}
                                                 ><i
                                                             class="la la-exclamation-triangle"></i>
+
+                                                </a>
+                                                <a data-toggle="tooltip" id="update-{{ device.inspectedDevices|first.id }}"
+                                                        {% if device.shortname != device.inspectedDevices|first.shortname %}
+                                                            title="Zaktualizuj typ urządzenia na {{ device.shortname }}"
+                                                            class="warning mr-1 update-ins-device"
+                                                        {% else %}
+                                                            title="" class="muted mr-1"
+                                                        {% endif %}
+                                                ><i
+                                                            class="la la-refresh "></i>
 
                                                 </a>
 

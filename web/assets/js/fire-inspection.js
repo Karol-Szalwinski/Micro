@@ -217,6 +217,8 @@ $(document).on('click', '.test-delete-row ', function () {
     });
 });
 
+
+//activate DataTable
 $('.inspected-devices-table').DataTable({
     dom: 'Bfrtip',
     stateSave: true,
@@ -247,6 +249,7 @@ $('.inspected-devices-table').DataTable({
 //     $( ".animation-dialog" ).dialog("open");
 // });
 
+// fill info modal
 $(".info-modal-btn").on("click", function () {
     var id = this.id.substring(5);
 
@@ -281,7 +284,7 @@ $(".info-modal-btn").on("click", function () {
     $("#animation-dialog").dialog("open");
 });
 
-
+// animation dialog
 $("#animation-dialog").dialog({
     autoOpen: false,
     width: 400,
@@ -296,7 +299,7 @@ $("#animation-dialog").dialog({
     modal: true
 });
 
-
+// activate input in info modal
 $(document).on('click', '.edit-info-btn ', function () {
 
     $(this).parent().prev().children().removeAttr("readonly");
@@ -305,6 +308,7 @@ $(document).on('click', '.edit-info-btn ', function () {
     window.getSelection().removeAllRanges();
 });
 
+// deactivate input in info modal
 $(document).on('blur', '.td-hidden-input ', function () {
 
     $(".td-hidden-input ").attr('readonly', true).css("border", "none");
@@ -312,6 +316,7 @@ $(document).on('blur', '.td-hidden-input ', function () {
 
 });
 
+// update fire protection device
 $(document).on('change', '.td-hidden-input ', function () {
 
     var id = $('#dialog-id').text();
@@ -356,6 +361,30 @@ $(document).on('change', '.td-hidden-input ', function () {
     });
 });
 
+// update inspected Device
+$(document).on('click', '.update-ins-device ', function () {
+    var ins_device = this.id.substring(7);
 
-//END: AJAX update object device -->
+    $.ajax({
+        url: '../inspdev/' + ins_device + '/update',
+        type: 'POST',
+        dataType: 'json',
+        async: true,
+
+        success: function (data) {
+            // update row
+            var row_id = data['row_id'];
+            var shortname = data['shortname'];
+            $('#shortname-' + row_id).text(shortname);
+
+
+        },
+        error: function () {
+            alert('Błąd update inspected device');
+        }
+    });
+});
+
+
+
 
