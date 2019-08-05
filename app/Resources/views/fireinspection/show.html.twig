@@ -206,8 +206,18 @@
                 <div class="card">
                     <div class="card-head">
                         <div class="card-header">
-                            <h4 class="card-title">Pętla Numer {{ key + 1 }} </h4>
+                            <h4 class="card-title">Pętla Numer {{ key + 1 }}
+                            {%  if loopNullDevs[key] is not empty %}
+                                <a>&nbsp</a>
+                                <a data-toggle="tooltip"
+                                            title="Do tej pętli zostały dodane nowe urzadzenia - kliknij żeby je dodać do dokumentu"
+                                            class="warning mr-1 "
+                                ><i
+                                            class="la la-exclamation-triangle "></i>Nowe urządzenia w pętli
 
+                                </a>
+                            {%  endif %}
+                            </h4>
                         </div>
                     </div>
                     <div class="card-content">

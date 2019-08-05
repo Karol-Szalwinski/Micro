@@ -41,4 +41,30 @@ class FireInspectionRepository extends \Doctrine\ORM\EntityRepository
         return $dql;
     }
 
+    public function findNullDevicesByFireInspection($document, $loopId) {
+        $em = $this->getEntityManager();
+        $RAW_QUERY ="SELECT * FROM fire_protection_device
+                LEFT JOIN 
+                (SELECT fire_protection_device.id AS oldid FROM `fire_protection_device`
+                LEFT JOIN inspected_device
+                ON fire_protection_device.id = inspected_device.fire_protection_device_id
+                WHERE inspected_device.fire_inspection_id = ?)
+                AS old
+                ON fire_protection_device.id = old.oldid
+                WHERE fire_protection_device.loop_dev_id = ?
+                AND old.oldid IS NULL
+        ";
+
+
+        $statement = $em->getConnection()->prepare($RAW_QUERY);
+        // Set parameters
+        $statement->bindvalue(1, $document);
+        $statement->bindvalue(2, $loopId);
+        $statement->execute();
+
+        $result = $statement->fetchAll();
+
+        return $result;
+    }
+
 }

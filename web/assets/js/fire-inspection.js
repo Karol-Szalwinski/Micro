@@ -376,7 +376,8 @@ $(document).on('click', '.update-ins-device ', function () {
             var row_id = data['row_id'];
             var shortname = data['shortname'];
             $('#shortname-' + row_id).text(shortname);
-
+            $('#update-'+ row_id).removeClass('update-ins-device').toggleClass('warning muted');
+            $('#update-'+ row_id).prev('a').toggleClass('warning muted');
 
         },
         error: function () {

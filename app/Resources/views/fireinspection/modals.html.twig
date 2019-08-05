@@ -18,7 +18,7 @@
                     <table id="inspected-devices"
                            class="table table-condensed table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
                         <thead>
-                        <h4 class="card-title"> </h4>
+                        <h4 class="card-title"></h4>
                         <tr>
                             <th>Pętla</th>
                             <th>Urządzenie</th>
@@ -30,7 +30,9 @@
                         </thead>
                         <tbody>
                         {% for key, loopDev in loopDevs %}
-                            <tr><th colspan="4">Pętla Numer {{ key + 1 }}</th></tr>
+                            <tr>
+                                <th colspan="4">Pętla Numer {{ key + 1 }}</th>
+                            </tr>
                             {% for device in loopDev %}
                                 <tr
                                         id="mod-{{ device.inspectedDevices|first.id }}"
@@ -50,13 +52,40 @@
 
                                     <td>
                                         <a
-                                                id="add-{{ device.inspectedDevices|first.id  }}"
-                                                class="device-row btn btn-sm btn-warning mr-1">Dodaj<i
+                                                id="add-{{ device.inspectedDevices|first.id }}"
+                                                class="device-row btn btn-sm btn-warning mr-1">Przywróć usunięte<i
                                                     class="la la-add"></i></a>
 
                                     </td>
 
                                 </tr>
+                            {% endfor %}
+                            {% for  device in loopNullDevs[key] %}
+                                <tr
+                                        id="mod-{{ device.id }}"
+                                >
+
+                                    <td>
+                                        <div>
+                                            <a class="media-heading name">{{ key + 1 }}</a>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div>{{ device.number }} </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div>{{ device.shortname }}</div>
+                                    </td>
+
+                                    <td>
+                                        <a href="{{ path('add_new_device', {'id': fireInspection.id, 'deviceId': device.id}) }}"
+                                                class=" btn btn-sm btn-warning mr-1">Dodaj nowe<i
+                                                    class="la la-add"></i></a>
+
+                                    </td>
+
+                                </tr>
+
                             {% endfor %}
                         {% endfor %}
                         </tbody>

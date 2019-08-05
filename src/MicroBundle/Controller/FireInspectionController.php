@@ -119,17 +119,22 @@ class FireInspectionController extends Controller
     {
         $this->container->get('micro')->updateLastServiceDateFireInspection($fireInspection);
         $em = $this->getDoctrine()->getManager();
-        $loopDevs = [];
+        $loopDevs = $loopNullDevs = [];
         foreach ($fireInspection->getBuilding()->getLoopDevs() as $loop) {
 
-
             $loopDev = $em->getRepository('MicroBundle:FireInspection')->findDevicesByFireInspection($fireInspection->getId(), $loop->getId());
+            $loopNullDev = $em->getRepository('MicroBundle:FireInspection')->findNullDevicesByFireInspection($fireInspection->getId(), $loop->getId());
             $loopDevs[] = $loopDev;
+            $loopNullDevs[] = $loopNullDev;
+//            dump($loopNullDevs, $loopDevs); die();
 
         }
 
 
-        return $this->render('fireinspection/show.html.twig', array('fireInspection' => $fireInspection, 'loopDevs' => $loopDevs,));
+        return $this->render('fireinspection/show.html.twig', array(
+            'fireInspection' => $fireInspection,
+            'loopDevs' => $loopDevs,
+            'loopNullDevs' => $loopNullDevs));
     }
 
     /**
@@ -212,37 +217,34 @@ class FireInspectionController extends Controller
     }
 
 
-    /**
-     * Deletes a fireInspection entity.
-     *
-     * @Route("/{id}", name="fireinspection_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, FireInspection $fireInspection)
-    {
-        $form = $this->createDeleteForm($fireInspection);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($fireInspection);
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('fireinspection_index');
-    }
 
     /**
-     * Creates a form to delete a fireInspection entity.
+     * Finds and displays a fireInspection entity.
      *
-     * @param FireInspection $fireInspection The fireInspection entity
-     *
-     * @return \Symfony\Component\Form\Form The form
+     * @Route("/{id}/add-new-device/{deviceId}", name="add_new_device")
+     * @Method("POST")
      */
-    private function createDeleteForm(FireInspection $fireInspection)
+    public function addNewDeviceAction(FireInspection $fireInspection, $deviceId)
     {
-        return $this->createFormBuilder()->setAction($this->generateUrl('fireinspection_delete', array('id' => $fireInspection->getId())))->setMethod('DELETE')->getForm();
-    }
+        $em = $this->getDoctrine()->getManager();
+        $device = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['id' => $deviceId]);
 
+
+        $inspectedDevices = new InspectedDevice();
+        $inspectedDevices->setNumber($device->getNumber());
+        $inspectedDevices->setShortname($device->getShortname());
+
+        $inspectedDevices->setFireProtectionDevice($device);
+        $device->addInspectedDevice($inspectedDevices);
+
+        $inspectedDevices->setFireInspection($fireInspection);
+        $fireInspection->addInspectedDevice($inspectedDevices);
+
+        $em->persist($inspectedDevices);
+        $em->flush();
+
+
+        return $this->redirectToRoute('fireinspection_show', array('id' => $fireInspection->getId()));
+    }
 
 }
