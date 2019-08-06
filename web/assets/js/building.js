@@ -130,7 +130,6 @@ $(document).ready(function () {
             success: function (data) {
                 var loop = data["loopid"];
                 var device = JSON.parse(data['device']);
-                alert(device);
                 var id = device.id;
 
                 var row = "<tr id='row-" + loop + "-" + id + "' ><td class='text-center'><a class='text-center' id='number-" + id + "'></a></td>" +
@@ -242,4 +241,42 @@ function deleteDevice(id) {
     });
 }
 
-//BEGIN: AJAX set device as deleted-->
+//END: AJAX set device as deleted-->
+
+//BEGIN: Sweet alert delete device-->
+
+
+$(document).on('click', '.cancel-delete', function(){
+    var id = this.id.substr(7);
+    alert(id);
+    swal({
+        title: "Jesteś pewny?",
+        text: "Usunięcie tego urządzenia jest nieodwracalne!",
+        icon: "warning",
+        buttons: {
+            cancel: {
+                text: "Nie, rozmyśliłem się",
+                value: null,
+                visible: true,
+                className: "",
+                closeModal: false,
+            },
+            confirm: {
+                text: "Tak, usuń to urządzenie!",
+                value: true,
+                visible: true,
+                className: "",
+                closeModal: false,
+            }
+        }
+    })
+        .then((isConfirm) => {
+        if (isConfirm) {
+            deleteDevice(id);
+            swal("Usunięte!", "Tego urządzenia już nie zobaczysz.", "success");
+        } else {
+            swal("Anulowano", "Twoje urządzenie pozostało", "error");
+}
+})
+
+});

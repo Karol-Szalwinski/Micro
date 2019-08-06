@@ -263,7 +263,7 @@
                                                 {% if device.inspectedDevices|first.status == 1 %}
                                                     {% set checked = true %}
                                                 {% endif %}
-                                                <input type="checkbox" class="column_filter status-checkbox switch"
+                                                <input type="checkbox" class="column_filter change-checkbox switch"
                                                        id="s{{ device.inspectedDevices|first.id }}"
                                                        {% if checked %}checked{% endif %}
                                                        data-icon-cls="fa" data-off-icon-cls="fa ft-thumbs-down"
@@ -279,7 +279,7 @@
                                                 {% if device.inspectedDevices|first.test == 1 %}
                                                     {% set checked = true %}
                                                 {% endif %}
-                                                <input type="checkbox" class="column_filter status-checkbox switch"
+                                                <input type="checkbox" class="column_filter change-checkbox switch"
                                                        id="t{{ device.inspectedDevices|first.id }}"
                                                        {% if checked %}checked{% endif %}
                                                        data-icon-cls="fa" data-off-icon-cls="fa ft-thumbs-down"
@@ -342,7 +342,7 @@
                                                             class="la la-info "></i></a>
                                                 <a id="del-{{ device.inspectedDevices|first.id }}" data-toggle="tooltip"
                                                    title="Usuń z przeglądu"
-                                                   class="device-row danger delete mr-1 "><i
+                                                   class="loop-delete-row danger delete mr-1 "><i
                                                             class="la la-trash-o "></i></a>
 
                                                 <a data-toggle="tooltip"
@@ -567,6 +567,8 @@
     <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.colVis.js') }}"></script>
     <!-- BEGIN: Page Vendor JS-->
     <script src="{{ asset('app-assets/js/core/libraries/jquery_ui/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/extensions/sweetalert.min.js') }}"></script>
+
     <!-- END: Page Vendor JS-->
 
     <!-- END: Page Vendor JS-->
@@ -577,6 +579,7 @@
 
 
     <!-- BEGIN: My JS-->
+    <script src="{{ asset('assets/js/sweet-alerts.js') }}"></script>
     <script src="{{ asset('assets/js/fire-inspection.js') }}"></script>
     <!-- END: My JS-->
 

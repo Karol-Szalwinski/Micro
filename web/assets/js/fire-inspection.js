@@ -1,9 +1,9 @@
 //updata row in Loop tables after change switch (Status and Test columns)
 
-$('.status-checkbox').change(function () {
-
+// $('.status-checkbox').change(function () {
+function changeCheckbox(id, type){
     $.ajax({
-        url: '/inspdev/' + this.id.substring(1) + '/changestatus/' + this.id.substring(0, 1),
+        url: '/inspdev/' + id + '/changestatus/' + type,
         type: 'POST',
         dataType: 'json',
         async: true,
@@ -16,7 +16,49 @@ $('.status-checkbox').change(function () {
             alert('Błąd requestu ajax.');
         }
     });
+};
+
+//sweet alert change checkbox
+
+$(document).on('change', '.change-checkbox', function () {
+    var id = this.id.substring(1);
+    var type = this.id.substring(0, 1)
+    swal({
+        title: "Jesteś pewny?",
+        text: "Każda zmiana musi zostać zatwierdzona!",
+        icon: "warning",
+        buttons: {
+            cancel: {
+                text: "Nie, rozmyśliłem się",
+                value: null,
+                visible: true,
+                className: "",
+                closeModal: false,
+            },
+            confirm: {
+                text: "Tak, zmień!",
+                value: true,
+                visible: true,
+                className: "",
+                closeModal: false,
+            }
+        }
+    })
+        .then((isConfirm) => {
+            if(isConfirm) {
+                changeCheckbox(id, type);
+                swal("Zmieniono!", "Zmiany zostały zapisane.", "success");
+            } else {
+                this.click();
+                swal("Anulowano", "Przywrócono poprzedni stan", "error"
+                )
+                ;
+            }
+        })
+
 });
+
+
 
 
 //show hiden input in text cells in Loop tables ( Comment column)
@@ -56,40 +98,32 @@ $(document).ready(function () {
 });
 
 
-//delete row in Loop tables
+//Funcion to delete row in Loop tables
+function changeInspectedDeviceVisible(id) {
+    $.ajax({
+        url: '/inspdev/' + id + '/changevisible',
+        type: 'POST',
+        dataType: 'json',
+        async: true,
 
-$(document).ready(function () {
-    $('.device-row').click(function () {
-        var device = this.id.substring(4);
-        $.ajax({
-            url: '/inspdev/' + device + '/changevisible',
-            type: 'POST',
-            dataType: 'json',
-            async: true,
-
-            success: function (data) {
-
-                if (data['response'] == false) {
-                    alert("Pomyślnie usunięto urządzenie");
-
-                } else if (data['response'] == true) {
-                    alert("Pomyślnie dodano urządzenie");
-
-                }
-                else {
-                    alert("Wystąpił problem z połączeniem do bazy!");
-                }
-                $('#row-' + device).toggle();
-                $('#mod-' + device).toggle();
-                ;
+        success: function (data) {
 
 
-            },
-            error: function () {
-                alert('Błąd usuwania - spróbuj przeładować stronę');
-            }
-        });
+            $('#row-' + id).toggle();
+            $('#mod-' + id).toggle();
+            ;
+
+
+        },
+        error: function () {
+            alert('Błąd usuwania - spróbuj przeładować stronę');
+        }
     });
+};
+
+$(document).on('click', '.device-restore', function () {
+    var id = this.id.substring(4);
+    changeInspectedDeviceVisible(id);
 });
 
 
@@ -224,7 +258,7 @@ $('.inspected-devices-table').DataTable({
     stateSave: true,
     buttons: ['colvis',
         {
-            text: 'Przywróć usunięte urządzenie',
+            text: 'Dodaj urządzenie do pętli',
             className: 'btn-info',
             action: function (e, dt, node, config) {
                 $('#add-device-modal').modal('show');
@@ -376,8 +410,8 @@ $(document).on('click', '.update-ins-device ', function () {
             var row_id = data['row_id'];
             var shortname = data['shortname'];
             $('#shortname-' + row_id).text(shortname);
-            $('#update-'+ row_id).removeClass('update-ins-device').toggleClass('warning muted');
-            $('#update-'+ row_id).prev('a').toggleClass('warning muted');
+            $('#update-' + row_id).removeClass('update-ins-device').toggleClass('warning muted');
+            $('#update-' + row_id).prev('a').toggleClass('warning muted');
 
         },
         error: function () {
@@ -386,7 +420,7 @@ $(document).on('click', '.update-ins-device ', function () {
     });
 });
 
-$(function() {
+$(function () {
     var loopNumber = $('#session-loop-number').val();
     if (loopNumber > 0) {
         $('html, body').animate({
@@ -395,4 +429,40 @@ $(function() {
     }
 });
 
+//sweet alert delete device from loop
 
+$(document).on('click', '.loop-delete-row', function () {
+    var id = this.id.substr(4);
+    swal({
+        title: "Jesteś pewny?",
+        text: "To urządzenie nie będzie objęte przeglądem!",
+        icon: "warning",
+        buttons: {
+            cancel: {
+                text: "Nie, rozmyśliłem się",
+                value: null,
+                visible: true,
+                className: "",
+                closeModal: false,
+            },
+            confirm: {
+                text: "Tak, usuń to urządzenie!",
+                value: true,
+                visible: true,
+                className: "",
+                closeModal: false,
+            }
+        }
+    })
+        .then((isConfirm) => {
+        if(isConfirm) {
+            changeInspectedDeviceVisible(id);
+            swal("Usunięte!", "Możesz przywrócić to urządzenie.", "success");
+        } else {
+            swal("Anulowano", "Twoje urządzenie pozostało", "error"
+)
+    ;
+}
+})
+
+});

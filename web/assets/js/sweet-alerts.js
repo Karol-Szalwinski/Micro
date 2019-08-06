@@ -13,41 +13,7 @@ $(document).ready(function(){
     $('#forgot-password').on('click',function(){
         swal("No to sorry!", "Jeśli chcesz odzyskać hasło skontaktuj się z adminem!", "warning");
     });
-
-    $(document).on('click', '.cancel-delete', function(){
-        var id = this.id.substr(7);
-        alert(id);
-        swal({
-            title: "Jesteś pewny?",
-            text: "Usunięcie tego urządzenia jest nieodwracalne!",
-            icon: "warning",
-            buttons: {
-                cancel: {
-                    text: "Nie, rozmyśliłem się",
-                    value: null,
-                    visible: true,
-                    className: "",
-                    closeModal: false,
-                },
-                confirm: {
-                    text: "Tak, usuń to urządzenie!",
-                    value: true,
-                    visible: true,
-                    className: "",
-                    closeModal: false,
-                }
-            }
-        })
-            .then((isConfirm) => {
-                if (isConfirm) {
-                    deleteDevice(id);
-                    swal("Usunięte!", "Tego urządzenia już nie zobaczysz.", "success");
-                } else {
-                    swal("Anulowano", "Twoje urządzenie pozostało", "error");
-                }
-            })
-
-    });
+//
 
 
 	//default

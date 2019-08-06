@@ -236,19 +236,16 @@ class FireInspectionController extends Controller
                      $device = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['id' => $arrayDevice['id']]);
                     $this->addInspectedDevice($fireInspection, $device);
                 }
-
             }
 
         }
         else {
-
         $device = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['id' => $deviceId]);
 
         $this->addInspectedDevice($fireInspection, $device);
 
         //set loop number in session
         $this->get('session')->set('loop-number', $device->getLoopDev()->getNumber());
-
         }
 
 
