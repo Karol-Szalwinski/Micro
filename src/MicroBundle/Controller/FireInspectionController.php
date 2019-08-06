@@ -242,8 +242,8 @@ class FireInspectionController extends Controller
 
         $em->persist($inspectedDevices);
         $em->flush();
-
-
+        //set loop number in session
+        $this->get('session')->set('loop-number', $device->getLoopDev()->getNumber());
         return $this->redirectToRoute('fireinspection_show', array('id' => $fireInspection->getId()));
     }
 

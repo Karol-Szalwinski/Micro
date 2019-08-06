@@ -8,6 +8,8 @@
 
 
 {% block body %}
+    <input id="session-loop-number" type="hidden" value="{{ app.session.get('loop-number')  }}">
+    {{ app.session.set('loop-number', 0 )  }}
     <!-- Content header -->
     <div class="content-header row">
         <div class="content-header-left col-md-6 col-12">
@@ -201,22 +203,22 @@
     <!-- Inspected devices section-->
 
     {% for key, loopDev in loopDevs %}
-        <section class="row all-contacts">
+        <section id="loop-number-{{ key + 1 }}" class="row all-contacts">
             <div class="col-12">
                 <div class="card">
                     <div class="card-head">
                         <div class="card-header">
                             <h4 class="card-title">Pętla Numer {{ key + 1 }}
-                            {%  if loopNullDevs[key] is not empty %}
-                                <a>&nbsp</a>
-                                <a data-toggle="tooltip"
-                                            title="Do tej pętli zostały dodane nowe urzadzenia - kliknij żeby je dodać do dokumentu"
-                                            class="warning mr-1 "
-                                ><i
-                                            class="la la-exclamation-triangle "></i>Nowe urządzenia w pętli
+                                {% if loopNullDevs[key] is not empty %}
+                                    <a>&nbsp</a>
+                                    <a data-toggle="tooltip"
+                                       title="Do tej pętli zostały dodane nowe urzadzenia - kliknij żeby je dodać do dokumentu"
+                                       class="warning mr-1 "
+                                    ><i
+                                                class="la la-exclamation-triangle "></i>Nowe urządzenia w pętli
 
-                                </a>
-                            {%  endif %}
+                                    </a>
+                                {% endif %}
                             </h4>
                         </div>
                     </div>
@@ -250,9 +252,10 @@
 
 
                                             <td class="text-center">
-                                               {{ device.inspectedDevices|first.number }}
+                                                {{ device.inspectedDevices|first.number }}
                                             </td>
-                                            <td id="shortname-{{ device.inspectedDevices|first.id }}" class="text-center" >
+                                            <td id="shortname-{{ device.inspectedDevices|first.id }}"
+                                                class="text-center">
                                                 {{ device.inspectedDevices|first.shortname }}
                                             </td>
                                             <td class="text-center">
@@ -355,7 +358,8 @@
                                                             class="la la-exclamation-triangle"></i>
 
                                                 </a>
-                                                <a data-toggle="tooltip" id="update-{{ device.inspectedDevices|first.id }}"
+                                                <a data-toggle="tooltip"
+                                                   id="update-{{ device.inspectedDevices|first.id }}"
                                                         {% if device.shortname != device.inspectedDevices|first.shortname %}
                                                             title="Zaktualizuj typ urządzenia na {{ device.shortname }}"
                                                             class="warning mr-1 update-ins-device"
@@ -547,37 +551,37 @@
 
 {% endblock %}
 
-        {% block scripts %}
+{% block scripts %}
 
-            <!-- BEGIN: Page Vendor JS-->
-            <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
-            <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-switch.min.js') }}"></script>
-            {#<script src="{{ asset('app-assets/vendors/js/forms/toggle/switchery.min.js') }}"></script>#}
-            <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-checkbox.min.js') }}"></script>
-            <script src="{{ asset('app-assets/js/scripts/forms/switch.js') }}"></script>
-            <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}"></script>
-            <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.select.min.js') }}"></script>
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-switch.min.js') }}"></script>
+    {#<script src="{{ asset('app-assets/vendors/js/forms/toggle/switchery.min.js') }}"></script>#}
+    <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-checkbox.min.js') }}"></script>
+    <script src="{{ asset('app-assets/js/scripts/forms/switch.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.select.min.js') }}"></script>
 
-            <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.buttons.min.js') }}"></script>
-            <script src="{{ asset('app-assets/vendors/js/tables/datatable/buttons.bootstrap4.min.js') }}"></script>
-            <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.colVis.js') }}"></script>
-            <!-- BEGIN: Page Vendor JS-->
-            <script src="{{ asset('app-assets/js/core/libraries/jquery_ui/jquery-ui.min.js') }}"></script>
-            <!-- END: Page Vendor JS-->
+    <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/tables/datatable/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.colVis.js') }}"></script>
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="{{ asset('app-assets/js/core/libraries/jquery_ui/jquery-ui.min.js') }}"></script>
+    <!-- END: Page Vendor JS-->
 
-            <!-- END: Page Vendor JS-->
+    <!-- END: Page Vendor JS-->
 
-            <!-- BEGIN: Page JS-->
-            {#<script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>#}
-            <!-- END: Page JS-->
-
-
-            <!-- BEGIN: My JS-->
-            <script src="{{ asset('assets/js/fire-inspection.js') }}"></script>
-            <!-- END: My JS-->
+    <!-- BEGIN: Page JS-->
+    {#<script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>#}
+    <!-- END: Page JS-->
 
 
+    <!-- BEGIN: My JS-->
+    <script src="{{ asset('assets/js/fire-inspection.js') }}"></script>
+    <!-- END: My JS-->
 
 
 
-        {% endblock %}
+
+
+{% endblock %}

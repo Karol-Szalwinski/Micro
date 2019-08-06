@@ -386,6 +386,13 @@ $(document).on('click', '.update-ins-device ', function () {
     });
 });
 
-
+$(function() {
+    var loopNumber = $('#session-loop-number').val();
+    if (loopNumber > 0) {
+        $('html, body').animate({
+            scrollTop: $('#loop-number-' + loopNumber).offset().top
+        }, 1000);
+    }
+});
 
 
