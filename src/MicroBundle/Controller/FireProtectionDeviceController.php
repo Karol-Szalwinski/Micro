@@ -197,21 +197,22 @@ class FireProtectionDeviceController extends Controller
     public function updateFireProtectionDeviceAction(Request $request, $id, $loop, $number, $name, $serial, $address, $desc)
     {
         $em = $this->getDoctrine()->getManager();
-
+        //if we dont have id
         if ($id == "null") {
-
+        //try to search deleted device with the same number and loopdev
             $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['number' => $number, 'loopDev'=> $loop]);
 
-
+            //if found change status on undeleted
             if ($fireProtectionDevice instanceof FireProtectionDevice) {
                 $fireProtectionDevice->setDel(false);
+                //if not we create a new object
             } else {
                 $fireProtectionDevice = new FireProtectionDevice();
 
                 $loopDev = $em->getRepository('MicroBundle:LoopDev')->findOneBy(['id' => $loop]);
                 $loopDev->addFireProtectionDevice($fireProtectionDevice);
 
-                $fireProtectionDevice->setLoopDev($loop);
+                $fireProtectionDevice->setLoopDev($loopDev);
                 $fireProtectionDevice->setnumber($number);
             }
 
@@ -230,10 +231,11 @@ class FireProtectionDeviceController extends Controller
             $fireProtectionDevice->setShortname($shortname);
 
         }
-     //get loop id if it possible
+        //get loop id
         $loopid = $fireProtectionDevice->getLoopDev()->getId();
 
-    //chane nulles on ""
+    //prepare to serialization
+        //chane nulles on ""
         $serial = ($serial == "null") ? "" : $serial;
         $address = ($address == "null") ? "" : $address;
         $desc = ($desc == "null") ? "" : $desc;
@@ -245,7 +247,7 @@ class FireProtectionDeviceController extends Controller
         $em->flush();
 
 
-//remove refference
+        //remove refference
         $fireProtectionDevice->removeAllInspectedDevices()->setLoopDev(null);
 
 
