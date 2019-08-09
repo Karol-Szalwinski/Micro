@@ -1,4 +1,3 @@
-
 //set same value name and shortname in form
 $("#microbundle_fireprotectiondevice_name").on("click", function () {
     $("#microbundle_fireprotectiondevice_shortname").val($(this).val());
@@ -84,7 +83,6 @@ $(document).on('click', '.edit-row', function () {
 //END: AJAX get object device -->
 
 
-
 //BEGIN: set loop id to add form -->
 
 $(document).ready(function () {
@@ -93,7 +91,6 @@ $(document).ready(function () {
         $('#microbundle_fireprotectiondevice_loopDev').val(loop);
     });
 });
-
 
 
 //END: set loop id to add form -->
@@ -233,7 +230,7 @@ function deleteDevice(id) {
         success: function (data) {
             var id = data['id'];
             var loop = data['loop'];
-            $('#row-' + loop + '-' + id ).remove();
+            $('#row-' + loop + '-' + id).remove();
         },
         error: function () {
             alert('Błąd delete device');
@@ -246,7 +243,7 @@ function deleteDevice(id) {
 //BEGIN: Sweet alert delete device-->
 
 
-$(document).on('click', '.cancel-delete', function(){
+$(document).on('click', '.cancel-delete', function () {
     var id = this.id.substr(7);
     alert(id);
     swal({
@@ -271,12 +268,84 @@ $(document).on('click', '.cancel-delete', function(){
         }
     })
         .then((isConfirm) => {
-        if (isConfirm) {
-            deleteDevice(id);
-            swal("Usunięte!", "Tego urządzenia już nie zobaczysz.", "success");
-        } else {
-            swal("Anulowano", "Twoje urządzenie pozostało", "error");
+            if (isConfirm) {
+                deleteDevice(id);
+                swal("Usunięte!", "Tego urządzenia już nie zobaczysz.", "success");
+            } else {
+                swal("Anulowano", "Twoje urządzenie pozostało", "error");
+            }
+        })
+
+});
+
+//BEGIN: AJAX set loop as deleted-->
+
+
+function deleteLoopDev(id) {
+
+    $.ajax({
+        url: '../loopdev/delete-loopdev/' + id,
+        type: 'POST',
+        dataType: 'json',
+        async: true,
+
+        success: function (data) {
+            if (data['success'] === true) {
+                swal("Usunięte!", "Tej pętli już nie zobaczysz w budynku.", "success");
+                $('#section-' + id).remove();
+
+            } else {
+                var errorlast = (data['error-last']) ? " Nie jest to ostatnia pętla w budynku." : "";
+                var errorempty = (data['error-empty']) ? "  Pętla posiada urządzenia." : "";
+                swal("Błąd", "Niestety nie udało się usunąć pętli. " + errorlast + errorempty, "error");
+            }
+        },
+        error: function () {
+            swal("Błąd", "Twoje pętla pozostała", "error");
+        }
+
+    });
+
+
 }
-})
+
+
+//END: AJAX set device as deleted-->
+
+//BEGIN: Sweet alert delete device-->
+
+
+$(document).on('click', '.delete-loop-button', function () {
+    var id = this.id.substr(11);
+    swal({
+        title: "Jesteś pewny?",
+        text: "Chcesz usunąć tą pętlę z budynku?",
+        icon: "warning",
+        buttons: {
+            cancel: {
+                text: "Nie, rozmyśliłem się",
+                value: null,
+                visible: true,
+                className: "",
+                closeModal: false,
+            },
+            confirm: {
+                text: "Tak, usuń tą pętlę!",
+                value: true,
+                visible: true,
+                className: "",
+                closeModal: false,
+            }
+        }
+    })
+        .then((isConfirm) => {
+
+            if (isConfirm) {
+                deleteLoopDev(id);
+
+            } else {
+                swal("Anulowano", "Twoje pętla pozostała", "error");
+            }
+        })
 
 });

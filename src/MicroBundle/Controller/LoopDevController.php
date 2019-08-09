@@ -5,7 +5,9 @@ namespace MicroBundle\Controller;
 use MicroBundle\Entity\LoopDev;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Loopdev controller.
@@ -99,38 +101,35 @@ class LoopDevController extends Controller
     }
 
     /**
-     * Deletes a loopDev entity.
-     *
-     * @Route("/{id}", name="loopdev_delete")
-     * @Method("DELETE")
+     * Add or Update Fire Protection Device
+     * @Method({"GET", "POST"})
+     * @Route("/delete-loopdev/{id}")
+     * @param Request $request
+     * @param $id
+     * @return JsonResponse
      */
-    public function deleteAction(Request $request, LoopDev $loopDev)
+    public function deleteLoopDevAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($loopDev);
-        $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($loopDev);
+        $loopDev = $em->getRepository('MicroBundle:LoopDev')->findOneBy(['id' => $id]);
+        $success = false;
+        $errorLast = !$loopDev->isLastNotDeleted();
+        $errorEmpty = !$loopDev->hasNotUndeletedDevices();
+        if(!$errorLast && !$errorEmpty) {
+            $loopDev->setDel(true);
             $em->flush();
+            $success = true;
+        };
+
+        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+
+            $jsonData['id'] = $id;
+            $jsonData['success'] = $success;
+            $jsonData['error-last'] = $errorLast;
+            $jsonData['error-empty'] = $errorEmpty;
+
+            return new JsonResponse($jsonData);
         }
-
-        return $this->redirectToRoute('loopdev_index');
-    }
-
-    /**
-     * Creates a form to delete a loopDev entity.
-     *
-     * @param LoopDev $loopDev The loopDev entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(LoopDev $loopDev)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('loopdev_delete', array('id' => $loopDev->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
     }
 }

@@ -97,126 +97,120 @@
     </section>
 
     {% for loopDev in building.loopDevs|sort %}
+        {% if loopDev.del %}
+        {% else %}
+            <section id="section-{{ loopDev.id }}" class="row all-contacts" >
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-head">
+                            <div class="card-header">
+                                <h4 class="card-title">Pętla urządzeń nr {{ loopDev.number }}</h4>
+                                <div class="heading-elements mt-0">
+                                    <button id="add-button-{{ loopDev.id }}"
+                                            class="btn btn-primary btn-sm add-device-button " data-toggle="modal"
+                                            data-target="#AddDeviceModal">
+                                        <i class="d-md-none d-block ft-plus white"></i>
+                                        <span class="d-md-block d-none ">Dodaj nowe urządzenie</span>
+                                    </button>
+                                    <button id="del-button-{{ loopDev.id }}"
+                                            class="btn btn-secondary btn-sm delete-loop-button">
+                                        <i class="d-md-none d-block ft-plus white"></i>
+                                        <span class="d-md-block d-none ">Usuń pętlę</span>
+                                    </button>
 
-        <section class="row all-contacts">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-head">
-                        <div class="card-header">
-                            <h4 class="card-title">Pętla urządzeń nr {{ loopDev.number }}</h4>
-                            <div class="heading-elements mt-0">
-                                <button id="add-button-{{ loopDev.id }}"
-                                        class="btn btn-primary btn-sm add-device-button " data-toggle="modal"
-                                        data-target="#AddDeviceModal">
-                                    <i class="d-md-none d-block ft-plus white"></i>
-                                    <span class="d-md-block d-none ">Dodaj nowe urządzenie</span>
-                                </button>
 
-
-                                <span class="dropdown">
-                                                <button id="btnSearchDrop1" type="button" data-toggle="dropdown"
-                                                        aria-haspopup="true" aria-expanded="true"
-                                                        class="btn btn-warning dropdown-toggle dropdown-menu-right btn-sm"><i
-                                                            class="ft-download-cloud white"></i></button>
-                                                <span aria-labelledby="btnSearchDrop1"
-                                                      class="dropdown-menu mt-1 dropdown-menu-right">
-                                                    <a href="#" class="dropdown-item"><i
-                                                                class="ft-upload"></i> Import</a>
-                                                    <a href="#" class="dropdown-item"><i class="ft-download"></i> Export</a>
-                                                    <a href="#" class="dropdown-item"><i class="ft-shuffle"></i> Find Duplicate</a>
-                                                </span>
-                                            </span>
-                                <button class="btn btn-default btn-sm"><i class="ft-settings white"></i></button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-content">
-                        <div class="card-body">
+                        <div class="card-content">
+                            <div class="card-body">
 
-                            <!-- Device List table -->
-                            {#<button type="button" class="btn btn-sm btn-danger delete-all mb-1">Usuń Wszystkie</button>#}
-                            <div class="table-responsive">
-                                <table
-                                        class=" devices-table table table-white-space table-sm table-bordered row-grouping display no-wrap icheck table-middle text-center">
-                                    <thead>
+                                <!-- Device List table -->
+                                {#<button type="button" class="btn btn-sm btn-danger delete-all mb-1">Usuń Wszystkie</button>#}
+                                <div class="table-responsive">
+                                    <table
+                                            class=" devices-table table table-white-space table-sm table-bordered row-grouping display no-wrap icheck table-middle text-center">
+                                        <thead>
 
-                                    <tr>
-                                        <th>Nr</th>
-                                        <th>Nazwa</th>
-                                        <th>Skrót</th>
-                                        <th>Serial</th>
-                                        <th>Adress</th>
-                                        <th>Opis</th>
-                                        <th>Ostatni przegląd</th>
-                                        <th>Akcje</th>
-                                    </tr>
+                                        <tr>
+                                            <th>Nr</th>
+                                            <th>Nazwa</th>
+                                            <th>Skrót</th>
+                                            <th>Serial</th>
+                                            <th>Adress</th>
+                                            <th>Opis</th>
+                                            <th>Ostatni przegląd</th>
+                                            <th>Akcje</th>
+                                        </tr>
 
-                                    </thead>
-                                    <tbody id="tbody-{{ loopDev.id }}">
-                                    {% for device in loopDev.fireProtectionDevices|sort %}
-                                        {% if device.del != true %}
-                                            <tr id="row-{{ loopDev.id }}-{{ device.id }}">
-                                                <td class="text-center">
-                                                    <a class="text-center"
-                                                       id="number-{{ device.id }}">{{ device.number }}</a>
-                                                </td>
-                                                <td class="text-center">
-                                                    <a class="text-center"
-                                                       id="name-{{ device.id }}">{{ device.name }}</a>
-                                                </td>
-                                                <td class="text-center">
-                                                    <a class="text-center "
-                                                       id="shortname-{{ device.id }}">{{ device.shortname }}</a>
-                                                </td>
-                                                <td class="text-center">
-                                                    <a class="text-center "
-                                                       id="serial-{{ device.id }}">{{ device.serial }}</a>
-                                                </td>
-                                                <td class="text-center">
-                                                    <a class="text-center "
-                                                       id="address-{{ device.id }}">{{ device.address }}</a>
-                                                </td>
-                                                <td class="text-center">
-                                                    <a class="text-center "
-                                                       id="desc-{{ device.id }}">{{ device.desc }}</a>
-                                                </td>
-                                                <td class="text-center">
-                                                    <a class="timeline-date">
-                                                        {{ device.lastServiceDate is empty ? "Brak" : device.lastServiceDate| date('Y/m/d') }}
-                                                    </a>
-                                                </td>
+                                        </thead>
+                                        <tbody id="tbody-{{ loopDev.id }}">
+                                        {% for device in loopDev.fireProtectionDevices|sort %}
+                                            {% if device.del != true %}
+                                                <tr id="row-{{ loopDev.id }}-{{ device.id }}">
+                                                    <td class="text-center">
+                                                        <a class="text-center"
+                                                           id="number-{{ device.id }}">{{ device.number }}</a>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <a class="text-center"
+                                                           id="name-{{ device.id }}">{{ device.name }}</a>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <a class="text-center "
+                                                           id="shortname-{{ device.id }}">{{ device.shortname }}</a>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <a class="text-center "
+                                                           id="serial-{{ device.id }}">{{ device.serial }}</a>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <a class="text-center "
+                                                           id="address-{{ device.id }}">{{ device.address }}</a>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <a class="text-center "
+                                                           id="desc-{{ device.id }}">{{ device.desc }}</a>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <a class="timeline-date">
+                                                            {{ device.lastServiceDate is empty ? "Brak" : device.lastServiceDate| date('Y/m/d') }}
+                                                        </a>
+                                                    </td>
 
-                                                <td>
-                                                    <a data-toggle="modal" data-target="#EditDeviceModal"
-                                                       id="edit-{{ device.id }}"
-                                                       class="primary edit-row mr-1"><i class="la la-pencil"></i></a>
-                                                    <a id="delete-{{ device.id }}"
-                                                       class="danger delete-row mr-1 cancel-delete"><i
-                                                                class="la la-trash-o"></i></a>
+                                                    <td>
+                                                        <a data-toggle="modal" data-target="#EditDeviceModal"
+                                                           id="edit-{{ device.id }}"
+                                                           class="primary edit-row mr-1"><i
+                                                                    class="la la-pencil"></i></a>
+                                                        <a id="delete-{{ device.id }}"
+                                                           class="danger delete-row mr-1 cancel-delete"><i
+                                                                    class="la la-trash-o"></i></a>
 
-                                                </td>
-                                            </tr>
-                                        {% endif %}
-                                    {% endfor %}
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <th>Nr</th>
-                                        <th>Nazwa</th>
-                                        <th>Skrót</th>
-                                        <th>Serial</th>
-                                        <th>Adress</th>
-                                        <th>Opis</th>
-                                        <th>Ostatni przegląd</th>
-                                        <th>Akcje</th>
-                                    </tfoot>
-                                </table>
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                        </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <th>Nr</th>
+                                            <th>Nazwa</th>
+                                            <th>Skrót</th>
+                                            <th>Serial</th>
+                                            <th>Adress</th>
+                                            <th>Opis</th>
+                                            <th>Ostatni przegląd</th>
+                                            <th>Akcje</th>
+                                        </tfoot>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        {% endif %}
     {% else %}
         <div>brak</div>
     {% endfor %}

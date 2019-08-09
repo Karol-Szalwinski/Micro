@@ -82,19 +82,21 @@ class FireInspectionController extends Controller
             //add InspectedDevice to document
             $loopDevs = $building->getLoopDevs();
             foreach ($loopDevs as $loopDev) {
-                foreach ($loopDev->getFireProtectionDevices() as $device) {
-                    if (!$device->getDel()) {
-                        $inspectedDevices = new InspectedDevice();
-                        $inspectedDevices->setNumber($device->getNumber());
-                        $inspectedDevices->setShortname($device->getShortname());
+                if (!$loopDev->getDel()) {
+                    foreach ($loopDev->getFireProtectionDevices() as $device) {
+                        if (!$device->getDel()) {
+                            $inspectedDevices = new InspectedDevice();
+                            $inspectedDevices->setNumber($device->getNumber());
+                            $inspectedDevices->setShortname($device->getShortname());
 
-                        $inspectedDevices->setFireProtectionDevice($device);
-                        $device->addInspectedDevice($inspectedDevices);
+                            $inspectedDevices->setFireProtectionDevice($device);
+                            $device->addInspectedDevice($inspectedDevices);
 
-                        $inspectedDevices->setFireInspection($fireInspection);
-                        $fireInspection->addInspectedDevice($inspectedDevices);
+                            $inspectedDevices->setFireInspection($fireInspection);
+                            $fireInspection->addInspectedDevice($inspectedDevices);
 
-                        $em->persist($inspectedDevices);
+                            $em->persist($inspectedDevices);
+                        }
                     }
                 }
 
@@ -131,10 +133,7 @@ class FireInspectionController extends Controller
         }
 
 
-        return $this->render('fireinspection/show.html.twig', array(
-            'fireInspection' => $fireInspection,
-            'loopDevs' => $loopDevs,
-            'loopNullDevs' => $loopNullDevs));
+        return $this->render('fireinspection/show.html.twig', array('fireInspection' => $fireInspection, 'loopDevs' => $loopDevs, 'loopNullDevs' => $loopNullDevs));
     }
 
     /**
@@ -217,7 +216,6 @@ class FireInspectionController extends Controller
     }
 
 
-
     /**
      * Finds and displays a fireInspection entity.
      *
@@ -233,26 +231,26 @@ class FireInspectionController extends Controller
 
                 $loopNullDev = $em->getRepository('MicroBundle:FireInspection')->findNullDevicesByFireInspection($fireInspection->getId(), $loop->getId());
                 foreach ($loopNullDev as $arrayDevice) {
-                     $device = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['id' => $arrayDevice['id']]);
+                    $device = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['id' => $arrayDevice['id']]);
                     $this->addInspectedDevice($fireInspection, $device);
                 }
             }
 
-        }
-        else {
-        $device = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['id' => $deviceId]);
+        } else {
+            $device = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['id' => $deviceId]);
 
-        $this->addInspectedDevice($fireInspection, $device);
+            $this->addInspectedDevice($fireInspection, $device);
 
-        //set loop number in session
-        $this->get('session')->set('loop-number', $device->getLoopDev()->getNumber());
+            //set loop number in session
+            $this->get('session')->set('loop-number', $device->getLoopDev()->getNumber());
         }
 
 
         return $this->redirectToRoute('fireinspection_show', array('id' => $fireInspection->getId()));
     }
 
-    private function addInspectedDevice(FireInspection $fireInspection, FireProtectionDevice $device){
+    private function addInspectedDevice(FireInspection $fireInspection, FireProtectionDevice $device)
+    {
         $em = $this->getDoctrine()->getManager();
         $inspectedDevices = new InspectedDevice();
         $inspectedDevices->setNumber($device->getNumber());

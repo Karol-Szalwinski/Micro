@@ -77,7 +77,6 @@ class FireProtectionDevice
      */
     private $del;
 
-
     /**
      * @var \DateTime|null
      *

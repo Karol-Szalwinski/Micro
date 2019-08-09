@@ -43,10 +43,7 @@ class BuildingController extends Controller
     public function newAction(Client $client, Request $request)
     {
         $building = new Building();
-        $building->setDeviceShortlistPosition(
-          "Centrala NAZWA \nCzujki optyczne dymu\nCzujki termiczne\nSygnalizatory optyczno-akustyczne\n" .
-           "Ręczne ostrzegacze pożarowe\nDrukarki termiczne"
-        );
+        $building->setDeviceShortlistPosition("Centrala NAZWA \nCzujki optyczne dymu\nCzujki termiczne\nSygnalizatory optyczno-akustyczne\n" . "Ręczne ostrzegacze pożarowe\nDrukarki termiczne");
         $form = $this->createForm('MicroBundle\Form\BuildingType', $building);
         $form->handleRequest($request);
 
@@ -71,11 +68,10 @@ class BuildingController extends Controller
      */
     public function showAction(Building $building, Request $request)
     {
-        $deleteForm = $this->createDeleteForm($building);
 
         $loopDev = new LoopDev();
         //setting new loop number
-        $loopDev->setNumber($building->getLoopDevs()->count() + 1);
+        $loopDev->setNumber($building->countLoopDevsWithoutDel() + 1);
         $loopForm = $this->createForm('MicroBundle\Form\LoopDevType', $loopDev);
         $loopForm->handleRequest($request);
 
@@ -86,33 +82,55 @@ class BuildingController extends Controller
 
         //Form to add Loop
         if ($loopForm->isSubmitted() && $loopForm->isValid()) {
-
-            $building->addLoopDev($loopDev);
-            $loopDev->setBuilding($building);
+            $quantityDevices = $loopDev->getQuantityDevices();
 
             $em = $this->getDoctrine()->getManager();
+//check if loopDev exist
+            $loopOldDev = $em->getRepository('MicroBundle:LoopDev')->findOneBy(['building' => $building->getId(), 'number' => $loopDev->getNumber()]);
 
-            for ($i = 1; $i <= $loopDev->getQuantityDevices(); $i++) {
-                $fireProtectionDevice = new FireProtectionDevice();
-                $fireProtectionDevice->setNumber($i);
-                $fireProtectionDevice->setLoopDev($loopDev);
-                $loopDev->addFireProtectionDevice($fireProtectionDevice);
-                $em->persist($fireProtectionDevice);
+            if ($loopOldDev instanceof LoopDev) {
+                $loopDev = $loopOldDev;
+                $loopDev->setDel(false);
+                for ($i = 1; $i <= $quantityDevices; $i++) {
+                    $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')
+                        ->findOneBy(['loopDev' => $loopDev->getId(), 'number' => $i]);
+                    if ($fireProtectionDevice instanceof FireProtectionDevice) {
+                        $fireProtectionDevice->setDel(false);
+
+                    }
+                    else {
+                        $fireProtectionDevice = new FireProtectionDevice();
+                        $fireProtectionDevice->setNumber($i);
+                        $fireProtectionDevice->setLoopDev($loopDev);
+                        $loopDev->addFireProtectionDevice($fireProtectionDevice);
+                        $em->persist($fireProtectionDevice);
+
+                    }
+                }
+
+            } else {
+                $building->addLoopDev($loopDev);
+                $loopDev->setBuilding($building);
+
+
+                for ($i = 1; $i <= $quantityDevices; $i++) {
+                    $fireProtectionDevice = new FireProtectionDevice();
+                    $fireProtectionDevice->setNumber($i);
+                    $fireProtectionDevice->setLoopDev($loopDev);
+                    $loopDev->addFireProtectionDevice($fireProtectionDevice);
+                    $em->persist($fireProtectionDevice);
+                }
+                $em->persist($loopDev);
             }
 
 
-            $em->persist($loopDev);
             $em->flush();
 
             return $this->redirectToRoute('building_show', array('id' => $building->getId()));
         }
         $this->container->get('micro')->updateLastServiceDate($building);
 
-        return $this->render('building/show.html.twig', array(
-            'building' => $building,
-            'form' => $addForm->createView(),
-            'loop_form' => $loopForm->createView(),
-            'edit_form' => $editForm->createView()));
+        return $this->render('building/show.html.twig', array('building' => $building, 'form' => $addForm->createView(), 'loop_form' => $loopForm->createView(), 'edit_form' => $editForm->createView()));
     }
 
     /**
