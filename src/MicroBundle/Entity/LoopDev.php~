@@ -190,4 +190,57 @@ class LoopDev
     {
         return $this->quantityDevices;
     }
+
+    /**
+     * Set del.
+     *
+     * @param bool $del
+     *
+     * @return LoopDev
+     */
+    public function setDel($del)
+    {
+        $this->del = $del;
+
+        return $this;
+    }
+
+    /**
+     * Get del.
+     *
+     * @return bool
+     */
+    public function getDel()
+    {
+        return $this->del;
+    }
+
+
+    public function isLastNotDeleted()
+    {
+
+        foreach ($this->getBuilding()->getLoopDevs() as $loopDev) {
+
+            if ($loopDev->getDel() == false && $loopDev->getNumber() > $this->getNumber()) {
+                return false;
+            }
+
+        }
+        return true;
+    }
+
+    public function hasNotUndeletedDevices()
+    {
+
+        foreach ($this->fireProtectionDevices as $device) {
+
+            if ($device->getDel() == false) {
+                return false;
+            }
+
+        }
+        return true;
+    }
+
+
 }

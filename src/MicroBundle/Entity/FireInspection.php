@@ -50,6 +50,13 @@ class FireInspection
     private $nextInspectionDate;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="nextInspectionForMonth", type="integer", nullable=true)
+     */
+    private $nextInspectionForMonth;
+
+    /**
      * One FireInspections has Many DocumentInspectors.
      * @ORM\OneToMany(targetEntity="DocumentInspector", mappedBy="fireInspection", cascade={"persist"})
      */
@@ -510,5 +517,29 @@ class FireInspection
     public function getTestPositions()
     {
         return $this->testPositions;
+    }
+
+    /**
+     * Set nextInspectionForMonth.
+     *
+     * @param int $nextInspectionForMonth
+     *
+     * @return FireInspection
+     */
+    public function setNextInspectionForMonth($nextInspectionForMonth)
+    {
+        $this->nextInspectionForMonth = $nextInspectionForMonth;
+
+        return $this;
+    }
+
+    /**
+     * Get nextInspectionForMonth.
+     *
+     * @return int
+     */
+    public function getNextInspectionForMonth()
+    {
+        return $this->nextInspectionForMonth;
     }
 }

@@ -405,4 +405,18 @@ class Building
     {
         return $this->deviceShortlistPosition;
     }
+
+    /**
+     * @return int
+     */
+    public function countLoopDevsWithoutDel()
+    {
+        $count = 0;
+        foreach ($this->loopDevs as $loopDev) {
+            if (!$loopDev->getDel()) {
+                $count++;
+            }
+        }
+        return $count;
+    }
 }

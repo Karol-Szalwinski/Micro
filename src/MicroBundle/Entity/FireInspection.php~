@@ -50,6 +50,13 @@ class FireInspection
     private $nextInspectionDate;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="nextInspectionForMonth", type="integer")
+     */
+    private $nextInspectionForMonth;
+
+    /**
      * One FireInspections has Many DocumentInspectors.
      * @ORM\OneToMany(targetEntity="DocumentInspector", mappedBy="fireInspection", cascade={"persist"})
      */

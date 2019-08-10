@@ -72,7 +72,14 @@
                                 <div class="form-group row">
                                     {{ form_label(form.inspectionDate, 'Data przegladu', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-3">
-                                        {{ form_widget(form.inspectionDate, { 'attr': {'class': 'form-control'} }) }}
+                                        {{ form_widget(form.inspectionDate, { 'attr': {'class': 'form-control '} }) }}
+
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(form.nextInspectionForMonth, 'Przedział czasowy', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9">
+                                        {{ form_widget(form.nextInspectionForMonth, { 'attr': {'class': 'form-control mr-3'} }) }}
 
                                     </div>
                                 </div>
@@ -152,14 +159,55 @@
             };
         });
     </script>
-//autocheck all checkboxes
-    <script>
-        $(':checkbox').next().addClass('pr-2');
-        $(':checkbox').each(function() {
-            this.checked = true;
 
+    <script>
+        $(':checkbox').next().addClass('pr-2'); // css refactor
+        $(':radio').next().addClass('pr-2'); //css refactor
+        $(':checkbox').each(function() {  //autocheck all checkboxes
+            this.checked = true;
 
         });
     </script>
+
+    <script>
+        function changeNextDate() {
+            var setDateVal = $('#microbundle_fireinspection_inspectionDate').val();
+            var setDate = new Date(setDateVal);
+            var nextDate = $('#microbundle_fireinspection_nextInspectionDate');
+            switch($("input[type='radio']:checked").val()) {
+                case '' :
+                    nextDate.prop( "disabled", false );
+                    break;
+                case '3' :
+                    setDate.setMonth(setDate.getMonth() + 3);
+                    nextDate.val(setDate.toISOString().split('T')[0]);
+                    nextDate.prop( "disabled", true );
+                    break;
+                case '6' :
+                    setDate.setMonth(setDate.getMonth() + 6);
+                    nextDate.val(setDate.toISOString().split('T')[0]);
+                    nextDate.prop( "disabled", true );
+                    break;
+                case '12' :
+                    setDate.setMonth(setDate.getMonth() + 12);
+                    nextDate.val(setDate.toISOString().split('T')[0]);
+                    nextDate.prop( "disabled", true );
+                    break;
+            }
+
+        }
+
+
+        $(document).on('change', 'input[type=radio]', function (event) {
+            changeNextDate()
+        });
+        $(document).on('change', '#microbundle_fireinspection_inspectionDate', function (event) {
+            changeNextDate()
+        });
+    </script>
+
+
+
+
     <!-- END: Page JS-->
 {% endblock %}
