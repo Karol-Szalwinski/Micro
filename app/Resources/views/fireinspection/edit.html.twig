@@ -77,9 +77,16 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    {{ form_label(edit_form.nextInspectionForMonth, 'Przedział czasowy', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9">
+                                        {{ form_widget(edit_form.nextInspectionForMonth, { 'attr': {'class': 'form-control mr-3'} }) }}
+
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     {{ form_label(edit_form.nextInspectionDate, 'Data następnego przeglądu', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-3 ">
-                                        {{ form_widget(edit_form.nextInspectionDate, { 'attr': {'class': 'form-control pickadate datepicker'} }) }}
+                                        {{ form_widget(edit_form.nextInspectionDate, { 'attr': {'class': 'form-control '} }) }}
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -129,42 +136,15 @@
     </section>
 
 
-
-
 {% endblock %}
 
 {% block scripts %}
     <!-- BEGIN: Page JS-->
     <script src="{{ asset('app-assets/vendors/js/forms/extended/inputmask/jquery.inputmask.bundle.min.js') }}"></script>
     <script src="{{ asset('app-assets/js/scripts/forms/extended/form-inputmask.js') }}"></script>
-
-
-    <script>
-        $("#microbundle_fireinspection_inspectionDate").get(0).type = 'date';
-        $("#microbundle_fireinspection_nextInspectionDate").get(0).type = 'date';
-        //autosize textarea
-        $("textarea").keyup(function(e) {
-            while($(this).outerHeight() < this.scrollHeight + parseFloat($(this).css("borderTopWidth"))
-            + parseFloat($(this).css("borderBottomWidth"))) {
-                $(this).height($(this).height()+1);
-            };
-        });
-    </script>
-
-    //change checkbox label margin
-    <script>
-        $(':checkbox').next().addClass('pr-2');
-
-
-    </script>
-
-    //autocheck all checkboxes
-    <script>
-        $(':checkbox').each(function() {
-            this.checked = true;
-
-
-        });
-    </script>
     <!-- END: Page JS-->
+
+    <!-- BEGIN: My JS-->
+    <script src="{{ asset('assets/js/fire-inspection-forms.js') }}"></script>
+    <!-- END: My JS-->
 {% endblock %}

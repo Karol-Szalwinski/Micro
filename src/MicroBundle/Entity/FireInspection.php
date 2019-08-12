@@ -45,7 +45,7 @@ class FireInspection
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="nextInspectionDate", type="datetime")
+     * @ORM\Column(name="nextInspectionDate", type="datetime", nullable=true)
      */
     private $nextInspectionDate;
 

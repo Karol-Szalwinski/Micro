@@ -86,7 +86,7 @@
                                 <div class="form-group row">
                                     {{ form_label(form.nextInspectionDate, 'Data następnego przeglądu', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-3">
-                                        {{ form_widget(form.nextInspectionDate, { 'attr': {'class': 'form-control pickadate datepicker'} }) }}
+                                        {{ form_widget(form.nextInspectionDate, { 'attr': {'class': 'form-control '} }) }}
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -146,68 +146,10 @@
     <!-- BEGIN: Page JS-->
     <script src="{{ asset('app-assets/vendors/js/forms/extended/inputmask/jquery.inputmask.bundle.min.js') }}"></script>
     <script src="{{ asset('app-assets/js/scripts/forms/extended/form-inputmask.js') }}"></script>
-
-
-    <script>
-        $("#microbundle_fireinspection_inspectionDate").get(0).type = 'date';
-        $("#microbundle_fireinspection_nextInspectionDate").get(0).type = 'date';
-        //autosize textarea
-        $("textarea").keyup(function(e) {
-            while($(this).outerHeight() < this.scrollHeight + parseFloat($(this).css("borderTopWidth"))
-            + parseFloat($(this).css("borderBottomWidth"))) {
-                $(this).height($(this).height()+1);
-            };
-        });
-    </script>
-
-    <script>
-        $(':checkbox').next().addClass('pr-2'); // css refactor
-        $(':radio').next().addClass('pr-2'); //css refactor
-        $(':checkbox').each(function() {  //autocheck all checkboxes
-            this.checked = true;
-
-        });
-    </script>
-
-    <script>
-        function changeNextDate() {
-            var setDateVal = $('#microbundle_fireinspection_inspectionDate').val();
-            var setDate = new Date(setDateVal);
-            var nextDate = $('#microbundle_fireinspection_nextInspectionDate');
-            switch($("input[type='radio']:checked").val()) {
-                case '' :
-                    nextDate.prop( "disabled", false );
-                    break;
-                case '3' :
-                    setDate.setMonth(setDate.getMonth() + 3);
-                    nextDate.val(setDate.toISOString().split('T')[0]);
-                    nextDate.prop( "disabled", true );
-                    break;
-                case '6' :
-                    setDate.setMonth(setDate.getMonth() + 6);
-                    nextDate.val(setDate.toISOString().split('T')[0]);
-                    nextDate.prop( "disabled", true );
-                    break;
-                case '12' :
-                    setDate.setMonth(setDate.getMonth() + 12);
-                    nextDate.val(setDate.toISOString().split('T')[0]);
-                    nextDate.prop( "disabled", true );
-                    break;
-            }
-
-        }
-
-
-        $(document).on('change', 'input[type=radio]', function (event) {
-            changeNextDate()
-        });
-        $(document).on('change', '#microbundle_fireinspection_inspectionDate', function (event) {
-            changeNextDate()
-        });
-    </script>
-
-
-
-
     <!-- END: Page JS-->
+    <!-- BEGIN: My JS-->
+    <script src="{{ asset('assets/js/fire-inspection-forms.js') }}"></script>
+    <!-- END: My JS-->
+
+
 {% endblock %}
