@@ -279,6 +279,7 @@ $('.inspected-devices-table').DataTable({
     ,
     "paging": false,
 });
+
 // $( ".animation-dialog-btn" ).on("click",function(){
 //     $( ".animation-dialog" ).dialog("open");
 // });

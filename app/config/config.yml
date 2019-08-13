@@ -36,6 +36,8 @@ framework:
 twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+    globals:
+        pathToWeb: "%kernel.root_dir%/../web"
 
 # Doctrine Configuration
 doctrine:
@@ -83,4 +85,6 @@ fos_user:
     from_email:
         address: "%mailer_user%"
         sender_name: "%mailer_user%"
+
+
 

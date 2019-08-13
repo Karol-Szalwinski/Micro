@@ -12,6 +12,7 @@
         body {
             font-family: Georgia, "Times New Roman", Times, serif;
             font-size: 18px;
+            background-color: ivory;
         }
 
         .table-striped {
@@ -37,43 +38,13 @@
         / / Choose your own color here
         }
 
-        .header, .header-space,
-        .footer, .footer-space {
-            height: 120px;
-        }
-
-        .header {
-            position: fixed;
-            top: 0;
-        }
-
-        .footer {
-            position: fixed;
-            bottom: 0;
-        }
-
-        .logo {
-
-            top: 5px;
-        }
-
-        .logo2 {
-
-            top: 50px;
-        }
-
-        .pieczatka {
-
-            top: 10px;
-        }
-
-        hr {
-            display: block;
-            height: 1px;
-            background: transparent;
-            width: 100%;
-            border: none;
-            border-top: solid 1px #940e1f;
+        .vl {
+            border-left: solid 2px #940e1f;
+            height: 100%;
+            position: absolute;
+            left: 10px;
+            margin-left: -3px;
+            top: 0px;
         }
 
         @media print {
@@ -81,23 +52,23 @@
             .table-striped > tbody > tr:nth-child(odd) > th {
                 background-color: darkgrey !important;
                 -webkit-print-color-adjust: exact;
+
+            }
+
+            .page {
+                width: 100% !important;
+                height: 100% !important;
             }
         }
+
 
     </style>
 </head>
 
 <body>
-{% set page = 0 %}
+<div class="vl"></div>
 <!--------------------->
 <table class="col-sm-12">
-    <thead>
-    <tr>
-        <td>
-            <div class="header-space">&nbsp;</div>
-        </td>
-    </tr>
-    </thead>
     <tbody>
     <tr>
         <td>
@@ -211,11 +182,11 @@
                     <br>
                     <div class="row" style="page-break-inside: avoid">
                         <div class="col-sm-12">
-                            <p class="text-center" ><b>Tabela nr 1</b></p>
+                            <p class="text-center"><b>Tabela nr 1</b></p>
                             <table class="table table-bordered table-striped text-center col-sm-12 table-sm"
-                                   >
-                                <thead >
-                                <tr >
+                            >
+                                <thead>
+                                <tr>
                                     <th class="align-middle">L.p.</th>
                                     <th class="align-middle">Nr pętli</th>
                                     <th class="align-middle">Nr urządzena</th>
@@ -285,37 +256,8 @@
         </td>
     </tr>
     </tbody>
-    <tfoot>
-    <tr>
-        <td>
-            <div class="footer-space">&nbsp;</div>
-        </td>
-    </tr>
-    </tfoot>
+
 </table>
-<div class="header col-sm-12">
-
-    <img class="logo " src="{{ asset('assets/images/logo-micro.png') }}" width="90px"
-         height="90px"/>
-
-
-    <img class="logo2 " src="{{ asset('assets/images/logo2-micro.png') }}" width="250px"
-         height="25px"/>
-
-    <div class="float-right pieczatka">
-        <p
-                style="color:#000000;font-size:12px;"><b>MICRO-TECH Michał Łuczywek<br>ul. Senatorska 15<br>96-100
-                Skierniewice<br>NIP: 8361650077<br>tel.600830063</b></p>
-    </div>
-    <hr>
-</div>
-
-<div class="footer col-sm-12">
-    <hr>
-
-    <span class="center">www.microelektronik.pl  mail: michal.luczywek@gmail.com</span>
-
-</div>
 
 
 </body>

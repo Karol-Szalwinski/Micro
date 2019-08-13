@@ -44,14 +44,14 @@
                        href="{{ path('building_show', { 'id' : fireInspection.building.id }) }}"><i
                                 class="la la-backward"></i> Wróć do budynku</a>
 
-                    {#<a class="btn btn-outline-info round"#}
-                    {#href="{{ path('fire_inspection_pdf', { 'fireInspection' : fireInspection.id }) }}"><i#}
-                    {#class="la la-backward"></i> PDF</a>#}
+                    <a class="btn btn-outline-info round"
+                    href="{{ path('fire_inspection_pdf', { 'fireInspection' : fireInspection.id }) }}"><i
+                    class="la la-backward"></i> PDF</a>
                     {#<a class="btn btn-outline-info round"#}
                     {#href="{{ path('fire_inspection_print', { 'fireInspection' : fireInspection.id }) }}"><i#}
                     {#class="la la-backward"></i> Podgląd</a>#}
-                    <iframe src="{{ path('fire_inspection_print', { 'fireInspection' : fireInspection.id }) }}"
-                            name="frame" style="display: none"></iframe>
+                    {#<iframe src="{{ path('fire_inspection_print', { 'fireInspection' : fireInspection.id }) }}"#}
+                            {#name="frame" style="display: none"></iframe>#}
 
                     <button class="btn btn-outline-info round" type="submit" onclick="frames['frame'].print()"
                             value="Drukuj">
@@ -413,12 +413,6 @@
                 <div class="card-head">
                     <div class="card-header">
                         <h4 class="card-title">Tabela 2 - Pozostałe czynności</h4>
-                        {#<div class="heading-elements">#}
-                        {#<ul class="list-inline mb-0">#}
-                        {#<li><a class="btn btn-sm btn-danger box-shadow-2 round btn-min-width pull-right"#}
-                        {#href="#">Dodaj czynność</a></li>#}
-                        {#</ul>#}
-                        {#</div>#}
                     </div>
                 </div>
                 <div class="card-content">

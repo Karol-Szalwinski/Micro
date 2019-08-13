@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <title>Podgląd wydruku</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            /*height:30px;*/
+            /*overflow:hidden;*/
+            /*margin:10px;*/
+            /*padding:0;*/
+        }
+        .image-box {
+
+            float: left;
+            width: 66%;
+        }
+
+        .logo {
+            padding: 5px;
+            padding-left:25px;
+
+        }
+
+        .logo2 {
+            padding: 35px;
+
+        }
+
+        .address {
+
+            float: right;
+            width: 34%;
+            text-align: center;
+            margin-top: 10px;
+
+        }
+
+        .address > b {
+            color: #000000;
+            font-size: 11.5px;
+            padding: 0;
+        }
+
+        hr {
+            display: block;
+            height: 1px;
+            background: transparent;
+            width: 100%;
+            border: none;
+            border-top: solid 2px #940e1f;
+        }
+
+        .vl {
+            border-left: solid 2px #940e1f;
+            height: 100%;
+            position: absolute;
+            left: 10px;
+            margin-left: -3px;
+            top: 10px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="vl"></div>
+<div class="image-box">
+    <img class="logo" src="{{ pathToWeb }}/assets/images/logo-micro.png" width="90px"
+         height="90px"/>
+
+
+    <img class="logo2 " src="{{ pathToWeb }}/assets/images/logo2-micro.png" width="250px"
+         height="25px"/>
+</div>
+<div class="address">
+    <b>MICRO-TECH Michał Łuczywek<br>ul. Senatorska 15<br>96-100
+        Skierniewice<br>NIP: 8361650077<br>tel.600830063</b>
+</div>
+<hr>
+</div>
+</body>
+</html>
