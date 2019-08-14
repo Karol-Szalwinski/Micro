@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Mycompanies list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Street</th>
+                <th>Postcode</th>
+                <th>City</th>
+                <th>Taxnumber</th>
+                <th>Phoneno</th>
+                <th>Stamp</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for myCompany in myCompanies %}
+            <tr>
+                <td><a href="{{ path('mycompany_show', { 'id': myCompany.id }) }}">{{ myCompany.id }}</a></td>
+                <td>{{ myCompany.name }}</td>
+                <td>{{ myCompany.street }}</td>
+                <td>{{ myCompany.postCode }}</td>
+                <td>{{ myCompany.city }}</td>
+                <td>{{ myCompany.taxNumber }}</td>
+                <td>{{ myCompany.phoneNo }}</td>
+                <td>{{ myCompany.stamp }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('mycompany_show', { 'id': myCompany.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('mycompany_edit', { 'id': myCompany.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('mycompany_new') }}">Create a new myCompany</a>
+        </li>
+    </ul>
+{% endblock %}
