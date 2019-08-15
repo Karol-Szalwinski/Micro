@@ -2,6 +2,7 @@
 # https://symfony.com/doc/current/service_container.html
 parameters:
     micro.service.buildingupdate.class: MicroBundle\Services\BuildingUpdateService
+    micro.service.mycompany.class: MicroBundle\Services\MyCompanyService
     #parameter_name: value
 
 services:
@@ -21,7 +22,7 @@ services:
         resource: '../../src/MicroBundle/*'
         # you can exclude directories or files
         # but if a service is unused, it's removed anyway
-        exclude: '../../src/MicroBundle/{Entity,Repository,Tests}'
+        exclude: '../../src/MicroBundle/{Entity, Repository, Tests}'
 
     # controllers are imported separately to make sure they're public
     # and have a tag that allows actions to type-hint services
@@ -29,6 +30,9 @@ services:
         resource: '../../src/MicroBundle/Controller'
         public: true
         tags: ['controller.service_arguments']
+
+    MicroBundle\Repository\:
+        resource: '../../src/MicroBundle/Repository'
 
     # add more services, or override services that need manual wiring
     # MicroBundle\Service\ExampleService:
@@ -38,3 +42,9 @@ services:
         class: %micro.service.buildingupdate.class%
         arguments: ['@doctrine.orm.default_entity_manager']
         public: true
+
+    mycompany:
+        class: %micro.service.mycompany.class%
+        public: true
+
+

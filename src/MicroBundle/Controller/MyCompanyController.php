@@ -2,8 +2,7 @@
 
 namespace MicroBundle\Controller;
 
-use MicroBundle\Entity\MyCompany;
-use MicroBundle\Repository\MyCompanyRepository;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -20,12 +19,22 @@ class MyCompanyController extends Controller
     /**
      * Finds and displays a myCompany entity.
      *
-     * @Route("", name="mycompany_show")
+     * @Route("/show", name="mycompany_show")
      * @Method("GET")
      */
-    public function showAction(MyCompanyRepository $repository)
+    public function showAction()
     {
-        $myCompany = $repository->returnDefaultMyCompany();
+        $myCompany = $this->get('mycompany')->getOrCreateDefaultMyCompany();
+//        $myCompany = new Mycompany(
+//            '1',
+//            'Przykładowa nazwa',
+//            'Przykładowa ulica',
+//            '00-000',
+//            'Przykładowe miasto',
+//            'Numer NIP',
+//            '000-000-000'
+//        );
+
         return $this->render('mycompany/show.html.twig', array(
             'myCompany' => $myCompany,
         ));
@@ -37,15 +46,16 @@ class MyCompanyController extends Controller
      * @Route("/edit", name="mycompany_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, MyCompanyRepository $repository)
+    public function editAction(Request $request)
     {
-        $myCompany = $repository->returnDefaultMyCompany();
+        $serviceMyCompany = $this->get('mycompany');
+        $myCompany = $serviceMyCompany->getOrCreateDefaultMyCompany();
 
         $editForm = $this->createForm('MicroBundle\Form\MyCompanyType', $myCompany);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $serviceMyCompany->updateMyCompany($myCompany);
 
             return $this->redirectToRoute('mycompany_show');
         }
