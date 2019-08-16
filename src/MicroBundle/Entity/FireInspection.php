@@ -120,6 +120,13 @@ class FireInspection
      */
     private $building;
 
+    /**
+     * One FireInspection has One PdfSettings
+     * @ORM\OneToOne(targetEntity="PdfSettings", inversedBy="fireInspection", cascade={"persist"})
+     * @ORM\JoinColumn(name="pdf_settings_id", referencedColumnName="id")
+     */
+    private $pdfSettings;
+
 
 
     /**
@@ -132,6 +139,7 @@ class FireInspection
         $this->inspectedDevices = new \Doctrine\Common\Collections\ArrayCollection();
         $this->inspectionDate = new \DateTime();
         $this->nextInspectionDate = new \DateTime('now + 6 month');
+        $this->pdfSettings = new PdfSettings($this);
     }
 
     /**
@@ -541,5 +549,29 @@ class FireInspection
     public function getNextInspectionForMonth()
     {
         return $this->nextInspectionForMonth;
+    }
+
+    /**
+     * Set pdfSettings.
+     *
+     * @param \MicroBundle\Entity\PdfSettings|null $pdfSettings
+     *
+     * @return FireInspection
+     */
+    public function setPdfSettings(\MicroBundle\Entity\PdfSettings $pdfSettings = null)
+    {
+        $this->pdfSettings = $pdfSettings;
+
+        return $this;
+    }
+
+    /**
+     * Get pdfSettings.
+     *
+     * @return \MicroBundle\Entity\PdfSettings|null
+     */
+    public function getPdfSettings()
+    {
+        return $this->pdfSettings;
     }
 }

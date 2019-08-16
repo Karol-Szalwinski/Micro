@@ -11,6 +11,7 @@
             /*margin:10px;*/
             /*padding:0;*/
         }
+
         .image-box {
 
             float: left;
@@ -19,7 +20,7 @@
 
         .logo {
             padding: 5px;
-            padding-left:25px;
+            padding-left: 25px;
 
         }
 
@@ -74,10 +75,9 @@
          height="25px"/>
 </div>
 <div class="address">
-    <b>MICRO-TECH Michał Łuczywek<br>ul. Senatorska 15<br>96-100
-        Skierniewice<br>NIP: 8361650077<br>tel.600830063</b>
+    <b>{{ mycompany.name }}<br>ul. {{ mycompany.street }}<br>{{ mycompany.postCode }}
+        {{ mycompany.city }}<br>NIP: {{ mycompany.taxNumber }}<br>tel.{{ mycompany.phoneNo }}</b>
 </div>
 <hr>
-</div>
 </body>
 </html>

@@ -8,6 +8,7 @@ use MicroBundle\Entity\FireInspection;
 use MicroBundle\Entity\FireProtectionDevice;
 use MicroBundle\Entity\InspectedDevice;
 use MicroBundle\Entity\Inspector;
+use MicroBundle\Entity\PdfSettings;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -118,7 +119,7 @@ class FireInspectionController extends Controller
      * @Route("/{id}", name="fireinspection_show")
      * @Method("GET")
      */
-    public function showAction(FireInspection $fireInspection)
+    public function showAction(Request $request, FireInspection $fireInspection)
     {
         $this->container->get('micro')->updateLastServiceDateFireInspection($fireInspection);
         $em = $this->getDoctrine()->getManager();
@@ -132,8 +133,28 @@ class FireInspectionController extends Controller
 
         }
 
+        $pdfSettings = $fireInspection->getPdfSettings();
+        if (!$pdfSettings) {
+            $pdfSettings = new PdfSettings($fireInspection);
+            $fireInspection->setPdfSettings($pdfSettings);
+        }
 
-        return $this->render('fireinspection/show.html.twig', array('fireInspection' => $fireInspection, 'loopDevs' => $loopDevs, 'loopNullDevs' => $loopNullDevs));
+        $pdfForm = $this->createForm('MicroBundle\Form\PdfSettingsType', $pdfSettings);
+
+        $pdfForm->handleRequest($request);
+        if ($pdfForm->isSubmitted() && $pdfForm->isValid()) {
+            $em->persist($pdfSettings);
+            $em->flush();
+            return $this->redirectToRoute('fire_inspection_pdf', array('fireInspection' => $fireInspection->getId()));
+
+        }
+
+        return $this->render('fireinspection/show.html.twig', array(
+            'fireInspection' => $fireInspection,
+            'loopDevs' => $loopDevs,
+            'loopNullDevs' => $loopNullDevs,
+            'pdf_form' => $pdfForm->createView(),
+        ));
     }
 
     /**

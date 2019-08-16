@@ -108,13 +108,14 @@
                                     {{ form_label(edit_form.stamp, 'Pieczątka', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         <div class="custom-file mb-3">
-                                            <input type="file" name="filename">
                                             {{ form_widget(edit_form.stamp, { 'attr': {'class': 'custom-file-input'} }) }}
                                             <label class="custom-file-label" for="microbundle_mycompany_stamp">Wybierz
                                                 plik</label>
+                                            {{ form_errors(edit_form.stamp, {'attr': {'class': 'text-danger'} }) }}
                                         </div>
 
                                     </div>
+
                                 </div>
 
                                 <div class="form-actions">

@@ -32,9 +32,11 @@ class PdfController extends Controller
      */
     public function pdfFireInspectionAction(FireInspection $fireInspection)
     {
-        $html = $this->renderView('pdf/fire-inspection-content.html.twig', array('fireInspection' => $fireInspection));
+        $myCompany = $this->get('mycompany')->getOrCreateDefaultMyCompany();
+        $html = $this->renderView('pdf/fire-inspection-content.html.twig',
+            array('fireInspection' => $fireInspection));
 
-        $header = $this->renderView( 'pdf/fire-inspection-header.html.twig' );
+        $header = $this->renderView( 'pdf/fire-inspection-header.html.twig', array( 'mycompany' => $myCompany) );
         $footer = $this->renderView( 'pdf/fire-inspection-footer.html.twig' );
 
 
@@ -52,6 +54,7 @@ class PdfController extends Controller
             'margin-top' => '33mm',
             'margin-bottom' => '25mm',
             'header-spacing'=> '3',
+            'footer-right'     => "[page]"
 
         ];
         $snappy =  $this->get('knp_snappy.pdf');

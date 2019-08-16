@@ -120,6 +120,13 @@ class FireInspection
      */
     private $building;
 
+    /**
+     * One FireInspection has One PdfSettings
+     * @ORM\OneToOne(targetEntity="PdfSettings", inversedBy="fireInspection", cascade={"persist"})
+     * @ORM\JoinColumn(name="pdf_settings_id", referencedColumnName="id")
+     */
+    private $pdfSettings;
+
 
 
     /**

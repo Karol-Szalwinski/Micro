@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Pdfsettings list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Showtables</th>
+                <th>Showbuildingdata</th>
+                <th>Showclientdata</th>
+                <th>Showstamp</th>
+                <th>Inspectors</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pdfSetting in pdfSettings %}
+            <tr>
+                <td><a href="{{ path('pdfsettings_show', { 'id': pdfSetting.id }) }}">{{ pdfSetting.id }}</a></td>
+                <td>{% if pdfSetting.showTables %}Yes{% else %}No{% endif %}</td>
+                <td>{% if pdfSetting.showBuildingData %}Yes{% else %}No{% endif %}</td>
+                <td>{% if pdfSetting.showClientData %}Yes{% else %}No{% endif %}</td>
+                <td>{% if pdfSetting.showStamp %}Yes{% else %}No{% endif %}</td>
+                <td>{{ pdfSetting.inspectors }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('pdfsettings_show', { 'id': pdfSetting.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('pdfsettings_edit', { 'id': pdfSetting.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('pdfsettings_new') }}">Create a new pdfSetting</a>
+        </li>
+    </ul>
+{% endblock %}

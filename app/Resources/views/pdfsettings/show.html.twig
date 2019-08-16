@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Pdfsetting</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ pdfSetting.id }}</td>
+            </tr>
+            <tr>
+                <th>Showtables</th>
+                <td>{% if pdfSetting.showTables %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Showbuildingdata</th>
+                <td>{% if pdfSetting.showBuildingData %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Showclientdata</th>
+                <td>{% if pdfSetting.showClientData %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Showstamp</th>
+                <td>{% if pdfSetting.showStamp %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Inspectors</th>
+                <td>{{ pdfSetting.inspectors }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('pdfsettings_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('pdfsettings_edit', { 'id': pdfSetting.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

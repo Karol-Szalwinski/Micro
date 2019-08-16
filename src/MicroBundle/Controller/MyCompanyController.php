@@ -44,9 +44,9 @@ class MyCompanyController extends Controller
     {
         $serviceMyCompany = $this->get('mycompany');
         $myCompany = $serviceMyCompany->getOrCreateDefaultMyCompany();
-        $stamp = $myCompany->getStamp();
-        if($stamp) {
-            $myCompany->setStamp(new File($this->getParameter('images_directory') . '/' . $stamp));
+        $stampFile = $this->getParameter('images_directory') . '/' .$myCompany->getStamp();
+        if(is_file($stampFile)) {
+            $myCompany->setStamp(new File($stampFile));
         }
 
         $editForm = $this->createForm('MicroBundle\Form\MyCompanyType', $myCompany);

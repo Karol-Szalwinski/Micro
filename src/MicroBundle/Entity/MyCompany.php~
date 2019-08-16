@@ -66,9 +66,30 @@ class MyCompany
     /**
      * @var string
      *
-     * @ORM\Column(name="stamp", type="string", length=255, nullable=true)
+     * @ORM\Column(name="stamp", type="string", nullable=true)
      */
     private $stamp;
+
+    /**
+     * MyCompany constructor.
+     * @param int $id
+     * @param string $name
+     * @param string $street
+     * @param string $postCode
+     * @param string $city
+     * @param string $taxNumber
+     * @param string $phoneNo
+     */
+    public function __construct($id, $name, $street, $postCode, $city, $taxNumber, $phoneNo)
+    {
+        $this->id = $id;
+        $this->name = $name;
+        $this->street = $street;
+        $this->postCode = $postCode;
+        $this->city = $city;
+        $this->taxNumber = $taxNumber;
+        $this->phoneNo = $phoneNo;
+    }
 
 
     /**

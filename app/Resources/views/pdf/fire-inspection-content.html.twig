@@ -12,7 +12,6 @@
         body {
             font-family: Georgia, "Times New Roman", Times, serif;
             font-size: 18px;
-            background-color: ivory;
         }
 
         .table-striped {
@@ -44,7 +43,7 @@
             position: absolute;
             left: 10px;
             margin-left: -3px;
-            top: 0px;
+            top: 0;
         }
 
         @media print {
@@ -79,11 +78,9 @@
                 <div class="container-fluid">
 
                     <div class="row">
-                        <div class="col-sm-9">
-                            <p></p>
-                        </div>
-                        <div class="col-sm-3">
-                            <p class="text-right">Skierniewice, {{ "now"|date('d.m.Y') }}</p>
+                        <div>&nbsp</div>
+                        <div class="col-sm-12">
+                            <p class=" text-right small">Skierniewice, {{ "now"|date('d.m.Y') }}</p>
                         </div>
                     </div>
                     <div class="row">
