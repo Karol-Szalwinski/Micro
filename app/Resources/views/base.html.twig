@@ -12,7 +12,7 @@
           content="admin template, modern admin template, dashboard template, flat admin template, responsive admin template, web app, crypto dashboard, bitcoin dashboard">
     <meta name="author" content="PIXINVENT">
 
-    <title>{% block title %}Welcome!{% endblock %}</title>
+    <title>{% block title %}Micro{% endblock %}</title>
 
     <link rel="apple-touch-icon" href="{{ asset('app-assets/images/ico/apple-icon-120.png') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('app-assets/images/ico/favicon.ico') }}">
@@ -497,9 +497,16 @@
                                     data-i18n="nav.dash.ecommerce">Inspektorzy</span></a>
                     </li>
 
-                </ul><ul class="menu-content">
+                </ul>
+                <ul class="menu-content">
                     <li><a class="menu-item" href="{{ path('def_fireinspection_show') }}"><i></i><span
                                     data-i18n="nav.dash.ecommerce">Szablon Przeglądu</span></a>
+                    </li>
+
+                </ul>
+                <ul class="menu-content">
+                    <li><a class="menu-item" href="{{ path('mycompany_show') }}"><i></i><span
+                                    data-i18n="nav.dash.ecommerce">Dane mojej firmy</span></a>
                     </li>
 
                 </ul>

@@ -3,8 +3,10 @@
 namespace MicroBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class MyCompanyType extends AbstractType
 {
@@ -13,7 +15,37 @@ class MyCompanyType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name')->add('street')->add('postCode')->add('city')->add('taxNumber')->add('phoneNo')->add('stamp');
+        $builder
+            ->add('name')
+            ->add('street')
+            ->add('postCode')
+            ->add('city')
+            ->add('taxNumber')
+            ->add('phoneNo')
+            ->add('stamp', FileType::class, [
+                'label' => 'Obrazek pieczątki PNG lub JPG',
+
+                // unmapped means that this field is not associated to any entity property
+                'mapped' => false,
+
+                // make it optional so you don't have to re-upload the PDF file
+                // everytime you edit the Product details
+                'required' => false,
+
+                // unmapped fields can't define their validation using annotations
+                // in the associated entity, so you can use the PHP constraint classes
+                'constraints' => [
+                    new File([
+                        'maxSize' => '1024k',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                        ],
+                        'mimeTypesMessage' => 'Proszę załaduj poprawny plik pieczątki jpg lub png',
+                    ])
+                ],
+            ])
+        ;
     }/**
      * {@inheritdoc}
      */

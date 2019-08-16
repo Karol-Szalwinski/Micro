@@ -47,4 +47,8 @@ services:
         class: %micro.service.mycompany.class%
         public: true
 
+    MicroBundle\Services\FileUploader:
+        arguments:
+            $targetDirectory: '%images_directory%'
+
 

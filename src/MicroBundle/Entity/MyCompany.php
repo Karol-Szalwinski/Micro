@@ -66,7 +66,7 @@ class MyCompany
     /**
      * @var string
      *
-     * @ORM\Column(name="stamp", type="string", length=255, nullable=true)
+     * @ORM\Column(name="stamp", type="string", nullable=true)
      */
     private $stamp;
 

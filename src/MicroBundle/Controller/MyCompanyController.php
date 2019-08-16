@@ -6,7 +6,9 @@ namespace MicroBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
+use MicroBundle\Services\FileUploader;
 
 /**
  * Mycompany controller.
@@ -19,25 +21,14 @@ class MyCompanyController extends Controller
     /**
      * Finds and displays a myCompany entity.
      *
-     * @Route("/show", name="mycompany_show")
+     * @Route("/", name="mycompany_show")
      * @Method("GET")
      */
     public function showAction()
     {
         $myCompany = $this->get('mycompany')->getOrCreateDefaultMyCompany();
-//        $myCompany = new Mycompany(
-//            '1',
-//            'Przykładowa nazwa',
-//            'Przykładowa ulica',
-//            '00-000',
-//            'Przykładowe miasto',
-//            'Numer NIP',
-//            '000-000-000'
-//        );
 
-        return $this->render('mycompany/show.html.twig', array(
-            'myCompany' => $myCompany,
-        ));
+        return $this->render('mycompany/show.html.twig', array('mycompany' => $myCompany,));
     }
 
     /**
@@ -45,28 +36,36 @@ class MyCompanyController extends Controller
      *
      * @Route("/edit", name="mycompany_edit")
      * @Method({"GET", "POST"})
+     * @param Request $request
+     * @param FileUploader $fileUploader
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function editAction(Request $request)
+    public function editAction(Request $request, FileUploader $fileUploader)
     {
         $serviceMyCompany = $this->get('mycompany');
         $myCompany = $serviceMyCompany->getOrCreateDefaultMyCompany();
+        $stamp = $myCompany->getStamp();
+        if($stamp) {
+            $myCompany->setStamp(new File($this->getParameter('images_directory') . '/' . $stamp));
+        }
 
         $editForm = $this->createForm('MicroBundle\Form\MyCompanyType', $myCompany);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $stampFile = $editForm['stamp']->getData();
+            if ($stampFile) {
+                $brochureFileName = $fileUploader->upload($stampFile);
+                $myCompany->setStamp($brochureFileName);
+            }
+
             $serviceMyCompany->updateMyCompany($myCompany);
 
             return $this->redirectToRoute('mycompany_show');
         }
 
-        return $this->render('mycompany/edit.html.twig', array(
-            'edit_form' => $editForm->createView(),
-        ));
+        return $this->render('mycompany/edit.html.twig', array('edit_form' => $editForm->createView(),));
     }
-
-
-
 
 
 }
