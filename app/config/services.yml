@@ -3,6 +3,7 @@
 parameters:
     micro.service.buildingupdate.class: MicroBundle\Services\BuildingUpdateService
     micro.service.mycompany.class: MicroBundle\Services\MyCompanyService
+    micro.service.prepareHtmlToPdf.class: MicroBundle\Services\PrepareHtmlToPdfService
     #parameter_name: value
 
 services:
@@ -45,6 +46,10 @@ services:
 
     mycompany:
         class: %micro.service.mycompany.class%
+        public: true
+
+    prepareHtmlToPdf:
+        class: %micro.service.prepareHtmlToPdf.class%
         public: true
 
     MicroBundle\Services\FileUploader:

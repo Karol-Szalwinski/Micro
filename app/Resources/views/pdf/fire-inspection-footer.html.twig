@@ -15,24 +15,50 @@
             border-top: solid 2px #940e1f;
         }
 
-        .vl {
-            border-left: solid 2px #940e1f;
-            height: 100%;
-            position: absolute;
-            left: 10px;
-            margin-left: -3px;
-            bottom: 10px;
-        }
+        /*.vl {*/
+        /*border-left: solid 2px #940e1f;*/
+        /*min-height: 100%;*/
+        /*position: absolute;*/
+        /*left: 10px;*/
+        /*margin-left: -3px;*/
+        /*bottom: 10px;*/
+        /*}*/
 
         .footer-text {
             text-align: center;
+        }
+
+        #stamp {
+            padding: 10px;
+            float:inherit;
+            width:200px;
+            height:80px;
+        }
+
+        #inspectors {
+            padding: 10px;
+            padding-top: 20px;
+            float:right;
         }
 
     </style>
 </head>
 <body>
 <div class="vl"></div>
-
+{% if fireInspection.pdfSettings.showStamp == true %}
+    {% if mycompany.stamp %}
+        <img id="stamp" src="{{ pathToWeb }}/uploads/images/{{ mycompany.stamp }}"
+             class="img-fluid"
+             alt="Pieczątka firmy">
+    {% endif %}
+{% endif %}
+{% if fireInspection.pdfSettings.inspectors is not empty %}
+    <div id="inspectors" >Wykonał:<br>
+    {% for inspector  in fireInspection.pdfSettings.inspectors %}
+         {{ inspector }}&nbsp<span style="float:right">......................</span><br>
+    {% endfor %}
+    </div>
+{% endif %}
 
 <hr>
 <div>

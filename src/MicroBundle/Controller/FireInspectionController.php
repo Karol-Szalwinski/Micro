@@ -138,8 +138,15 @@ class FireInspectionController extends Controller
             $pdfSettings = new PdfSettings($fireInspection);
             $fireInspection->setPdfSettings($pdfSettings);
         }
+        //todo refactor this code
+        $docInspectors = $pdfSettings->getFireInspection()->getDocumentInspectors();
+        $inspectors = [];
+        foreach ($docInspectors as $docInspector) {
+            $inspectors[$docInspector->getName() . " " . $docInspector->getSurname()] = $docInspector->getName() . " " . $docInspector->getSurname();
+        }
 
-        $pdfForm = $this->createForm('MicroBundle\Form\PdfSettingsType', $pdfSettings);
+        $options =['inspectors' => $inspectors];
+        $pdfForm = $this->createForm('MicroBundle\Form\PdfSettingsType', $pdfSettings, $options);
 
         $pdfForm->handleRequest($request);
         if ($pdfForm->isSubmitted() && $pdfForm->isValid()) {

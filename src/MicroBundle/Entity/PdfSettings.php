@@ -2,6 +2,7 @@
 
 namespace MicroBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -52,7 +53,7 @@ class PdfSettings
     /**
      * @var string
      *
-     * @ORM\Column(name="inspectors", type="string", length=255)
+     * @ORM\Column(name="inspectors", type="array")
      */
     private $inspectors;
 
@@ -72,6 +73,7 @@ class PdfSettings
         $this->showBuildingData = true;
         $this->showClientData = false;
         $this->showStamp = false;
+
     }
 
 
@@ -180,30 +182,7 @@ class PdfSettings
     {
         return $this->showStamp;
     }
-
-    /**
-     * Set inspectors.
-     *
-     * @param string $inspectors
-     *
-     * @return PdfSettings
-     */
-    public function setInspectors($inspectors)
-    {
-        $this->inspectors = $inspectors;
-
-        return $this;
-    }
-
-    /**
-     * Get inspectors.
-     *
-     * @return string
-     */
-    public function getInspectors()
-    {
-        return $this->inspectors;
-    }
+    
 
     /**
      * Set fireInspection.
@@ -227,5 +206,31 @@ class PdfSettings
     public function getFireInspection()
     {
         return $this->fireInspection;
+    }
+
+ 
+
+    /**
+     * Set inspectors.
+     *
+     * @param array $inspectors
+     *
+     * @return PdfSettings
+     */
+    public function setInspectors($inspectors)
+    {
+        $this->inspectors = $inspectors;
+
+        return $this;
+    }
+
+    /**
+     * Get inspectors.
+     *
+     * @return array
+     */
+    public function getInspectors()
+    {
+        return $this->inspectors;
     }
 }

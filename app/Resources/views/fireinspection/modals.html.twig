@@ -200,26 +200,58 @@
                     <div class="form-group row">
                         {{ form_label(pdf_form.showTables, 'Dokument z tabelami', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                         <div class="col-md-9 mx-auto">
-                            {{ form_widget(pdf_form.showTables, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_widget(pdf_form.showTables, { 'attr': {
+                                'class': ' switch',
+                                'data-icon-cls':'fa',
+                                'data-off-icon-cls':'fa ft-thumbs-down',
+                                'data-on-icon-cls':'fa ft-thumbs-up',
+                                'data-off-label':'OFF',
+                                'data-on-label':'ON',
+                                'data-group-cls':'btn-group-sm'
+                            } }) }}
 
                         </div>
                     </div>
                     <div class="form-group row">
                         {{ form_label(pdf_form.showBuildingData, 'Widoczne dane budynku', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                         <div class="col-md-9 mx-auto">
-                            {{ form_widget(pdf_form.showBuildingData, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_widget(pdf_form.showBuildingData, { 'attr': {
+                                'class': ' switch',
+                                'data-icon-cls':'fa',
+                                'data-off-icon-cls':'fa ft-thumbs-down',
+                                'data-on-icon-cls':'fa ft-thumbs-up',
+                                'data-off-label':'OFF',
+                                'data-on-label':'ON',
+                                'data-group-cls':'btn-group-sm'
+                            } }) }}
                         </div>
                     </div>
                     <div class="form-group row">
                         {{ form_label(pdf_form.showClientData, 'Widoczne dane klienta', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                         <div class="col-md-9 mx-auto">
-                            {{ form_widget(pdf_form.showClientData, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_widget(pdf_form.showClientData, { 'attr': {
+                                'class': ' switch form-control',
+                                'data-icon-cls':'fa',
+                                'data-off-icon-cls':'fa ft-thumbs-down',
+                                'data-on-icon-cls':'fa ft-thumbs-up',
+                                'data-off-label':'OFF',
+                                'data-on-label':'ON',
+                                'data-group-cls':'btn-group-sm'
+                            } }) }}
                         </div>
                     </div>
                     <div class="form-group row">
                         {{ form_label(pdf_form.showStamp, 'Widoczna pieczątka', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                         <div class="col-md-9 mx-auto">
-                            {{ form_widget(pdf_form.showStamp, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_widget(pdf_form.showStamp, { 'attr': {
+                                'class': ' switch',
+                                'data-icon-cls':'fa',
+                                'data-off-icon-cls':'fa ft-thumbs-down',
+                                'data-on-icon-cls':'fa ft-thumbs-up',
+                                'data-off-label':'OFF',
+                                'data-on-label':'ON',
+                                'data-group-cls':'btn-group-sm'
+                            } }) }}
                         </div>
                     </div>
                     <div class="form-group row">

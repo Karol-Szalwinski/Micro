@@ -8,7 +8,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
     <style>
+        html
         body {
             font-family: Georgia, "Times New Roman", Times, serif;
             font-size: 18px;
@@ -37,14 +39,15 @@
         / / Choose your own color here
         }
 
-        .vl {
-            border-left: solid 2px #940e1f;
-            height: 100%;
-            position: absolute;
-            left: 10px;
-            margin-left: -3px;
-            top: 0;
-        }
+        /*.vl {*/
+            /*border-left: solid 2px #940e1f;*/
+            /*height: 100%;*/
+            /*position: absolute;*/
+            /*left: 10px;*/
+            /*margin-left: -3px;*/
+            /*top: 0;*/
+        /*}*/
+
 
         @media print {
             .table-striped > tbody > tr:nth-child(odd) > td,
@@ -88,18 +91,34 @@
                             <p class="text-center"><b>Protokół z przeglądu systemu SSP</b></p>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <p><b>Obiekt: </b><br>
-                                <b>{{ fireInspection.building.name }}</b><br/>
-                                <span>ul. {{ fireInspection.building.street }} {{ fireInspection.building.houseNo }}
-                                    {% if  fireInspection.building.flatNo  is not null %} / {{ fireInspection.building.flatNo }}
-                                    {% endif %}<br/>
-                                    {{ fireInspection.building.city }} {{ fireInspection.building.postalCode }}
+                    {% if fireInspection.pdfSettings.showClientData == true %}
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <p><b>Zleceniodawca: </b><br>
+                                    <b>{{ fireInspection.building.client.name }}</b><br/>
+                                    <span>ul. {{ fireInspection.building.street }} {{ fireInspection.building.houseNo }}
+                                        {% if  fireInspection.building.flatNo  is not null %} / {{ fireInspection.building.flatNo }}
+                                        {% endif %}<br/>
+                                        {{ fireInspection.building.city }} {{ fireInspection.building.postalCode }}
                                 </span></p>
 
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
+                    {% if fireInspection.pdfSettings.showBuildingData == true %}
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <p><b>Obiekt: </b><br>
+                                    <b>{{ fireInspection.building.name }}</b><br/>
+                                    <span>ul. {{ fireInspection.building.street }} {{ fireInspection.building.houseNo }}
+                                        {% if  fireInspection.building.flatNo  is not null %} / {{ fireInspection.building.flatNo }}
+                                        {% endif %}<br/>
+                                        {{ fireInspection.building.city }} {{ fireInspection.building.postalCode }}
+                                </span></p>
+
+                            </div>
+                        </div>
+                    {% endif %}
                     <div class="row">
                         <div class="col-sm-12">
                             <p><b>Zakres wykonanych prac: </b><br>{{ fireInspection.scope|nl2br }}</p>
@@ -177,74 +196,76 @@
                     </div>
 
                     <br>
-                    <div class="row" style="page-break-inside: avoid">
-                        <div class="col-sm-12">
-                            <p class="text-center"><b>Tabela nr 1</b></p>
-                            <table class="table table-bordered table-striped text-center col-sm-12 table-sm"
-                            >
-                                <thead>
-                                <tr>
-                                    <th class="align-middle">L.p.</th>
-                                    <th class="align-middle">Nr pętli</th>
-                                    <th class="align-middle">Nr urządzena</th>
-                                    <th class="align-middle">Typ urządzena</th>
-                                    <th class="align-middle">Status w systemie</th>
-                                    <th class="align-middle">Wynik testu</th>
-                                    <th class="align-middle">Uwagi</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for device in fireInspection.inspectedDevices %}
-                                    <tr>
-                                        <td style="width: 6%">{{ loop.index }}</td>
-                                        <td style="width: 10%">{{ device.loopNo }}</td>
-                                        <td style="width: 10%">{{ device.number }}</td>
-                                        <td style="width: 10%">{{ device.shortname }}</td>
-                                        <td style="width: 10%">
-                                            {% if device.status==1 %}Włączony{% else %}Wyłączony{% endif %}
-                                        </td>
-                                        <td style="width: 10%">
-                                            {% if device.test==1 %}Pozytywny{% else %}Negatywny{% endif %}
-                                        </td>
-                                        <td>{{ device.comment }}</td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
 
-                    </div>
-                    <br>
-                    <div class="row" style="page-break-inside: avoid">
-                        <div class="col-sm-12">
-                            <p class="text-center" style="page-break-before: avoid"><b>Tabela nr 2</b></p>
-                            <table class="table table-bordered table-striped text-center col-sm-12 table-sm">
-                                <thead>
-                                <tr>
-                                    <th>L.p.</th>
-                                    <th>Pozostałe czynności</th>
-                                    <th>Wynik testu</th>
-                                    <th>Uwagi</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for testPosition in fireInspection.testPositions %}
+                    {% if fireInspection.pdfSettings.showTables == true %}
+                        <div class="row" style="page-break-inside: avoid">
+                            <div class="col-sm-12">
+                                <p class="text-center"><b>Tabela nr 1</b></p>
+                                <table class="table table-bordered table-striped text-center col-sm-12 table-sm"
+                                >
+                                    <thead>
                                     <tr>
-                                        <td style="width: 6%">{{ loop.index }}</td>
-                                        <td style="width: 44%">{{ testPosition.name }}</td>
-                                        <td style="width: 10%">
-                                            {% if testPosition.test==1 %}Pozytywny{% else %}Negatywny{% endif %}
-                                        </td>
-                                        <td>{{ testPosition.comment }}</td>
+                                        <th class="align-middle">L.p.</th>
+                                        <th class="align-middle">Nr pętli</th>
+                                        <th class="align-middle">Nr urządzena</th>
+                                        <th class="align-middle">Typ urządzena</th>
+                                        <th class="align-middle">Status w systemie</th>
+                                        <th class="align-middle">Wynik testu</th>
+                                        <th class="align-middle">Uwagi</th>
                                     </tr>
-                                {% endfor %}
-
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    {% for device in fireInspection.inspectedDevices %}
+                                        <tr>
+                                            <td style="width: 6%">{{ loop.index }}</td>
+                                            <td style="width: 10%">{{ device.loopNo }}</td>
+                                            <td style="width: 10%">{{ device.number }}</td>
+                                            <td style="width: 10%">{{ device.shortname }}</td>
+                                            <td style="width: 10%">
+                                                {% if device.status==1 %}Włączony{% else %}Wyłączony{% endif %}
+                                            </td>
+                                            <td style="width: 10%">
+                                                {% if device.test==1 %}Pozytywny{% else %}Negatywny{% endif %}
+                                            </td>
+                                            <td>{{ device.comment }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
 
                         </div>
-                    </div>
+                        <br>
+                        <div class="row" style="page-break-inside: avoid">
+                            <div class="col-sm-12">
+                                <p class="text-center" style="page-break-before: avoid"><b>Tabela nr 2</b></p>
+                                <table class="table table-bordered table-striped text-center col-sm-12 table-sm">
+                                    <thead>
+                                    <tr>
+                                        <th>L.p.</th>
+                                        <th>Pozostałe czynności</th>
+                                        <th>Wynik testu</th>
+                                        <th>Uwagi</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for testPosition in fireInspection.testPositions %}
+                                        <tr>
+                                            <td style="width: 6%">{{ loop.index }}</td>
+                                            <td style="width: 44%">{{ testPosition.name }}</td>
+                                            <td style="width: 10%">
+                                                {% if testPosition.test==1 %}Pozytywny{% else %}Negatywny{% endif %}
+                                            </td>
+                                            <td>{{ testPosition.comment }}</td>
+                                        </tr>
+                                    {% endfor %}
 
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    {% endif %}
 
                 </div>
             </div>
@@ -255,7 +276,6 @@
     </tbody>
 
 </table>
-
 
 </body>
 </html>
