@@ -45,19 +45,7 @@
                                 class="la la-backward"></i> Wróć do budynku</a>
 
                     <a class="btn btn-outline-info round"
-                       data-toggle="modal" data-target="#pdf-modal"><i
-                    class="la la-backward"></i> PDF</a>
-                    {#<a class="btn btn-outline-info round"#}
-                    {#href="{{ path('fire_inspection_print', { 'fireInspection' : fireInspection.id }) }}"><i#}
-                    {#class="la la-backward"></i> Podgląd</a>#}
-                    {#<iframe src="{{ path('fire_inspection_print', { 'fireInspection' : fireInspection.id }) }}"#}
-                            {#name="frame" style="display: none"></iframe>#}
-
-                    <button class="btn btn-outline-info round" type="submit" onclick="frames['frame'].print()"
-                            value="Drukuj">
-                        <i
-                                class="la la-print"></i> Drukuj
-                    </button>
+                       data-toggle="modal" data-target="#pdf-modal"><i class="la la-file-pdf-o"></i> Wygeneruj PDF</a>
 
 
                 </div>
