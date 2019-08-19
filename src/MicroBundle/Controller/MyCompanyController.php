@@ -44,7 +44,7 @@ class MyCompanyController extends Controller
     {
         $serviceMyCompany = $this->get('mycompany');
         $myCompany = $serviceMyCompany->getOrCreateDefaultMyCompany();
-        $stampFile = $this->getParameter('images_directory') . '/' .$myCompany->getStamp();
+        $stampFile = $this->getParameter('target_directory') . '/images' .$myCompany->getStamp();
         if(is_file($stampFile)) {
             $myCompany->setStamp(new File($stampFile));
         }
@@ -55,8 +55,8 @@ class MyCompanyController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $stampFile = $editForm['stamp']->getData();
             if ($stampFile) {
-                $brochureFileName = $fileUploader->upload($stampFile);
-                $myCompany->setStamp($brochureFileName);
+                $stampFileName = $fileUploader->uploadWithName($stampFile, 'stamp');
+                $myCompany->setStamp($stampFileName);
             }
 
             $serviceMyCompany->updateMyCompany($myCompany);

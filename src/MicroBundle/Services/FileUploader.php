@@ -18,14 +18,22 @@ class FileUploader
         $this->targetDirectory = $targetDirectory;
     }
 
-    public function upload(UploadedFile $file)
+    public function uploadWithName(UploadedFile $file, $fileName)
+
     {
-        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
-        $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
+        $extension = $file->guessExtension();
+        if ($fileName == null) {
+            $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
+            $fileName = $safeFilename . '-' . uniqid() . '.' . $extension;
+
+        } else {
+            $fileName .= '.' . $extension;
+        }
+
 
         try {
-            $file->move($this->getTargetDirectory(), $fileName);
+            $file->move($this->getDownloadDirectory($extension), $fileName);
         } catch (FileException $e) {
             // ... handle exception if something happens during file upload
         }
@@ -33,8 +41,41 @@ class FileUploader
         return $fileName;
     }
 
+    public function upload(UploadedFile $file)
+    {
+
+        return $this->uploadWithName($file, null);
+    }
+
+
     public function getTargetDirectory()
     {
         return $this->targetDirectory;
+    }
+
+    private function getDownloadDirectory($extension){
+        switch ($extension) {
+            case "jpg":
+                $subDirectory = '/images';
+                break;
+            case "jpeg":
+                $subDirectory = '/images';
+                break;
+            case "png":
+                $subDirectory = '/images';
+                break;
+            case "gif":
+                $subDirectory = '/images';
+                break;
+            case "pdf":
+                $subDirectory = '/pdfs';
+                break;
+            default:
+                $subDirectory = '';
+
+        }
+
+        return $this->getTargetDirectory() . $subDirectory;
+
     }
 }

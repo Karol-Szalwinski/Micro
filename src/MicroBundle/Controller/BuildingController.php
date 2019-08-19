@@ -2,10 +2,13 @@
 
 namespace MicroBundle\Controller;
 
+use Doctrine\ORM\EntityManager;
 use MicroBundle\Entity\Building;
 use MicroBundle\Entity\Client;
 use MicroBundle\Entity\FireProtectionDevice;
 use MicroBundle\Entity\LoopDev;
+use MicroBundle\Entity\PdfDocument;
+use MicroBundle\Services\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -92,13 +95,11 @@ class BuildingController extends Controller
                 $loopDev = $loopOldDev;
                 $loopDev->setDel(false);
                 for ($i = 1; $i <= $quantityDevices; $i++) {
-                    $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')
-                        ->findOneBy(['loopDev' => $loopDev->getId(), 'number' => $i]);
+                    $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['loopDev' => $loopDev->getId(), 'number' => $i]);
                     if ($fireProtectionDevice instanceof FireProtectionDevice) {
                         $fireProtectionDevice->setDel(false);
 
-                    }
-                    else {
+                    } else {
                         $fireProtectionDevice = new FireProtectionDevice();
                         $fireProtectionDevice->setNumber($i);
                         $fireProtectionDevice->setLoopDev($loopDev);
@@ -155,34 +156,59 @@ class BuildingController extends Controller
     }
 
     /**
-     * Deletes a building entity.
+     * Show building documents.
      *
-     * @Route("/{id}", name="building_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/document", name="building_document")
+     * @Method({"GET", "POST"})
+     * @param Building $building
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function deleteAction(Request $request, Building $building)
+    public function documentAction(Building $building, Request $request)
     {
-        $form = $this->createDeleteForm($building);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($building);
-            $em->flush();
+        $fileUploader = $this->get('MicroBundle\Services\FileUploader');
+        $pdf = new PdfDocument();
+        $pdfForm = $this->createForm('MicroBundle\Form\PdfDocumentType', $pdf);
+        $pdfForm->handleRequest($request);
+
+        if ($pdfForm->isSubmitted() && $pdfForm->isValid()) {
+
+            $pdfFile = $pdfForm['pdf']->getData();
+
+            if ($pdfFile) {
+                $pdfFileName = $fileUploader->upload($pdfFile);
+                $pdf->setPdfFileName($pdfFileName);
+
+                $building->addPdfDocument($pdf);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($pdf);
+                $em->flush();
+
+            }
+
+
+            return $this->redirectToRoute('building_document', array('id' => $building->getId()));
         }
 
-        return $this->redirectToRoute('building_index');
+        return $this->render('building/document.html.twig', array('building' => $building, 'pdf_form' => $pdfForm->createView(),));
+
     }
 
+
     /**
-     * Creates a form to delete a building entity.
-     *
-     * @param Building $building The building entity
-     *
-     * @return \Symfony\Component\Form\Form The form
+     * @Route("/{id}/document/{pdfDocument}/delete", name="building_document_delete")
+     * @Method({"POST"})
+     * @param Building $building
+     * @param PdfDocument $pdfDocument
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    private function createDeleteForm(Building $building)
+    public function deleteDocumentAction(Building $building, PdfDocument $pdfDocument)
     {
-        return $this->createFormBuilder()->setAction($this->generateUrl('building_delete', array('id' => $building->getId())))->setMethod('DELETE')->getForm();
+        $em = $this->getDoctrine()->getManager();
+        $building->removePdfDocument($pdfDocument);
+        $em->remove($pdfDocument);
+        $em->flush();
+        return $this->redirectToRoute('building_document', array('id' => $building->getId()));
     }
 }

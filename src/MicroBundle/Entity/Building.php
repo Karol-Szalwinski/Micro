@@ -97,6 +97,15 @@ class Building
      */
     private $deviceShortlistPosition;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="PdfDocument")
+     * @ORM\JoinTable(name="building_pdfs",
+     *      joinColumns={@ORM\JoinColumn(name="building_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="pdf_id", referencedColumnName="id")}
+     *      )
+     */
+    private $pdfDocuments;
+
 
     /**
      * Constructor
@@ -105,6 +114,7 @@ class Building
     {
         $this->loopDevs = new \Doctrine\Common\Collections\ArrayCollection();
         $this->fireInspections = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pdfDocuments = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -418,5 +428,42 @@ class Building
             }
         }
         return $count;
+    }
+
+
+    /**
+     * Add pdfDocument.
+     *
+     * @param \MicroBundle\Entity\PdfDocument $pdfDocument
+     *
+     * @return Building
+     */
+    public function addPdfDocument(\MicroBundle\Entity\PdfDocument $pdfDocument)
+    {
+        $this->pdfDocuments[] = $pdfDocument;
+
+        return $this;
+    }
+
+    /**
+     * Remove pdfDocument.
+     *
+     * @param \MicroBundle\Entity\PdfDocument $pdfDocument
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removePdfDocument(\MicroBundle\Entity\PdfDocument $pdfDocument)
+    {
+        return $this->pdfDocuments->removeElement($pdfDocument);
+    }
+
+    /**
+     * Get pdfDocuments.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPdfDocuments()
+    {
+        return $this->pdfDocuments;
     }
 }

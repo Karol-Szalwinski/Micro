@@ -73,7 +73,7 @@ class PdfSettings
         $this->showBuildingData = true;
         $this->showClientData = false;
         $this->showStamp = false;
-        $this->inspectors = new ArrayCollection();
+
     }
 
 
@@ -209,4 +209,28 @@ class PdfSettings
     }
 
  
+
+    /**
+     * Set inspectors.
+     *
+     * @param array $inspectors
+     *
+     * @return PdfSettings
+     */
+    public function setInspectors($inspectors)
+    {
+        $this->inspectors = $inspectors;
+
+        return $this;
+    }
+
+    /**
+     * Get inspectors.
+     *
+     * @return array
+     */
+    public function getInspectors()
+    {
+        return $this->inspectors;
+    }
 }

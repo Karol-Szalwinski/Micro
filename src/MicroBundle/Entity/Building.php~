@@ -97,6 +97,15 @@ class Building
      */
     private $deviceShortlistPosition;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="PdfDocument")
+     * @ORM\JoinTable(name="building_pdfs",
+     *      joinColumns={@ORM\JoinColumn(name="building_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="pdf_id", referencedColumnName="id")}
+     *      )
+     */
+    private $pdfDocuments;
+
 
     /**
      * Constructor
@@ -105,6 +114,7 @@ class Building
     {
         $this->loopDevs = new \Doctrine\Common\Collections\ArrayCollection();
         $this->fireInspections = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pdfDocuments = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -419,4 +429,5 @@ class Building
         }
         return $count;
     }
+
 }

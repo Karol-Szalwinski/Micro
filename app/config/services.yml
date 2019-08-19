@@ -54,6 +54,6 @@ services:
 
     MicroBundle\Services\FileUploader:
         arguments:
-            $targetDirectory: '%images_directory%'
+            $targetDirectory: '%target_directory%'
 
 

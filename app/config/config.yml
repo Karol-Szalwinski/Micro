@@ -8,7 +8,8 @@ imports:
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
-    images_directory: '%kernel.project_dir%/web/uploads/images'
+    target_directory: '%kernel.project_dir%/web/uploads'
+    pdfs_directory: '%kernel.project_dir%/web/uploads/pdfs'
 
 framework:
     #esi: ~
