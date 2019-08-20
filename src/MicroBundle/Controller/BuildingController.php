@@ -89,13 +89,15 @@ class BuildingController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 //check if loopDev exist
-            $loopOldDev = $em->getRepository('MicroBundle:LoopDev')->findOneBy(['building' => $building->getId(), 'number' => $loopDev->getNumber()]);
+            $loopOldDev = $em->getRepository('MicroBundle:LoopDev')
+                ->findOneBy(['building' => $building->getId(), 'number' => $loopDev->getNumber()]);
 
             if ($loopOldDev instanceof LoopDev) {
                 $loopDev = $loopOldDev;
                 $loopDev->setDel(false);
                 for ($i = 1; $i <= $quantityDevices; $i++) {
-                    $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['loopDev' => $loopDev->getId(), 'number' => $i]);
+                    $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')
+                        ->findOneBy(['loopDev' => $loopDev->getId(), 'number' => $i]);
                     if ($fireProtectionDevice instanceof FireProtectionDevice) {
                         $fireProtectionDevice->setDel(false);
 
@@ -131,7 +133,12 @@ class BuildingController extends Controller
         }
         $this->container->get('micro')->updateLastServiceDate($building);
 
-        return $this->render('building/show.html.twig', array('building' => $building, 'form' => $addForm->createView(), 'loop_form' => $loopForm->createView(), 'edit_form' => $editForm->createView()));
+        return $this->render('building/show.html.twig',
+            array('building' => $building,
+                'form' => $addForm->createView(),
+                'loop_form' => $loopForm->createView(),
+                'edit_form' => $editForm->createView()
+            ));
     }
 
     /**
@@ -142,7 +149,6 @@ class BuildingController extends Controller
      */
     public function editAction(Request $request, Building $building)
     {
-        $deleteForm = $this->createDeleteForm($building);
         $editForm = $this->createForm('MicroBundle\Form\BuildingType', $building);
         $editForm->handleRequest($request);
 
@@ -152,7 +158,7 @@ class BuildingController extends Controller
             return $this->redirectToRoute('building_index');
         }
 
-        return $this->render('building/edit.html.twig', array('building' => $building, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView(),));
+        return $this->render('building/edit.html.twig', array('building' => $building, 'edit_form' => $editForm->createView() ));
     }
 
     /**
