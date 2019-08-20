@@ -218,7 +218,7 @@
                                     {% for device in fireInspection.inspectedDevices %}
                                         <tr>
                                             <td style="width: 6%">{{ loop.index }}</td>
-                                            <td style="width: 10%">{{ device.loopNo }}</td>
+                                            <td style="width: 10%">{{ device.fireProtectionDevice.loopDev.number }}</td>
                                             <td style="width: 10%">{{ device.number }}</td>
                                             <td style="width: 10%">{{ device.shortname }}</td>
                                             <td style="width: 10%">
