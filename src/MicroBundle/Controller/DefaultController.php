@@ -28,7 +28,7 @@ class DefaultController extends Controller
 
         $clientsCount = $em->getRepository('MicroBundle:Client')->count([]);
         $buildingsCount = $em->getRepository('MicroBundle:Building')->count([]);
-        $fireInspectionCount = $em->getRepository('MicroBundle:FireInspection')->count([]);
+        $fireInspectionCount = $em->getRepository('MicroBundle:Document')->count([]);
 
 
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {

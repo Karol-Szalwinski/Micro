@@ -1,0 +1,118 @@
+<?php
+
+namespace MicroBundle\Entity;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * BuildDevice
+ *
+ * @ORM\Table(name="build_device")
+ * @ORM\Entity(repositoryClass="MicroBundle\Repository\BuildDeviceRepository")
+ */
+class BuildDevice
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="shortname", type="string", length=5, nullable=true)
+     */
+    private $shortname;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="loop_no", type="integer", nullable=true)
+     */
+    private $loopNo;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="number", type="integer")
+     */
+    private $number;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="serial", type="string", length=100, nullable=true)
+     */
+    private $serial;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="address", type="string", length=100, nullable=true)
+     */
+    private $address;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $desc;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="del", type="boolean")
+     */
+    private $del;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="last_service_date", type="datetime", nullable=true)
+     */
+    private $lastServiceDate;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="temp_service_date", type="datetime", nullable=true)
+     */
+    private $tempServiceDate;
+
+    /**
+     * Many BuildDevice have One Building.
+     * @ORM\ManyToOne(targetEntity="Building", inversedBy="buildDevices", cascade={"persist"})
+     * @ORM\JoinColumn(name="building_id", referencedColumnName="id")
+     */
+    private $building;
+
+    /**
+     * One BuildDevice has Many docDevices.
+     * @ORM\OneToMany(targetEntity="DocDevice", mappedBy="buildDevice")
+     */
+    private $docDevices;
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->docDevice = new ArrayCollection();
+        $this->del = false;
+    }
+
+}

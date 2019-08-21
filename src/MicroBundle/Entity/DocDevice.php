@@ -5,12 +5,12 @@ namespace MicroBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * InspectedDevice
+ * DocDevice
  *
- * @ORM\Table(name="inspected_device")
- * @ORM\Entity(repositoryClass="MicroBundle\Repository\InspectedDeviceRepository")
+ * @ORM\Table(name="doc_device")
+ * @ORM\Entity(repositoryClass="MicroBundle\Repository\DocDeviceRepository")
  */
-class InspectedDevice
+class DocDevice
 {
     /**
      * @var int
@@ -24,7 +24,7 @@ class InspectedDevice
     /**
      * @var int
      *
-     * @ORM\Column(name="loopNo", type="integer", nullable=true)
+     * @ORM\Column(name="loop_no", type="integer", nullable=true)
      */
     private $loopNo;
 
@@ -72,18 +72,18 @@ class InspectedDevice
     private $visible;
 
     /**
-     * Many InspectedDevices have One Fire Inspection
-     * @ORM\ManyToOne(targetEntity="MicroBundle\Entity\FireInspection", inversedBy="inspectedDevices", cascade={"persist"})
-     * @ORM\JoinColumn(name="fire_inspection_id", referencedColumnName="id")
+     * Many DocDevices have One Document
+     * @ORM\ManyToOne(targetEntity="Document", inversedBy="docDevices", cascade={"persist"})
+     * @ORM\JoinColumn(name="document_id", referencedColumnName="id")
      */
-    private $fireInspection;
+    private $document;
 
     /**
-     * Many InspectedDevices have One FireProtectionDevice
-     * @ORM\ManyToOne(targetEntity="MicroBundle\Entity\FireProtectionDevice", inversedBy="inspectedDevices")
-     * @ORM\JoinColumn(name="fire_protection_device_id", referencedColumnName="id")
+     * Many DocDevices have One BuildDevice
+     * @ORM\ManyToOne(targetEntity="BuildDevice", inversedBy="docDevices")
+     * @ORM\JoinColumn(name="build_device_id", referencedColumnName="id")
      */
-    private $fireProtectionDevice;
+    private $buildDevice;
 
     /**
      * Constructor
@@ -95,19 +95,7 @@ class InspectedDevice
         $this->visible = true;
     }
 
-    /**
-     * Set id.
-     *
-     * @param int $id
-     *
-     * @return InspectedDevice
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
 
-        return $this;
-    }
 
     /**
      * Get id.
@@ -122,11 +110,11 @@ class InspectedDevice
     /**
      * Set loopNo.
      *
-     * @param int $loopNo
+     * @param int|null $loopNo
      *
-     * @return InspectedDevice
+     * @return DocDevice
      */
-    public function setLoopNo($loopNo)
+    public function setLoopNo($loopNo = null)
     {
         $this->loopNo = $loopNo;
 
@@ -136,7 +124,7 @@ class InspectedDevice
     /**
      * Get loopNo.
      *
-     * @return int
+     * @return int|null
      */
     public function getLoopNo()
     {
@@ -148,7 +136,7 @@ class InspectedDevice
      *
      * @param int $number
      *
-     * @return InspectedDevice
+     * @return DocDevice
      */
     public function setNumber($number)
     {
@@ -172,7 +160,7 @@ class InspectedDevice
      *
      * @param string $shortname
      *
-     * @return InspectedDevice
+     * @return DocDevice
      */
     public function setShortname($shortname)
     {
@@ -196,7 +184,7 @@ class InspectedDevice
      *
      * @param bool $status
      *
-     * @return InspectedDevice
+     * @return DocDevice
      */
     public function setStatus($status)
     {
@@ -218,9 +206,9 @@ class InspectedDevice
     /**
      * Set test.
      *
-     * @param string $test
+     * @param bool $test
      *
-     * @return InspectedDevice
+     * @return DocDevice
      */
     public function setTest($test)
     {
@@ -232,7 +220,7 @@ class InspectedDevice
     /**
      * Get test.
      *
-     * @return string
+     * @return bool
      */
     public function getTest()
     {
@@ -242,11 +230,11 @@ class InspectedDevice
     /**
      * Set comment.
      *
-     * @param string $comment
+     * @param string|null $comment
      *
-     * @return InspectedDevice
+     * @return DocDevice
      */
-    public function setComment($comment)
+    public function setComment($comment = null)
     {
         $this->comment = $comment;
 
@@ -256,7 +244,7 @@ class InspectedDevice
     /**
      * Get comment.
      *
-     * @return string
+     * @return string|null
      */
     public function getComment()
     {
@@ -264,59 +252,11 @@ class InspectedDevice
     }
 
     /**
-     * Set fireInspection.
-     *
-     * @param \MicroBundle\Entity\FireInspection|null $fireInspection
-     *
-     * @return InspectedDevice
-     */
-    public function setFireInspection(\MicroBundle\Entity\FireInspection $fireInspection = null)
-    {
-        $this->fireInspection = $fireInspection;
-
-        return $this;
-    }
-
-    /**
-     * Get fireInspection.
-     *
-     * @return \MicroBundle\Entity\FireInspection|null
-     */
-    public function getFireInspection()
-    {
-        return $this->fireInspection;
-    }
-
-    /**
-     * Set fireProtectionDevice.
-     *
-     * @param \MicroBundle\Entity\FireProtectionDevice|null $fireProtectionDevice
-     *
-     * @return InspectedDevice
-     */
-    public function setFireProtectionDevice(\MicroBundle\Entity\FireProtectionDevice $fireProtectionDevice = null)
-    {
-        $this->fireProtectionDevice = $fireProtectionDevice;
-
-        return $this;
-    }
-
-    /**
-     * Get fireProtectionDevice.
-     *
-     * @return \MicroBundle\Entity\FireProtectionDevice|null
-     */
-    public function getFireProtectionDevice()
-    {
-        return $this->fireProtectionDevice;
-    }
-
-    /**
      * Set visible.
      *
      * @param bool $visible
      *
-     * @return InspectedDevice
+     * @return DocDevice
      */
     public function setVisible($visible)
     {
@@ -336,14 +276,50 @@ class InspectedDevice
     }
 
     /**
-     * Change visible.
+     * Set document.
      *
-     * @return bool
+     * @param \MicroBundle\Entity\Document|null $document
+     *
+     * @return DocDevice
      */
-    public function changeVisible()
+    public function setDocument(\MicroBundle\Entity\Document $document = null)
     {
-        $this->visible = !$this->visible;
+        $this->document = $document;
 
-        return $this->visible;
+        return $this;
+    }
+
+    /**
+     * Get document.
+     *
+     * @return \MicroBundle\Entity\Document|null
+     */
+    public function getDocument()
+    {
+        return $this->document;
+    }
+
+    /**
+     * Set buildDevice.
+     *
+     * @param \MicroBundle\Entity\BuildDevice|null $buildDevice
+     *
+     * @return DocDevice
+     */
+    public function setBuildDevice(\MicroBundle\Entity\BuildDevice $buildDevice = null)
+    {
+        $this->buildDevice = $buildDevice;
+
+        return $this;
+    }
+
+    /**
+     * Get buildDevice.
+     *
+     * @return \MicroBundle\Entity\BuildDevice|null
+     */
+    public function getBuildDevice()
+    {
+        return $this->buildDevice;
     }
 }

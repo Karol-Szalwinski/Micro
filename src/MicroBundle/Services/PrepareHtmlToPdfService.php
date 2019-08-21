@@ -3,7 +3,7 @@
 namespace MicroBundle\Services;
 
 
-use MicroBundle\Entity\FireInspection;
+use MicroBundle\Entity\Document;
 
 /**
  * Class PrepareFireInspectionToPdfService
@@ -23,10 +23,10 @@ final class PrepareHtmlToPdfService
 
 
     /**
-     * @param FireInspection $fireInspection
+     * @param Document $fireInspection
      * @return string
      */
-    public function getContent(FireInspection $fireInspection): string
+    public function getContent(Document $fireInspection): string
     {
         $content = $this->templating->render('pdf/fire-inspection-content.html.twig',
             array('fireInspection' => $fireInspection));
@@ -35,10 +35,10 @@ final class PrepareHtmlToPdfService
     }
 
     /**
-     * @param FireInspection $fireInspection
+     * @param Document $fireInspection
      * @return string
      */
-    public function getHeader(FireInspection $fireInspection): string
+    public function getHeader(Document $fireInspection): string
     {
         $header = $this->templating->render( 'pdf/fire-inspection-header.html.twig',
             array( 'mycompany' => $this->myCompany->getOrCreateDefaultMyCompany()) );
@@ -47,10 +47,10 @@ final class PrepareHtmlToPdfService
     }
 
     /**
-     * @param FireInspection $fireInspection
+     * @param Document $fireInspection
      * @return string
      */
-    public function getFooter(FireInspection $fireInspection): string
+    public function getFooter(Document $fireInspection): string
     {
         $footer = $this->templating->render( 'pdf/fire-inspection-footer.html.twig',
             array('fireInspection' => $fireInspection,

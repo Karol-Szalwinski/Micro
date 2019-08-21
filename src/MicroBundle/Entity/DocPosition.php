@@ -5,12 +5,12 @@ namespace MicroBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TestPosition
+ * DocPosition
  *
- * @ORM\Table(name="test_position")
- * @ORM\Entity(repositoryClass="MicroBundle\Repository\TestPositionRepository")
+ * @ORM\Table(name="doc_position")
+ * @ORM\Entity(repositoryClass="MicroBundle\Repository\DocPositionRepository")
  */
-class TestPosition
+class DocPosition
 {
     /**
      * @var int
@@ -43,14 +43,14 @@ class TestPosition
     private $comment;
 
     /**
-     * Many InspectedDevices have One Fire Inspection
-     * @ORM\ManyToOne(targetEntity="MicroBundle\Entity\FireInspection", inversedBy="testPositions", cascade={"persist"})
-     * @ORM\JoinColumn(name="fire_inspection_id", referencedColumnName="id")
+     * Many DocPosition have One Document
+     * @ORM\ManyToOne(targetEntity="Document", inversedBy="docPositions", cascade={"persist"})
+     * @ORM\JoinColumn(name="document_id", referencedColumnName="id")
      */
-    private $fireInspection;
+    private $document;
 
     /**
-     * TestPosition constructor.
+     * DocPosition constructor.
      *
      */
     public function __construct()
@@ -72,11 +72,11 @@ class TestPosition
     /**
      * Set name.
      *
-     * @param string $name
+     * @param string|null $name
      *
-     * @return TestPosition
+     * @return DocPosition
      */
-    public function setName($name)
+    public function setName($name = null)
     {
         $this->name = $name;
 
@@ -86,7 +86,7 @@ class TestPosition
     /**
      * Get name.
      *
-     * @return string
+     * @return string|null
      */
     public function getName()
     {
@@ -98,7 +98,7 @@ class TestPosition
      *
      * @param bool $test
      *
-     * @return TestPosition
+     * @return DocPosition
      */
     public function setTest($test)
     {
@@ -120,11 +120,11 @@ class TestPosition
     /**
      * Set comment.
      *
-     * @param string $comment
+     * @param string|null $comment
      *
-     * @return TestPosition
+     * @return DocPosition
      */
-    public function setComment($comment)
+    public function setComment($comment = null)
     {
         $this->comment = $comment;
 
@@ -134,7 +134,7 @@ class TestPosition
     /**
      * Get comment.
      *
-     * @return string
+     * @return string|null
      */
     public function getComment()
     {
@@ -142,26 +142,26 @@ class TestPosition
     }
 
     /**
-     * Set fireInspection.
+     * Set document.
      *
-     * @param \MicroBundle\Entity\FireInspection|null $fireInspection
+     * @param \MicroBundle\Entity\Document|null $document
      *
-     * @return TestPosition
+     * @return DocPosition
      */
-    public function setFireInspection(\MicroBundle\Entity\FireInspection $fireInspection = null)
+    public function setDocument(\MicroBundle\Entity\Document $document = null)
     {
-        $this->fireInspection = $fireInspection;
+        $this->document = $document;
 
         return $this;
     }
 
     /**
-     * Get fireInspection.
+     * Get document.
      *
-     * @return \MicroBundle\Entity\FireInspection|null
+     * @return \MicroBundle\Entity\Document|null
      */
-    public function getFireInspection()
+    public function getDocument()
     {
-        return $this->fireInspection;
+        return $this->document;
     }
 }

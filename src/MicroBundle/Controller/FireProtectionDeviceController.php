@@ -2,8 +2,8 @@
 
 namespace MicroBundle\Controller;
 
-use MicroBundle\Entity\DeviceName;
-use MicroBundle\Entity\FireProtectionDevice;
+use MicroBundle\Entity\Device;
+use MicroBundle\Entity\BuildDevice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -31,7 +31,7 @@ class FireProtectionDeviceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $fireProtectionDevices = $em->getRepository('MicroBundle:FireProtectionDevice')->findAll();
+        $fireProtectionDevices = $em->getRepository('MicroBundle:BuildDevice')->findAll();
 
         return $this->render('fireprotectiondevice/index.html.twig', array('fireProtectionDevices' => $fireProtectionDevices,));
     }
@@ -44,7 +44,7 @@ class FireProtectionDeviceController extends Controller
      */
     public function newAction(Request $request)
     {
-        $fireProtectionDevice = new Fireprotectiondevice();
+        $fireProtectionDevice = new BuildDevice();
         $form = $this->createForm('MicroBundle\Form\FireProtectionDeviceType', $fireProtectionDevice);
         $form->handleRequest($request);
 
@@ -65,7 +65,7 @@ class FireProtectionDeviceController extends Controller
      * @Route("/{id}", name="fireprotectiondevice_show")
      * @Method("GET")
      */
-    public function showAction(FireProtectionDevice $fireProtectionDevice)
+    public function showAction(BuildDevice $fireProtectionDevice)
     {
         $deleteForm = $this->createDeleteForm($fireProtectionDevice);
 
@@ -78,7 +78,7 @@ class FireProtectionDeviceController extends Controller
      * @Route("/{id}/edit", name="fireprotectiondevice_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, FireProtectionDevice $fireProtectionDevice)
+    public function editAction(Request $request, BuildDevice $fireProtectionDevice)
     {
         $deleteForm = $this->createDeleteForm($fireProtectionDevice);
         $editForm = $this->createForm('MicroBundle\Form\FireProtectionDeviceType', $fireProtectionDevice);
@@ -99,7 +99,7 @@ class FireProtectionDeviceController extends Controller
      * @Route("/{id}", name="fireprotectiondevice_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, FireProtectionDevice $fireProtectionDevice)
+    public function deleteAction(Request $request, BuildDevice $fireProtectionDevice)
     {
         $form = $this->createDeleteForm($fireProtectionDevice);
         $form->handleRequest($request);
@@ -116,18 +116,18 @@ class FireProtectionDeviceController extends Controller
     /**
      * Creates a form to delete a fireProtectionDevice entity.
      *
-     * @param FireProtectionDevice $fireProtectionDevice The fireProtectionDevice entity
+     * @param BuildDevice $fireProtectionDevice The fireProtectionDevice entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(FireProtectionDevice $fireProtectionDevice)
+    private function createDeleteForm(BuildDevice $fireProtectionDevice)
     {
         return $this->createFormBuilder()->setAction($this->generateUrl('fireprotectiondevice_delete', array('id' => $fireProtectionDevice->getId())))->setMethod('DELETE')->getForm();
 
     }
 
     /**
-     * Get FireProtectionDevice object
+     * Get BuildDevice object
      * @Method({"GET", "POST"})
      * @Route("/get-device/{id}")
      * @param Request $request
@@ -137,9 +137,9 @@ class FireProtectionDeviceController extends Controller
     public function getFireProtectionDeviceAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['id' => $id]);
+        $fireProtectionDevice = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['id' => $id]);
         $nameId = '1';
-        $deviceName = $em->getRepository('MicroBundle:DeviceName')->findOneBy(['name' => $fireProtectionDevice->getName()]);
+        $deviceName = $em->getRepository('MicroBundle:Device')->findOneBy(['name' => $fireProtectionDevice->getName()]);
 
         if (!$deviceName == null) {
             $nameId = $deviceName->getId();
@@ -200,14 +200,14 @@ class FireProtectionDeviceController extends Controller
         //if we dont have id
         if ($id == "null") {
         //try to search deleted device with the same number and loopdev
-            $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['number' => $number, 'loopDev'=> $loop]);
+            $fireProtectionDevice = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['number' => $number, 'loopDev'=> $loop]);
 
             //if found change status on undeleted
-            if ($fireProtectionDevice instanceof FireProtectionDevice) {
+            if ($fireProtectionDevice instanceof BuildDevice) {
                 $fireProtectionDevice->setDel(false);
                 //if not we create a new object
             } else {
-                $fireProtectionDevice = new FireProtectionDevice();
+                $fireProtectionDevice = new BuildDevice();
 
                 $loopDev = $em->getRepository('MicroBundle:LoopDev')->findOneBy(['id' => $loop]);
                 $loopDev->addFireProtectionDevice($fireProtectionDevice);
@@ -217,13 +217,13 @@ class FireProtectionDeviceController extends Controller
             }
 
         } else {
-            $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['id' => $id]);
+            $fireProtectionDevice = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['id' => $id]);
         }
 
         if ($name != "null") {
-            $deviceName = $em->getRepository('MicroBundle:DeviceName')->findOneBy(['name' => $name]);
-            if (!$deviceName instanceof DeviceName) {
-                $deviceName = $em->getRepository('MicroBundle:DeviceName')->findOneBy(['id' => $name]);
+            $deviceName = $em->getRepository('MicroBundle:Device')->findOneBy(['name' => $name]);
+            if (!$deviceName instanceof Device) {
+                $deviceName = $em->getRepository('MicroBundle:Device')->findOneBy(['id' => $name]);
             }
             $name = $deviceName->getName();
             $shortname = $deviceName->getShortname();
@@ -286,7 +286,7 @@ class FireProtectionDeviceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['id' => $id]);
+        $fireProtectionDevice = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['id' => $id]);
 
         $fireProtectionDevice->setDel(true);
         $em->flush();

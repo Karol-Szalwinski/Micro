@@ -10,7 +10,7 @@ namespace MicroBundle\Controller;
 
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use MicroBundle\Entity\FireInspection;
+use MicroBundle\Entity\Document;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,13 +24,13 @@ class PdfController extends Controller
 
 
     /**
-     * Print to pdf FireInspection
+     * Print to pdf Document
      *
      * @Route("/pdf/{fireInspection}", name="fire_inspection_pdf")
-     * @param FireInspection $fireInspection
+     * @param Document $fireInspection
      * @return PdfResponse
      */
-    public function pdfFireInspectionAction(FireInspection $fireInspection)
+    public function pdfFireInspectionAction(Document $fireInspection)
     {
         $prepareService = $this->get('prepareHtmlToPdf');
         $html = $prepareService->getContent($fireInspection);

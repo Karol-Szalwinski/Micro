@@ -2,6 +2,7 @@
 
 namespace MicroBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -79,16 +80,16 @@ class Building
     private $client;
 
     /**
-     * One Building has Many LoopDev.
-     * @ORM\OneToMany(targetEntity="LoopDev", mappedBy="building", cascade={"persist"})
+     * One Building has Many BuildDevice.
+     * @ORM\OneToMany(targetEntity="BuildDevice", mappedBy="building", cascade={"persist"})
      */
-    private $loopDevs;
+    private $buildDevices;
 
     /**
      * One Building has Many FireInspections.
-     * @ORM\OneToMany(targetEntity="FireInspection", mappedBy="building", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Document", mappedBy="building", cascade={"persist"})
      */
-    private $fireInspections;
+    private $documents;
 
     /**
      * @var string
@@ -112,322 +113,10 @@ class Building
      */
     public function __construct()
     {
-        $this->loopDevs = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->fireInspections = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->pdfDocuments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->buildDevices = new ArrayCollection();
+        $this->documents = new ArrayCollection();
+        $this->pdfDocuments = new ArrayCollection();
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set name.
-     *
-     * @param string $name
-     *
-     * @return Building
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set street.
-     *
-     * @param string $street
-     *
-     * @return Building
-     */
-    public function setStreet($street)
-    {
-        $this->street = $street;
-
-        return $this;
-    }
-
-    /**
-     * Get street.
-     *
-     * @return string
-     */
-    public function getStreet()
-    {
-        return $this->street;
-    }
-
-    /**
-     * Set houseNo.
-     *
-     * @param string $houseNo
-     *
-     * @return Building
-     */
-    public function setHouseNo($houseNo)
-    {
-        $this->houseNo = $houseNo;
-
-        return $this;
-    }
-
-    /**
-     * Get houseNo.
-     *
-     * @return string
-     */
-    public function getHouseNo()
-    {
-        return $this->houseNo;
-    }
-
-    /**
-     * Set flatNo.
-     *
-     * @param string|null $flatNo
-     *
-     * @return Building
-     */
-    public function setFlatNo($flatNo = null)
-    {
-        $this->flatNo = $flatNo;
-
-        return $this;
-    }
-
-    /**
-     * Get flatNo.
-     *
-     * @return string|null
-     */
-    public function getFlatNo()
-    {
-        return $this->flatNo;
-    }
-
-    /**
-     * Set city.
-     *
-     * @param string $city
-     *
-     * @return Building
-     */
-    public function setCity($city)
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
-    /**
-     * Get city.
-     *
-     * @return string
-     */
-    public function getCity()
-    {
-        return $this->city;
-    }
-
-    /**
-     * Set postalCode.
-     *
-     * @param string $postalCode
-     *
-     * @return Building
-     */
-    public function setPostalCode($postalCode)
-    {
-        $this->postalCode = $postalCode;
-
-        return $this;
-    }
-
-    /**
-     * Get postalCode.
-     *
-     * @return string
-     */
-    public function getPostalCode()
-    {
-        return $this->postalCode;
-    }
-
-    /**
-     * Set description.
-     *
-     * @param string|null $description
-     *
-     * @return Building
-     */
-    public function setDescription($description = null)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description.
-     *
-     * @return string|null
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set client.
-     *
-     * @param \MicroBundle\Entity\Client|null $client
-     *
-     * @return Building
-     */
-    public function setClient(\MicroBundle\Entity\Client $client = null)
-    {
-        $this->client = $client;
-
-        return $this;
-    }
-
-    /**
-     * Get client.
-     *
-     * @return \MicroBundle\Entity\Client|null
-     */
-    public function getClient()
-    {
-        return $this->client;
-    }
-
-
-    /**
-     * Add fireInspection.
-     *
-     * @param \MicroBundle\Entity\FireInspection $fireInspection
-     *
-     * @return Building
-     */
-    public function addFireInspection(\MicroBundle\Entity\FireInspection $fireInspection)
-    {
-        $this->fireInspections[] = $fireInspection;
-
-        return $this;
-    }
-
-    /**
-     * Remove fireInspection.
-     *
-     * @param \MicroBundle\Entity\FireInspection $fireInspection
-     *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeFireInspection(\MicroBundle\Entity\FireInspection $fireInspection)
-    {
-        return $this->fireInspections->removeElement($fireInspection);
-    }
-
-    /**
-     * Get fireInspections.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFireInspections()
-    {
-        return $this->fireInspections;
-    }
-
-    /**
-     * Add loopDev.
-     *
-     * @param \MicroBundle\Entity\LoopDev $loopDev
-     *
-     * @return Building
-     */
-    public function addLoopDev(\MicroBundle\Entity\LoopDev $loopDev)
-    {
-        $this->loopDevs[] = $loopDev;
-
-        return $this;
-    }
-
-    /**
-     * Remove loopDev.
-     *
-     * @param \MicroBundle\Entity\LoopDev $loopDev
-     *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeLoopDev(\MicroBundle\Entity\LoopDev $loopDev)
-    {
-        return $this->loopDevs->removeElement($loopDev);
-    }
-
-    /**
-     * Get loopDevs.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getLoopDevs()
-    {
-        return $this->loopDevs;
-    }
-
-    /**
-     * Set deviceShortlistPosition.
-     *
-     * @param string|null $deviceShortlistPosition
-     *
-     * @return Building
-     */
-    public function setDeviceShortlistPosition($deviceShortlistPosition = null)
-    {
-        $this->deviceShortlistPosition = $deviceShortlistPosition;
-
-        return $this;
-    }
-
-    /**
-     * Get deviceShortlistPosition.
-     *
-     * @return string|null
-     */
-    public function getDeviceShortlistPosition()
-    {
-        return $this->deviceShortlistPosition;
-    }
-
-    /**
-     * @return int
-     */
-    public function countLoopDevsWithoutDel()
-    {
-        $count = 0;
-        foreach ($this->loopDevs as $loopDev) {
-            if (!$loopDev->getDel()) {
-                $count++;
-            }
-        }
-        return $count;
-    }
 
 }

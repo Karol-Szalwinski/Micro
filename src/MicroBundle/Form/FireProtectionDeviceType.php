@@ -19,11 +19,11 @@ class FireProtectionDeviceType extends AbstractType
             ->add('id', HiddenType::class)
             ->add('loopDev', HiddenType::class)
             ->add('name', EntityType::class, [
-                'class'=>'MicroBundle\Entity\DeviceName',
+                'class'=> 'MicroBundle\Entity\Device',
                 'choice_label'=>'name',
             ])
             ->add('shortname', EntityType::class, [
-                'class'=>'MicroBundle\Entity\DeviceName',
+                'class'=> 'MicroBundle\Entity\Device',
                 'choice_label'=>'shortname',
             ])
             ->add('serial')
@@ -38,7 +38,7 @@ class FireProtectionDeviceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'MicroBundle\Entity\FireProtectionDevice'
+            'data_class' => 'MicroBundle\Entity\BuildDevice'
         ));
     }
 

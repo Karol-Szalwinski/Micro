@@ -25,28 +25,28 @@ class PdfSettings
     /**
      * @var bool
      *
-     * @ORM\Column(name="showTables", type="boolean")
+     * @ORM\Column(name="show_tables", type="boolean")
      */
     private $showTables;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="showBuildingData", type="boolean")
+     * @ORM\Column(name="show_building_data", type="boolean")
      */
     private $showBuildingData;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="showClientData", type="boolean")
+     * @ORM\Column(name="show_client_data", type="boolean")
      */
     private $showClientData;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="showStamp", type="boolean")
+     * @ORM\Column(name="show_stamp", type="boolean")
      */
     private $showStamp;
 
@@ -58,17 +58,17 @@ class PdfSettings
     private $inspectors;
 
     /**
-     * One PdfSettings has One FireInspection.
-     * @ORM\OneToOne(targetEntity="FireInspection", mappedBy="pdfSettings")
+     * One PdfSettings has One Document.
+     * @ORM\OneToOne(targetEntity="Document", mappedBy="pdfSettings")
      */
-    private $fireInspection;
+    private $document;
 
     /**
      * PdfSettings constructor.
      */
-    public function __construct($fireInspection)
+    public function __construct($document)
     {
-        $this->fireInspection = $fireInspection;
+        $this->document = $document;
         $this->showTables = true;
         $this->showBuildingData = true;
         $this->showClientData = false;
@@ -182,33 +182,6 @@ class PdfSettings
     {
         return $this->showStamp;
     }
-    
-
-    /**
-     * Set fireInspection.
-     *
-     * @param string $fireInspection
-     *
-     * @return PdfSettings
-     */
-    public function setFireInspection($fireInspection)
-    {
-        $this->fireInspection = $fireInspection;
-
-        return $this;
-    }
-
-    /**
-     * Get fireInspection.
-     *
-     * @return string
-     */
-    public function getFireInspection()
-    {
-        return $this->fireInspection;
-    }
-
- 
 
     /**
      * Set inspectors.
@@ -232,5 +205,29 @@ class PdfSettings
     public function getInspectors()
     {
         return $this->inspectors;
+    }
+
+    /**
+     * Set document.
+     *
+     * @param \MicroBundle\Entity\Document|null $document
+     *
+     * @return PdfSettings
+     */
+    public function setDocument(\MicroBundle\Entity\Document $document = null)
+    {
+        $this->document = $document;
+
+        return $this;
+    }
+
+    /**
+     * Get document.
+     *
+     * @return \MicroBundle\Entity\Document|null
+     */
+    public function getDocument()
+    {
+        return $this->document;
     }
 }

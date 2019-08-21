@@ -2,15 +2,17 @@
 
 namespace MicroBundle\Entity;
 
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FireInspection
+ * Document
  *
- * @ORM\Table(name="fire_inspection")
- * @ORM\Entity(repositoryClass="MicroBundle\Repository\FireInspectionRepository")
+ * @ORM\Table(name="document")
+ * @ORM\Entity(repositoryClass="MicroBundle\Repository\DocumentRepository")
  */
-class FireInspection
+class Document
 {
     /**
      * @var int
@@ -24,6 +26,13 @@ class FireInspection
     /**
      * @var string
      *
+     * @ORM\Column(name="name", type="string", length=100)
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="scope", type="text")
      */
     private $scope;
@@ -31,46 +40,41 @@ class FireInspection
     /**
      * @var string
      *
-     * @ORM\Column(name="deviceShortlistPosition", type="text", nullable=true)
+     * @ORM\Column(name="device_shortlist_position", type="text", nullable=true)
      */
     private $deviceShortlistPosition;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="inspectionDate", type="datetime")
+     * @ORM\Column(name="inspection_date", type="datetime")
      */
     private $inspectionDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="nextInspectionDate", type="datetime", nullable=true)
+     * @ORM\Column(name="next_inspection_date", type="datetime", nullable=true)
      */
     private $nextInspectionDate;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="nextInspectionForMonth", type="integer", nullable=true)
+     * @ORM\Column(name="next_inspection_for_month", type="integer", nullable=true)
      */
     private $nextInspectionForMonth;
 
-    /**
-     * One FireInspections has Many DocumentInspectors.
-     * @ORM\OneToMany(targetEntity="DocumentInspector", mappedBy="fireInspection", cascade={"persist"})
-     */
-    private $documentInspectors;
 
     /**
-     * Many FireInspectors have Many Inspectors.
+     * Many Documents have Many Inspectors.
      * @ORM\ManyToMany(targetEntity="Inspector")
-     * @ORM\JoinTable(name="fire_inspection_temp_inspectors",
-     *      joinColumns={@ORM\JoinColumn(name="fire_inspection_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="temp_inspectors_id", referencedColumnName="id", unique=true)}
+     * @ORM\JoinTable(name="document_inspectors",
+     *      joinColumns={@ORM\JoinColumn(name="document_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="inspector_id", referencedColumnName="id", unique=true)}
      *      )
      */
-    private $tempInspectors;
+    private $inspectors;
 
     /**
      * @var string
@@ -102,27 +106,27 @@ class FireInspection
 
 
     /**
-     * One Fire Inspection has Many inspectedDevices.
-     * @ORM\OneToMany(targetEntity="MicroBundle\Entity\InspectedDevice", mappedBy="fireInspection", cascade={"persist"})
+     * One Document has Many docDevices.
+     * @ORM\OneToMany(targetEntity="DocDevice", mappedBy="document", cascade={"persist"})
      */
-    private $inspectedDevices;
+    private $docDevices;
 
     /**
-     * One Fire Inspection has Many testPositions.
-     * @ORM\OneToMany(targetEntity="MicroBundle\Entity\TestPosition", mappedBy="fireInspection", cascade={"persist"})
+     * One Document has Many DocPosition.
+     * @ORM\OneToMany(targetEntity="DocPosition", mappedBy="document", cascade={"persist"})
      */
-    private $testPositions;
+    private $docPositions;
 
     /**
-     * Many FireInspections have One Building.
-     * @ORM\ManyToOne(targetEntity="Building", inversedBy="fireInspections", cascade={"persist"})
+     * Many Document have One Building.
+     * @ORM\ManyToOne(targetEntity="Building", inversedBy="documents", cascade={"persist"})
      * @ORM\JoinColumn(name="building_id", referencedColumnName="id")
      */
     private $building;
 
     /**
-     * One FireInspection has One PdfSettings
-     * @ORM\OneToOne(targetEntity="PdfSettings", inversedBy="fireInspection", cascade={"persist"})
+     * One Document has One PdfSettings
+     * @ORM\OneToOne(targetEntity="PdfSettings", inversedBy="document", cascade={"persist"})
      * @ORM\JoinColumn(name="pdf_settings_id", referencedColumnName="id")
      */
     private $pdfSettings;
@@ -134,13 +138,13 @@ class FireInspection
      */
     public function __construct()
     {
-        $this->documentInspectors = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->tempInspectors = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->inspectedDevices = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->inspectionDate = new \DateTime();
-        $this->nextInspectionDate = new \DateTime('now + 6 month');
+        $this->inspectors = new ArrayCollection();
+        $this->docDevices = new ArrayCollection();
+        $this->inspectionDate = new DateTime();
+        $this->nextInspectionDate = new DateTime('now + 6 month');
         $this->pdfSettings = new PdfSettings($this);
     }
+
 
     /**
      * Get id.
@@ -153,11 +157,35 @@ class FireInspection
     }
 
     /**
+     * Set name.
+     *
+     * @param string $name
+     *
+     * @return Document
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
      * Set scope.
      *
      * @param string $scope
      *
-     * @return FireInspection
+     * @return Document
      */
     public function setScope($scope)
     {
@@ -181,7 +209,7 @@ class FireInspection
      *
      * @param string|null $deviceShortlistPosition
      *
-     * @return FireInspection
+     * @return Document
      */
     public function setDeviceShortlistPosition($deviceShortlistPosition = null)
     {
@@ -205,7 +233,7 @@ class FireInspection
      *
      * @param \DateTime $inspectionDate
      *
-     * @return FireInspection
+     * @return Document
      */
     public function setInspectionDate($inspectionDate)
     {
@@ -227,11 +255,11 @@ class FireInspection
     /**
      * Set nextInspectionDate.
      *
-     * @param \DateTime $nextInspectionDate
+     * @param \DateTime|null $nextInspectionDate
      *
-     * @return FireInspection
+     * @return Document
      */
-    public function setNextInspectionDate($nextInspectionDate)
+    public function setNextInspectionDate($nextInspectionDate = null)
     {
         $this->nextInspectionDate = $nextInspectionDate;
 
@@ -241,7 +269,7 @@ class FireInspection
     /**
      * Get nextInspectionDate.
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function getNextInspectionDate()
     {
@@ -249,11 +277,35 @@ class FireInspection
     }
 
     /**
+     * Set nextInspectionForMonth.
+     *
+     * @param int|null $nextInspectionForMonth
+     *
+     * @return Document
+     */
+    public function setNextInspectionForMonth($nextInspectionForMonth = null)
+    {
+        $this->nextInspectionForMonth = $nextInspectionForMonth;
+
+        return $this;
+    }
+
+    /**
+     * Get nextInspectionForMonth.
+     *
+     * @return int|null
+     */
+    public function getNextInspectionForMonth()
+    {
+        return $this->nextInspectionForMonth;
+    }
+
+    /**
      * Set comment.
      *
      * @param string|null $comment
      *
-     * @return FireInspection
+     * @return Document
      */
     public function setComment($comment = null)
     {
@@ -277,7 +329,7 @@ class FireInspection
      *
      * @param string|null $recomendations
      *
-     * @return FireInspection
+     * @return Document
      */
     public function setRecomendations($recomendations = null)
     {
@@ -301,7 +353,7 @@ class FireInspection
      *
      * @param string $legal
      *
-     * @return FireInspection
+     * @return Document
      */
     public function setLegal($legal)
     {
@@ -325,7 +377,7 @@ class FireInspection
      *
      * @param string|null $conclusion
      *
-     * @return FireInspection
+     * @return Document
      */
     public function setConclusion($conclusion = null)
     {
@@ -344,127 +396,112 @@ class FireInspection
         return $this->conclusion;
     }
 
-
     /**
-     * Add documentInspector.
+     * Add inspector.
      *
-     * @param \MicroBundle\Entity\DocumentInspector $documentInspector
+     * @param \MicroBundle\Entity\Inspector $inspector
      *
-     * @return FireInspection
+     * @return Document
      */
-    public function addDocumentInspector(\MicroBundle\Entity\DocumentInspector $documentInspector)
+    public function addInspector(\MicroBundle\Entity\Inspector $inspector)
     {
-        $this->documentInspectors[] = $documentInspector;
+        $this->inspectors[] = $inspector;
 
         return $this;
     }
 
     /**
-     * Remove documentInspector.
+     * Remove inspector.
      *
-     * @param \MicroBundle\Entity\DocumentInspector $documentInspector
+     * @param \MicroBundle\Entity\Inspector $inspector
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeDocumentInspector(\MicroBundle\Entity\DocumentInspector $documentInspector)
+    public function removeInspector(\MicroBundle\Entity\Inspector $inspector)
     {
-        return $this->documentInspectors->removeElement($documentInspector);
+        return $this->inspectors->removeElement($inspector);
     }
 
     /**
-     * Get documentInspectors.
+     * Get inspectors.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getDocumentInspectors()
+    public function getInspectors()
     {
-        return $this->documentInspectors;
+        return $this->inspectors;
     }
 
     /**
-     * Add tempInspector.
+     * Add docDevice.
      *
-     * @param \MicroBundle\Entity\Inspector $tempInspector
+     * @param \MicroBundle\Entity\DocDevice $docDevice
      *
-     * @return FireInspection
+     * @return Document
      */
-    public function addTempInspector(\MicroBundle\Entity\Inspector $tempInspector)
+    public function addDocDevice(\MicroBundle\Entity\DocDevice $docDevice)
     {
-        $this->tempInspectors[] = $tempInspector;
+        $this->docDevices[] = $docDevice;
 
         return $this;
     }
 
     /**
-     * Remove tempInspector.
+     * Remove docDevice.
      *
-     * @param \MicroBundle\Entity\Inspector $tempInspector
+     * @param \MicroBundle\Entity\DocDevice $docDevice
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeTempInspector(\MicroBundle\Entity\Inspector $tempInspector)
+    public function removeDocDevice(\MicroBundle\Entity\DocDevice $docDevice)
     {
-        return $this->tempInspectors->removeElement($tempInspector);
+        return $this->docDevices->removeElement($docDevice);
     }
 
     /**
-     * Get tempInspectors.
+     * Get docDevices.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getTempInspectors()
+    public function getDocDevices()
     {
-        return $this->tempInspectors;
+        return $this->docDevices;
     }
 
     /**
-     * Add inspectedDevice.
+     * Add docPosition.
      *
-     * @param \MicroBundle\Entity\InspectedDevice $inspectedDevice
+     * @param \MicroBundle\Entity\DocPosition $docPosition
      *
-     * @return FireInspection
+     * @return Document
      */
-    public function addInspectedDevice(\MicroBundle\Entity\InspectedDevice $inspectedDevice)
+    public function addDocPosition(\MicroBundle\Entity\DocPosition $docPosition)
     {
-        $this->inspectedDevices[] = $inspectedDevice;
+        $this->docPositions[] = $docPosition;
 
         return $this;
     }
 
     /**
-     * Remove inspectedDevice.
+     * Remove docPosition.
      *
-     * @param \MicroBundle\Entity\InspectedDevice $inspectedDevice
+     * @param \MicroBundle\Entity\DocPosition $docPosition
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeInspectedDevice(\MicroBundle\Entity\InspectedDevice $inspectedDevice)
+    public function removeDocPosition(\MicroBundle\Entity\DocPosition $docPosition)
     {
-        return $this->inspectedDevices->removeElement($inspectedDevice);
+        return $this->docPositions->removeElement($docPosition);
     }
 
     /**
-     * Get inspectedDevices.
+     * Get docPositions.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getInspectedDevices()
+    public function getDocPositions()
     {
-        return $this->inspectedDevices;
-    }
-
-    /**
-     * Set All inspectedDevices Visible.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function setInspectedDevicesVisible()
-    {
-        foreach ( $this->inspectedDevices as $inspectedDevice) {
-            $inspectedDevice->setVisible(true);
-        }
-
-        return $this->inspectedDevices;
+        return $this->docPositions;
     }
 
     /**
@@ -472,7 +509,7 @@ class FireInspection
      *
      * @param \MicroBundle\Entity\Building|null $building
      *
-     * @return FireInspection
+     * @return Document
      */
     public function setBuilding(\MicroBundle\Entity\Building $building = null)
     {
@@ -492,71 +529,11 @@ class FireInspection
     }
 
     /**
-     * Add testPosition.
-     *
-     * @param \MicroBundle\Entity\TestPosition $testPosition
-     *
-     * @return FireInspection
-     */
-    public function addTestPosition(\MicroBundle\Entity\TestPosition $testPosition)
-    {
-        $this->testPositions[] = $testPosition;
-
-        return $this;
-    }
-
-    /**
-     * Remove testPosition.
-     *
-     * @param \MicroBundle\Entity\TestPosition $testPosition
-     *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeTestPosition(\MicroBundle\Entity\TestPosition $testPosition)
-    {
-        return $this->testPositions->removeElement($testPosition);
-    }
-
-    /**
-     * Get testPositions.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTestPositions()
-    {
-        return $this->testPositions;
-    }
-
-    /**
-     * Set nextInspectionForMonth.
-     *
-     * @param int $nextInspectionForMonth
-     *
-     * @return FireInspection
-     */
-    public function setNextInspectionForMonth($nextInspectionForMonth)
-    {
-        $this->nextInspectionForMonth = $nextInspectionForMonth;
-
-        return $this;
-    }
-
-    /**
-     * Get nextInspectionForMonth.
-     *
-     * @return int
-     */
-    public function getNextInspectionForMonth()
-    {
-        return $this->nextInspectionForMonth;
-    }
-
-    /**
      * Set pdfSettings.
      *
      * @param \MicroBundle\Entity\PdfSettings|null $pdfSettings
      *
-     * @return FireInspection
+     * @return Document
      */
     public function setPdfSettings(\MicroBundle\Entity\PdfSettings $pdfSettings = null)
     {

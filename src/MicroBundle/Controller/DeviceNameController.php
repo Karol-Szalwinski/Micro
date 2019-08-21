@@ -2,7 +2,7 @@
 
 namespace MicroBundle\Controller;
 
-use MicroBundle\Entity\DeviceName;
+use MicroBundle\Entity\Device;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +24,7 @@ class DeviceNameController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $deviceNames = $em->getRepository('MicroBundle:DeviceName')->findAll();
+        $deviceNames = $em->getRepository('MicroBundle:Device')->findAll();
 
         return $this->render('devicename/index.html.twig', array(
             'deviceNames' => $deviceNames,
@@ -39,7 +39,7 @@ class DeviceNameController extends Controller
      */
     public function newAction(Request $request)
     {
-        $deviceName = new Devicename();
+        $deviceName = new Device();
         $form = $this->createForm('MicroBundle\Form\DeviceNameType', $deviceName);
         $form->handleRequest($request);
 
@@ -63,7 +63,7 @@ class DeviceNameController extends Controller
      * @Route("/{id}", name="devicename_show")
      * @Method("GET")
      */
-    public function showAction(DeviceName $deviceName)
+    public function showAction(Device $deviceName)
     {
         $deleteForm = $this->createDeleteForm($deviceName);
 
@@ -79,7 +79,7 @@ class DeviceNameController extends Controller
      * @Route("/{id}/edit", name="devicename_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, DeviceName $deviceName)
+    public function editAction(Request $request, Device $deviceName)
     {
         $deleteForm = $this->createDeleteForm($deviceName);
         $editForm = $this->createForm('MicroBundle\Form\DeviceNameType', $deviceName);
@@ -104,7 +104,7 @@ class DeviceNameController extends Controller
      * @Route("/{id}", name="devicename_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, DeviceName $deviceName)
+    public function deleteAction(Request $request, Device $deviceName)
     {
         $form = $this->createDeleteForm($deviceName);
         $form->handleRequest($request);
@@ -121,11 +121,11 @@ class DeviceNameController extends Controller
     /**
      * Creates a form to delete a deviceName entity.
      *
-     * @param DeviceName $deviceName The deviceName entity
+     * @param Device $deviceName The deviceName entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(DeviceName $deviceName)
+    private function createDeleteForm(Device $deviceName)
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('devicename_delete', array('id' => $deviceName->getId())))

@@ -2,6 +2,7 @@
 
 namespace MicroBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -79,16 +80,16 @@ class Building
     private $client;
 
     /**
-     * One Building has Many LoopDev.
-     * @ORM\OneToMany(targetEntity="LoopDev", mappedBy="building", cascade={"persist"})
+     * One Building has Many BuildDevice.
+     * @ORM\OneToMany(targetEntity="BuildDevice", mappedBy="building", cascade={"persist"})
      */
-    private $loopDevs;
+    private $buildDevices;
 
     /**
      * One Building has Many FireInspections.
-     * @ORM\OneToMany(targetEntity="FireInspection", mappedBy="building", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Document", mappedBy="building", cascade={"persist"})
      */
-    private $fireInspections;
+    private $documents;
 
     /**
      * @var string
@@ -112,10 +113,12 @@ class Building
      */
     public function __construct()
     {
-        $this->loopDevs = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->fireInspections = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->pdfDocuments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->buildDevices = new ArrayCollection();
+        $this->documents = new ArrayCollection();
+        $this->pdfDocuments = new ArrayCollection();
     }
+
+
 
     /**
      * Get id.
@@ -296,103 +299,6 @@ class Building
     }
 
     /**
-     * Set client.
-     *
-     * @param \MicroBundle\Entity\Client|null $client
-     *
-     * @return Building
-     */
-    public function setClient(\MicroBundle\Entity\Client $client = null)
-    {
-        $this->client = $client;
-
-        return $this;
-    }
-
-    /**
-     * Get client.
-     *
-     * @return \MicroBundle\Entity\Client|null
-     */
-    public function getClient()
-    {
-        return $this->client;
-    }
-
-
-    /**
-     * Add fireInspection.
-     *
-     * @param \MicroBundle\Entity\FireInspection $fireInspection
-     *
-     * @return Building
-     */
-    public function addFireInspection(\MicroBundle\Entity\FireInspection $fireInspection)
-    {
-        $this->fireInspections[] = $fireInspection;
-
-        return $this;
-    }
-
-    /**
-     * Remove fireInspection.
-     *
-     * @param \MicroBundle\Entity\FireInspection $fireInspection
-     *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeFireInspection(\MicroBundle\Entity\FireInspection $fireInspection)
-    {
-        return $this->fireInspections->removeElement($fireInspection);
-    }
-
-    /**
-     * Get fireInspections.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFireInspections()
-    {
-        return $this->fireInspections;
-    }
-
-    /**
-     * Add loopDev.
-     *
-     * @param \MicroBundle\Entity\LoopDev $loopDev
-     *
-     * @return Building
-     */
-    public function addLoopDev(\MicroBundle\Entity\LoopDev $loopDev)
-    {
-        $this->loopDevs[] = $loopDev;
-
-        return $this;
-    }
-
-    /**
-     * Remove loopDev.
-     *
-     * @param \MicroBundle\Entity\LoopDev $loopDev
-     *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeLoopDev(\MicroBundle\Entity\LoopDev $loopDev)
-    {
-        return $this->loopDevs->removeElement($loopDev);
-    }
-
-    /**
-     * Get loopDevs.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getLoopDevs()
-    {
-        return $this->loopDevs;
-    }
-
-    /**
      * Set deviceShortlistPosition.
      *
      * @param string|null $deviceShortlistPosition
@@ -417,19 +323,100 @@ class Building
     }
 
     /**
-     * @return int
+     * Set client.
+     *
+     * @param \MicroBundle\Entity\Client|null $client
+     *
+     * @return Building
      */
-    public function countLoopDevsWithoutDel()
+    public function setClient(\MicroBundle\Entity\Client $client = null)
     {
-        $count = 0;
-        foreach ($this->loopDevs as $loopDev) {
-            if (!$loopDev->getDel()) {
-                $count++;
-            }
-        }
-        return $count;
+        $this->client = $client;
+
+        return $this;
     }
 
+    /**
+     * Get client.
+     *
+     * @return \MicroBundle\Entity\Client|null
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    /**
+     * Add buildDevice.
+     *
+     * @param \MicroBundle\Entity\BuildDevice $buildDevice
+     *
+     * @return Building
+     */
+    public function addBuildDevice(\MicroBundle\Entity\BuildDevice $buildDevice)
+    {
+        $this->buildDevices[] = $buildDevice;
+
+        return $this;
+    }
+
+    /**
+     * Remove buildDevice.
+     *
+     * @param \MicroBundle\Entity\BuildDevice $buildDevice
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeBuildDevice(\MicroBundle\Entity\BuildDevice $buildDevice)
+    {
+        return $this->buildDevices->removeElement($buildDevice);
+    }
+
+    /**
+     * Get buildDevices.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBuildDevices()
+    {
+        return $this->buildDevices;
+    }
+
+    /**
+     * Add document.
+     *
+     * @param \MicroBundle\Entity\Document $document
+     *
+     * @return Building
+     */
+    public function addDocument(\MicroBundle\Entity\Document $document)
+    {
+        $this->documents[] = $document;
+
+        return $this;
+    }
+
+    /**
+     * Remove document.
+     *
+     * @param \MicroBundle\Entity\Document $document
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeDocument(\MicroBundle\Entity\Document $document)
+    {
+        return $this->documents->removeElement($document);
+    }
+
+    /**
+     * Get documents.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDocuments()
+    {
+        return $this->documents;
+    }
 
     /**
      * Add pdfDocument.

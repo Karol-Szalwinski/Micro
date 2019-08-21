@@ -3,9 +3,9 @@
 namespace MicroBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use MicroBundle\Entity\FireInspection;
-use MicroBundle\Entity\InspectedDevice;
-use MicroBundle\Entity\TestPosition;
+use MicroBundle\Entity\Document;
+use MicroBundle\Entity\DocDevice;
+use MicroBundle\Entity\DocPosition;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -42,7 +42,7 @@ class TestPositionController extends Controller
         $value = ($value == "null") ? "" : $value;
 
         $em = $this->getDoctrine()->getManager();
-        $testPosition = $em->getRepository('MicroBundle:TestPosition')->findOneById($id);
+        $testPosition = $em->getRepository('MicroBundle:DocPosition')->findOneById($id);
 
         $responseText = null;
         switch ($type) {
@@ -91,7 +91,7 @@ class TestPositionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $fireInspection= $em->getRepository("MicroBundle\Entity\FireInspection")->FindOneBy(['id'=>$fireInspectionId]);
-        $testPosition = New TestPosition();
+        $testPosition = New DocPosition();
         $testPosition->setFireInspection($fireInspection);
         $fireInspection->addTestPosition($testPosition);
 

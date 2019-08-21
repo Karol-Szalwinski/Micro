@@ -3,8 +3,8 @@
 namespace MicroBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use MicroBundle\Entity\FireInspection;
-use MicroBundle\Entity\InspectedDevice;
+use MicroBundle\Entity\Document;
+use MicroBundle\Entity\DocDevice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -26,7 +26,7 @@ class InspectedDeviceController extends Controller
 
 
     /**
-     * Change status or test in InspectedDevice
+     * Change status or test in DocDevice
      * @Method({"GET", "POST"})
      * @Route("/{id}/changestatus/{type}")
      * @param Request $request
@@ -37,7 +37,7 @@ class InspectedDeviceController extends Controller
     public function changeStatusAction(Request $request, $id, $type)
     {
         $em = $this->getDoctrine()->getManager();
-        $inspectedDevice = $em->getRepository('MicroBundle:InspectedDevice')->findOneById($id);
+        $inspectedDevice = $em->getRepository('MicroBundle:DocDevice')->findOneById($id);
         if ($type == 's') {
 
 
@@ -82,7 +82,7 @@ class InspectedDeviceController extends Controller
     public function changeCommentAction(Request $request, $id, $comm)
     {
         $em = $this->getDoctrine()->getManager();
-        $inspectedDevice = $em->getRepository('MicroBundle:InspectedDevice')->findOneById($id);
+        $inspectedDevice = $em->getRepository('MicroBundle:DocDevice')->findOneById($id);
         $comment = ($comm == "null") ? "" : $comm;
         $inspectedDevice->setComment($comment);
 
@@ -102,10 +102,10 @@ class InspectedDeviceController extends Controller
      *
      * @Route("/{id}/loaddevices", name="fireinspection_load_devices")
      * @Method({"GET", "POST"})
-     * @param FireInspection $fireInspection
+     * @param Document $fireInspection
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function loadDevicesAction(FireInspection $fireInspection)
+    public function loadDevicesAction(Document $fireInspection)
     {
         $em = $this->getDoctrine()->getManager();
         $fireInspection->setInspectedDevicesVisible();
@@ -122,7 +122,7 @@ class InspectedDeviceController extends Controller
 
             //If I find it , I create objects of inspectedDevices and push them into the array
             if ($success) {
-                $inspectedDevices = new InspectedDevice();
+                $inspectedDevices = new DocDevice();
                 $inspectedDevices->setLoopNo($device->getLoopNo());
                 $inspectedDevices->setNumber($device->getNumber());
                 $inspectedDevices->setShortname($device->getShortname());
@@ -149,10 +149,10 @@ class InspectedDeviceController extends Controller
 
     /**
      * @Route("/{id}/deldevices", name="fireinspection_del_devices")
-     * @param FireInspection $fireInspection
+     * @param Document $fireInspection
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteDeviceAction(FireInspection $fireInspection)
+    public function deleteDeviceAction(Document $fireInspection)
     {
         if (!$fireInspection->getInspectedDevices()->isEmpty()) {
 
@@ -178,7 +178,7 @@ class InspectedDeviceController extends Controller
 
 
         $em = $this->getDoctrine()->getManager();
-        $inspectedDevice = $em->getRepository("MicroBundle:InspectedDevice")->findOneBy(["id" => $id]);
+        $inspectedDevice = $em->getRepository("MicroBundle:DocDevice")->findOneBy(["id" => $id]);
 
 
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
@@ -205,7 +205,7 @@ class InspectedDeviceController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $fireInspection = $em->getRepository('MicroBundle:FireInspection')->findOneById($fireInspection);
+        $fireInspection = $em->getRepository('MicroBundle:Document')->findOneById($fireInspection);
         //all devices in building
         $fireProtectionDevices = $fireInspection->getBuilding()->getFireProtectionDevices();
 
@@ -228,7 +228,7 @@ class InspectedDeviceController extends Controller
 
             //If I find it , I create objects of inspectedDevices and push them into the array
             if ($success) {
-                $inspectedDevices = new InspectedDevice();
+                $inspectedDevices = new DocDevice();
                 $inspectedDevices->setLoopNo($device->getLoopNo());
                 $inspectedDevices->setNumber($device->getNumber());
                 $inspectedDevices->setShortname($device->getShortname());
@@ -261,7 +261,7 @@ class InspectedDeviceController extends Controller
     }
 
     /**
-     * Update InspectedDevice
+     * Update DocDevice
      *
      * @Route("/{id}/update", name="inspected_device_update")
      * @param Request $request
@@ -271,7 +271,7 @@ class InspectedDeviceController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $inspectedDevice = $em->getRepository('MicroBundle:InspectedDevice')->findOneById($id);
+        $inspectedDevice = $em->getRepository('MicroBundle:DocDevice')->findOneById($id);
         $shortname = $inspectedDevice->getFireProtectionDevice()->getShortname();
         $inspectedDevice->setShortname($shortname);
 

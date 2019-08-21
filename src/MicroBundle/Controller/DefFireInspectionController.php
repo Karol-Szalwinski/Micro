@@ -4,8 +4,8 @@ namespace MicroBundle\Controller;
 
 use MicroBundle\Entity\Building;
 use MicroBundle\Entity\DocumentInspector;
-use MicroBundle\Entity\FireInspection;
-use MicroBundle\Entity\InspectedDevice;
+use MicroBundle\Entity\Document;
+use MicroBundle\Entity\DocDevice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -29,7 +29,7 @@ class DefFireInspectionController extends Controller
      */
     public function showAction()
     {
-        $fireInspection = $this->getDoctrine()->getManager()->getRepository('MicroBundle:FireInspection')
+        $fireInspection = $this->getDoctrine()->getManager()->getRepository('MicroBundle:Document')
             ->findOneBy(['id' => 1 ]);
 
         return $this->render('deffireinspection/show.html.twig', array(
@@ -48,7 +48,7 @@ class DefFireInspectionController extends Controller
     public function editAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $fireInspection = $em->getRepository('MicroBundle:FireInspection')
+        $fireInspection = $em->getRepository('MicroBundle:Document')
             ->findOneBy(['id' => 1 ]);
         $editForm = $this->createForm('MicroBundle\Form\DefFireInspectionType', $fireInspection);
 
@@ -81,7 +81,7 @@ class DefFireInspectionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $fireInspection = $em->getRepository('MicroBundle:FireInspection')
+        $fireInspection = $em->getRepository('MicroBundle:Document')
             ->findOneBy(['id' => 1 ]);
         $editForm = $this->createForm('MicroBundle\Form\FireInspectionSummaryType', $fireInspection);
 

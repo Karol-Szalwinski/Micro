@@ -1,0 +1,99 @@
+<?php
+
+namespace MicroBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * DocDevice
+ *
+ * @ORM\Table(name="doc_device")
+ * @ORM\Entity(repositoryClass="MicroBundle\Repository\DocDeviceRepository")
+ */
+class DocDevice
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="loop_no", type="integer", nullable=true)
+     */
+    private $loopNo;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="number", type="integer")
+     */
+    private $number;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="shortname", type="string", length=20)
+     */
+    private $shortname;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="status", type="boolean")
+     */
+    private $status;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="test", type="boolean")
+     */
+    private $test;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comment", type="string", length=255, nullable=true)
+     */
+    private $comment;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="visible", type="boolean")
+     */
+    private $visible;
+
+    /**
+     * Many DocDevices have One Document
+     * @ORM\ManyToOne(targetEntity="Document", inversedBy="docDevices", cascade={"persist"})
+     * @ORM\JoinColumn(name="document_id", referencedColumnName="id")
+     */
+    private $document;
+
+    /**
+     * Many DocDevices have One BuildDevice
+     * @ORM\ManyToOne(targetEntity="BuildDevice", inversedBy="docDevices")
+     * @ORM\JoinColumn(name="build_device_id", referencedColumnName="id")
+     */
+    private $buildDevice;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->status = true;
+        $this->test = true;
+        $this->visible = true;
+    }
+
+
+}

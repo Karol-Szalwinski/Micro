@@ -25,28 +25,28 @@ class PdfSettings
     /**
      * @var bool
      *
-     * @ORM\Column(name="showTables", type="boolean")
+     * @ORM\Column(name="show_tables", type="boolean")
      */
     private $showTables;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="showBuildingData", type="boolean")
+     * @ORM\Column(name="show_building_data", type="boolean")
      */
     private $showBuildingData;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="showClientData", type="boolean")
+     * @ORM\Column(name="show_client_data", type="boolean")
      */
     private $showClientData;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="showStamp", type="boolean")
+     * @ORM\Column(name="show_stamp", type="boolean")
      */
     private $showStamp;
 
@@ -58,17 +58,17 @@ class PdfSettings
     private $inspectors;
 
     /**
-     * One PdfSettings has One FireInspection.
-     * @ORM\OneToOne(targetEntity="FireInspection", mappedBy="pdfSettings")
+     * One PdfSettings has One Document.
+     * @ORM\OneToOne(targetEntity="Document", mappedBy="pdfSettings")
      */
-    private $fireInspection;
+    private $document;
 
     /**
      * PdfSettings constructor.
      */
-    public function __construct($fireInspection)
+    public function __construct($document)
     {
-        $this->fireInspection = $fireInspection;
+        $this->document = $document;
         $this->showTables = true;
         $this->showBuildingData = true;
         $this->showClientData = false;
@@ -76,161 +76,4 @@ class PdfSettings
 
     }
 
-
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set showTables.
-     *
-     * @param bool $showTables
-     *
-     * @return PdfSettings
-     */
-    public function setShowTables($showTables)
-    {
-        $this->showTables = $showTables;
-
-        return $this;
-    }
-
-    /**
-     * Get showTables.
-     *
-     * @return bool
-     */
-    public function getShowTables()
-    {
-        return $this->showTables;
-    }
-
-    /**
-     * Set showBuildingData.
-     *
-     * @param bool $showBuildingData
-     *
-     * @return PdfSettings
-     */
-    public function setShowBuildingData($showBuildingData)
-    {
-        $this->showBuildingData = $showBuildingData;
-
-        return $this;
-    }
-
-    /**
-     * Get showBuildingData.
-     *
-     * @return bool
-     */
-    public function getShowBuildingData()
-    {
-        return $this->showBuildingData;
-    }
-
-    /**
-     * Set showClientData.
-     *
-     * @param bool $showClientData
-     *
-     * @return PdfSettings
-     */
-    public function setShowClientData($showClientData)
-    {
-        $this->showClientData = $showClientData;
-
-        return $this;
-    }
-
-    /**
-     * Get showClientData.
-     *
-     * @return bool
-     */
-    public function getShowClientData()
-    {
-        return $this->showClientData;
-    }
-
-    /**
-     * Set showStamp.
-     *
-     * @param bool $showStamp
-     *
-     * @return PdfSettings
-     */
-    public function setShowStamp($showStamp)
-    {
-        $this->showStamp = $showStamp;
-
-        return $this;
-    }
-
-    /**
-     * Get showStamp.
-     *
-     * @return bool
-     */
-    public function getShowStamp()
-    {
-        return $this->showStamp;
-    }
-    
-
-    /**
-     * Set fireInspection.
-     *
-     * @param string $fireInspection
-     *
-     * @return PdfSettings
-     */
-    public function setFireInspection($fireInspection)
-    {
-        $this->fireInspection = $fireInspection;
-
-        return $this;
-    }
-
-    /**
-     * Get fireInspection.
-     *
-     * @return string
-     */
-    public function getFireInspection()
-    {
-        return $this->fireInspection;
-    }
-
- 
-
-    /**
-     * Set inspectors.
-     *
-     * @param array $inspectors
-     *
-     * @return PdfSettings
-     */
-    public function setInspectors($inspectors)
-    {
-        $this->inspectors = $inspectors;
-
-        return $this;
-    }
-
-    /**
-     * Get inspectors.
-     *
-     * @return array
-     */
-    public function getInspectors()
-    {
-        return $this->inspectors;
-    }
 }

@@ -5,7 +5,7 @@ namespace MicroBundle\Controller;
 use Doctrine\ORM\EntityManager;
 use MicroBundle\Entity\Building;
 use MicroBundle\Entity\Client;
-use MicroBundle\Entity\FireProtectionDevice;
+use MicroBundle\Entity\BuildDevice;
 use MicroBundle\Entity\LoopDev;
 use MicroBundle\Entity\PdfDocument;
 use MicroBundle\Services\FileUploader;
@@ -72,72 +72,19 @@ class BuildingController extends Controller
     public function showAction(Building $building, Request $request)
     {
 
-        $loopDev = new LoopDev();
-        //setting new loop number
-        $loopDev->setNumber($building->countLoopDevsWithoutDel() + 1);
-        $loopForm = $this->createForm('MicroBundle\Form\LoopDevType', $loopDev);
-        $loopForm->handleRequest($request);
 
-        $tempFireProtectionDevice = new Fireprotectiondevice();
-        $editForm = $this->createForm('MicroBundle\Form\FireProtectionDeviceEditType', $tempFireProtectionDevice);
-        $addForm = $this->createForm('MicroBundle\Form\FireProtectionDeviceType', $tempFireProtectionDevice);
+        $tempFireProtectionDevice = new BuildDevice();
+//        $editForm = $this->createForm('MicroBundle\Form\FireProtectionDeviceEditType', $tempFireProtectionDevice);
+//        $addForm = $this->createForm('MicroBundle\Form\FireProtectionDeviceType', $tempFireProtectionDevice);
 
 
-        //Form to add Loop
-        if ($loopForm->isSubmitted() && $loopForm->isValid()) {
-            $quantityDevices = $loopDev->getQuantityDevices();
-
-            $em = $this->getDoctrine()->getManager();
-//check if loopDev exist
-            $loopOldDev = $em->getRepository('MicroBundle:LoopDev')
-                ->findOneBy(['building' => $building->getId(), 'number' => $loopDev->getNumber()]);
-
-            if ($loopOldDev instanceof LoopDev) {
-                $loopDev = $loopOldDev;
-                $loopDev->setDel(false);
-                for ($i = 1; $i <= $quantityDevices; $i++) {
-                    $fireProtectionDevice = $em->getRepository('MicroBundle:FireProtectionDevice')
-                        ->findOneBy(['loopDev' => $loopDev->getId(), 'number' => $i]);
-                    if ($fireProtectionDevice instanceof FireProtectionDevice) {
-                        $fireProtectionDevice->setDel(false);
-
-                    } else {
-                        $fireProtectionDevice = new FireProtectionDevice();
-                        $fireProtectionDevice->setNumber($i);
-                        $fireProtectionDevice->setLoopDev($loopDev);
-                        $loopDev->addFireProtectionDevice($fireProtectionDevice);
-                        $em->persist($fireProtectionDevice);
-
-                    }
-                }
-
-            } else {
-                $building->addLoopDev($loopDev);
-                $loopDev->setBuilding($building);
-
-
-                for ($i = 1; $i <= $quantityDevices; $i++) {
-                    $fireProtectionDevice = new FireProtectionDevice();
-                    $fireProtectionDevice->setNumber($i);
-                    $fireProtectionDevice->setLoopDev($loopDev);
-                    $loopDev->addFireProtectionDevice($fireProtectionDevice);
-                    $em->persist($fireProtectionDevice);
-                }
-                $em->persist($loopDev);
-            }
-
-
-            $em->flush();
-
-            return $this->redirectToRoute('building_show', array('id' => $building->getId()));
-        }
-        $this->container->get('micro')->updateLastServiceDate($building);
+        //todo refactor this service
+//        $this->container->get('micro')->updateLastServiceDate($building);
 
         return $this->render('building/show.html.twig',
             array('building' => $building,
-                'form' => $addForm->createView(),
-                'loop_form' => $loopForm->createView(),
-                'edit_form' => $editForm->createView()
+//                'form' => $addForm->createView(),
+//                'edit_form' => $editForm->createView()
             ));
     }
 
@@ -216,5 +163,29 @@ class BuildingController extends Controller
         $em->remove($pdfDocument);
         $em->flush();
         return $this->redirectToRoute('building_document', array('id' => $building->getId()));
+    }
+
+
+    /**
+     * Show building devices in loop.
+     *
+     * @Route("/{id}/devices/{loop}", name="building_devices")
+     * @Method({"GET", "POST"})
+     * @param Building $building
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function devicesAction(Building $building, $loop, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $devices = $em->getRepository('MicroBundle:BuildDevice')->findBy(['building' => $building, 'loopNo' => $loop]);
+
+
+        return $this->render('building/devices.html.twig', array(
+            'building' => $building,
+            'devices' => $devices,
+            'loop_no' => $loop,
+        ));
+
     }
 }

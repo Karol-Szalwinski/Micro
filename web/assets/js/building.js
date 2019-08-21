@@ -15,7 +15,7 @@ $("#microbundle_fireprotectiondevice_edit_shortname").on("click", function () {
     $("#microbundle_fireprotectiondevice_edit_name").val($(this).val());
 });
 
-//fill edit form for FireProtectionDevice
+//fill edit form for BuildDevice
 $("a[data-target='#EditContactModal']").on("click", function () {
 
     var id = $(this).attr('id').substr(5);
@@ -48,6 +48,7 @@ $('.devices-table').DataTable({
         "infoFiltered": "(znaleziono z _MAX_ wszystkich wierszy)"
     },
     "paging": false,
+    fixedHeader: true,
 });
 
 

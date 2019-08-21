@@ -30,7 +30,7 @@ class DefFireInspectionType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array('data_class' => 'MicroBundle\Entity\FireInspection'));
+        $resolver->setDefaults(array('data_class' => 'MicroBundle\Entity\Document'));
     }
 
     /**

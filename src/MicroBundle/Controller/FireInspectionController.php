@@ -4,9 +4,9 @@ namespace MicroBundle\Controller;
 
 use MicroBundle\Entity\Building;
 use MicroBundle\Entity\DocumentInspector;
-use MicroBundle\Entity\FireInspection;
-use MicroBundle\Entity\FireProtectionDevice;
-use MicroBundle\Entity\InspectedDevice;
+use MicroBundle\Entity\Document;
+use MicroBundle\Entity\BuildDevice;
+use MicroBundle\Entity\DocDevice;
 use MicroBundle\Entity\Inspector;
 use MicroBundle\Entity\PdfSettings;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -32,7 +32,7 @@ class FireInspectionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $fireInspections = $em->getRepository('MicroBundle:FireInspection')->findAllExceptId(1);
+        $fireInspections = $em->getRepository('MicroBundle:Document')->findAllExceptId(1);
 
         return $this->render('fireinspection/index.html.twig', array('fireInspections' => $fireInspections,));
     }
@@ -47,7 +47,7 @@ class FireInspectionController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $defaultFireInspection = $em->getRepository('MicroBundle:FireInspection')->findOneBy(['id' => 1]);
+        $defaultFireInspection = $em->getRepository('MicroBundle:Document')->findOneBy(['id' => 1]);
         $fireInspection = clone $defaultFireInspection;
         $fireInspection->setDeviceShortlistPosition($building->getDeviceShortlistPosition());
         $fireInspection->setInspectionDate(new \DateTime());
@@ -80,13 +80,13 @@ class FireInspectionController extends Controller
                 $em->persist($testPosition);
             }
 
-            //add InspectedDevice to document
+            //add DocDevice to document
             $loopDevs = $building->getLoopDevs();
             foreach ($loopDevs as $loopDev) {
                 if (!$loopDev->getDel()) {
                     foreach ($loopDev->getFireProtectionDevices() as $device) {
                         if (!$device->getDel()) {
-                            $inspectedDevices = new InspectedDevice();
+                            $inspectedDevices = new DocDevice();
                             $inspectedDevices->setNumber($device->getNumber());
                             $inspectedDevices->setShortname($device->getShortname());
 
@@ -119,15 +119,15 @@ class FireInspectionController extends Controller
      * @Route("/{id}", name="fireinspection_show")
      * @Method("GET")
      */
-    public function showAction(Request $request, FireInspection $fireInspection)
+    public function showAction(Request $request, Document $fireInspection)
     {
         $this->container->get('micro')->updateLastServiceDateFireInspection($fireInspection);
         $em = $this->getDoctrine()->getManager();
         $loopDevs = $loopNullDevs = [];
         foreach ($fireInspection->getBuilding()->getLoopDevs() as $loop) {
 
-            $loopDev = $em->getRepository('MicroBundle:FireInspection')->findDevicesByFireInspection($fireInspection->getId(), $loop->getId());
-            $loopNullDev = $em->getRepository('MicroBundle:FireInspection')->findNullDevicesByFireInspection($fireInspection->getId(), $loop->getId());
+            $loopDev = $em->getRepository('MicroBundle:Document')->findDevicesByFireInspection($fireInspection->getId(), $loop->getId());
+            $loopNullDev = $em->getRepository('MicroBundle:Document')->findNullDevicesByFireInspection($fireInspection->getId(), $loop->getId());
             $loopDevs[] = $loopDev;
             $loopNullDevs[] = $loopNullDev;
 
@@ -170,7 +170,7 @@ class FireInspectionController extends Controller
      * @Route("/{id}/edit", name="fireinspection_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, FireInspection $fireInspection)
+    public function editAction(Request $request, Document $fireInspection)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -224,7 +224,7 @@ class FireInspectionController extends Controller
      * @Route("/{id}/editsum", name="fireinspection_edit_summary")
      * @Method({"GET", "POST"})
      */
-    public function editSumAction(Request $request, FireInspection $fireInspection)
+    public function editSumAction(Request $request, Document $fireInspection)
     {
 
         $editForm = $this->createForm('MicroBundle\Form\FireInspectionSummaryType', $fireInspection);
@@ -250,22 +250,22 @@ class FireInspectionController extends Controller
      * @Route("/{id}/add-new-device/{deviceId}",  defaults={"deviceId"=0}, name="add_new_device")
      * @Method("POST")
      */
-    public function addNewDeviceAction(FireInspection $fireInspection, $deviceId)
+    public function addNewDeviceAction(Document $fireInspection, $deviceId)
     {
         $em = $this->getDoctrine()->getManager();
 
         if ($deviceId == 0) {
             foreach ($fireInspection->getBuilding()->getLoopDevs() as $loop) {
 
-                $loopNullDev = $em->getRepository('MicroBundle:FireInspection')->findNullDevicesByFireInspection($fireInspection->getId(), $loop->getId());
+                $loopNullDev = $em->getRepository('MicroBundle:Document')->findNullDevicesByFireInspection($fireInspection->getId(), $loop->getId());
                 foreach ($loopNullDev as $arrayDevice) {
-                    $device = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['id' => $arrayDevice['id']]);
+                    $device = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['id' => $arrayDevice['id']]);
                     $this->addInspectedDevice($fireInspection, $device);
                 }
             }
 
         } else {
-            $device = $em->getRepository('MicroBundle:FireProtectionDevice')->findOneBy(['id' => $deviceId]);
+            $device = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['id' => $deviceId]);
 
             $this->addInspectedDevice($fireInspection, $device);
 
@@ -277,10 +277,10 @@ class FireInspectionController extends Controller
         return $this->redirectToRoute('fireinspection_show', array('id' => $fireInspection->getId()));
     }
 
-    private function addInspectedDevice(FireInspection $fireInspection, FireProtectionDevice $device)
+    private function addInspectedDevice(Document $fireInspection, BuildDevice $device)
     {
         $em = $this->getDoctrine()->getManager();
-        $inspectedDevices = new InspectedDevice();
+        $inspectedDevices = new DocDevice();
         $inspectedDevices->setNumber($device->getNumber());
         $inspectedDevices->setShortname($device->getShortname());
 

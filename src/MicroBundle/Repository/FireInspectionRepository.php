@@ -15,9 +15,9 @@ class FireInspectionRepository extends \Doctrine\ORM\EntityRepository
      * @return mixed
      */
     public function findAllExceptId($id) {
-        $qb = $this->createQueryBuilder('FireInspection');
+        $qb = $this->createQueryBuilder('Document');
         $qb->add('select', 'f')
-            ->add('from', 'MicroBundle:FireInspection f')
+            ->add('from', 'MicroBundle:Document f')
             ->add('where', 'f != :id')
             ->setParameter('id', $id);
         return $qb->getQuery()->getResult();
@@ -28,7 +28,7 @@ class FireInspectionRepository extends \Doctrine\ORM\EntityRepository
         $result = $this->createQueryBuilder('Device');
 
         $dql = $result->select('f','i')
-            ->from('MicroBundle:FireProtectionDevice', 'f')
+            ->from('MicroBundle:BuildDevice', 'f')
             ->leftJoin('f.inspectedDevices', 'i')
             ->where('i.fireInspection =:document')
             ->andWhere('f.loopDev =:loopid')

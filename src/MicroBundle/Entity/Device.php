@@ -5,12 +5,12 @@ namespace MicroBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * DeviceName
+ * Device
  *
  * @ORM\Table(name="device_name")
  * @ORM\Entity(repositoryClass="MicroBundle\Repository\DeviceNameRepository")
  */
-class DeviceName
+class Device
 {
     /**
      * @var int
@@ -35,6 +35,12 @@ class DeviceName
      */
     private $shortname;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="in_building", type="boolean")
+     */
+    private $inBuilding;
 
     /**
      * Get id.
@@ -51,7 +57,7 @@ class DeviceName
      *
      * @param string $name
      *
-     * @return DeviceName
+     * @return Device
      */
     public function setName($name)
     {
@@ -75,7 +81,7 @@ class DeviceName
      *
      * @param string $shortname
      *
-     * @return DeviceName
+     * @return Device
      */
     public function setShortname($shortname)
     {
@@ -92,5 +98,29 @@ class DeviceName
     public function getShortname()
     {
         return $this->shortname;
+    }
+
+    /**
+     * Set inBuilding.
+     *
+     * @param bool $inBuilding
+     *
+     * @return Device
+     */
+    public function setInBuilding($inBuilding)
+    {
+        $this->inBuilding = $inBuilding;
+
+        return $this;
+    }
+
+    /**
+     * Get inBuilding.
+     *
+     * @return bool
+     */
+    public function getInBuilding()
+    {
+        return $this->inBuilding;
     }
 }
