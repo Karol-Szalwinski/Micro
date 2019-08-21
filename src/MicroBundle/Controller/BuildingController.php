@@ -180,11 +180,27 @@ class BuildingController extends Controller
         $em = $this->getDoctrine()->getManager();
         $devices = $em->getRepository('MicroBundle:BuildDevice')->findBy(['building' => $building, 'loopNo' => $loop]);
 
+        $loopForm = $this->createForm('MicroBundle\Form\LoopType', ['loop' => $loop]);
+        $loopForm->handleRequest($request);
+        if ($loopForm->isSubmitted() && $loopForm->isValid()) {
+            $quantity = $loopForm->getData()['quantityDevices'];
+            for($i=1; $i <= $quantity; $i ++){
+                $device = new BuildDevice();
+                $device->setLoopNo($loop);
+                $device->setNumber($i);
+                $device->setBuilding($building);
+                $building->addBuildDevice($device);
+                $em->persist($device);
+            }
+            $em->flush();
+            return $this->redirectToRoute('building_devices', array('id' => $building->getId(), 'loop' => $loop));
+        }
 
         return $this->render('building/devices.html.twig', array(
             'building' => $building,
             'devices' => $devices,
             'loop_no' => $loop,
+            'loop_form' => $loopForm->createView(),
         ));
 
     }

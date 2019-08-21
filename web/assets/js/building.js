@@ -48,7 +48,10 @@ $('.devices-table').DataTable({
         "infoFiltered": "(znaleziono z _MAX_ wszystkich wierszy)"
     },
     "paging": false,
-    fixedHeader: true,
+    "fixedHeader": {
+        "header": true,
+        "footer": true
+    }
 });
 
 

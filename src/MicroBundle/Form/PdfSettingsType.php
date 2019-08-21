@@ -16,9 +16,6 @@ class PdfSettingsType extends AbstractType
     {
         $inspectors = $options['inspectors'];
 
-        $choices = ['abc' => 'abc',
-            'dfddf' => 'ddd'
-        ];
         $builder->add('showTables')
             ->add('showBuildingData')
             ->add('showClientData')

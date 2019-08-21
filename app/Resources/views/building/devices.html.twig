@@ -81,10 +81,12 @@
                                 {#<button type="button" class="btn btn-sm btn-danger delete-all mb-1">Usuń Wszystkie</button>#}
                                 <div class="table-responsive">
                                     <table
-                                            class=" devices-table table table-white-space table-sm table-bordered row-grouping display no-wrap icheck table-middle text-center">
+                                            class=" devices-table table table-striped table-white-space table-sm table-bordered
+                                            row-grouping display no-wrap icheck table-middle text-center">
                                         <thead>
 
                                         <tr>
+                                            <th>L.p.</th>
                                             <th>Nr</th>
                                             <th>Nazwa</th>
                                             <th>Skrót</th>
@@ -99,10 +101,14 @@
                                         <tbody id="tbody-{{ loop_no }}">
                                         {% for device in devices|sort %}
                                             {% if device.del != true %}
-                                                <tr id="row-{{ loopDev.id }}-{{ device.id }}">
+                                                <tr id="row--{{ device.id }}">
                                                     <td class="text-center">
                                                         <a class="text-center"
-                                                           id="number-{{ device.id }}">{{ device.number }}</a>
+                                                           id="number-{{ device.id }}">{{ loop.index }}</a>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <a class="text-center"
+                                                           id="number-{{ device.id }}">{{ device.loopNo }}/{{ device.number }}</a>
                                                     </td>
                                                     <td class="text-center">
                                                         <a class="text-center"
@@ -146,6 +152,7 @@
                                         </tbody>
                                         <tfoot>
                                         <tr>
+                                            <th>L.p.</th>
                                             <th>Nr</th>
                                             <th>Nazwa</th>
                                             <th>Skrót</th>
@@ -168,62 +175,62 @@
 
     <!---------------Modals----------------->
 
-    {#<!--------------Begin AdLoopModal---------->#}
-    {#<div class="modal fade" id="AddLoopModal" tabindex="-1" role="dialog"#}
-         {#aria-labelledby="exampleModalLabel1" aria-hidden="true">#}
-        {#<div class="modal-dialog" role="document">#}
-            {#<div class="modal-content">#}
+    <!--------------Begin AdLoopModal---------->
+    <div class="modal fade" id="AddLoopModal" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
 
-                {#<section class="contact-form">#}
-                    {#{{ form_start(loop_form, { 'attr': {'class': 'form form-horizontal inputmask contact-input'} }) }}#}
+                <section class="contact-form">
+                    {{ form_start(loop_form, { 'attr': {'class': 'form form-horizontal inputmask contact-input'} }) }}
 
-                    {#<div class="modal-header">#}
-                        {#<h5 class="modal-title" id="exampleModalLabel1">Dodaj nową pętlę</h5>#}
-                        {#<button type="button" class="close" data-dismiss="modal"#}
-                                {#aria-label="Close">#}
-                            {#<span aria-hidden="true">&times;</span>#}
-                        {#</button>#}
-                    {#</div>#}
-                    {#<div class="modal-body">#}
-                        {#<div class="form-body">#}
-                            {#<h4 class="form-section"><i class="ft-user"></i> Dane Pętli#}
-                            {#</h4>#}
-                            {#<div class="form-group row">#}
-                                {#{{ form_label(loop_form.number, 'Numer pętli', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
-                                {#<div class="col-md-9 mx-auto">#}
-                                    {#{{ form_widget(loop_form.number, { 'attr': {'class': 'form-control'} }) }}#}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel1">Dodaj nową pętlę</h5>
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-body">
+                            <h4 class="form-section"><i class="ft-user"></i> Dane Pętli
+                            </h4>
+                            <div class="form-group row">
+                                {{ form_label(loop_form.loop, 'Numer pętli', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                <div class="col-md-9 mx-auto">
+                                    {{ form_widget(loop_form.loop, { 'attr': {'class': 'form-control'} }) }}
 
-                                {#</div>#}
-                            {#</div>#}
-                            {#<div class="form-group row">#}
-                                {#{{ form_label(loop_form.quantityDevices, 'Ilość urządzeń w pętli', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
-                                {#<div class="col-md-9 mx-auto">#}
-                                    {#{{ form_widget(loop_form.quantityDevices, { 'attr': {'class': 'form-control'} }) }}#}
-                                {#</div>#}
-                            {#</div>#}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                {{ form_label(loop_form.quantityDevices, 'Ilość urządzeń w pętli', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                <div class="col-md-9 mx-auto">
+                                    {{ form_widget(loop_form.quantityDevices, { 'attr': {'class': 'form-control'} }) }}
+                                </div>
+                            </div>
 
 
-                        {#</div>#}
+                        </div>
 
-                        {#<div class="modal-footer">#}
-                            {#<div class="">#}
-                                {#<button type="button" data-dismiss="modal"#}
-                                        {#class="btn btn-warning mr-1">#}
-                                    {#<i class="ft-x"></i> Anuluj#}
-                                {#</button>#}
-                                {#<button type="submit" class="btn btn-primary">#}
-                                    {#<i class="la la-check-square-o"></i> Zapisz#}
-                                {#</button>#}
-                            {#</div>#}
-                        {#</div>#}
-                        {#{{ form_end(loop_form) }}#}
-                    {#</div>#}
-                {#</section>#}
+                        <div class="modal-footer">
+                            <div class="">
+                                <button type="button" data-dismiss="modal"
+                                        class="btn btn-warning mr-1">
+                                    <i class="ft-x"></i> Anuluj
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="la la-check-square-o"></i> Zapisz
+                                </button>
+                            </div>
+                        </div>
+                        {{ form_end(loop_form) }}
+                    </div>
+                </section>
 
-            {#</div>#}
-        {#</div>#}
-    {#</div>#}
-    <!--------------End AddDeviceModal---------->
+            </div>
+        </div>
+    </div>
+    <!--------------End AddLoopModal---------->
 
     <!--------------Begin AdDeviceModal---------->
     {#<div class="modal fade" id="AddDeviceModal" tabindex="-1" role="dialog"#}
