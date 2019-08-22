@@ -28,13 +28,13 @@ class DefaultController extends Controller
 
         $clientsCount = $em->getRepository('MicroBundle:Client')->count([]);
         $buildingsCount = $em->getRepository('MicroBundle:Building')->count([]);
-        $fireInspectionCount = $em->getRepository('MicroBundle:Document')->count([]);
+        $documentCount = $em->getRepository('MicroBundle:Document')->count([]);
 
 
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
             $jsonData['buildings'] = $buildingsCount;
             $jsonData['clients'] = $clientsCount;
-            $jsonData['fireInspections'] = $fireInspectionCount - 1; //except one default
+            $jsonData['documents'] = $documentCount - 1; //except one default
             return new JsonResponse($jsonData);
         }
 

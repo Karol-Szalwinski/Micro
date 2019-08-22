@@ -17,9 +17,9 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * Fireprotectiondevice controller.
  *
- * @Route("fireprotectiondevice")
+ * @Route("build-device")
  */
-class FireProtectionDeviceController extends Controller
+class BuildDeviceController extends Controller
 {
     /**
      * Lists all fireProtectionDevice entities.
@@ -295,9 +295,54 @@ class FireProtectionDeviceController extends Controller
 
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
 
+            $normalizers = [new ObjectNormalizer()];
+            $encoders = [new JsonEncoder()];
+            $serializer = new Serializer($normalizers, $encoders);
+            $serializeDevice = $serializer->serialize($fireProtectionDevice, 'json');
 
             $jsonData['id'] = $id;
             $jsonData['loop'] = $loopId;
+
+
+            return new JsonResponse($jsonData);
+        }
+
+    }
+
+
+    /**
+     * Update BuildDevice
+     * @Method({"GET", "POST"})
+     * @Route("/update/{jsondevice}")
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function updateAction(Request $request, $jsondevice)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $device = json_decode($jsondevice);
+
+        $buildDevice = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['id' => $device->{'id'}]);
+
+        $buildDevice->setShortname($device->{'shortname'});
+        $buildDevice->setSerial($device->{'serial'});
+        $buildDevice->setAddress($device->{'address'});
+        $em->flush();
+
+
+        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+
+            $normalizer = new ObjectNormalizer();
+            $normalizer->setIgnoredAttributes(['building', 'docDevices']);
+            $encoder = new JsonEncoder();
+
+            $serializer = new Serializer([$normalizer], [$encoder]);
+            $serializeDevice = $serializer->serialize($buildDevice, 'json');
+
+
+            $jsonData['device'] = $serializeDevice;
+
 
 
             return new JsonResponse($jsonData);

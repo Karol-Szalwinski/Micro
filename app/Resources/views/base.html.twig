@@ -62,6 +62,7 @@
 <body class="vertical-layout vertical-menu-modern 2-columns   fixed-navbar" data-open="click"
       data-menu="vertical-menu-modern" data-col="2-columns">
 
+
 <!-- BEGIN: Header-->
 <nav class="header-navbar navbar-expand-lg navbar navbar-with-menu navbar-without-dd-arrow fixed-top navbar-semi-dark navbar-shadow">
     <div class="navbar-wrapper">
@@ -474,7 +475,7 @@
             <li class=" nav-item"><a href="{{ path('fireinspection_index') }}"><i class="la la-list-alt "></i><span
                             class="menu-title"
                             data-i18n="nav.dash.main">Przeglądy</span><span
-                            id="counter-fire-inspections"
+                            id="counter-documents"
                             class="badge badge-pill float-right mr-2"></span></a>
                 <ul class="menu-content">
                     <li><a class="menu-item" href="{{ path('fireinspection_index') }}"><i></i><span
@@ -514,7 +515,7 @@
             <li class=" nav-item"><a href="{{ path('user_index') }}"><i class="la la-user "></i><span
                             class="menu-title"
                             data-i18n="nav.dash.main">Użytkownicy</span><span
-                            id="counter-fire-inspections"
+                            id="counter-users"
                             class="badge badge-pill float-right mr-2"></span></a>
                 <ul class="menu-content">
                     <li><a class="menu-item" href="{{ path('user_index') }}"><i></i><span
@@ -593,7 +594,7 @@
 
                 $('#counter-clients').addClass("badge-info").text(data['clients']);
                 $('#counter-buildings').addClass("badge-info").text(data['buildings']);
-                $('#counter-fire-inspections').addClass("badge-info").text(data['fireInspections']);
+                $('#counter-documents').addClass("badge-info").text(data['documents']);
 
             },
             error: function (xhr, textStatus, errorThrown) {

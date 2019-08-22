@@ -40,7 +40,7 @@ class DeviceNameController extends Controller
     public function newAction(Request $request)
     {
         $deviceName = new Device();
-        $form = $this->createForm('MicroBundle\Form\DeviceNameType', $deviceName);
+        $form = $this->createForm('MicroBundle\Form\DeviceType', $deviceName);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -82,7 +82,7 @@ class DeviceNameController extends Controller
     public function editAction(Request $request, Device $deviceName)
     {
         $deleteForm = $this->createDeleteForm($deviceName);
-        $editForm = $this->createForm('MicroBundle\Form\DeviceNameType', $deviceName);
+        $editForm = $this->createForm('MicroBundle\Form\DeviceType', $deviceName);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {

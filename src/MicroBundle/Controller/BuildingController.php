@@ -178,7 +178,13 @@ class BuildingController extends Controller
     public function devicesAction(Building $building, $loop, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $devices = $em->getRepository('MicroBundle:BuildDevice')->findBy(['building' => $building, 'loopNo' => $loop]);
+        $buildDevices = $em->getRepository('MicroBundle:BuildDevice')->findBy(['building' => $building, 'loopNo' => $loop]);
+        $devices=$em->getRepository('MicroBundle:Device')->findAll();
+        $shortnames=[];
+        foreach ($devices as $device) {
+            $shortnames[]=$device->getShortname();
+        }
+
 
         $loopForm = $this->createForm('MicroBundle\Form\LoopType', ['loop' => $loop]);
         $loopForm->handleRequest($request);
@@ -198,7 +204,8 @@ class BuildingController extends Controller
 
         return $this->render('building/devices.html.twig', array(
             'building' => $building,
-            'devices' => $devices,
+            'devices' => $buildDevices,
+            'shortnames' => $shortnames,
             'loop_no' => $loop,
             'loop_form' => $loopForm->createView(),
         ));

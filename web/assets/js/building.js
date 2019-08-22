@@ -50,6 +50,7 @@ $('.devices-table').DataTable({
     "paging": false,
     "fixedHeader": {
         "header": true,
+        "headerOffset": 70,
         "footer": true
     }
 });
@@ -316,7 +317,7 @@ function deleteLoopDev(id) {
 
 //END: AJAX set device as deleted-->
 
-//BEGIN: Sweet alert delete device-->
+//BEGIN: Sweet alert delete loop-->
 
 
 $(document).on('click', '.delete-loop-button', function () {

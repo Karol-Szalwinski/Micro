@@ -7,8 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Device
  *
- * @ORM\Table(name="device_name")
- * @ORM\Entity(repositoryClass="MicroBundle\Repository\DeviceNameRepository")
+ * @ORM\Table(name="device")
+ * @ORM\Entity(repositoryClass="MicroBundle\Repository\DeviceRepository")
  */
 class Device
 {
@@ -41,6 +41,16 @@ class Device
      * @ORM\Column(name="in_building", type="boolean")
      */
     private $inBuilding;
+
+    /**
+     * Device constructor.
+     * @param bool $inBuilding
+     */
+    public function __construct()
+    {
+        $this->inBuilding = true;
+    }
+
 
     /**
      * Get id.
