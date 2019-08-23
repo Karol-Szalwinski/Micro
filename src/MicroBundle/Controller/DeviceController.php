@@ -12,7 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component
  *
  * @Route("devicename")
  */
-class DeviceNameController extends Controller
+class DeviceController extends Controller
 {
     /**
      * Lists all deviceName entities.

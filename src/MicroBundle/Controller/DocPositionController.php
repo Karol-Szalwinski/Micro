@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Serializer;
  *
  * @Route("testposition")
  */
-class TestPositionController extends Controller
+class DocPositionController extends Controller
 {
 
 

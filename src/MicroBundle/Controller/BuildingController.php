@@ -74,8 +74,8 @@ class BuildingController extends Controller
 
 
         $tempFireProtectionDevice = new BuildDevice();
-//        $editForm = $this->createForm('MicroBundle\Form\FireProtectionDeviceEditType', $tempFireProtectionDevice);
-//        $addForm = $this->createForm('MicroBundle\Form\FireProtectionDeviceType', $tempFireProtectionDevice);
+//        $editForm = $this->createForm('MicroBundle\Form\BuildDeviceEditType', $tempFireProtectionDevice);
+//        $addForm = $this->createForm('MicroBundle\Form\BuildDeviceType', $tempFireProtectionDevice);
 
 
         //todo refactor this service

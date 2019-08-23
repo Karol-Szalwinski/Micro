@@ -37,14 +37,10 @@
                 <div class="btn-group" role="group">
                     <a class="btn btn-outline-info round" href="{{ path('building_show', { 'id': building.id }) }}"><i
                                 class="la la-backward"></i> Wróć do budynku</a>
-                    <a class="btn btn-outline-info round" href=""><i
-                                class="la la-file-photo-o"></i> Dodaj urządzenia</a>
-                    <a class="btn btn-outline-info round" href=""><i
-                                class="la la-file-photo-o"></i> Dodaj jedno</a>
                     <button class="btn btn-outline-info round " data-toggle="modal"
                             data-target="#AddLoopModal">
                         <i class="la la-plus"></i>&nbsp
-                        Dodaj pętlę
+                        Dodaj wstępnie urządzenia
                     </button>
 
                 </div>
@@ -85,7 +81,7 @@
                         {#<button type="button" class="btn btn-sm btn-danger delete-all mb-1">Usuń Wszystkie</button>#}
                         <div class="table-responsive">
                             <table class="devices-table table table-striped table-white-space table-sm table-bordered
-                                            row-grouping display no-wrap icheck table-middle text-center">
+                                            row-grouping display no-wrap icheck text-center">
                                 <thead>
 
                                 <tr>
@@ -102,17 +98,16 @@
 
                                 </thead>
                                 <tbody id="tbody-{{ loop_no }}">
+                                {% set order = 1 %}
                                 {% for device in devices|sort %}
                                     {% if device.del != true %}
                                         <tr id="row-{{ device.id }}">
-                                            <td class="text-center">
-                                                <a class="text-center"
-                                                   id="number-{{ device.id }}">{{ loop.index }}</a>
+                                            <td class="text-center order">
+                                                {{ ++order }}{% set order = order + 1 %}
                                             </td>
 
-                                            <td class="text-center">
-                                                {{ device.loopNo }} /
-                                                <input type="number" min="1" max="255" class="hidden-op hidden-input" id="i-number-{{ device.id }}"
+                                            <td class="text-right">{{ device.loopNo }} /
+                                                <input type="number" min="1" max="255" class="hidden-op hidden-input unique-input" id="i-number-{{ device.id }}"
                                                        value="{{ device.number }}"
                                                        readonly>
                                             </td>
@@ -122,8 +117,8 @@
                                                    id="i-name-{{ device.id }}">{{ device.name }}</a>
                                             </td>
                                             <td class="text-center">
-                                                <select class=" hidden-op hidden-select" id="i-shortcut-{{ device.id }}"
-                                                        style="width:100%" disabled>
+                                                <select class=" hidden-op hidden-select" id="i-shortname-{{ device.id }}"
+                                                        disabled>
                                                     <option value="{{ device.shortname }}" selected>{{ device.shortname }}</option>
                                                     {% for short in shortnames %}
                                                         {% if device.shortname != short %}
@@ -157,14 +152,15 @@
                                                    id="edit-row-btn-{{ device.id }}"
                                                    class="primary edit-row-btn mr-1"><i
                                                             class="la la-pencil"></i></a>
-                                                <a id="delete-{{ device.id }}"
-                                                   class="danger delete-row mr-1 cancel-delete"><i
+                                                <a data-device="{{ device.id }}"
+                                                   class="danger delete-row-btn mr-1"><i
                                                             class="la la-trash-o"></i></a>
 
                                             </td>
                                         </tr>
                                     {% endif %}
                                 {% endfor %}
+
                                 </tbody>
                                 <tfoot>
                                 <tr>
@@ -179,6 +175,7 @@
                                     <th>Akcje</th>
                                 </tfoot>
                             </table>
+                            <button id="add-row-btn"  data-building="{{ building.id }}" data-loopno="{{ loop_no }}">Dodaj nowe urządzenie</button>
                         </div>
                     </div>
                 </div>

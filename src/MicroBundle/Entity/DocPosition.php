@@ -3,6 +3,7 @@
 namespace MicroBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use MicroBundle\Entity\Document;
 
 /**
  * DocPosition
@@ -144,11 +145,11 @@ class DocPosition
     /**
      * Set document.
      *
-     * @param \MicroBundle\Entity\Document|null $document
+     * @param Document|null $document
      *
      * @return DocPosition
      */
-    public function setDocument(\MicroBundle\Entity\Document $document = null)
+    public function setDocument(Document $document = null)
     {
         $this->document = $document;
 
@@ -158,7 +159,7 @@ class DocPosition
     /**
      * Get document.
      *
-     * @return \MicroBundle\Entity\Document|null
+     * @return Document|null
      */
     public function getDocument()
     {

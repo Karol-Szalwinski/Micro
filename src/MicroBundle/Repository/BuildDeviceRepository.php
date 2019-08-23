@@ -10,5 +10,22 @@ namespace MicroBundle\Repository;
  */
 class BuildDeviceRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getHighestNumber($building, $loopNo)
+    {
+        $result = $this->createQueryBuilder('BuildDevice');
+
+        $dql = $result->select(' MAX(b.number) as maxNumber')
+            ->from('MicroBundle:BuildDevice', 'b')
+            ->where('b.loopNo =:loopno')
+            ->andWhere('b.building =:building')
+            ->setParameter('loopno', $loopNo)
+            ->setParameter('building', $building)
+            ->getQuery()
+            ->getSingleResult();
+
+
+        return $dql;
+    }
+
 
 }

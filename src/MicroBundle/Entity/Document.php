@@ -69,9 +69,9 @@ class Document
     /**
      * Many Documents have Many Inspectors.
      * @ORM\ManyToMany(targetEntity="Inspector")
-     * @ORM\JoinTable(name="document_inspectors",
+     * @ORM\JoinTable(name="documents_inspectors",
      *      joinColumns={@ORM\JoinColumn(name="document_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="inspector_id", referencedColumnName="id", unique=true)}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="inspector_id", referencedColumnName="id")}
      *      )
      */
     private $inspectors;

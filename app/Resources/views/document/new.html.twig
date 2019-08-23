@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edytuj dane podstawowe{% endblock %}
+{% block title %}Dodaj nowy przegląd{% endblock %}
 
 {% block body %}
     <!-- Content header -->
@@ -13,10 +13,10 @@
                         <li class="breadcrumb-item"><a href="{{ path('micro_default_index') }}">Główna</a>
                         </li>
                         <li class="breadcrumb-item"><a
-                                    href="{{ path('building_show',{ 'id': fireInspection.building.id }) }}">Budynek</a>
+                                    href="{{ path('building_show',{ 'id': building.id }) }}">Budynek</a>
                         </li>
 
-                        <li class="breadcrumb-item active">Edytuj dane podstawowe
+                        <li class="breadcrumb-item active">Dodaj nowy przegląd
                         </li>
 
                     </ol>
@@ -26,8 +26,8 @@
         <div class="content-header-left col-md-6 col-12">
             <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
                 <div class="btn-group" role="group">
-                    <a class="btn btn-outline-info round" href="{{ path('fireinspection_show',{ 'id': fireInspection.id }) }}"><i
-                                class="la la-backward"></i> Wróć do przeglądu</a>
+                    <a class="btn btn-outline-info round" href="{{ path('building_show',{ 'id': building.id }) }}"><i
+                                class="la la-backward"></i> Wróć do budynku</a>
 
                     <button class="btn btn-outline-info round dropdown-toggle dropdown-menu-right" id="btnGroupDrop1"
                             type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
@@ -49,8 +49,8 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title" id="horz-layout-basic">Formularz edycji danych podstawowych przeglądu dla
-                            budynku {{ fireInspection.building.name }}</h4>
+                        <h4 class="card-title" id="horz-layout-basic">Formularz tworzenia nowego przeglądu dla
+                            budynku {{ building.name }}</h4>
                         <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">
@@ -64,55 +64,57 @@
                     <div class="card-content collpase show">
                         <div class="card-body">
 
-                            {{ form_start(edit_form, { 'attr': {'class': 'form form-horizontal inputmask'} }) }}
+                            {{ form_start(form, { 'attr': {'class': 'form form-horizontal inputmask'} }) }}
 
 
                             <div class="form-body">
                                 <h4 class="form-section"><i class="ft-user"></i> Dane podstawowe przeglądu</h4>
                                 <div class="form-group row">
-                                    {{ form_label(edit_form.inspectionDate, 'Data przegladu', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
-                                    <div class="col-md-3 ">
-                                        {{ form_widget(edit_form.inspectionDate, { 'attr': {'class': 'form-control'} }) }}
+                                    {{ form_label(form.inspectionDate, 'Data przegladu', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-3">
+                                        {{ form_widget(form.inspectionDate, { 'attr': {'class': 'form-control '} }) }}
 
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    {{ form_label(edit_form.nextInspectionForMonth, 'Przedział czasowy', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    {{ form_label(form.nextInspectionForMonth, 'Przedział czasowy', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9">
-                                        {{ form_widget(edit_form.nextInspectionForMonth, { 'attr': {'class': 'form-control mr-3'} }) }}
+                                        {{ form_widget(form.nextInspectionForMonth, { 'attr': {'class': 'form-control mr-3'} }) }}
 
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    {{ form_label(edit_form.nextInspectionDate, 'Data następnego przeglądu', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
-                                    <div class="col-md-3 ">
-                                        {{ form_widget(edit_form.nextInspectionDate, { 'attr': {'class': 'form-control '} }) }}
+                                    {{ form_label(form.nextInspectionDate, 'Data następnego przeglądu', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-3">
+                                        {{ form_widget(form.nextInspectionDate, { 'attr': {'class': 'form-control '} }) }}
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    {{ form_label(edit_form.scope, 'Zakres wykonanych prac', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    {{ form_label(form.scope, 'Zakres wykonanych prac', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 ">
-                                        {{ form_widget(edit_form.scope, { 'attr': {'class': 'form-control ', 'placeholder': 'Wprowadź zakres','rows': '5'} }) }}
+                                        {{ form_widget(form.scope, { 'attr': {'class': 'form-control ', 'placeholder': 'Wprowadź zakres','rows': '5'} }) }}
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    {{ form_label(edit_form.tempInspectors, 'Osoby uprawnione', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    {{ form_label(form.inspectors, 'Osoby uprawnione', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
-                                        {{ form_widget(edit_form.tempInspectors, { 'attr': {'class': 'form-control'} }) }}
+                                        {{ form_widget(form.inspectors, { 'attr': {'class': 'form-control mr-3 '}}) }}
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    {{ form_label(edit_form.deviceShortlistPosition, 'Lista urządzeń', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    {{ form_label(form.deviceShortlistPosition, 'Lista urządzeń', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
-                                        {{ form_widget(edit_form.deviceShortlistPosition, { 'attr':
+                                        {{ form_widget(form.deviceShortlistPosition, { 'attr':
                                             {'class': 'form-control textarea-autosize','rows': '10'}
                                         }) }}
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    {{ form_label(edit_form.legal, 'Podstawa prawna', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    {{ form_label(form.legal, 'Podstawa prawna', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
-                                        {{ form_widget(edit_form.legal, { 'attr': {'class': 'form-control textarea-autosize', 'placeholder': 'Wprowadź podstawę prawną','rows': '5'} }) }}
+                                        {{ form_widget(form.legal, { 'attr':
+                                            {'class': 'form-control textarea-autosize', 'placeholder': 'Wprowadź podstawę prawną','rows': '5'}
+                                        }) }}
                                     </div>
                                 </div>
 
@@ -123,10 +125,10 @@
                                         <i class="ft-x"></i> Anuluj
                                     </button>
                                     <button type="submit" class="btn btn-primary">
-                                        <i class="la la-check-square-o"></i> Zapisz zmiany
+                                        <i class="la la-check-square-o"></i> Zapisz
                                     </button>
                                 </div>
-                                {{ form_end(edit_form) }}
+                                {{ form_end(form) }}
                             </div>
                         </div>
                     </div>
@@ -136,6 +138,8 @@
     </section>
 
 
+
+
 {% endblock %}
 
 {% block scripts %}
@@ -143,8 +147,9 @@
     <script src="{{ asset('app-assets/vendors/js/forms/extended/inputmask/jquery.inputmask.bundle.min.js') }}"></script>
     <script src="{{ asset('app-assets/js/scripts/forms/extended/form-inputmask.js') }}"></script>
     <!-- END: Page JS-->
-
     <!-- BEGIN: My JS-->
-    <script src="{{ asset('assets/js/fire-inspection-forms.js') }}"></script>
+    <script src="{{ asset('assets/js/document-forms.js') }}"></script>
     <!-- END: My JS-->
+
+
 {% endblock %}

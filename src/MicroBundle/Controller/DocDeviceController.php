@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Serializer;
  *
  * @Route("inspdev")
  */
-class InspectedDeviceController extends Controller
+class DocDeviceController extends Controller
 {
 
 

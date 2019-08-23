@@ -3,7 +3,7 @@
 {% block title %}Przegląd{% endblock %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/fire-inspection.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/document.css') }}">
 {% endblock %}
 
 
@@ -21,15 +21,15 @@
                                     href="{{ path('micro_default_index') }}">Główna</a>
                         </li>
 
-                        <li class="breadcrumb-item"><a href="{{ path('fireinspection_index') }}">Lista
+                        <li class="breadcrumb-item"><a href="{{ path('document_index') }}">Lista
                                 przeglądów</a>
                         </li>
                         <li class="breadcrumb-item"><a
-                                    href="{{ path('building_show', { 'id': fireInspection.building.id }) }}">
-                                Budynek {{ fireInspection.building.name }}</a>
+                                    href="{{ path('building_show', { 'id': document.building.id }) }}">
+                                Budynek {{ document.building.name }}</a>
                         </li>
                         <li class="breadcrumb-item active">Przegląd z
-                            dnia {% if fireInspection.inspectionDate %}{{ fireInspection.inspectionDate|date('Y-m-d') }}{% endif %}
+                            dnia {% if document.inspectionDate %}{{ document.inspectionDate|date('Y-m-d') }}{% endif %}
                         </li>
 
                     </ol>
@@ -41,7 +41,7 @@
                  aria-label="Button group with nested dropdown">
                 <div class="btn-group" role="group">
                     <a class="btn btn-outline-info round"
-                       href="{{ path('building_show', { 'id' : fireInspection.building.id }) }}"><i
+                       href="{{ path('building_show', { 'id' : document.building.id }) }}"><i
                                 class="la la-backward"></i> Wróć do budynku</a>
 
                     <a class="btn btn-outline-info round"
@@ -66,7 +66,7 @@
                                     class="la la-ellipsis-v font-medium-3"></i></a>
                         <div class="heading-elements mt-0">
                             <a class="btn btn-primary btn-sm "
-                               href="{{ path('fireinspection_edit', {'id': fireInspection.id}) }}"><i
+                               href="{{ path('document_edit', {'id': document.id}) }}"><i
                                         class="la la-edit"></i> Edytuj dane podstawowe</a>
                         </div>
 
@@ -81,18 +81,18 @@
                                 <table class="table table-borderless table-column">
                                     <tr>
                                         <th>Nazwa budynku:</th>
-                                        <td>{{ fireInspection.building.name }}</td>
+                                        <td>{{ document.building.name }}</td>
                                     </tr>
                                     <tr>
                                         <th>Ulica:</th>
-                                        <td>{{ fireInspection.building.street }} {{ fireInspection.building.houseNo }}
-                                            {% if fireInspection.building.flatNo is not null %}/{% endif %}
-                                            {{ fireInspection.building.flatNo }}
+                                        <td>{{ document.building.street }} {{ document.building.houseNo }}
+                                            {% if document.building.flatNo is not null %}/{% endif %}
+                                            {{ document.building.flatNo }}
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Miasto:</th>
-                                        <td>{{ fireInspection.building.city }}</td>
+                                        <td>{{ document.building.city }}</td>
                                     </tr>
 
                                 </table>
@@ -109,11 +109,11 @@
                                 <table class="table table-borderless table-column">
                                     <tr>
                                         <th>Data przeglądu:</th>
-                                        <td>{% if fireInspection.inspectionDate %}{{ fireInspection.inspectionDate|date('Y-m-d') }}{% endif %}</td>
+                                        <td>{% if document.inspectionDate %}{{ document.inspectionDate|date('Y-m-d') }}{% endif %}</td>
                                     </tr>
                                     <tr>
                                         <th>Data następnego przeglądu:</th>
-                                        <td>{% if fireInspection.nextInspectionDate %}{{ fireInspection.nextInspectionDate|date('Y-m-d') }}{% endif %}</td>
+                                        <td>{% if document.nextInspectionDate %}{{ document.nextInspectionDate|date('Y-m-d') }}{% endif %}</td>
                                     </tr>
 
                                 </table>
@@ -127,7 +127,7 @@
                             <h4><i class="ft-briefcase"></i> Zakres wykonanych prac</h4>
                             <hr>
                             <div class="col-md-8">
-                                <p>{{ fireInspection.scope|nl2br }}</p>
+                                <p>{{ document.scope|nl2br }}</p>
                             </div>
                         </div>
                     </div>
@@ -138,7 +138,7 @@
                             <h4><i class="ft-file-text"></i> Wykaz urządzeń objętych przeglądem:</h4>
                             <hr>
                             <div class="col-md-8">
-                                <p> {{ fireInspection.deviceShortlistPosition|nl2br }} </p>
+                                <p> {{ document.deviceShortlistPosition|nl2br }} </p>
 
                             </div>
                         </div>
@@ -150,13 +150,13 @@
                             <h4><i class="ft-users"></i> Inspektorzy</h4>
                             <hr>
                             <div class="col-md-8">
-                                {% if fireInspection.documentInspectors is not empty %}
+                                {% if document.inspectors is not empty %}
                                     <table class="table table-borderless table-column">
                                         <tr>
                                             <th>Imię i nazwisko</th>
                                             <th>Nr uprawnień</th>
                                         </tr>
-                                        {% for inspector in fireInspection.documentInspectors %}
+                                        {% for inspector in document.inspectors %}
                                             <tr>
                                                 <td>{{ inspector.name }} {{ inspector.surname }}</td>
                                                 <td>{{ inspector.license }}</td>
@@ -177,7 +177,7 @@
                             <h4><i class="ft-at-sign"></i> Podstawa opracowania</h4>
                             <hr>
                             <div class="col-md-8">
-                                <p>{{ fireInspection.legal|nl2br }}</p>
+                                <p>{{ document.legal|nl2br }}</p>
 
                             </div>
                         </div>
@@ -190,15 +190,13 @@
 
     <!-- Inspected devices section-->
 
-    {% for key, loopDev in loopDevs %}
-        {% if loopDev is not empty %}
-            <section id="loop-number-{{ key + 1 }}" class="row all-contacts">
+            <section id="loop-number-{{ 1 }}" class="row all-contacts">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-head">
                             <div class="card-header">
-                                <h4 class="card-title">Pętla Numer {{ key + 1 }}
-                                    {% if loopNullDevs[key] is not empty %}
+                                <h4 class="card-title">Pętla Numer {{ + 1 }}
+                                    {#{% if loopNullDevs[key] is not empty %}#}
                                         <a>&nbsp</a>
                                         <a data-toggle="tooltip"
                                            title="Do tej pętli zostały dodane nowe urzadzenia - kliknij żeby je dodać do dokumentu"
@@ -207,7 +205,7 @@
                                                     class="la la-exclamation-triangle "></i>Nowe urządzenia w pętli
 
                                         </a>
-                                    {% endif %}
+                                    {#{% endif %}#}
                                 </h4>
                             </div>
                         </div>
@@ -233,7 +231,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for device in loopDev %}
+                                        {% for device in document.docDevices %}
                                             <tr
                                                     id="row-{{ device.inspectedDevices|first.id }}"
                                                     style="{% if not device.inspectedDevices|first.visible %}display:none{% endif %}"
@@ -383,9 +381,6 @@
                     </div>
                 </div>
             </section>
-        {% endif %}
-
-    {% endfor %}
 
 
 
@@ -406,7 +401,7 @@
                 <div class="card-content">
                     <div class="card-body">
                         <!-- Task List table -->
-                        <button id="add-test-position-{{ fireInspection.id }}" type="button"
+                        <button id="add-test-position-{{ document.id }}" type="button"
                                 class="add-test-position btn btn-sm btn-info mb-1">
                             Dodaj pozycję
                         </button>
@@ -425,7 +420,7 @@
                                 </thead>
                                 <tbody id='tbody-tests'>
 
-                                {% for test in fireInspection.testpositions %}
+                                {% for test in document.testpositions %}
                                     <tr id="terow-{{ test.id }}">
 
                                         <td class="text-center test-hidden-input">
@@ -488,7 +483,7 @@
                                     class="la la-ellipsis-v font-medium-3"></i></a>
                         <div class="heading-elements mt-0">
                             <a class="btn btn-primary btn-sm "
-                               href="{{ path('fireinspection_edit_summary', {'id': fireInspection.id}) }}"><i
+                               href="{{ path('document_edit_summary', {'id': document.id}) }}"><i
                                         class="la la-edit"></i> Edytuj podsumowanie</a>
                         </div>
                     </div>
@@ -499,7 +494,7 @@
                             <h4><i class="ft-activity"></i>Wnioski</h4>
                             <hr>
                             <div class="col-md-8">
-                                <p>{{ fireInspection.conclusion|nl2br }}</p>
+                                <p>{{ document.conclusion|nl2br }}</p>
 
                             </div>
                         </div>
@@ -511,7 +506,7 @@
                             <h4><i class="ft-alert-triangle"></i>Uwagi</h4>
                             <hr>
                             <div class="col-md-8">
-                                <p>{{ fireInspection.comment|nl2br }}</p>
+                                <p>{{ document.comment|nl2br }}</p>
 
                             </div>
                         </div>
@@ -523,7 +518,7 @@
                             <h4><i class="ft-list"></i>Zalecenia</h4>
                             <hr>
                             <div class="col-md-8">
-                                <p>{{ fireInspection.recomendations|nl2br }}</p>
+                                <p>{{ document.recomendations|nl2br }}</p>
                             </div>
                         </div>
                     </div>
@@ -533,7 +528,7 @@
         </div>
     </section>
 
-    {% include 'fireinspection/modals.html.twig' %}
+    {% include 'document/modals.html.twig' %}
 
 {% endblock %}
 
@@ -566,7 +561,7 @@
 
     <!-- BEGIN: My JS-->
     <script src="{{ asset('assets/js/sweet-alerts.js') }}"></script>
-    <script src="{{ asset('assets/js/fire-inspection.js') }}"></script>
+    <script src="{{ asset('assets/js/document.js') }}"></script>
     <!-- END: My JS-->
 
 

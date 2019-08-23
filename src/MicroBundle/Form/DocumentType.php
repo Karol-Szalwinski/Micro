@@ -13,7 +13,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use MicroBundle\Entity\Inspector;
 
 
-class FireInspectionType extends AbstractType
+class DocumentType extends AbstractType
 {
 
 
@@ -34,7 +34,7 @@ class FireInspectionType extends AbstractType
                 ))
             ->add('nextInspectionDate', DateType::class, ['widget' => 'single_text', 'html5' => false,])
             ->add('scope')
-            ->add('tempInspectors', EntityType::class, [// looks for choices from this entity
+            ->add('inspectors', EntityType::class, [// looks for choices from this entity
                 'class' => Inspector::class,
 
                 // uses the User.username property as the visible option string

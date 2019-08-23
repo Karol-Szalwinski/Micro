@@ -21,110 +21,8 @@ use Symfony\Component\Serializer\Serializer;
  */
 class BuildDeviceController extends Controller
 {
-    /**
-     * Lists all fireProtectionDevice entities.
-     *
-     * @Route("/", name="fireprotectiondevice_index")
-     * @Method("GET")
-     */
-    public function indexAction()
-    {
-        $em = $this->getDoctrine()->getManager();
 
-        $fireProtectionDevices = $em->getRepository('MicroBundle:BuildDevice')->findAll();
 
-        return $this->render('fireprotectiondevice/index.html.twig', array('fireProtectionDevices' => $fireProtectionDevices,));
-    }
-
-    /**
-     * Creates a new fireProtectionDevice entity.
-     *
-     * @Route("/new", name="fireprotectiondevice_new")
-     * @Method({"GET", "POST"})
-     */
-    public function newAction(Request $request)
-    {
-        $fireProtectionDevice = new BuildDevice();
-        $form = $this->createForm('MicroBundle\Form\FireProtectionDeviceType', $fireProtectionDevice);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($fireProtectionDevice);
-            $em->flush();
-
-            return $this->redirectToRoute('fireprotectiondevice_show', array('id' => $fireProtectionDevice->getId()));
-        }
-
-        return $this->render('fireprotectiondevice/new.html.twig', array('fireProtectionDevice' => $fireProtectionDevice, 'form' => $form->createView(),));
-    }
-
-    /**
-     * Finds and displays a fireProtectionDevice entity.
-     *
-     * @Route("/{id}", name="fireprotectiondevice_show")
-     * @Method("GET")
-     */
-    public function showAction(BuildDevice $fireProtectionDevice)
-    {
-        $deleteForm = $this->createDeleteForm($fireProtectionDevice);
-
-        return $this->render('fireprotectiondevice/show.html.twig', array('fireProtectionDevice' => $fireProtectionDevice, 'delete_form' => $deleteForm->createView(),));
-    }
-
-    /**
-     * Displays a form to edit an existing fireProtectionDevice entity.
-     *
-     * @Route("/{id}/edit", name="fireprotectiondevice_edit")
-     * @Method({"GET", "POST"})
-     */
-    public function editAction(Request $request, BuildDevice $fireProtectionDevice)
-    {
-        $deleteForm = $this->createDeleteForm($fireProtectionDevice);
-        $editForm = $this->createForm('MicroBundle\Form\FireProtectionDeviceType', $fireProtectionDevice);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('fireprotectiondevice_edit', array('id' => $fireProtectionDevice->getId()));
-        }
-
-        return $this->render('fireprotectiondevice/edit.html.twig', array('fireProtectionDevice' => $fireProtectionDevice, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView(),));
-    }
-
-    /**
-     * Deletes a fireProtectionDevice entity.
-     *
-     * @Route("/{id}", name="fireprotectiondevice_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, BuildDevice $fireProtectionDevice)
-    {
-        $form = $this->createDeleteForm($fireProtectionDevice);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($fireProtectionDevice);
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('fireprotectiondevice_index');
-    }
-
-    /**
-     * Creates a form to delete a fireProtectionDevice entity.
-     *
-     * @param BuildDevice $fireProtectionDevice The fireProtectionDevice entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(BuildDevice $fireProtectionDevice)
-    {
-        return $this->createFormBuilder()->setAction($this->generateUrl('fireprotectiondevice_delete', array('id' => $fireProtectionDevice->getId())))->setMethod('DELETE')->getForm();
-
-    }
 
     /**
      * Get BuildDevice object
@@ -308,12 +206,12 @@ class BuildDeviceController extends Controller
         }
 
     }
-
+/////////////////////////////////////////////NEW/////////////////////////////////////////////////////
 
     /**
      * Update BuildDevice
      * @Method({"GET", "POST"})
-     * @Route("/update/{jsondevice}")
+     * @Route("/update/{jsondevice}", name="build_device_update")
      * @param Request $request
      * @return JsonResponse
      */
@@ -324,8 +222,12 @@ class BuildDeviceController extends Controller
         $device = json_decode($jsondevice);
 
         $buildDevice = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['id' => $device->{'id'}]);
+        $deviceName = $em->getRepository('MicroBundle:Device')->findOneBy(['shortname' => $device->{'shortname'}]);
+        $name = ($deviceName) ? $deviceName->getName() : "";
 
+        $buildDevice->setNumber($device->{'number'});
         $buildDevice->setShortname($device->{'shortname'});
+        $buildDevice->setName($name);
         $buildDevice->setSerial($device->{'serial'});
         $buildDevice->setAddress($device->{'address'});
         $em->flush();
@@ -347,5 +249,83 @@ class BuildDeviceController extends Controller
 
             return new JsonResponse($jsonData);
         }
+    }
+
+    /**
+     * Add BuildDevice
+     * @Method({"GET", "POST"})
+     * @Route("/add/{buildingId}/{loopNo}", name="build_device_add")
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function addAction(Request $request, $buildingId, $loopNo)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $maxNumber = $em->getRepository('MicroBundle:BuildDevice')->getHighestNumber($buildingId, $loopNo);
+        $nextNumber = ++$maxNumber['maxNumber'];
+        $building = $em->getRepository('MicroBundle:Building')->findOneBy(['id' => $buildingId]);
+
+        $buildDevice = new BuildDevice;
+        $buildDevice->setNumber($nextNumber);
+        $buildDevice->setLoopNo($loopNo);
+        $buildDevice->setBuilding($building);
+        $building->addBuildDevice($buildDevice);
+        $em->persist($buildDevice);
+        $em->flush();
+
+        $devices=$em->getRepository('MicroBundle:Device')->findAll();
+        $shortnames=[];
+        foreach ($devices as $device) {
+            $shortnames[]=$device->getShortname();
+        }
+
+        $next = $em->getRepository('MicroBundle:BuildDevice')->count(['building' => $building, 'loopNo' => $loopNo, 'del' => false]);
+
+        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+
+            $normalizer = new ObjectNormalizer();
+            $normalizer->setIgnoredAttributes(['building', 'docDevices']);
+            $encoder = new JsonEncoder();
+
+            $serializer = new Serializer([$normalizer], [$encoder]);
+            $serializeDevice = $serializer->serialize($buildDevice, 'json');
+
+
+            $jsonData['device'] = $serializeDevice;
+            $jsonData['next'] = $next;
+            $jsonData['shortnames'] = $shortnames;
+
+
+
+            return new JsonResponse($jsonData);
+        }
+    }
+
+    /**
+     * Delete BuildDevice
+     * @Method({"POST"})
+     * @Route("/delete/{deviceId}", name="build_device_delete")
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function deleteAction(Request $request, $deviceId) {
+        $em = $this->getDoctrine()->getManager();
+
+        $buildDevice = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['id' => $deviceId]);
+
+        $buildDevice->setDel(true);
+        $em->flush();
+
+
+        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+
+            $jsonData['id'] = $deviceId;
+
+
+            return new JsonResponse($jsonData);
+        }
+
+
     }
 }

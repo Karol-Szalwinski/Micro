@@ -23,7 +23,7 @@
             <div class="content-header-left col-md-6 col-12">
                 <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
                     <div class="btn-group" role="group">
-                        <a class="btn btn-outline-info round" href="{{ path('fireinspection_index') }}"><i
+                        <a class="btn btn-outline-info round" href="{{ path('document_index') }}"><i
                                     class="la la-user-plus"></i> Dodaj nowy</a>
 
                         <button class="btn btn-outline-info round dropdown-toggle dropdown-menu-right"
@@ -72,18 +72,18 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for fireInspection in fireInspections %}
+                                    {% for document in documents %}
                                         <tr>
                                             <td>
-                                                <a href="{{ path('fireinspection_show', { 'id': fireInspection.id }) }}">{{ fireInspection.id }}</a>
+                                                <a href="{{ path('document_show', { 'id': document.id }) }}">{{ document.id }}</a>
                                             </td>
-                                            <td>{{ fireInspection.building.client.name }}</td>
-                                            <td>{{ fireInspection.building.name }}</td>
-                                            <td>{% if fireInspection.inspectionDate %}{{ fireInspection.inspectionDate|date('d-m-Y') }}{% endif %}</td>
-                                            <td>{% if fireInspection.nextInspectionDate %}{{ fireInspection.nextInspectionDate|date('d-m-Y') }}{% endif %}</td>
-                                            <td>{{ fireInspection.inspectedDevices|length }}</td>
+                                            <td>{{ document.building.client.name }}</td>
+                                            <td>{{ document.building.name }}</td>
+                                            <td>{% if document.inspectionDate %}{{ document.inspectionDate|date('d-m-Y') }}{% endif %}</td>
+                                            <td>{% if document.nextInspectionDate %}{{ document.nextInspectionDate|date('d-m-Y') }}{% endif %}</td>
+                                            <td>{{ document.inspectedDevices|length }}</td>
                                             <td>
-                                                <a href="{{ path('fireinspection_edit', { 'id': fireInspection.id }) }}"
+                                                <a href="{{ path('document_edit', { 'id': document.id }) }}"
                                                    class="primary edit mr-1"><i class="la la-pencil"></i></a>
                                                 <a class="danger delete mr-1"><i class="la la-trash-o"></i></a>
 

@@ -24,7 +24,7 @@ class DocDevice
     /**
      * @var int
      *
-     * @ORM\Column(name="loop_no", type="integer", nullable=true)
+     * @ORM\Column(name="loop_no", type="integer")
      */
     private $loopNo;
 
@@ -39,7 +39,7 @@ class DocDevice
     /**
      * @var string
      *
-     * @ORM\Column(name="shortname", type="string", length=20)
+     * @ORM\Column(name="shortname", type="string", length=20, nullable=true)
      */
     private $shortname;
 

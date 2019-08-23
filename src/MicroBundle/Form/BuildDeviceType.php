@@ -3,12 +3,12 @@
 namespace MicroBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
-class FireProtectionDeviceEditType extends AbstractType
+class BuildDeviceType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -17,6 +17,7 @@ class FireProtectionDeviceEditType extends AbstractType
     {
         $builder
             ->add('id', HiddenType::class)
+            ->add('loopDev', HiddenType::class)
             ->add('name', EntityType::class, [
                 'class'=> 'MicroBundle\Entity\Device',
                 'choice_label'=>'name',
@@ -28,7 +29,7 @@ class FireProtectionDeviceEditType extends AbstractType
             ->add('serial')
             ->add('address')
             ->add('desc')
-        ;
+            ->add('number');
     }
 
     /**
@@ -46,7 +47,7 @@ class FireProtectionDeviceEditType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'microbundle_fireprotectiondevice_edit';
+        return 'microbundle_fireprotectiondevice';
     }
 
 

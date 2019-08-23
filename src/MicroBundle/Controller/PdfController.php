@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 
 /**
- * @Route("fireinspection")
+ * @Route("document")
  */
 class PdfController extends Controller
 {

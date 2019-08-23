@@ -26,7 +26,7 @@
                                     class="la la-ellipsis-v font-medium-3"></i></a>
                         <div class="heading-elements mt-0">
                             <a class="btn btn-primary btn-sm "
-                               href="{{ path('def_fireinspection_edit') }}"><i
+                               href="{{ path('def_document_edit') }}"><i
                                         class="la la-edit"></i> Edytuj domyślne dane podstawowe</a>
                         </div>
 
@@ -40,7 +40,7 @@
                             <h4><i class="ft-user"></i> Zakres wykonanych prac</h4>
                             <hr>
                             <div class="col-md-8">
-                                <p>{{ fireInspection.scope|nl2br }}</p>
+                                <p>{{ document.scope|nl2br }}</p>
                             </div>
                         </div>
                     </div>
@@ -51,7 +51,7 @@
                             <h4><i class="ft-user"></i> Wykaz urządzeń objętych przeglądem:</h4>
                             <hr>
                             <div class="col-md-8">
-                               <p> {{ fireInspection.deviceShortlistPosition|nl2br }} </p>
+                               <p> {{ document.deviceShortlistPosition|nl2br }} </p>
 
                             </div>
                         </div>
@@ -64,7 +64,7 @@
                             <h4><i class="ft-user"></i> Podstawa opracowania</h4>
                             <hr>
                             <div class="col-md-8">
-                                <p>{{ fireInspection.legal|nl2br }}</p>
+                                <p>{{ document.legal|nl2br }}</p>
 
                             </div>
                         </div>
@@ -113,7 +113,7 @@
                                 </thead>
                                 <tbody id='tbody-tests'>
 
-                                {% for test in fireInspection.testpositions %}
+                                {% for test in document.testpositions %}
                                     <tr id="terow-{{ test.id }}">
 
                                         <td class="text-center test-hidden-input">
@@ -175,7 +175,7 @@
                                     class="la la-ellipsis-v font-medium-3"></i></a>
                         <div class="heading-elements mt-0">
                             <a class="btn btn-primary btn-sm "
-                               href="{{ path('def_fireinspection_edit_summary') }}"><i
+                               href="{{ path('def_document_edit_summary') }}"><i
                                         class="la la-edit"></i> Edytuj domyślne podsumowanie</a>
                         </div>
                     </div>
@@ -186,7 +186,7 @@
                             <h4><i class="ft-user"></i>Wnioski</h4>
                             <hr>
                             <div class="col-md-8">
-                                <p>{{ fireInspection.conclusion|nl2br }}</p>
+                                <p>{{ document.conclusion|nl2br }}</p>
 
                             </div>
                         </div>
@@ -198,7 +198,7 @@
                             <h4><i class="ft-user"></i>Uwagi</h4>
                             <hr>
                             <div class="col-md-8">
-                                <p>{{ fireInspection.comment|nl2br }}</p>
+                                <p>{{ document.comment|nl2br }}</p>
 
                             </div>
                         </div>
@@ -210,7 +210,7 @@
                             <h4><i class="ft-user"></i>Zalecenia</h4>
                             <hr>
                             <div class="col-md-8">
-                                <p>{{ fireInspection.recomendations|nl2br }}</p>
+                                <p>{{ document.recomendations|nl2br }}</p>
                             </div>
                         </div>
                     </div>
@@ -397,7 +397,7 @@
             $('#add-test-position').click(function () {
 
                 $.ajax({
-                    url: '/testposition/add/' + {{ fireInspection.id }},
+                    url: '/testposition/add/' + {{ document.id }},
                     type: 'POST',
                     dataType: 'json',
                     async: true,

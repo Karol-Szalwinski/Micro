@@ -12,7 +12,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use MicroBundle\Entity\Inspector;
 
 
-class FireInspectionSummaryType extends AbstractType
+class DocumentSummaryType extends AbstractType
 {
     /**
      * {@inheritdoc}
