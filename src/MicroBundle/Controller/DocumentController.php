@@ -124,7 +124,7 @@ class DocumentController extends Controller
             $document->setPdfSettings($pdfSettings);
         }
         //todo refactor this code
-        $docInspectors = $pdfSettings->getdocument()->getInspectors();
+        $docInspectors = $document->getInspectors();
         $inspectors = [];
         foreach ($docInspectors as $docInspector) {
             $inspectors[$docInspector->getName() . " " . $docInspector->getSurname()] = $docInspector->getName() . " " . $docInspector->getSurname();
@@ -154,15 +154,6 @@ class DocumentController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        foreach ($document->getDocumentInspectors() as $inspector) {
-            if ($inspector->getPrototype()) {
-                $prototypeId = $inspector->getPrototype();
-                $prototype = $em->getRepository('MicroBundle:Inspector')->findOneBy(['id' => $prototypeId]);
-                if ($prototype instanceof Inspector) {
-                    $document->addTempInspector($prototype);
-                }
-            }
-        }
 
         $editForm = $this->createForm('MicroBundle\Form\DocumentType', $document);
 
@@ -170,25 +161,6 @@ class DocumentController extends Controller
 
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            //clear Document Inspectors
-            foreach ($document->getDocumentInspectors() as $documentInspector) {
-
-                $document->removeDocumentInspector($documentInspector);
-
-                $em->remove($documentInspector);
-
-            }
-            //add Document Inspectors
-            foreach ($document->getTempInspectors() as $inspector) {
-                $docInspector = new DocumentInspector();
-                $docInspector->setName($inspector->getName());
-                $docInspector->setSurname($inspector->getSurname());
-                $docInspector->setLicense($inspector->getLicense());
-                $docInspector->setdocument($document);
-                $docInspector->setPrototype($inspector->getId());
-                $document->addDocumentInspector($docInspector);
-                $document->removeTempInspector($inspector);
-            }
 
             $em->flush();
             return $this->redirectToRoute('document_show', array('id' => $document->getId()));
@@ -223,6 +195,48 @@ class DocumentController extends Controller
         return $this->render('document/editsum.html.twig', array('document' => $document, 'edit_form' => $editForm->createView(),));
     }
 
+    /**
+     * Show Docement devices in loop.
+     *
+     * @Route("/{id}/devices/{loop}", name="document_devices")
+     * @Method({"GET", "POST"})
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function devicesAction(Document $document, $loop, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+
+
+        $devices = $em->getRepository('MicroBundle:Document')->findDocumentDevices($document->getId(), $loop);
+
+
+
+        $missDevices = $em->getRepository('MicroBundle:Document')
+            ->findMissingDocumentDevices($document->getId(),$document->getBuilding()->getId(), $loop);
+
+
+
+        //todo refactor
+        $devicesTypes=$em->getRepository('MicroBundle:Device')->findAll();
+        $shortnames=[];
+        foreach ($devicesTypes as $device) {
+            $shortnames[]=$device->getShortname();
+        }
+
+
+
+
+        return $this->render('document/devices.html.twig', array(
+            'document' => $document,
+            'devices' => $devices,
+            'miss_devices' => $missDevices,
+            'shortnames' => $shortnames,
+            'loop_no' => $loop
+
+        ));
+
+    }
 
     /**
      * Finds and displays a document entity.

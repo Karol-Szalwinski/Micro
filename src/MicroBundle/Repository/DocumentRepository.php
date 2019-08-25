@@ -24,16 +24,16 @@ class DocumentRepository extends \Doctrine\ORM\EntityRepository
     }
 
 
-    public function findDevicesByFireInspection($document, $loopId) {
+    public function findDocumentDevices($document, $loopNo) {
         $result = $this->createQueryBuilder('Device');
 
         $dql = $result->select('f','i')
             ->from('MicroBundle:BuildDevice', 'f')
-            ->leftJoin('f.inspectedDevices', 'i')
-            ->where('i.fireInspection =:document')
-            ->andWhere('f.loopDev =:loopid')
+            ->leftJoin('f.docDevices', 'i')
+            ->where('i.document =:document')
+            ->andWhere('f.loopNo =:loopno')
             ->setParameter('document', $document)
-            ->setParameter('loopid', $loopId)
+            ->setParameter('loopno', $loopNo)
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
@@ -41,25 +41,33 @@ class DocumentRepository extends \Doctrine\ORM\EntityRepository
         return $dql;
     }
 
-    public function findNullDevicesByFireInspection($document, $loopId) {
+    public function findMissingDocumentDevices($document, $building, $loopNo) {
         $em = $this->getEntityManager();
-        $RAW_QUERY ="SELECT * FROM fire_protection_device
-                LEFT JOIN 
-                (SELECT fire_protection_device.id AS oldid FROM `fire_protection_device`
-                LEFT JOIN inspected_device
-                ON fire_protection_device.id = inspected_device.fire_protection_device_id
-                WHERE inspected_device.fire_inspection_id = ?)
-                AS old
-                ON fire_protection_device.id = old.oldid
-                WHERE fire_protection_device.loop_dev_id = ?
-                AND old.oldid IS NULL
+        $RAW_QUERY ="SELECT * FROM
+(
+SELECT * FROM `build_device`
+WHERE build_device.building_id = ?
+AND build_device.loop_no = ?
+)
+AS tab1
+LEFT JOIN
+(
+SELECT * FROM `doc_device`
+WHERE doc_device.document_id = ?
+AND doc_device.loop_no = ?
+)
+AS tab2
+ON tab1.id = tab2.build_device_id
+WHERE tab2.build_device_id IS NULL
         ";
 
 
         $statement = $em->getConnection()->prepare($RAW_QUERY);
         // Set parameters
-        $statement->bindvalue(1, $document);
-        $statement->bindvalue(2, $loopId);
+        $statement->bindvalue(1, $building);
+        $statement->bindvalue(2, $loopNo);
+        $statement->bindvalue(3, $document);
+        $statement->bindvalue(4, $loopNo);
         $statement->execute();
 
         $result = $statement->fetchAll();

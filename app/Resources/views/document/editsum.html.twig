@@ -13,7 +13,7 @@
                         <li class="breadcrumb-item"><a href="{{ path('micro_default_index') }}">Główna</a>
                         </li>
                         <li class="breadcrumb-item"><a
-                                    href="{{ path('building_show',{ 'id': fireInspection.building.id }) }}">Budynek</a>
+                                    href="{{ path('building_show',{ 'id': document.building.id }) }}">Budynek</a>
                         </li>
 
                         <li class="breadcrumb-item active">Edytuj podsumowanie
@@ -26,7 +26,7 @@
         <div class="content-header-left col-md-6 col-12">
             <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
                 <div class="btn-group" role="group">
-                    <a class="btn btn-outline-info round" href="{{ path('fireinspection_show',{ 'id': fireInspection.id }) }}"><i
+                    <a class="btn btn-outline-info round" href="{{ path('document_show',{ 'id': document.id }) }}"><i
                                 class="la la-backward"></i> Wróć do przeglądu</a>
 
                     <button class="btn btn-outline-info round dropdown-toggle dropdown-menu-right" id="btnGroupDrop1"
@@ -50,7 +50,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title" id="horz-layout-basic">Formularz edycji podsumowania przeglądu dla
-                            budynku {{ fireInspection.building.name }}</h4>
+                            budynku {{ document.building.name }}</h4>
                         <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">

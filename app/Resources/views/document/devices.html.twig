@@ -1,0 +1,276 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Przegląd{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/building-devices.css') }}">
+{% endblock %}
+
+{% block body %}
+    <!-- Content header -->
+    <div class="content-header row">
+        <div class="content-header-left col-md-4 col-12">
+
+        </div>
+        <div class="content-header-left col-md-8 col-12">
+            <div class="btn-group float-md-right" role="group"
+                 aria-label="Button group with nested dropdown">
+                <div class="btn-group" role="group">
+                    <a class="btn btn-outline-info round" href="{{ path('document_show', { 'id': document.id }) }}"><i
+                                class="la la-backward"></i> Wróć do przeglądu</a>
+                    <button class="btn btn-outline-info round " data-toggle="modal"
+                            data-target="#AddLoopModal">
+                        <i class="la la-plus"></i>&nbsp
+                        Przywróć usunięte urządzenia
+                    </button>
+                    <button class="btn btn-outline-info round " data-toggle="modal"
+                            data-target="#AddLoopModal">
+                        <i class="la la-plus"></i>&nbsp
+                        Dodaj brakujące urządzenia
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content header -->
+
+
+
+
+    <section id="section" class="row all-contacts">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-head">
+                    <div class="card-header">
+                        <h4 class="card-title">Pętla urządzeń nr {{ loop_no }}</h4>
+                        {#<div class="heading-elements mt-0">#}
+                        {#<button id="add-button"#}
+                        {#class="btn btn-primary btn-sm add-device-button " data-toggle="modal"#}
+                        {#data-target="#AddDeviceModal">#}
+                        {#<i class="d-md-none d-block ft-plus white"></i>#}
+                        {#<span class="d-md-block d-none ">Dodaj nowe urządzenie</span>#}
+                        {#</button>#}
+                        {#<button id="del-button"#}
+                        {#class="btn btn-secondary btn-sm delete-loop-button">#}
+                        {#<i class="d-md-none d-block ft-plus white"></i>#}
+                        {#<span class="d-md-block d-none ">Usuń pętlę</span>#}
+                        {#</button>#}
+                        {##}
+                        {#</div>#}
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+
+                        <!-- Device List table -->
+                        {#<button type="button" class="btn btn-sm btn-danger delete-all mb-1">Usuń Wszystkie</button>#}
+                        <table id="inspected-devices-table"
+                               class=" inspected-devices-table table table-condensed table-white-space table-bordered
+                                       row-grouping display no-wrap icheck table-middle text-center
+                                       inspected-devices-table ">
+
+                            <thead>
+                            <tr>
+                                <th>Nr</th>
+                                <th>Typ</th>
+                                <th>Status</th>
+                                <th>Wynik testu</th>
+                                <th>Poprzedni</th>
+                                <th>Akcje</th>
+                                <th>Uwagi</th>
+
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for device in devices %}
+                                <tr
+                                        id="row-{{ device.docDevices|first.id }}"
+                                        style="{% if not device.docDevices|first.visible %}display:none{% endif %}"
+                                >
+
+
+                                    <td class="text-center">
+                                        {{ device.docDevices|first.number }}
+                                    </td>
+                                    <td id="shortname-{{ device.docDevices|first.id }}"
+                                        class="text-center">
+                                        {{ device.docDevices|first.shortname }}
+                                    </td>
+                                    <td class="text-center">
+                                        {% set checked = false %}
+                                        {% if device.docDevices|first.status == 1 %}
+                                            {% set checked = true %}
+                                        {% endif %}
+                                        <input type="checkbox" class="column_filter change-checkbox switch"
+                                               id="s{{ device.docDevices|first.id }}"
+                                               {% if checked %}checked{% endif %}
+                                               data-icon-cls="fa" data-off-icon-cls="fa ft-thumbs-down"
+                                               data-on-icon-cls="fa ft-thumbs-up"
+                                               data-off-label="OFF"
+                                               data-on-label="ON"
+                                               data-group-cls="btn-group-sm"
+                                        >
+
+                                    </td>
+                                    <td class="text-center">
+                                        {% set checked = false %}
+                                        {% if device.docDevices|first.test == 1 %}
+                                            {% set checked = true %}
+                                        {% endif %}
+                                        <input type="checkbox" class="column_filter change-checkbox switch"
+                                               id="t{{ device.docDevices|first.id }}"
+                                               {% if checked %}checked{% endif %}
+                                               data-icon-cls="fa" data-off-icon-cls="fa ft-thumbs-down"
+                                               data-on-icon-cls="fa ft-thumbs-up"
+                                               data-off-label="NEG"
+                                               data-on-label="POZ"
+                                               data-group-cls="btn-group-sm"
+                                        >
+
+                                    </td>
+
+                                    <td>
+                                        {% if device.tempServiceDate is null %}
+                                            {% set badgecolor = "badge-secondary" %}
+                                            {% set diff = "brak" %}
+                                            {% set unit = "" %}
+                                        {% else %}
+
+
+                                            {% set year = "now"|date('y') - device.tempServiceDate|date('y') %}
+                                            {% set month = "now"|date('m') - device.tempServiceDate|date('m') %}
+                                            {% set diff = year * 12 + month %}
+                                            {% set unit = "mies" %}
+
+
+                                            {% if  diff > 12 %}
+                                                {% set badgecolor = "badge-danger" %}
+                                            {% elseif  diff > 9 %}
+                                                {% set badgecolor = "badge-warning" %}
+                                            {% elseif  diff > 6 %}
+                                                {% set badgecolor = "badge-primary" %}
+                                            {% elseif  diff > 3 %}
+                                                {% set badgecolor = "badge-info" %}
+                                            {% elseif  diff > 0 %}
+                                                {% set badgecolor = "badge-success" %}
+                                            {% elseif  diff == 0 %}
+                                                {% set badgecolor = "badge-success" %}
+                                                {% set diff = "< 1" %}
+                                            {% elseif  diff < 0 %}
+                                                {% set badgecolor = "badge-danger" %}
+                                                {% set diff = "zaplanowany w przyszłości" %}
+                                                {% set unit = "" %}
+
+
+                                            {% endif %}
+                                        {% endif %}
+                                        <i data-toggle="tooltip"
+                                           title="{% if device.tempServiceDate is not null %}
+                                                        {{ device.tempServiceDate|date('Y-m-d') }}
+                                                    {% else %}
+                                                        brak
+                                                    {% endif %}"
+                                           class="badge badge-pill {{ badgecolor }}">{{ diff }} {{ unit }}
+
+                                        </i>
+                                    </td>
+                                    <td>
+                                        <a id="info-{{ device.id }}" data-toggle="tooltip"
+                                           title="Pokaż info"
+                                           class=" info mr-1 info-modal-btn"><i
+                                                    class="la la-info "></i></a>
+                                        <a id="del-{{ device.docDevices|first.id }}"
+                                           data-toggle="tooltip"
+                                           title="Usuń z przeglądu"
+                                           class="loop-delete-row danger delete mr-1 "><i
+                                                    class="la la-trash-o "></i></a>
+
+                                        <a data-toggle="tooltip"
+                                                {% if device.del %}
+
+                                                    title="Urządzenie usunięte z budynku!" class="warning mr-1"
+                                                {% elseif device.shortname != device.docDevices|first.shortname %}
+                                                    title="Typ urządzenia zmieniono na {{ device.shortname }}" class="warning mr-1"
+                                                {% else %}
+                                                    title="" class="muted mr-1"
+                                                {% endif %}
+                                        ><i
+                                                    class="la la-exclamation-triangle"></i>
+
+                                        </a>
+                                        <a data-toggle="tooltip"
+                                           id="update-{{ device.docDevices|first.id }}"
+                                                {% if device.shortname != device.docDevices|first.shortname %}
+                                                    title="Zaktualizuj typ urządzenia na {{ device.shortname }}"
+                                                    class="warning mr-1 update-ins-device"
+                                                {% else %}
+                                                    title="" class="muted mr-1"
+                                                {% endif %}
+                                        ><i
+                                                    class="la la-refresh "></i>
+
+                                        </a>
+
+
+                                    </td>
+                                    <td class="text-center hidden-input">
+                                        <p id="p{{ device.docDevices|first.id }}">{{ device.docDevices|first.comment }}</p>
+                                        <input id="c{{ device.docDevices|first.id }}"
+                                               type="hidden" value="">
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-switch.min.js') }}"></script>
+    {#<script src="{{ asset('app-assets/vendors/js/forms/toggle/switchery.min.js') }}"></script>#}
+    <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-checkbox.min.js') }}"></script>
+    <script src="{{ asset('app-assets/js/scripts/forms/switch.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.select.min.js') }}"></script>
+
+    <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/tables/datatable/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.colVis.js') }}"></script>
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="{{ asset('app-assets/js/core/libraries/jquery_ui/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/extensions/sweetalert.min.js') }}"></script>
+
+    <!-- END: Page Vendor JS-->
+
+    <!-- END: Page Vendor JS-->
+
+    <!-- BEGIN: Page JS-->
+    {#<script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>#}
+    <!-- END: Page JS-->
+
+
+    <!-- BEGIN: My JS-->
+    <script src="{{ asset('assets/js/sweet-alerts.js') }}"></script>
+    <script src="{{ asset('assets/js/document.js') }}"></script>
+    <!-- END: My JS-->
+
+
+{% endblock %}

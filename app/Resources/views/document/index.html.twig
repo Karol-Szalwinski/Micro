@@ -81,7 +81,7 @@
                                             <td>{{ document.building.name }}</td>
                                             <td>{% if document.inspectionDate %}{{ document.inspectionDate|date('d-m-Y') }}{% endif %}</td>
                                             <td>{% if document.nextInspectionDate %}{{ document.nextInspectionDate|date('d-m-Y') }}{% endif %}</td>
-                                            <td>{{ document.inspectedDevices|length }}</td>
+                                            <td>{{ document.docDevices|length }}</td>
                                             <td>
                                                 <a href="{{ path('document_edit', { 'id': document.id }) }}"
                                                    class="primary edit mr-1"><i class="la la-pencil"></i></a>
