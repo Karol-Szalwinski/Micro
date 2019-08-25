@@ -72,6 +72,7 @@
 
                             <thead>
                             <tr>
+                                <th>Lp</th>
                                 <th>Nr</th>
                                 <th>Typ</th>
                                 <th>Status</th>
@@ -84,19 +85,31 @@
                             </tr>
                             </thead>
                             <tbody>
+                            {% set order = 1 %}
+
                             {% for device in devices %}
                                 <tr
                                         id="row-{{ device.docDevices|first.id }}"
-                                        style="{% if not device.docDevices|first.visible %}display:none{% endif %}"
+                                        style="{% if not device.docDevices|first.visible %}display:none{% endif %};"
                                 >
-
-
-                                    <td class="text-center">
-                                        {{ device.docDevices|first.number }}
+                                    <td class="text-center order">
+                                        {{ ++order }}{% set order = order + 1 %}
                                     </td>
-                                    <td id="shortname-{{ device.docDevices|first.id }}"
-                                        class="text-center">
-                                        {{ device.docDevices|first.shortname }}
+                                    <td class="text-right">{{ device.loopNo }} /
+                                        <input type="number" min="1" max="255" class="hidden-op hidden-input unique-input" id="i-number-{{ device.id }}"
+                                               value="{{ device.docDevices|first.number }}"
+                                               readonly>
+                                    </td>
+                                    <td class="text-center">
+                                        <select class=" hidden-op hidden-select" id="i-shortname-{{ device.id }}"
+                                                disabled>
+                                            <option value="{{ device.docDevices|first.shortname }}" selected>{{ device.docDevices|first.shortname }}</option>
+                                            {% for short in shortnames %}
+                                                {% if device.docDevices|first.shortname != short %}
+                                                    <option value="{{ short }}">{{ short }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
                                     </td>
                                     <td class="text-center">
                                         {% set checked = false %}
@@ -106,8 +119,8 @@
                                         <input type="checkbox" class="column_filter change-checkbox switch"
                                                id="s{{ device.docDevices|first.id }}"
                                                {% if checked %}checked{% endif %}
-                                               data-icon-cls="fa" data-off-icon-cls="fa ft-thumbs-down"
-                                               data-on-icon-cls="fa ft-thumbs-up"
+                                               data-icon-cls="fa" data-off-icon-cls="fa ft-eye-off"
+                                               data-on-icon-cls="fa ft-eye"
                                                data-off-label="OFF"
                                                data-on-label="ON"
                                                data-group-cls="btn-group-sm"
@@ -177,10 +190,14 @@
                                         </i>
                                     </td>
                                     <td>
+
                                         <a id="info-{{ device.id }}" data-toggle="tooltip"
                                            title="Pokaż info"
                                            class=" info mr-1 info-modal-btn"><i
                                                     class="la la-info "></i></a>
+                                        <a id="edit-row-btn-{{ device.id }}"
+                                           class="primary edit-row-btn mr-1"><i
+                                                    class="la la-pencil"></i></a>
                                         <a id="del-{{ device.docDevices|first.id }}"
                                            data-toggle="tooltip"
                                            title="Usuń z przeglądu"
@@ -215,10 +232,10 @@
 
 
                                     </td>
-                                    <td class="text-center hidden-input">
-                                        <p id="p{{ device.docDevices|first.id }}">{{ device.docDevices|first.comment }}</p>
-                                        <input id="c{{ device.docDevices|first.id }}"
-                                               type="hidden" value="">
+                                    <td class="text-center">
+                                        <input class="hidden-op hidden-input" id="i-comment-{{ device.docDevices|first.id }}"
+                                               value="{{ device.docDevices|first.comment }}"
+                                               readonly>
                                     </td>
 
                                 </tr>
@@ -226,6 +243,20 @@
                             {% endfor %}
 
                             </tbody>
+                            <tfoot>
+                            <tr>
+                                <th>Lp</th>
+                                <th>Nr</th>
+                                <th>Typ</th>
+                                <th>Status</th>
+                                <th>Wynik testu</th>
+                                <th>Poprzedni</th>
+                                <th>Akcje</th>
+                                <th>Uwagi</th>
+
+
+                            </tr>
+                            </tfoot>
 
                         </table>
                     </div>
@@ -269,7 +300,7 @@
 
     <!-- BEGIN: My JS-->
     <script src="{{ asset('assets/js/sweet-alerts.js') }}"></script>
-    <script src="{{ asset('assets/js/document.js') }}"></script>
+    <script src="{{ asset('assets/js/document-devices.js') }}"></script>
     <!-- END: My JS-->
 
 
