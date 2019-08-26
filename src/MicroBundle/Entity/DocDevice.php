@@ -276,6 +276,18 @@ class DocDevice
     }
 
     /**
+     * Toggle visible.
+     *
+     * @return bool
+     */
+    public function toggleVisible()
+    {
+        $this->visible = !$this->visible;
+
+        return $this->visible;
+    }
+
+    /**
      * Set document.
      *
      * @param \MicroBundle\Entity\Document|null $document

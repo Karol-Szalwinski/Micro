@@ -1,5 +1,5 @@
 // change tables in DatataTable
-$('.devices-table').DataTable({
+$('.doc-devices-table').DataTable({
     "language": {
         "lengthMenu": "Pokaż _MENU_ wierszy na stronie",
         "zeroRecords": "Niestety brak wyników",
@@ -198,7 +198,7 @@ function deleteDevice(id) {
             //repair first column after remover row
             var row = 1;
             $('.order').each(function () {
-                $(this).text(row++)
+                $(this).text(row++);
             })
         },
         error: function () {

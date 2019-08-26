@@ -1,0 +1,244 @@
+<!-- Info devices modal -->
+<div class="modal fade " id="info-modal" role="dialog">
+    <div class="modal-dialog modal-lg ">
+
+        <!-- Modal content-->
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h4 class="modal-title">Informacja o urządzeniu</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <p id="dialog-id" style="visibility:hidden"></p>
+            <div class="modal-body table-responsive">
+                <table class="table table-sm table-bordered ">
+                    <tbody>
+                    <tr>
+                        <th>Numer w pętli</th>
+                        <td id="dialog-number"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Nazwa urzadzenia</th>
+                        <td id="dialog-name"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Ostatni przegląd</th>
+                        <td id="dialog-temp-date"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Numer Seryjny</th>
+                        <td>
+                            <input class="info-input" id="dialog-serial" style="border:none; width:100%; "
+                                   readonly>
+                            {#onblur="readonly(this)#}
+                        </td>
+                        <td><a class=" info mr-1 edit-info-btn"><i
+                                        class="la la-edit "></i></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Adress</th>
+                        <td>
+                            <input class="info-input" id="dialog-address" style="border:none; width:100%" readonly>
+                            {#onblur="readonly(this)#}
+                        </td>
+                        <td><a class=" info mr-1 edit-info-btn"><i
+                                        class="la la-edit "></i></a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>Opis</th>
+                        <td>
+
+                            <textarea class="info-input" rows=12 cols=50 id="dialog-description"
+                                      style="border:none; width:100%" readonly>
+                            </textarea>
+                            {#onblur="readonly(this)#}
+                        </td>
+                        <td><a class=" info mr-1 edit-info-btn"><i
+                                        class="la la-edit "></i></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Restore devices modal-->
+
+<div id="restore-device-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h4 class="modal-title">Wybierz urządzenie ktore chcesz dodać do dokumentu</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+
+                <!-- Task List table -->
+                <div class="table-responsive">
+
+                    <table id="inspected-devices"
+                           class="table table-condensed table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
+                        <thead>
+                        <h4 class="card-title"></h4>
+                        <tr>
+                            <th>Lp</th>
+                            <th>Nr</th>
+                            <th>Typ</th>
+                            <th>Akcje</th>
+
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% set order = 1 %}
+                        {% for device in devices %}
+                            <tr id="mod-{{ device.docDevices|first.id }}"
+                                style="{% if device.docDevices|first.visible %}display:none;{% endif %}">
+
+                                <td class="text-center order">
+                                    {{ order }}
+                                    {% if not device.docDevices|first.visible %}
+                                        {% set order = order + 1 %}
+                                    {% endif %}
+                                </td>
+                                <td class="text-right">{{ device.loopNo }} /
+                                    <input type="number" min="1" max="255"
+                                           class="hidden-op hidden-input unique-input"
+                                           id="i-number-{{ device.docDevices|first.id }}"
+                                           value="{{ device.docDevices|first.number }}"
+                                           readonly>
+                                </td>
+                                <td class="text-center">
+                                    <select class=" hidden-op hidden-select"
+                                            id="i-shortname-{{ device.docDevices|first.id }}"
+                                            disabled>
+                                        <option value="{{ device.docDevices|first.shortname }}"
+                                                selected>{{ device.docDevices|first.shortname }}</option>
+                                        {% for short in shortnames %}
+                                            {% if device.docDevices|first.shortname != short %}
+                                                <option value="{{ short }}">{{ short }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <a
+                                            id="add-{{ device.docDevices|first.id }}"
+                                            class="device-restore btn btn-sm btn-warning mr-1"><i
+                                                class="la la-level-up"></i> Przywróć</a>
+
+                                </td>
+
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">Zamknij</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Add new devices modal-->
+
+<div id="add-device-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h4 class="modal-title">Wybierz urządzenie ktore chcesz dodać do dokumentu</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+
+                <!-- Task List table -->
+                <div class="table-responsive">
+
+                    <table id="inspected-devices"
+                           class="table table-condensed table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
+                        <thead>
+                        <h4 class="card-title"></h4>
+                        <tr>
+                            <th>Lp</th>
+                            <th>Nr</th>
+                            <th>Typ</th>
+                            <th>Akcje</th>
+
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% set order = 1 %}
+                        {% for device in miss_devices %}
+                            {{ dump(device) }}
+                            <tr id="mod2-{{ device.id }}">
+
+                                <td class="text-center order">
+                                    {{ order }}
+                                    {% set order = order + 1 %}
+                                </td>
+                                <td class="text-right">{{ device.loop_no }} /
+                                    <input type="number" min="1" max="255"
+                                           class="hidden-op hidden-input unique-input"
+                                           id="i-new-number-{{ device.id }}"
+                                           value="{{ device.number }}"
+                                           readonly>
+                                </td>
+                                <td class="text-center">
+                                    <select class=" hidden-op hidden-select"
+                                            id="i-new-shortname-{{ device.id }}"
+                                            disabled>
+                                        <option value="{{ device.shortname }}"
+                                                selected>{{ device.shortname }}</option>
+
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <a
+                                            id="add-{{ device.id }}"
+                                            class="device-restore btn btn-sm btn-warning mr-1"><i
+                                                class="la la-level-up"></i> Przywróć</a>
+
+                                </td>
+
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">Zamknij</button>
+            </div>
+        </div>
+    </div>
+</div>

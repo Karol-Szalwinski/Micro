@@ -23,7 +23,6 @@ class BuildDeviceController extends Controller
 {
 
 
-
     /**
      * Get BuildDevice object
      * @Method({"GET", "POST"})
@@ -97,8 +96,8 @@ class BuildDeviceController extends Controller
         $em = $this->getDoctrine()->getManager();
         //if we dont have id
         if ($id == "null") {
-        //try to search deleted device with the same number and loopdev
-            $fireProtectionDevice = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['number' => $number, 'loopDev'=> $loop]);
+            //try to search deleted device with the same number and loopdev
+            $fireProtectionDevice = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['number' => $number, 'loopDev' => $loop]);
 
             //if found change status on undeleted
             if ($fireProtectionDevice instanceof BuildDevice) {
@@ -132,7 +131,7 @@ class BuildDeviceController extends Controller
         //get loop id
         $loopid = $fireProtectionDevice->getLoopDev()->getId();
 
-    //prepare to serialization
+        //prepare to serialization
         //chane nulles on ""
         $serial = ($serial == "null") ? "" : $serial;
         $address = ($address == "null") ? "" : $address;
@@ -222,14 +221,26 @@ class BuildDeviceController extends Controller
         $device = json_decode($jsondevice);
 
         $buildDevice = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['id' => $device->{'id'}]);
-        $deviceName = $em->getRepository('MicroBundle:Device')->findOneBy(['shortname' => $device->{'shortname'}]);
-        $name = ($deviceName) ? $deviceName->getName() : "";
+        if (array_key_exists('shortname', $device)) {
+            $deviceName = $em->getRepository('MicroBundle:Device')->findOneBy(['shortname' => $device->{'shortname'}]);
+            $name = ($deviceName) ? $deviceName->getName() : "";
+            $buildDevice->setName($name);
 
-        $buildDevice->setNumber($device->{'number'});
-        $buildDevice->setShortname($device->{'shortname'});
-        $buildDevice->setName($name);
-        $buildDevice->setSerial($device->{'serial'});
-        $buildDevice->setAddress($device->{'address'});
+            $buildDevice->setShortname($device->{'shortname'});
+        }
+
+        if (array_key_exists('number', $device)) {
+            $buildDevice->setNumber($device->{'number'});
+        };
+        if (array_key_exists('serial', $device)) {
+            $buildDevice->setSerial($device->{'serial'});
+        };
+        if (array_key_exists('address', $device)) {
+            $buildDevice->setAddress($device->{'address'});
+        };
+        if (array_key_exists('desc', $device)) {
+            $buildDevice->setDesc($device->{'desc'});
+        };
         $em->flush();
 
 
@@ -246,9 +257,41 @@ class BuildDeviceController extends Controller
             $jsonData['device'] = $serializeDevice;
 
 
+            return new JsonResponse($jsonData);
+        }
+    }
+
+    /**
+     * Get BuildDevice object
+     * @Method({"GET", "POST"})
+     * @Route("/get/{id}")
+     * @param Request $request
+     * @param $id
+     * @return JsonResponse
+     */
+    public function getBuildDeviceAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $buildDevice = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['id' => $id]);
+
+
+        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+
+            $normalizer = new ObjectNormalizer();
+            $normalizer->setIgnoredAttributes(['building', 'docDevices']);
+            $encoder = new JsonEncoder();
+
+            $serializer = new Serializer([$normalizer], [$encoder]);
+            $serializeDevice = $serializer->serialize($buildDevice, 'json');
+
+
+            $jsonData['device'] = $serializeDevice;
+
 
             return new JsonResponse($jsonData);
         }
+
     }
 
     /**
@@ -274,10 +317,10 @@ class BuildDeviceController extends Controller
         $em->persist($buildDevice);
         $em->flush();
 
-        $devices=$em->getRepository('MicroBundle:Device')->findAll();
-        $shortnames=[];
+        $devices = $em->getRepository('MicroBundle:Device')->findAll();
+        $shortnames = [];
         foreach ($devices as $device) {
-            $shortnames[]=$device->getShortname();
+            $shortnames[] = $device->getShortname();
         }
 
         $next = $em->getRepository('MicroBundle:BuildDevice')->count(['building' => $building, 'loopNo' => $loopNo, 'del' => false]);
@@ -297,7 +340,6 @@ class BuildDeviceController extends Controller
             $jsonData['shortnames'] = $shortnames;
 
 
-
             return new JsonResponse($jsonData);
         }
     }
@@ -309,7 +351,8 @@ class BuildDeviceController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function deleteAction(Request $request, $deviceId) {
+    public function deleteAction(Request $request, $deviceId)
+    {
         $em = $this->getDoctrine()->getManager();
 
         $buildDevice = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['id' => $deviceId]);

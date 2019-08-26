@@ -1,5 +1,5 @@
 // change tables in DatataTable
-$('.devices-table').DataTable({
+$('#doc-devices-table').DataTable({
     "language": {
         "lengthMenu": "Pokaż _MENU_ wierszy na stronie",
         "zeroRecords": "Niestety brak wyników",
@@ -12,7 +12,7 @@ $('.devices-table').DataTable({
     "fixedHeader": {
         "header": true,
         "headerOffset": 70,
-        "footer": true
+        "footer": true,
     }
 });
 
@@ -25,9 +25,9 @@ $(document).on('click', '.edit-row-btn ', function () {
 
     // add to tr status active
 
-    $(this).closest('tr').find(':input').removeAttr("readonly");
-    $(this).closest('tr').find(':input').css("border", "solid").css("border-color", "DeepSkyBlue");
-    $(this).closest('tr').find(':input').addClass('active');
+    $(this).closest('tr').find('.hidden-input ').removeAttr("readonly");
+    $(this).closest('tr').find('.hidden-input ').css("border", "solid").css("border-color", "DeepSkyBlue");
+    $(this).closest('tr').find('.hidden-input ').addClass('active');
 
     $(this).closest('tr').find('select').removeAttr("disabled");
     $(this).closest('tr').find('select').css("border", "solid").css("border-color", "DeepSkyBlue");
@@ -45,88 +45,73 @@ $(document).on('blur', '.active', function (e) {
             $(".hidden-input ").attr('readonly', true).css("border", "none");
             $(".hidden-select ").attr('disabled', true).css("border", "none");
             $(".hidden-op").removeClass('active');
-            updateDevice(id);
+            updateDocDevice(id);
         }
 
     }, 200)
 
 });
 
+//sweet alert change checkbox
 
+$(document).on('change', '.change-checkbox', function () {
+    var id = this.closest('tr').id.substring(4);
+    swal({
+        title: "Jesteś pewny?",
+        text: "Każda zmiana musi zostać zatwierdzona!",
+        icon: "warning",
+        buttons: {
+            cancel: {
+                text: "Nie, rozmyśliłem się",
+                value: null,
+                visible: true,
+                className: "",
+                closeModal: false,
+            },
+            confirm: {
+                text: "Tak, zmień!",
+                value: true,
+                visible: true,
+                className: "",
+                closeModal: false,
+            }
+        }
+    })
+        .then((isConfirm) => {
+            if(isConfirm) {
+                updateDocDevice(id);
+                swal("Zmieniono!", "Zmiany zostały zapisane.", "success");
+            } else {
+                this.click();
+                swal("Anulowano", "Przywrócono poprzedni stan", "error"
+                )
+                ;
+            }
+        })
+
+});
 
 
 ///////////////////////////////////////new///////////////////////////////
 
-$(document).on('click', '#add-row-btn ', function () {
-    addDevice($(this).data("building"), $(this).data("loopno"));
-});
-
-
-// add fire protection device
-function addDevice(building, loop) {
-
-    $.ajax({
-        url: '../../../build-device/add/' + building + '/' + loop,
-        type: 'POST',
-        dataType: 'json',
-        async: true,
-
-        success: function (data) {
-            var options = "";
-            var device = JSON.parse(data['device']);
-            var next = data['next'];
-            var shortnames = data['shortnames'];
-            var tdOrder = "<td class='text-center order'>" + next + "</td>";
-            var tdNumber = "<td class='text-right'>" + device.loopNo + " / <input type='number' min='1' max='255' " +
-                    "class='hidden-op hidden-input unique-input' id='i-number-" + device.id + "' value='" + device.number + "'readonly></td>";
-            var tdName = "<td class='text-center'><a class='text-center' id='i-name-" + device.id + "'></a></td>";
-
-            shortnames.forEach(function(item){
-                options +="<option value='" + item + "'>" + item + "</option>";
-            });
-
-
-            var tdShortname = "<td class='text-center'><select class=' hidden-op hidden-select' id='i-shortname-" + device.id + "' disabled>" +
-                "<option value='' selected></option>" +
-                options + "</select></td>";
-            var tdSerial = "<td class='text-center'><input class='hidden-op hidden-input' id='i-serial-" + device.id + "' value='' readonly></td>";
-            var tdAddress = "<td class='text-center'><input class='hidden-op hidden-input' id='i-address-" + device.id + "' value='' readonly></td>";
-            var tdDesc = "<td class='text-center'><a class='text-center' id='desc-" + device.id + "'></a></td>";
-            var tdDate = "<td class='text-center'>Brak</td>";
-            var tdActions = "<td><a type='button' id='edit-row-btn-" + device.id + "' class='primary edit-row-btn mr-1'><i class='la la-pencil'></i></a>" +
-                "<a data-device='" + device.id + "' class='danger delete-row-btn mr-1'><i class='la la-trash-o'></i></a></td>";
-
-            var row =
-                "<tr id='row-" + device.id + "'>" +
-                tdOrder + tdNumber + tdName + tdShortname + tdSerial + tdAddress + tdDesc + tdDate + tdActions +
-                "</tr>";
-
-            $("tbody").append(row);
 
 
 
-        },
-        error: function () {
-            alert('Błąd dodawania device');
-        }
-    });
-};
+// update docDevice
+function updateDocDevice(id) {
 
-
-// update fire protection device
-function updateDevice(id) {
-
-    var device = {
+    var docDevice = {
         id: id,
         shortname: $('#i-shortname-' + id).val(),
         number: $('#i-number-' + id).val(),
-        serial: $('#i-serial-' + id).val(),
-        address: $('#i-address-' + id).val(),
+        comment: $('#i-comment-' + id).val(),
+        status: $('#i-status-' + id).prop('checked'),
+        test: $('#i-test-' + id).prop('checked'),
     };
-    var jsonString = JSON.stringify(device);
+    var jsonString = JSON.stringify(docDevice);
 
     $.ajax({
-        url: '../../../build-device/update/' + jsonString,
+        url: '../../../doc-device/update/' + jsonString,
         type: 'POST',
         dataType: 'json',
         async: true,
@@ -134,16 +119,16 @@ function updateDevice(id) {
         success: function (data) {
 
             // update row
-            var device = JSON.parse(data['device']);
-            $('#i-shortname-' + id).val(device.shortname);
-            $('#i-name-' + id).text(device.name);
-            $('#i-number-' + id).val(device.number);
-            $('#i-serial-' + id).val(device.serial);
-            $('#i-address-' + id).val(device.address);
+            var docDevice = JSON.parse(data['doc_device']);
+            $('#i-shortname-' + id).val(docDevice.shortname);
+            $('#i-number-' + id).val(docDevice.number);
+            $('#i-comment-' + id).val(docDevice.comment);
+            $('#i-status-' + id).prop("checked", docDevice.status);
+            $('#i-test-' + id).prop("checked", docDevice.test);
 
         },
         error: function () {
-            alert('Błąd update device');
+            alert('Błąd update docDevice');
         }
     });
 };
@@ -229,3 +214,191 @@ $(document).on('change', '.unique-input', function () {
     $(this).addClass('unique-input');
 })
 ;
+
+// fill info modal
+$(".info-modal-btn").on("click", function () {
+    var id = this.id.substring(5);
+    $.ajax({
+        url: '../../../build-device/get/' + id,
+        type: 'POST',
+        dataType: 'json',
+        async: true,
+
+        success: function (data) {
+
+            var device = JSON.parse(data['device']);
+
+            $('#dialog-name').text(device.name);
+            $('#dialog-id').text(device.id);
+            $('#dialog-serial').val(device.serial);
+            $('#dialog-address').val(device.address);
+            $('#dialog-description').val(device.desc);
+            $('#dialog-number').text(device.loopNo + ' / ' + device.number);
+            $('#dialog-temp-date').text(device.tempServiceDate);
+
+
+            $('#info-modal').modal('show');
+
+        },
+        error: function () {
+            alert('Błąd przesyłania');
+        }
+    })
+
+});
+
+// animation dialog
+$("#animation-dialog").dialog({
+    autoOpen: false,
+    width: 400,
+    show: {
+        effect: "fade",
+        duration: 400
+    },
+    hide: {
+        effect: "explode",
+        duration: 1000
+    },
+    modal: true
+});
+
+// activate input in info modal
+$(document).on('click', '.edit-info-btn ', function () {
+
+    $(this).parent().prev().children().removeAttr("readonly");
+    $(this).parent().prev().children().focus();
+    $(this).parent().prev().children().css("border", "solid").css("border-color", "DeepSkyBlue");
+    window.getSelection().removeAllRanges();
+});
+
+// deactivate input in info modal
+$(document).on('blur', '.info-input ', function () {
+
+    $(".info-input ").attr('readonly', true).css("border", "none");
+    $(".info-input:focus").css("outline", "none");
+
+});
+// update build device function
+function updateBuildDevice(id) {
+
+    var buildDevice = {
+        id: id,
+        serial: $('#dialog-serial').val(),
+        address: $('#dialog-address').val(),
+        desc : $('#dialog-description').val(),
+    };
+    var jsonString = JSON.stringify(buildDevice);
+
+    $.ajax({
+        url: '../../../build-device/update/' + jsonString,
+        type: 'POST',
+        dataType: 'json',
+        async: true,
+
+        success: function (data) {
+
+            // update row
+            var device = JSON.parse(data['device']);
+            $('#dialog-id').text(device.id);
+            $('#dialog-name').text(device.name);
+            $('#dialog-serial').val(device.serial);
+            $('#dialog-address').val(device.address);
+            $('#dialog-description').val(device.desc);
+
+        },
+        error: function () {
+            alert('Błąd update device');
+        }
+    });
+};
+// update fire protection device after change input
+$(document).on('change', '.info-input', function () {
+
+    var id = $('#dialog-id').text();
+    updateBuildDevice(id);
+});
+
+
+//sweet alert delete device from loop
+
+$(document).on('click', '.delete-row-btn', function () {
+    var id = this.id.substr(15);
+    swal({
+        title: "Jesteś pewny?",
+        text: "To urządzenie nie będzie objęte przeglądem!",
+        icon: "warning",
+        buttons: {
+            cancel: {
+                text: "Nie, rozmyśliłem się",
+                value: null,
+                visible: true,
+                className: "",
+                closeModal: false,
+            },
+            confirm: {
+                text: "Tak, usuń to urządzenie!",
+                value: true,
+                visible: true,
+                className: "",
+                closeModal: false,
+            }
+        }
+    })
+        .then((isConfirm) => {
+            if(isConfirm) {
+                changeInspectedDeviceVisible(id);
+                swal("Usunięte!", "Możesz przywrócić to urządzenie.", "success");
+            } else {
+                swal("Anulowano", "Twoje urządzenie pozostało", "error"
+                )
+                ;
+            }
+        })
+
+});
+
+// update docDevice
+function changeInspectedDeviceVisible(id) {
+
+    var docDevice = {
+        id: id,
+        visible: 'toggle',
+    };
+
+    console.log(id);
+    var jsonString = JSON.stringify(docDevice);
+
+    $.ajax({
+        url: '../../../doc-device/update/' + jsonString,
+        type: 'POST',
+        dataType: 'json',
+        async: true,
+
+        success: function (data) {
+
+            // update row
+            var docDevice = JSON.parse(data['doc_device']);
+            $('#row-' + id).toggle();
+            $('#mod-' + id).toggle();
+            repairRowOrder();
+
+        },
+        error: function () {
+            alert('Błąd update docDevice');
+        }
+    });
+};
+
+function repairRowOrder() {
+    var row = 1;
+    $('.order').each(function () {
+        if($(this).is(':visible')) {
+            $(this).text(row++);
+        }
+    })
+}
+
+$(document).on('click', '.device-restore', function () {
+    var id = this.id.substring(4);
+    changeInspectedDeviceVisible(id);
+});

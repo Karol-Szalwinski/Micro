@@ -1,4 +1,4 @@
-.hidden-input {
+.hidden-input, .readonly-input {
     outline: none;
     border:none;
     width:100%;

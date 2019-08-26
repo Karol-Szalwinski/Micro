@@ -19,12 +19,12 @@
                     <a class="btn btn-outline-info round" href="{{ path('document_show', { 'id': document.id }) }}"><i
                                 class="la la-backward"></i> Wróć do przeglądu</a>
                     <button class="btn btn-outline-info round " data-toggle="modal"
-                            data-target="#AddLoopModal">
+                            data-target="#restore-device-modal">
                         <i class="la la-plus"></i>&nbsp
                         Przywróć usunięte urządzenia
                     </button>
                     <button class="btn btn-outline-info round " data-toggle="modal"
-                            data-target="#AddLoopModal">
+                            data-target="#add-device-modal">
                         <i class="la la-plus"></i>&nbsp
                         Dodaj brakujące urządzenia
                     </button>
@@ -65,7 +65,7 @@
 
                         <!-- Device List table -->
                         {#<button type="button" class="btn btn-sm btn-danger delete-all mb-1">Usuń Wszystkie</button>#}
-                        <table id="inspected-devices-table"
+                        <table id="doc-devices-table"
                                class=" inspected-devices-table table table-condensed table-white-space table-bordered
                                        row-grouping display no-wrap icheck table-middle text-center
                                        inspected-devices-table ">
@@ -93,17 +93,24 @@
                                         style="{% if not device.docDevices|first.visible %}display:none{% endif %};"
                                 >
                                     <td class="text-center order">
-                                        {{ ++order }}{% set order = order + 1 %}
+                                        {{ order }}
+                                        {% if device.docDevices|first.visible %}
+                                            {% set order = order + 1 %}
+                                        {% endif %}
                                     </td>
                                     <td class="text-right">{{ device.loopNo }} /
-                                        <input type="number" min="1" max="255" class="hidden-op hidden-input unique-input" id="i-number-{{ device.id }}"
+                                        <input type="number" min="1" max="255"
+                                               class="readonly-input unique-input"
+                                               id="i-number-{{ device.docDevices|first.id }}"
                                                value="{{ device.docDevices|first.number }}"
                                                readonly>
                                     </td>
                                     <td class="text-center">
-                                        <select class=" hidden-op hidden-select" id="i-shortname-{{ device.id }}"
+                                        <select class=" hidden-op hidden-select"
+                                                id="i-shortname-{{ device.docDevices|first.id }}"
                                                 disabled>
-                                            <option value="{{ device.docDevices|first.shortname }}" selected>{{ device.docDevices|first.shortname }}</option>
+                                            <option value="{{ device.docDevices|first.shortname }}"
+                                                    selected>{{ device.docDevices|first.shortname }}</option>
                                             {% for short in shortnames %}
                                                 {% if device.docDevices|first.shortname != short %}
                                                     <option value="{{ short }}">{{ short }}</option>
@@ -117,7 +124,7 @@
                                             {% set checked = true %}
                                         {% endif %}
                                         <input type="checkbox" class="column_filter change-checkbox switch"
-                                               id="s{{ device.docDevices|first.id }}"
+                                               id="i-status-{{ device.docDevices|first.id }}"
                                                {% if checked %}checked{% endif %}
                                                data-icon-cls="fa" data-off-icon-cls="fa ft-eye-off"
                                                data-on-icon-cls="fa ft-eye"
@@ -133,7 +140,7 @@
                                             {% set checked = true %}
                                         {% endif %}
                                         <input type="checkbox" class="column_filter change-checkbox switch"
-                                               id="t{{ device.docDevices|first.id }}"
+                                               id="i-test-{{ device.docDevices|first.id }}"
                                                {% if checked %}checked{% endif %}
                                                data-icon-cls="fa" data-off-icon-cls="fa ft-thumbs-down"
                                                data-on-icon-cls="fa ft-thumbs-up"
@@ -191,17 +198,18 @@
                                     </td>
                                     <td>
 
-                                        <a id="info-{{ device.id }}" data-toggle="tooltip"
+                                        <a id="info-{{ device.id }}" data-toggle="tooltip" data-target="#info-modal"
                                            title="Pokaż info"
                                            class=" info mr-1 info-modal-btn"><i
                                                     class="la la-info "></i></a>
-                                        <a id="edit-row-btn-{{ device.id }}"
+                                        <a id="edit-row-btn-{{ device.id }}" data-toggle="tooltip"
+                                           title="Edytuj urządzenie"
                                            class="primary edit-row-btn mr-1"><i
                                                     class="la la-pencil"></i></a>
-                                        <a id="del-{{ device.docDevices|first.id }}"
+                                        <a id="delete-row-btn-{{ device.docDevices|first.id }}"
                                            data-toggle="tooltip"
                                            title="Usuń z przeglądu"
-                                           class="loop-delete-row danger delete mr-1 "><i
+                                           class="delete-row-btn danger delete mr-1 "><i
                                                     class="la la-trash-o "></i></a>
 
                                         <a data-toggle="tooltip"
@@ -233,7 +241,8 @@
 
                                     </td>
                                     <td class="text-center">
-                                        <input class="hidden-op hidden-input" id="i-comment-{{ device.docDevices|first.id }}"
+                                        <input class="hidden-op hidden-input"
+                                               id="i-comment-{{ device.docDevices|first.id }}"
                                                value="{{ device.docDevices|first.comment }}"
                                                readonly>
                                     </td>
@@ -265,7 +274,7 @@
         </div>
     </section>
 
-
+    {% include 'document/devices-modals.html.twig' %}
 
 
 

@@ -43,7 +43,8 @@ class DocumentRepository extends \Doctrine\ORM\EntityRepository
 
     public function findMissingDocumentDevices($document, $building, $loopNo) {
         $em = $this->getEntityManager();
-        $RAW_QUERY ="SELECT * FROM
+        $RAW_QUERY ="
+SELECT tab1.id, tab1.name, tab1.shortname, tab1.loop_no, tab1.number, tab1.serial, tab1.address, tab1.description FROM
 (
 SELECT * FROM `build_device`
 WHERE build_device.building_id = ?
