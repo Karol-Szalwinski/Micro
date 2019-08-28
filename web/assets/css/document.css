@@ -1,8 +1,14 @@
-.td-hidden-input:focus {
+.hidden-input, .readonly-input {
     outline: none;
+    border: 2px solid #ffffff;
+    width:100%;
+    min-width: 55px;
+
 }
+
 
 input, textarea {
     color: #6b6f82;
 }
+
 

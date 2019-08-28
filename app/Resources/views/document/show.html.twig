@@ -13,7 +13,7 @@
     <!-- Content header -->
     <div class="content-header row">
         <div class="content-header-left col-md-6 col-12">
-            <h3 class="content-header-title mb-0">Przegląd urządzeń przeciwpożarowych</h3>
+            <h3 class="content-header-title mb-0">{{ document.name }}</h3>
             <div class="row breadcrumbs-top">
                 <div class="breadcrumb-wrapper col-12">
                     <ol class="breadcrumb">
@@ -22,13 +22,13 @@
                         </li>
 
                         <li class="breadcrumb-item"><a href="{{ path('document_index') }}">Lista
-                                przeglądów</a>
+                                dokumentów</a>
                         </li>
                         <li class="breadcrumb-item"><a
                                     href="{{ path('building_show', { 'id': document.building.id }) }}">
                                 Budynek {{ document.building.name }}</a>
                         </li>
-                        <li class="breadcrumb-item active">Przegląd z
+                        <li class="breadcrumb-item active">Dokument z
                             dnia {% if document.inspectionDate %}{{ document.inspectionDate|date('Y-m-d') }}{% endif %}
                         </li>
 
@@ -43,6 +43,18 @@
                     <a class="btn btn-outline-info round"
                        href="{{ path('building_show', { 'id' : document.building.id }) }}"><i
                                 class="la la-backward"></i> Wróć do budynku</a>
+                    <a class="btn btn-outline-info round"
+                       href="{{ path('document_devices', { 'id': document.id, 'loop': 1 }) }}">
+                        <i class="la la-circle-o-notch"></i> Pętla 1</a>
+                    <a class="btn btn-outline-info round"
+                       href="{{ path('document_devices', { 'id': document.id, 'loop': 2 }) }}">
+                        <i class="la la-circle-o-notch"></i> Pętla 2</a>
+                    <a class="btn btn-outline-info round"
+                       href="{{ path('document_devices', { 'id': document.id, 'loop': 3 }) }}">
+                        <i class="la la-circle-o-notch"></i> Pętla 3</a>
+                    <a class="btn btn-outline-info round"
+                       href="{{ path('document_devices', { 'id': document.id, 'loop': 4 }) }}">
+                        <i class="la la-circle-o-notch"></i> Pętla 4</a>
 
                     <a class="btn btn-outline-info round"
                        data-toggle="modal" data-target="#pdf-modal"><i class="la la-file-pdf-o"></i> Wygeneruj PDF</a>
@@ -205,8 +217,8 @@
                 <div class="card-content">
                     <div class="card-body">
                         <!-- Task List table -->
-                        <button id="add-test-position-{{ document.id }}" type="button"
-                                class="add-test-position btn btn-sm btn-info mb-1">
+                        <button id="add-doc-position" type="button"
+                                class="btn btn-sm btn-info mb-1" data-id="{{ document.id }}">
                             Dodaj pozycję
                         </button>
 
@@ -224,45 +236,46 @@
                                 </thead>
                                 <tbody id='tbody-tests'>
 
-                                {% for test in document.docpositions %}
-                                    <tr id="terow-{{ test.id }}">
-
-                                        <td class="text-center test-hidden-input">
-                                            <p id="namep-{{ test.id }}">{{ test.name }}</p>
-                                            <input id="namei-{{ test.id }}"
-                                                   type="hidden" value="">
+                                {% for position in document.docpositions %}
+                                    <tr data-id="{{ position.id }}">
+                                        <td class="text-center">
+                                            <input class="hidden-op hidden-input"
+                                                   id="i-name-{{ position.id }}"
+                                                   value="{{ position.name }}"
+                                                   readonly>
                                         </td>
                                         <td class="text-center">
                                             {% set checked = false %}
-                                            {% if test.test == 1 %}
+                                            {% if position.test == 1 %}
                                                 {% set checked = true %}
                                             {% endif %}
-                                            <input type="checkbox"
-                                                   class="column_filter test-checkbox-switch switch "
-                                                   id="testc-{{ test.id }}" {% if checked %}checked{% endif %}
+                                            <input type="checkbox" class="column_filter change-checkbox switch"
+                                                   id="i-test-{{ position.id }}"
+                                                   {% if checked %}checked{% endif %}
                                                    data-icon-cls="fa" data-off-icon-cls="fa ft-thumbs-down"
                                                    data-on-icon-cls="fa ft-thumbs-up"
                                                    data-off-label="NEG"
                                                    data-on-label="POZ"
                                                    data-group-cls="btn-group-sm"
                                             >
-
                                         </td>
-                                        <td class="text-center test-hidden-input">
-                                            <p id="commp-{{ test.id }}">{{ test.comment }}</p>
-                                            <input id="commi-{{ test.id }}"
-                                                   type="hidden" value="">
+                                        <td class="text-center">
+                                            <input class="hidden-op hidden-input"
+                                                   id="i-comment-{{ position.id }}"
+                                                   value="{{ position.comment }}"
+                                                   readonly>
                                         </td>
-
                                         <td>
-                                            <a
-                                                    id="tedel-{{ test.id }}"
-                                                    class="test-delete-row btn btn-sm btn-danger mr-1">Usuń<i
-                                                        class="la la-add"></i></a>
-
-
+                                            <a id="edit-row-btn-{{ position.id }}" data-toggle="tooltip"
+                                               title="Edytuj pozycję"
+                                               class="primary edit-row-btn mr-1"><i
+                                                        class="la la-pencil"></i></a>
+                                            <a id="delete-row-btn-{{ position.id }}"
+                                               data-toggle="tooltip"
+                                               title="Usuń z przeglądu"
+                                               class="delete-row-btn danger delete mr-1 "><i
+                                                        class="la la-trash-o "></i></a>
                                         </td>
-
                                     </tr>
                                 {% endfor %}
 

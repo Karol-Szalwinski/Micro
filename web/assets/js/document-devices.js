@@ -20,17 +20,17 @@ $('#doc-devices-table').DataTable({
 // activate input in device row
 $(document).on('click', '.edit-row-btn ', function () {
     //clear another open inpu
-    $(".hidden-input ").attr('readonly', true).css("border", "none");
-    $(".hidden-select ").attr('disabled', true).css("border", "none");
+    $(".hidden-input ").attr('readonly', true).css("border", "2px solid #ffffff");
+    $(".hidden-select ").attr('disabled', true).css("border", "2px solid #ffffff");
 
     // add to tr status active
 
     $(this).closest('tr').find('.hidden-input ').removeAttr("readonly");
-    $(this).closest('tr').find('.hidden-input ').css("border", "solid").css("border-color", "DeepSkyBlue");
+    $(this).closest('tr').find('.hidden-input ').css("border", "2px solid #00bfff");
     $(this).closest('tr').find('.hidden-input ').addClass('active');
 
     $(this).closest('tr').find('select').removeAttr("disabled");
-    $(this).closest('tr').find('select').css("border", "solid").css("border-color", "DeepSkyBlue");
+    $(this).closest('tr').find('select').css("border", "2px solid #00bfff");
     $(this).closest('tr').find('select').addClass('active');
 
     window.getSelection().removeAllRanges();
@@ -42,8 +42,8 @@ $(document).on('blur', '.active', function (e) {
     setTimeout(function () {
         console.log(document.activeElement);
         if (!$(document.activeElement).hasClass('active')) {
-            $(".hidden-input ").attr('readonly', true).css("border", "none");
-            $(".hidden-select ").attr('disabled', true).css("border", "none");
+            $(".hidden-input ").attr('readonly', true).css("border", "2px solid #ffffff");
+            $(".hidden-select ").attr('disabled', true).css("border", "2px solid #ffffff");
             $(".hidden-op").removeClass('active');
             updateDocDevice(id);
         }
@@ -267,15 +267,15 @@ $(document).on('click', '.edit-info-btn ', function () {
 
     $(this).parent().prev().children().removeAttr("readonly");
     $(this).parent().prev().children().focus();
-    $(this).parent().prev().children().css("border", "solid").css("border-color", "DeepSkyBlue");
+    $(this).parent().prev().children().css("border", "2px solid #00bfff");
     window.getSelection().removeAllRanges();
 });
 
 // deactivate input in info modal
 $(document).on('blur', '.info-input ', function () {
 
-    $(".info-input ").attr('readonly', true).css("border", "none");
-    $(".info-input:focus").css("outline", "none");
+    $(".info-input ").attr('readonly', true).css("border", "2px solid #ffffff");
+    $(".info-input:focus").css("outline", "2px solid #ffffff");
 
 });
 // update build device function

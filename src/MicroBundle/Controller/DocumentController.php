@@ -46,18 +46,17 @@ class DocumentController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $defaultdocument = $em->getRepository('MicroBundle:Document')->findOneBy(['id' => 1]);
-        $document = clone $defaultdocument;
+        $defaultDocument = $em->getRepository('MicroBundle:Document')->findOneBy(['id' => 1]);
+        $document = clone $defaultDocument;
         $document->setDeviceShortlistPosition($building->getDeviceShortlistPosition());
         $document->setInspectionDate(new \DateTime());
         $document->setNextInspectionDate(new \DateTime('now + 6 month'));
-
+        $names = ["Przegląd urządzeń SPP", "Protokół odbioru", "Protokół przekazania", "Protokół ze szkolenia"];
 
         $form = $this->createForm('MicroBundle\Form\DocumentType', $document);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
 
 
             $building->addDocument($document);
@@ -66,7 +65,7 @@ class DocumentController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             //add test position to document
-            foreach ($defaultdocument->getDocPositions() as $defDocPosition) {
+            foreach ($defaultDocument->getDocPositions() as $defDocPosition) {
                 $DocPosition = clone $defDocPosition;
                 $DocPosition->setDocument($document);
                 $document->addDocPosition($DocPosition);
@@ -75,22 +74,8 @@ class DocumentController extends Controller
 
             //add DocDevice to document
 
-            foreach ($building->getBuildDevices() as $device) {
-                if (!$device->getDel()) {
-                    $docDevices = new DocDevice();
-                    $docDevices->setNumber($device->getNumber());
-                    $docDevices->setShortname($device->getShortname());
-                    $docDevices->setLoopNo($device->getLoopNo());
 
-                    $docDevices->setBuildDevice($device);
-                    $device->addDocDevice($docDevices);
-
-                    $docDevices->setDocument($document);
-                    $document->addDocDevice($docDevices);
-
-                    $em->persist($docDevices);
-                }
-            }
+            $this->generateDocDevices([], $document, $em, true);
 
 
             $em->persist($document);
@@ -99,7 +84,7 @@ class DocumentController extends Controller
             return $this->redirectToRoute('document_show', array('id' => $document->getId()));
         }
 
-        return $this->render('document/new.html.twig', array('document' => $document, 'building' => $building, 'form' => $form->createView(),));
+        return $this->render('document/new.html.twig', array('document' => $document, 'building' => $building, 'names' => $names, 'form' => $form->createView(),));
     }
 
     /**
@@ -153,7 +138,7 @@ class DocumentController extends Controller
     public function editAction(Request $request, Document $document)
     {
         $em = $this->getDoctrine()->getManager();
-
+        $names = ["Przegląd urządzeń SPP", "Protokół odbioru", "Protokół przekazania", "Protokół ze szkolenia"];
 
         $editForm = $this->createForm('MicroBundle\Form\DocumentType', $document);
 
@@ -166,7 +151,7 @@ class DocumentController extends Controller
             return $this->redirectToRoute('document_show', array('id' => $document->getId()));
         }
 
-        return $this->render('document/edit.html.twig', array('document' => $document, 'edit_form' => $editForm->createView(),));
+        return $this->render('document/edit.html.twig', array('document' => $document, 'names' => $names, 'edit_form' => $editForm->createView(),));
 
     }
 
@@ -205,34 +190,20 @@ class DocumentController extends Controller
     public function devicesAction(Document $document, $loop, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-
-
+        $this->generateDocDevices($loop, $document, $em, false);
 
         $devices = $em->getRepository('MicroBundle:Document')->findDocumentDevices($document->getId(), $loop);
 
 
-
-        $missDevices = $em->getRepository('MicroBundle:Document')
-            ->findMissingDocumentDevices($document->getId(),$document->getBuilding()->getId(), $loop);
-
-
-
         //todo refactor
-        $devicesTypes=$em->getRepository('MicroBundle:Device')->findAll();
-        $shortnames=[];
+        $devicesTypes = $em->getRepository('MicroBundle:Device')->findAll();
+        $shortnames = [];
         foreach ($devicesTypes as $device) {
-            $shortnames[]=$device->getShortname();
+            $shortnames[] = $device->getShortname();
         }
 
 
-
-
-        return $this->render('document/devices.html.twig', array(
-            'document' => $document,
-            'devices' => $devices,
-            'miss_devices' => $missDevices,
-            'shortnames' => $shortnames,
-            'loop_no' => $loop
+        return $this->render('document/devices.html.twig', array('document' => $document, 'devices' => $devices, 'miss_devices' => [], 'shortnames' => $shortnames, 'loop_no' => $loop
 
         ));
 
@@ -271,7 +242,7 @@ class DocumentController extends Controller
         return $this->redirectToRoute('document_show', array('id' => $document->getId()));
     }
 
-    private function adddocDevice(Document $document, BuildDevice $device)
+    private function addDocDevice(Document $document, BuildDevice $device)
     {
         $em = $this->getDoctrine()->getManager();
         $docDevices = new DocDevice();
@@ -286,6 +257,41 @@ class DocumentController extends Controller
 
         $em->persist($docDevices);
         $em->flush();
+    }
+
+    /**
+     * @param $loop
+     * @param $document
+     * @param $em
+     */
+    private function generateDocDevices($loop, $document, $em, $visible): void
+    {
+
+        if (is_array($loop)) {
+            $missDevices = $em->getRepository('MicroBundle:Document')->findMissingDocumentDevices($document->getId(), $document->getBuilding()->getId());
+        } else {
+            $missDevices = $em->getRepository('MicroBundle:Document')->findMissingDocumentDevicesByLoop($document->getId(), $document->getBuilding()->getId(), $loop);
+        }
+
+        foreach ($missDevices as $device) {
+            if ($device->{'del'} == 0) {
+                $buildDevice = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['id' => $device->{'id'}]);
+                $docDevices = new DocDevice();
+                $docDevices->setNumber($buildDevice->getNumber());
+                $docDevices->setShortname($buildDevice->getShortname());
+                $docDevices->setLoopNo($buildDevice->getLoopNo());
+                $docDevices->setVisible($visible);
+
+                $docDevices->setBuildDevice($buildDevice);
+                $buildDevice->addDocDevice($docDevices);
+
+                $docDevices->setDocument($document);
+                $document->addDocDevice($docDevices);
+
+                $em->persist($docDevices);
+                $em->flush();
+            }
+        }
     }
 
 }

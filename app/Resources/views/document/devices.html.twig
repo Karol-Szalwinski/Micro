@@ -18,13 +18,20 @@
                 <div class="btn-group" role="group">
                     <a class="btn btn-outline-info round" href="{{ path('document_show', { 'id': document.id }) }}"><i
                                 class="la la-backward"></i> Wróć do przeglądu</a>
+                    <a class="btn btn-{% if loop_no != 1 %}outline-{% endif %}info round"
+                       href="{{ path('document_devices', { 'id': document.id, 'loop': 1 }) }}">
+                        <i class="la la-circle-o-notch"></i> Pętla 1</a>
+                    <a class="btn btn-{% if loop_no != 2 %}outline-{% endif %}info round"
+                       href="{{ path('document_devices', { 'id': document.id, 'loop': 2 }) }}">
+                        <i class="la la-circle-o-notch"></i> Pętla 2</a>
+                    <a class="btn btn-{% if loop_no != 3 %}outline-{% endif %}info round"
+                       href="{{ path('document_devices', { 'id': document.id, 'loop': 3 }) }}">
+                        <i class="la la-circle-o-notch"></i> Pętla 3</a>
+                    <a class="btn btn-{% if loop_no != 4 %}outline-{% endif %}info round"
+                       href="{{ path('document_devices', { 'id': document.id, 'loop': 4 }) }}">
+                        <i class="la la-circle-o-notch"></i> Pętla 4</a>
                     <button class="btn btn-outline-info round " data-toggle="modal"
                             data-target="#restore-device-modal">
-                        <i class="la la-plus"></i>&nbsp
-                        Przywróć usunięte urządzenia
-                    </button>
-                    <button class="btn btn-outline-info round " data-toggle="modal"
-                            data-target="#add-device-modal">
                         <i class="la la-plus"></i>&nbsp
                         Dodaj brakujące urządzenia
                     </button>
@@ -43,7 +50,10 @@
             <div class="card">
                 <div class="card-head">
                     <div class="card-header">
-                        <h4 class="card-title">Pętla urządzeń nr {{ loop_no }}</h4>
+                        <h4 class="card-title">Budynek {{ document.building.name }}.
+                            Dokument nr {{ document.id }} z
+                            dnia {% if document.inspectionDate %}{{ document.inspectionDate|date('d-m-Y') }}{% endif %}.
+                            Pętla urządzeń nr <b>{{ loop_no }}</b>.</h4>
                         {#<div class="heading-elements mt-0">#}
                         {#<button id="add-button"#}
                         {#class="btn btn-primary btn-sm add-device-button " data-toggle="modal"#}
@@ -280,37 +290,37 @@
 
 {% endblock %}
 
-{% block scripts %}
+    {% block scripts %}
 
-    <!-- BEGIN: Page Vendor JS-->
-    <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
-    <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-switch.min.js') }}"></script>
-    {#<script src="{{ asset('app-assets/vendors/js/forms/toggle/switchery.min.js') }}"></script>#}
-    <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-checkbox.min.js') }}"></script>
-    <script src="{{ asset('app-assets/js/scripts/forms/switch.js') }}"></script>
-    <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.select.min.js') }}"></script>
+        <!-- BEGIN: Page Vendor JS-->
+        <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
+        <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-switch.min.js') }}"></script>
+        {#<script src="{{ asset('app-assets/vendors/js/forms/toggle/switchery.min.js') }}"></script>#}
+        <script src="{{ asset('app-assets/vendors/js/forms/toggle/bootstrap-checkbox.min.js') }}"></script>
+        <script src="{{ asset('app-assets/js/scripts/forms/switch.js') }}"></script>
+        <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}"></script>
+        <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.select.min.js') }}"></script>
 
-    <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('app-assets/vendors/js/tables/datatable/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.colVis.js') }}"></script>
-    <!-- BEGIN: Page Vendor JS-->
-    <script src="{{ asset('app-assets/js/core/libraries/jquery_ui/jquery-ui.min.js') }}"></script>
-    <script src="{{ asset('app-assets/vendors/js/extensions/sweetalert.min.js') }}"></script>
+        <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.buttons.min.js') }}"></script>
+        <script src="{{ asset('app-assets/vendors/js/tables/datatable/buttons.bootstrap4.min.js') }}"></script>
+        <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.colVis.js') }}"></script>
+        <!-- BEGIN: Page Vendor JS-->
+        <script src="{{ asset('app-assets/js/core/libraries/jquery_ui/jquery-ui.min.js') }}"></script>
+        <script src="{{ asset('app-assets/vendors/js/extensions/sweetalert.min.js') }}"></script>
 
-    <!-- END: Page Vendor JS-->
+        <!-- END: Page Vendor JS-->
 
-    <!-- END: Page Vendor JS-->
+        <!-- END: Page Vendor JS-->
 
-    <!-- BEGIN: Page JS-->
-    {#<script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>#}
-    <!-- END: Page JS-->
-
-
-    <!-- BEGIN: My JS-->
-    <script src="{{ asset('assets/js/sweet-alerts.js') }}"></script>
-    <script src="{{ asset('assets/js/document-devices.js') }}"></script>
-    <!-- END: My JS-->
+        <!-- BEGIN: Page JS-->
+        {#<script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>#}
+        <!-- END: Page JS-->
 
 
-{% endblock %}
+        <!-- BEGIN: My JS-->
+        <script src="{{ asset('assets/js/sweet-alerts.js') }}"></script>
+        <script src="{{ asset('assets/js/document-devices.js') }}"></script>
+        <!-- END: My JS-->
+
+
+    {% endblock %}

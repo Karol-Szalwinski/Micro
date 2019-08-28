@@ -1,28 +1,36 @@
-//updata row in Loop tables after change switch (Status and Test columns)
+// activate input in device row
+$(document).on('click', '.edit-row-btn ', function () {
+    //clear another open inpu
+    $(".hidden-input ").attr('readonly', true).css("border", "solid 2px #ffffff");
 
-// $('.status-checkbox').change(function () {
-function changeCheckbox(id, type){
-    $.ajax({
-        url: '/inspdev/' + id + '/changestatus/' + type,
-        type: 'POST',
-        dataType: 'json',
-        async: true,
+    // add to tr status active
 
-        success: function (data, status) {
+    $(this).closest('tr').find('.hidden-input ').removeAttr("readonly");
+    $(this).closest('tr').find('.hidden-input ').css("border", "solid 2px #00bfff");
+    $(this).closest('tr').find('.hidden-input ').addClass('active');
 
+     window.getSelection().removeAllRanges();
+});
 
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            alert('Błąd requestu ajax.');
+// deactivate input in info modal except another info in this row
+$(document).on('blur', '.active', function (e) {
+    var id = (this).closest('tr').dataset.id;
+    setTimeout(function () {
+        console.log(document.activeElement);
+        if (!$(document.activeElement).hasClass('active')) {
+            $(".hidden-input ").attr('readonly', true).css("border", "solid 2px #ffffff");
+            $(".hidden-op").removeClass('active');
+            updateDocPosition(id);
         }
-    });
-};
+
+    }, 200)
+
+});
 
 //sweet alert change checkbox
 
 $(document).on('change', '.change-checkbox', function () {
-    var id = this.id.substring(1);
-    var type = this.id.substring(0, 1)
+    var id = (this).closest('tr').dataset.id;
     swal({
         title: "Jesteś pewny?",
         text: "Każda zmiana musi zostać zatwierdzona!",
@@ -46,7 +54,7 @@ $(document).on('change', '.change-checkbox', function () {
     })
         .then((isConfirm) => {
             if(isConfirm) {
-                changeCheckbox(id, type);
+                updateDocPosition(id);
                 swal("Zmieniono!", "Zmiany zostały zapisane.", "success");
             } else {
                 this.click();
@@ -58,144 +66,45 @@ $(document).on('change', '.change-checkbox', function () {
 
 });
 
+// update docPosition
+function updateDocPosition(id) {
 
+    var docPosition = {
+        id: id,
+        name: $('#i-name-' + id).val(),
+        comment: $('#i-comment-' + id).val(),
+        test: $('#i-test-' + id).prop('checked'),
+    };
+    var jsonString = JSON.stringify(docPosition);
 
-
-//show hiden input in text cells in Loop tables ( Comment column)
-
-$(document).ready(function () {
-    $(".hidden-input").click(function () {
-
-        var comment = $(this).find('p').text();
-
-        $(this).find("input").attr('type', 'text').val(comment).focus();
-        $(this).find('p').text('');
-    });
-});
-
-//updata row in Loop tables after blur in input ( Comment column)
-$(document).ready(function () {
-    $(".hidden-input").find("input").blur(function () {
-        $(this).attr('type', 'hidden');
-        var comm = ($(this).val().toString() == "") ? null : $(this).val();
-
-        $.ajax({
-            url: '/inspdev/' + this.id.substring(1) + '/changecomment/' + comm,
-            type: 'POST',
-            dataType: 'json',
-            async: true,
-
-            success: function (data) {
-                var id = data['id'];
-                $("#p" + id).text(data['comm']);
-
-            },
-            error: function () {
-                $(this).parent().find('p').text('Wprowadź ponownie');
-            }
-        });
-    });
-});
-
-
-//Funcion to delete row in Loop tables
-function changeInspectedDeviceVisible(id) {
     $.ajax({
-        url: '/inspdev/' + id + '/changevisible',
+        url: '../../../doc-position/update/' + jsonString,
         type: 'POST',
         dataType: 'json',
         async: true,
 
         success: function (data) {
 
-
-            $('#row-' + id).toggle();
-            $('#mod-' + id).toggle();
-            ;
-
+            // update row
+            var docPosition = JSON.parse(data['doc_position']);
+            $('#i-name-' + id).val(docPosition.name);
+            $('#i-comment-' + id).val(docPosition.comment);
+            $('#i-test-' + id).prop("checked", docPosition.test);
 
         },
         error: function () {
-            alert('Błąd usuwania - spróbuj przeładować stronę');
+            alert('Błąd update docPosition');
         }
     });
 };
 
-$(document).on('click', '.device-restore', function () {
-    var id = this.id.substring(4);
-    changeInspectedDeviceVisible(id);
-});
-
-
-//Show hidden inputs in Test position table ( Comment column)
-
-$(document).on('click', '.test-hidden-input', function () {
-
-    var comment = $(this).find('p').text();
-
-    $(this).find("input").attr('type', 'text').val(comment).focus();
-    $(this).find('p').text('');
-});
-
-
-//Update Inputs after blur in Test position table ( Comment column)
-
-$(document).on('blur', '.test-hidden-input input', function () {
-//            $(".test-hidden-input").find("input").blur(function () {
-    $(this).attr('type', 'hidden');
-    var value = $(this).val().toString();
-    updateAjax(value, this.id);
-});
-
-
-// update row in Test position table changing by switch ( Result column)
-$(document).on('change', '.test-checkbox-switch', function () {
-//            $('.test-checkbox-switch').change(function () {
-    updateAjax(null, this.id);
-});
-
-// Function to update test position by Ajax ( Result column)
-
-function updateAjax(value, id) {
-
-    value = (value === "") ? null : value;
-
-    $.ajax({
-        url: '/testposition/' + id + '/update/' + value,
-        type: 'POST',
-        dataType: 'json',
-        async: true,
-
-        success: function (data) {
-            var id = data['id'];
-            var type = data['type'];
-            var text = data['text'];
-
-            switch (type) {
-                case ('namei-'):
-                    $("#namep-" + id).text(text);
-
-                    break;
-
-                case ('commi-'):
-
-                    $("#commp-" + id).text(text);
-
-            }
-        },
-        error: function () {
-            alert('Niestety wystąpił błąd połączenia. Spróbuj przeładować stronę');
-        }
-    });
-}
-
-// add new row in Test position table
+// todo add new row in Test position table
 $(document).ready(function () {
-    $('.add-test-position').click(function () {
-        var id = this.id.substring(18);
+    $('#add-doc-position').click(function () {
+        var id = $(this).data("id");
 
         $.ajax({
-            url: '/testposition/add/' + id,
+            url: '/doc-position/add/' + id,
             type: 'POST',
             dataType: 'json',
             async: true,
@@ -252,6 +161,8 @@ $(document).on('click', '.test-delete-row ', function () {
 });
 
 
+
+// todo ----old-----------------------
 //activate DataTable
 $('.inspected-devices-table').DataTable({
     dom: 'Bfrtip',

@@ -20,58 +20,55 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * Test Position controller.
  *
- * @Route("testposition")
+ * @Route("doc-position")
  */
 class DocPositionController extends Controller
 {
 
 
     /**
-     * Change pool in Test position
-     * @Method({"POST"})
-     * @Route("/{htmlid}/update/{value}")
-     * @param $request
-     * @param String $htmlid
-     * @param String $value
+     * Update DocDevice
+     * @Method({"GET", "POST"})
+     * @Route("/update/{jsondevice}", name="doc_position_update")
+     * @param Request $request
+     * @param $jsondevice
      * @return JsonResponse
      */
-    public function updateTestPositionAction(Request $request, $htmlid, $value)
+    public function updateAction(Request $request, $jsondevice)
     {
-        $type = substr($htmlid, 0, 6);
-        $id = substr($htmlid, 6);
-        $value = ($value == "null") ? "" : $value;
-
         $em = $this->getDoctrine()->getManager();
-        $testPosition = $em->getRepository('MicroBundle:DocPosition')->findOneById($id);
 
-        $responseText = null;
-        switch ($type) {
-            case ('namei-'):
+        $jsonDevice = json_decode($jsondevice);
 
-                $testPosition->setName($value);
-                $responseText = $testPosition->getName();
+        $docPosition = $em->getRepository('MicroBundle:DocPosition')->findOneBy(['id' => $jsonDevice->{'id'}]);
 
-                break;
-            case ('testc-'):
+        if (array_key_exists('name', $jsonDevice)) {
 
-                $testPosition->setTest(!$testPosition->getTest());
-                $responseText = $testPosition->getTest();
-
-                break;
-            case ('commi-'):
-
-                $testPosition->setComment($value);
-                $responseText = $testPosition->getComment();
+            $docPosition->setName($jsonDevice->{'name'});
         }
+        if (array_key_exists('test', $jsonDevice)) {
 
+            $docPosition->setTest($jsonDevice->{'test'});
+        }
+        if (array_key_exists('comment', $jsonDevice)) {
+
+            $docPosition->setComment($jsonDevice->{'comment'});
+        }
 
         $em->flush();
 
 
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
-            $jsonData['id'] = $id;
-            $jsonData['type'] = $type;
-            $jsonData['text'] = $responseText;
+
+            $normalizer = new ObjectNormalizer();
+            $normalizer->setIgnoredAttributes(['document']);
+            $encoder = new JsonEncoder();
+
+            $serializer = new Serializer([$normalizer], [$encoder]);
+            $serializeDevice = $serializer->serialize($docPosition, 'json');
+
+
+            $jsonData['doc_position'] = $serializeDevice;
 
 
             return new JsonResponse($jsonData);
@@ -81,23 +78,23 @@ class DocPositionController extends Controller
     /**
      * Creates a new testPosition.
      *
-     * @Route("/add/{fireInspectionId}", name="test_position_add")
+     * @Route("/add/{documentId}", name="doc_position_add")
      * @Method({"POST"})
      * @param Request $request
-     * @param $fireInspectionId
+     * @param $documentId
      * @return JsonResponse
      */
-    public function testPositionAddAction(Request $request, $fireInspectionId)
+    public function testPositionAddAction(Request $request, $documentId)
     {
         $em = $this->getDoctrine()->getManager();
-        $fireInspection= $em->getRepository("MicroBundle\Entity\FireInspection")->FindOneBy(['id'=>$fireInspectionId]);
-        $testPosition = New DocPosition();
-        $testPosition->setFireInspection($fireInspection);
-        $fireInspection->addTestPosition($testPosition);
+        $document= $em->getRepository("MicroBundle\Entity\Document")->FindOneBy(['id'=>$documentId]);
+        $docPosition = New DocPosition();
+        $docPosition->setDocument($document);
+        $document->addDocPosition($docPosition);
 
-        $em->persist($testPosition);
+        $em->persist($docPosition);
         $em->flush();
-        $id = $testPosition->getId();
+        $id = $docPosition->getId();
 
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
             $jsonData['id'] = $id;

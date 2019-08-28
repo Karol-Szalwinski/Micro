@@ -263,6 +263,7 @@
 
                                 <tr>
                                     <th>Numer</th>
+                                    <th>Nazwa</th>
                                     <th>Data przeglądu</th>
                                     <th>Data następnego</th>
                                     <th>Ilość urządzeń</th>
@@ -270,24 +271,25 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {#{% for document in building.documents|sort %}#}
-                                    {#<tr onclick='location.href = "{{ path('document_show', { 'id': document.id }) }}";'>#}
-                                        {#<td>#}
-                                            {#{{ document.name }}#}
-                                        {#</td>#}
-                                        {#<td>#}
-                                            {#<a href="{{ path('document_show', { 'id': document.id }) }}">{{ document.id }}</a>#}
-                                        {#</td>#}
-                                        {#<td>{% if document.inspectionDate %}{{ document.inspectionDate|date('d-m-Y') }}{% endif %}</td>#}
-                                        {#<td>{% if document.nextInspectionDate %}{{ document.nextInspectionDate|date('d-m-Y') }}{% endif %}</td>#}
-                                        {#<td>{{ document.inspectedDevices|length }}</td>#}
+                                {% for document in building.documents|sort %}
+                                    <tr onclick='location.href = "{{ path('document_show', { 'id': document.id }) }}";'>
+                                        <td>
+                                            <a href="{{ path('document_show', { 'id': document.id }) }}">{{ document.id }}</a>
+                                        </td>
+                                        <td>
+                                            {{ document.name }}
+                                        </td>
+                                        <td>{% if document.inspectionDate %}{{ document.inspectionDate|date('d-m-Y') }}{% endif %}</td>
+                                        <td>{% if document.nextInspectionDate %}{{ document.nextInspectionDate|date('d-m-Y') }}{% endif %}</td>
+                                        <td>{{ document.docDevices|length }}</td>
 
-                                    {#</tr>#}
-                                {#{% endfor %}#}
+                                    </tr>
+                                {% endfor %}
                                 </tbody>
                                 <tfoot>
                                 <tr>
                                     <th>Numer</th>
+                                    <th>Nazwa</th>
                                     <th>Data przeglądu</th>
                                     <th>Data następnego</th>
                                     <th>Ilość urządzeń</th>

@@ -20,17 +20,17 @@ $('.doc-devices-table').DataTable({
 // activate input in device row
 $(document).on('click', '.edit-row-btn ', function () {
     //clear another open inpu
-    $(".hidden-input ").attr('readonly', true).css("border", "none");
-    $(".hidden-select ").attr('disabled', true).css("border", "none");
+    $(".hidden-input ").attr('readonly', true).css("border", "2px solid #ffffff");
+    $(".hidden-select ").attr('disabled', true).css("border", "2px solid #ffffff");
 
     // add to tr status active
 
     $(this).closest('tr').find(':input').removeAttr("readonly");
-    $(this).closest('tr').find(':input').css("border", "solid").css("border-color", "DeepSkyBlue");
+    $(this).closest('tr').find(':input').css("border", "2px solid #00bfff");
     $(this).closest('tr').find(':input').addClass('active');
 
     $(this).closest('tr').find('select').removeAttr("disabled");
-    $(this).closest('tr').find('select').css("border", "solid").css("border-color", "DeepSkyBlue");
+    $(this).closest('tr').find('select').css("border", "2px solid #00bfff");
     $(this).closest('tr').find('select').addClass('active');
 
     window.getSelection().removeAllRanges();
@@ -42,8 +42,8 @@ $(document).on('blur', '.active', function (e) {
     setTimeout(function () {
         console.log(document.activeElement);
         if (!$(document.activeElement).hasClass('active')) {
-            $(".hidden-input ").attr('readonly', true).css("border", "none");
-            $(".hidden-select ").attr('disabled', true).css("border", "none");
+            $(".hidden-input ").attr('readonly', true).css("border", "2px solid #ffffff");
+            $(".hidden-select ").attr('disabled', true).css("border", "2px solid #ffffff");
             $(".hidden-op").removeClass('active');
             updateDevice(id);
         }

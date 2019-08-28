@@ -62,6 +62,7 @@
                                     <thead>
                                     <tr>
                                         <th>Numer</th>
+                                        <th>Nazwa</th>
                                         <th>Klient</th>
                                         <th>Budynek</th>
                                         <th>Data przeglądu</th>
@@ -77,6 +78,7 @@
                                             <td>
                                                 <a href="{{ path('document_show', { 'id': document.id }) }}">{{ document.id }}</a>
                                             </td>
+                                            <td>{{ document.name }}</td>
                                             <td>{{ document.building.client.name }}</td>
                                             <td>{{ document.building.name }}</td>
                                             <td>{% if document.inspectionDate %}{{ document.inspectionDate|date('d-m-Y') }}{% endif %}</td>
@@ -94,12 +96,12 @@
                                     <tfoot>
                                     <tr>
                                         <th>Numer</th>
+                                        <th>Nazwa</th>
                                         <th>Klient</th>
                                         <th>Budynek</th>
                                         <th>Data przeglądu</th>
                                         <th>Data następnego</th>
                                         <th>Ilość urządzeń</th>
-
                                         <th>Akcje</th>
                                     </tr>
                                     </tfoot>

@@ -70,6 +70,18 @@
                             <div class="form-body">
                                 <h4 class="form-section"><i class="ft-user"></i> Dane podstawowe przeglądu</h4>
                                 <div class="form-group row">
+                                    {{ form_label(edit_form.name, 'Nazwa dokumentu', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9">
+                                        {{ form_widget(edit_form.name, { 'attr': {'class': 'form-control mr-3'} }) }}
+                                        <datalist id="names">
+                                            {% for name in names %}
+                                            <option value="{{ name }}">
+                                                {% endfor %}
+                                        </datalist>
+
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     {{ form_label(edit_form.inspectionDate, 'Data przegladu', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-3 ">
                                         {{ form_widget(edit_form.inspectionDate, { 'attr': {'class': 'form-control'} }) }}

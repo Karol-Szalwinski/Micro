@@ -1,6 +1,8 @@
 <?php
 
 namespace MicroBundle\Repository;
+use PDO;
+
 /**
  * DocumentRepository
  *
@@ -41,37 +43,61 @@ class DocumentRepository extends \Doctrine\ORM\EntityRepository
         return $dql;
     }
 
-    public function findMissingDocumentDevices($document, $building, $loopNo) {
+    public function findMissingDocumentDevices($document, $building) {
         $em = $this->getEntityManager();
         $RAW_QUERY ="
-SELECT tab1.id, tab1.name, tab1.shortname, tab1.loop_no, tab1.number, tab1.serial, tab1.address, tab1.description FROM
+SELECT build_device.id, build_device.del FROM `build_device`
+LEFT JOIN
 (
-SELECT * FROM `build_device`
-WHERE build_device.building_id = ?
-AND build_device.loop_no = ?
+SELECT * FROM `doc_device`
+WHERE doc_device.document_id = ?
 )
-AS tab1
+AS doc
+ON build_device.id = doc.build_device_id
+WHERE doc.build_device_id IS NULL
+AND build_device.building_id = ?
+        ";
+
+
+        $statement = $em->getConnection()->prepare($RAW_QUERY);
+        // Set parameters
+        $statement->bindvalue(1, $document);
+        $statement->bindvalue(2, $building);
+        $statement->execute();
+
+        $result = $statement->fetchAll(PDO::FETCH_OBJ, 'MicroBundle\Entity\BuildDevice');
+
+        return $result;
+    }
+
+
+    public function findMissingDocumentDevicesByLoop($document, $building, $loopNo) {
+        $em = $this->getEntityManager();
+        $RAW_QUERY ="
+SELECT build_device.id, build_device.del FROM `build_device`
 LEFT JOIN
 (
 SELECT * FROM `doc_device`
 WHERE doc_device.document_id = ?
 AND doc_device.loop_no = ?
 )
-AS tab2
-ON tab1.id = tab2.build_device_id
-WHERE tab2.build_device_id IS NULL
+AS doc
+ON build_device.id = doc.build_device_id
+WHERE doc.build_device_id IS NULL
+AND build_device.building_id = ?
+AND build_device.loop_no = ?
         ";
 
 
         $statement = $em->getConnection()->prepare($RAW_QUERY);
         // Set parameters
-        $statement->bindvalue(1, $building);
+        $statement->bindvalue(1, $document);
         $statement->bindvalue(2, $loopNo);
-        $statement->bindvalue(3, $document);
+        $statement->bindvalue(3, $building);
         $statement->bindvalue(4, $loopNo);
         $statement->execute();
 
-        $result = $statement->fetchAll();
+        $result = $statement->fetchAll(PDO::FETCH_OBJ, 'MicroBundle\Entity\BuildDevice');
 
         return $result;
     }

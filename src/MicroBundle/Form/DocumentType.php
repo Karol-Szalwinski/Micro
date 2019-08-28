@@ -2,11 +2,11 @@
 
 namespace MicroBundle\Form;
 
-use MicroBundle\Entity\DocumentInspector;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -24,7 +24,16 @@ class DocumentType extends AbstractType
     {
         $choices = array('3 miesiące' => '3', '6 miesięcy' => '6', '1 rok' => '12');
 
-        $builder->add('inspectionDate', DateType::class, ['widget' => 'single_text', 'html5' => false,])
+        $builder
+            ->add('name', TextType::class ,
+                array('required' => false,
+                    'label' => 'fieldLabel',
+                    'attr'      =>
+                        [
+                            'placeholder'   => 'Wybierz lub wpisz typ dokumentu',
+                            'list'          => 'names'
+                        ]))
+            ->add('inspectionDate', DateType::class, ['widget' => 'single_text', 'html5' => false,])
             ->add('nextInspectionForMonth', ChoiceType::class, array(
                 'choices' => $choices,
                 'required' => false,
