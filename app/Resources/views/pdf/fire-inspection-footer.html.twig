@@ -45,16 +45,16 @@
 </head>
 <body>
 <div class="vl"></div>
-{% if fireInspection.pdfSettings.showStamp == true %}
+{% if document.pdfSettings.showStamp == true %}
     {% if mycompany.stamp %}
         <img id="stamp" src="{{ pathToWeb }}/uploads/images/{{ mycompany.stamp }}"
              class="img-fluid"
              alt="Pieczątka firmy">
     {% endif %}
 {% endif %}
-{% if fireInspection.pdfSettings.inspectors is not empty %}
+{% if document.pdfSettings.inspectors is not empty %}
     <div id="inspectors" >Wykonał:<br>
-    {% for inspector  in fireInspection.pdfSettings.inspectors %}
+    {% for inspector  in document.pdfSettings.inspectors %}
          {{ inspector }}&nbsp<span style="float:right">......................</span><br>
     {% endfor %}
     </div>

@@ -88,32 +88,32 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <p class="text-center"><b>Protokół z przeglądu systemu SSP</b></p>
+                            <p class="text-center"><b>{{ document.name }}</b></p>
                         </div>
                     </div>
-                    {% if fireInspection.pdfSettings.showClientData == true %}
+                    {% if document.pdfSettings.showClientData == true %}
                         <div class="row">
                             <div class="col-sm-12">
                                 <p><b>Zleceniodawca: </b><br>
-                                    <b>{{ fireInspection.building.client.name }}</b><br/>
-                                    <span>ul. {{ fireInspection.building.street }} {{ fireInspection.building.houseNo }}
-                                        {% if  fireInspection.building.flatNo  is not null %} / {{ fireInspection.building.flatNo }}
+                                    <b>{{ document.building.client.name }}</b><br/>
+                                    <span>ul. {{ document.building.street }} {{ document.building.houseNo }}
+                                        {% if  document.building.flatNo  is not null %} / {{ document.building.flatNo }}
                                         {% endif %}<br/>
-                                        {{ fireInspection.building.city }} {{ fireInspection.building.postalCode }}
+                                        {{ document.building.city }} {{ document.building.postalCode }}
                                 </span></p>
 
                             </div>
                         </div>
                     {% endif %}
-                    {% if fireInspection.pdfSettings.showBuildingData == true %}
+                    {% if document.pdfSettings.showBuildingData == true %}
                         <div class="row">
                             <div class="col-sm-12">
                                 <p><b>Obiekt: </b><br>
-                                    <b>{{ fireInspection.building.name }}</b><br/>
-                                    <span>ul. {{ fireInspection.building.street }} {{ fireInspection.building.houseNo }}
-                                        {% if  fireInspection.building.flatNo  is not null %} / {{ fireInspection.building.flatNo }}
+                                    <b>{{ document.building.name }}</b><br/>
+                                    <span>ul. {{ document.building.street }} {{ document.building.houseNo }}
+                                        {% if  document.building.flatNo  is not null %} / {{ document.building.flatNo }}
                                         {% endif %}<br/>
-                                        {{ fireInspection.building.city }} {{ fireInspection.building.postalCode }}
+                                        {{ document.building.city }} {{ document.building.postalCode }}
                                 </span></p>
 
                             </div>
@@ -121,21 +121,21 @@
                     {% endif %}
                     <div class="row">
                         <div class="col-sm-12">
-                            <p><b>Zakres wykonanych prac: </b><br>{{ fireInspection.scope|nl2br }}</p>
+                            <p><b>Zakres wykonanych prac: </b><br>{{ document.scope|nl2br }}</p>
 
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
                             <p><b>Wykaz urządzeń objętych
-                                    przeglądem: </b><br>{{ fireInspection.deviceShortlistPosition|nl2br }}</p>
+                                    przeglądem: </b><br>{{ document.deviceShortlistPosition|nl2br }}</p>
 
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <p><b>Data wykonania przeglądu: {{ fireInspection.inspectionDate|date('d.m.Y') }}</b><br>
-                                <b>Data następnego przeglądu: {{ fireInspection.nextInspectionDate|date('d.m.Y') }}</b>
+                            <p><b>Data wykonania przeglądu: {{ document.inspectionDate|date('d.m.Y') }}</b><br>
+                                <b>Data następnego przeglądu: {{ document.nextInspectionDate|date('d.m.Y') }}</b>
                             </p>
 
                         </div>
@@ -143,7 +143,7 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <p><b>Wnioski:</b><br>
-                                <b>{{ fireInspection.conclusion }}</b></p>
+                                <b>{{ document.conclusion }}</b></p>
 
                         </div>
                     </div>
@@ -160,7 +160,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for inspector in fireInspection.documentInspectors %}
+                                {% for inspector in document.inspectors %}
                                     <tr>
                                         <td style="width: 33%">{{ inspector.fullname }}</td>
                                         <td style="width: 33%">{{ inspector.license }}</td>
@@ -176,28 +176,28 @@
                     <div class="row" style="page-break-inside: avoid">
                         <div class="col-sm-12">
                             <p><b>Uwagi:</b><br>
-                                {{ fireInspection.comment|nl2br }}</p>
+                                {{ document.comment|nl2br }}</p>
 
                         </div>
                     </div>
                     <div class="row" style="page-break-inside: avoid">
                         <div class="col-sm-12">
                             <p><b>Zalecenia:</b><br>
-                                {{ fireInspection.recomendations|nl2br }}</p>
+                                {{ document.recomendations|nl2br }}</p>
 
                         </div>
                     </div>
                     <div class="row" style="page-break-inside: avoid">
                         <div class="col-sm-12">
                             <p><b>Podstawa opracowania:</b><br>
-                                {{ fireInspection.legal|nl2br }}</p>
+                                {{ document.legal|nl2br }}</p>
 
                         </div>
                     </div>
 
                     <br>
 
-                    {% if fireInspection.pdfSettings.showTables == true %}
+                    {% if document.pdfSettings.showTables == true %}
                         <div class="row" style="page-break-inside: avoid">
                             <div class="col-sm-12">
                                 <p class="text-center"><b>Tabela nr 1</b></p>
@@ -215,10 +215,10 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for device in fireInspection.inspectedDevices %}
+                                    {% for device in document.docDevices %}
                                         <tr>
                                             <td style="width: 6%">{{ loop.index }}</td>
-                                            <td style="width: 10%">{{ device.fireProtectionDevice.loopDev.number }}</td>
+                                            <td style="width: 10%">{{ device.loopNo }}</td>
                                             <td style="width: 10%">{{ device.number }}</td>
                                             <td style="width: 10%">{{ device.shortname }}</td>
                                             <td style="width: 10%">
@@ -249,7 +249,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for testPosition in fireInspection.testPositions %}
+                                    {% for testPosition in document.docPositions %}
                                         <tr>
                                             <td style="width: 6%">{{ loop.index }}</td>
                                             <td style="width: 44%">{{ testPosition.name }}</td>

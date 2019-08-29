@@ -122,7 +122,7 @@ class DocumentController extends Controller
         if ($pdfForm->isSubmitted() && $pdfForm->isValid()) {
             $em->persist($pdfSettings);
             $em->flush();
-            return $this->redirectToRoute('fire_inspection_pdf', array('document' => $document->getId()));
+            return $this->redirectToRoute('document_pdf', array('document' => $document->getId()));
 
         }
 

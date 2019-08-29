@@ -23,22 +23,22 @@ final class PrepareHtmlToPdfService
 
 
     /**
-     * @param Document $fireInspection
+     * @param Document $document
      * @return string
      */
-    public function getContent(Document $fireInspection): string
+    public function getContent(Document $document): string
     {
         $content = $this->templating->render('pdf/fire-inspection-content.html.twig',
-            array('fireInspection' => $fireInspection));
+            array('document' => $document));
 
         return $content;
     }
 
     /**
-     * @param Document $fireInspection
+     * @param Document $document
      * @return string
      */
-    public function getHeader(Document $fireInspection): string
+    public function getHeader(Document $document): string
     {
         $header = $this->templating->render( 'pdf/fire-inspection-header.html.twig',
             array( 'mycompany' => $this->myCompany->getOrCreateDefaultMyCompany()) );
@@ -47,13 +47,13 @@ final class PrepareHtmlToPdfService
     }
 
     /**
-     * @param Document $fireInspection
+     * @param Document $document
      * @return string
      */
-    public function getFooter(Document $fireInspection): string
+    public function getFooter(Document $document): string
     {
         $footer = $this->templating->render( 'pdf/fire-inspection-footer.html.twig',
-            array('fireInspection' => $fireInspection,
+            array('document' => $document,
                     'mycompany' => $this->myCompany->getOrCreateDefaultMyCompany()
             ));
 

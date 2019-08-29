@@ -26,18 +26,18 @@ class PdfController extends Controller
     /**
      * Print to pdf Document
      *
-     * @Route("/pdf/{fireInspection}", name="fire_inspection_pdf")
-     * @param Document $fireInspection
+     * @Route("/pdf/{document}", name="document_pdf")
+     * @param Document $document
      * @return PdfResponse
      */
-    public function pdfFireInspectionAction(Document $fireInspection)
+    public function pdfDocumentAction(Document $document)
     {
         $prepareService = $this->get('prepareHtmlToPdf');
-        $html = $prepareService->getContent($fireInspection);
-        $header = $prepareService->getHeader($fireInspection);
-        $footer = $prepareService->getFooter($fireInspection);
+        $html = $prepareService->getContent($document);
+        $header = $prepareService->getHeader($document);
+        $footer = $prepareService->getFooter($document);
 
-        $marginBottom = ($fireInspection->getPdfSettings()->getShowStamp() || !empty($fireInspection->getPdfSettings()->getInspectors()))
+        $marginBottom = ($document->getPdfSettings()->getShowStamp() || !empty($document->getPdfSettings()->getInspectors()))
             ? '45mm' : '25mm';
 
         $options = [
@@ -61,7 +61,7 @@ class PdfController extends Controller
         $snappy->setOption('header-html', $header);
         $snappy->setOption('footer-html', $footer);
         $snappy->setTimeout(40);
-        $filename = "Przeglad_PPOZ_nr_" . $fireInspection->getId() . ".pdf";
+        $filename = "Document_nr_" . $document->getId() . ".pdf";
 
         return new PdfResponse($snappy->getOutputFromHtml($html, $options), $filename);
     }
