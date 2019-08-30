@@ -105,26 +105,25 @@ class DocPositionController extends Controller
     }
 
     /**
-     * Delete testPosition
+     * Delete docPosition
      *
-     * @Route("/delete/{testPositionId}", name="test_position_delete")
+     * @Route("/delete/{docPositionId}", name="doc_position_delete")
      * @param Request $request
-     * @param $testPositionId
+     * @param $docPositionId
      * @return JsonResponse
      */
-    public function deleteTestPositionAction(Request $request, $testPositionId)
+    public function deleteTestPositionAction(Request $request, $docPositionId)
     {
         $em = $this->getDoctrine()->getManager();
-        $id = substr($testPositionId, 6);
-        $testPosition= $em->getRepository("MicroBundle\Entity\TestPosition")->FindOneBy(['id'=>$id]);
-        $testPosition->getFireInspection()->removeTestPosition($testPosition);
-        $em->remove($testPosition);
+        $docPosition= $em->getRepository("MicroBundle\Entity\DocPosition")->FindOneBy(['id'=>$docPositionId]);
+        $docPosition->getDocument()->removeDocPosition($docPosition);
+        $em->remove($docPosition);
 
         $em->flush();
 
 
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
-            $jsonData['id'] = $id;
+            $jsonData['id'] = $docPositionId;
 
             return new JsonResponse($jsonData);
         }

@@ -112,27 +112,26 @@ $(document).ready(function () {
             success: function (data) {
                 var id = data['id'];
 
-                var row = "<tr id='terow-" + id + "'><td class='text-center test-hidden-input'>" +
-                    "<p id='namep-" + id + "'></p>" +
-                    "<input id='namei-" + id + "' type='hidden' value=''></td>" +
-                    "<td class='text-center'>" +
-                    "<input type='checkbox' class='column_filter test-checkbox-switch switch' checked " +
-                    "id='testc-" + id + "' " +
+                var row =
+                    "<tr data-id='" + id + "'><td class='text-center'>" +
+                    "<input class='hidden-op hidden-input' id='i-name-" + id + "'" +
+                    "value='' readonly></td>" +
+                    "<td class='text-center'><input type='checkbox' class='column_filter change-checkbox switch'" +
+                    "id='i-test-" + id + "'" +
                     "data-icon-cls='fa' data-off-icon-cls='fa ft-thumbs-down'" +
                     "data-on-icon-cls='fa ft-thumbs-up'" +
                     "data-off-label='NEG'" +
                     "data-on-label='POZ'" +
                     "data-group-cls='btn-group-sm'></td>" +
-
-                    "<td class='text-center test-hidden-input'>" +
-                    "<p id='commp-" + id + "'></p> " +
-                    "<input id='commi-" + id + "' type='hidden' value=''></td>" +
-                    "<td><a id='tedel-" + id + "'" +
-                    "class='test-delete-row btn btn-sm btn-danger mr-1'>Usuń<i" +
-                    "class='la la-add'></i></a></td></tr>";
+                    "<td class='text-center'><input class='hidden-op hidden-input' id='i-comment-" + id + "'" +
+                    "value='' readonly></td>" +
+                    "<td><a id='edit-row-btn-" + id + "' data-toggle='tooltip' title='Edytuj pozycję'" +
+                    "class='primary edit-row-btn mr-1'><i class='la la-pencil'></i></a>" +
+                    "<a id='delete-row-btn' data-id ='" + id + "' data-toggle='tooltip' title='Usuń z przeglądu'" +
+                    "class='delete-row-btn danger delete mr-1 '><i class='la la-trash-o '></i></a></td></tr>";
                 $("#tbody-tests").append(row);
 
-                $('#testc-' + id).checkboxpicker();
+                $('.switch').checkboxpicker();
 
             }
 
@@ -144,21 +143,57 @@ $(document).ready(function () {
         ;
     });
 });
+//delete position alert
+$(document).on('click', '.delete-row-btn ', function () {
 
-// deleting row in Test position table
-$(document).on('click', '.test-delete-row ', function () {
+    var id = this.dataset.id;
+
+    swal({
+        title: "Jesteś pewny?",
+        text: "Usunięcie tej pozycji jest nieodwracalne!",
+        icon: "warning",
+        buttons: {
+            cancel: {
+                text: "Nie, rozmyśliłem się",
+                value: null,
+                visible: true,
+                className: "",
+                closeModal: false,
+            },
+            confirm: {
+                text: "Tak, usuń ten wpis!",
+                value: true,
+                visible: true,
+                className: "",
+                closeModal: false,
+            }
+        }
+    })
+        .then((isConfirm) => {
+            if (isConfirm) {
+                deletePosition(id);
+                swal("Usunięte!", "Tego wpisu już nie zobaczysz.", "success");
+            } else {
+                swal("Anulowano", "Twój wpis pozostał", "error");
+            }
+        })
+});
+// delete row in position table
+function deletePosition(id) {
+
+
     $.ajax({
-        url: '/testposition/delete/' + this.id,
+        url: '/doc-position/delete/' + id,
         type: 'POST',
         dataType: 'json',
         async: true,
 
         success: function (data) {
             var id = data['id'];
-            $('#terow-' + id).remove();
+            $("tr[data-id='" + id + "']").remove();
         }
     });
-});
+};
 
 
 
