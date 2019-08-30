@@ -37,27 +37,17 @@ class MyCompanyController extends Controller
      * @Route("/edit", name="mycompany_edit")
      * @Method({"GET", "POST"})
      * @param Request $request
-     * @param FileUploader $fileUploader
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function editAction(Request $request, FileUploader $fileUploader)
+    public function editAction(Request $request)
     {
         $serviceMyCompany = $this->get('mycompany');
         $myCompany = $serviceMyCompany->getOrCreateDefaultMyCompany();
-        $stampFile = $this->getParameter('target_directory') . '/images' .$myCompany->getStamp();
-        if(is_file($stampFile)) {
-            $myCompany->setStamp(new File($stampFile));
-        }
 
         $editForm = $this->createForm('MicroBundle\Form\MyCompanyType', $myCompany);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $stampFile = $editForm['stamp']->getData();
-            if ($stampFile) {
-                $stampFileName = $fileUploader->uploadWithName($stampFile, 'stamp');
-                $myCompany->setStamp($stampFileName);
-            }
 
             $serviceMyCompany->updateMyCompany($myCompany);
 

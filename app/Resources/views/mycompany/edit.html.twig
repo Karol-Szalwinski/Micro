@@ -104,19 +104,6 @@
                                         {{ form_widget(edit_form.phoneNo, { 'attr': {'class': 'form-control'} }) }}
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    {{ form_label(edit_form.stamp, 'Pieczątka 200x80 pikseli (proporcje 5:2)', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
-                                    <div class="col-md-9 mx-auto">
-                                        <div class="custom-file mb-3">
-                                            {{ form_widget(edit_form.stamp, { 'attr': {'class': 'custom-file-input'} }) }}
-                                            <label class="custom-file-label" for="microbundle_mycompany_stamp">Wybierz
-                                                plik</label>
-                                            {{ form_errors(edit_form.stamp, {'attr': {'class': 'text-danger'} }) }}
-                                        </div>
-
-                                    </div>
-
-                                </div>
 
                                 <div class="form-actions">
                                     <button type="button" onClick="history.go(-1)" class="btn btn-warning mr-1">
