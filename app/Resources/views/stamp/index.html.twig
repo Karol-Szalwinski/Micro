@@ -1,19 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Lista osób uprawnionych{% endblock %}
+{% block title %}Pieczątki{% endblock %}
 
 {% block body %}
     <!-- Content header -->
     <div class="content-header row">
         <div class="content-header-left col-md-6 col-12">
-            <h3 class="content-header-title mb-0">Lista uprawnionych inspektorów</h3>
+            <h3 class="content-header-title mb-0">Lista pieczatek</h3>
             <div class="row breadcrumbs-top">
                 <div class="breadcrumb-wrapper col-12">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ path('micro_default_index') }}">Główna</a>
                         </li>
 
-                        <li class="breadcrumb-item active">Inspektorzy
+                        <li class="breadcrumb-item active">Pieczątki
                         </li>
 
                     </ol>
@@ -23,9 +23,8 @@
         <div class="content-header-left col-md-6 col-12">
             <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
                 <div class="btn-group" role="group">
-                    <a class="btn btn-outline-info round" href="{{ path('inspector_new') }}"><i
-                                class="la la-user-plus"></i> Dodaj nowego</a>
-
+                    <a class="btn btn-outline-info round" href="{{ path('stamp_new') }}"><i
+                                class="la la-user-plus"></i> Dodaj nową</a>
 
                 </div>
             </div>
@@ -39,7 +38,7 @@
             <div class="card">
                 <div class="card-head">
                     <div class="card-header">
-                        <h4 class="card-title">Inspektorzy</h4>
+                        <h4 class="card-title">Pieczątki</h4>
                         <div class="heading-elements mt-0">
                         </div>
                     </div>
@@ -47,41 +46,41 @@
                 <div class="card-content">
                     <div class="card-body">
                         <!-- Task List table -->
-                        {#<button type="button" class="btn btn-sm btn-danger delete-all mb-1">Delete All</button>#}
                         <div class="table-responsive">
                             <table id="users-contacts"
                                    class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
                                 <thead>
                                 <tr>
                                     <th>Id</th>
-                                    <th>Imie</th>
-                                    <th>Nazwisko</th>
-                                    <th>Numer uprawnienia</th>
+                                    <th>Nazwa</th>
+                                    <th>Pieczątka</th>
                                     <th>Akcje</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for inspector in inspectors %}
-                                    <tr onclick='location.href = "{{ path('inspector_show', { 'id': inspector.id }) }}";'>
-                                        <td>{{ inspector.id }}</td>
+                                {% for stamp in stamps %}
+                                    <tr>
+                                        <td>{{ stamp.id }}</td>
                                         <td>
                                             <div class="media">
                                                 <div class="media-body media-middle">
-                                                    <a class="media-heading name">{{ inspector.name }}</a>
+                                                    <a class="media-heading name">{{ stamp.name }}</a>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="text-center">
-                                            <div>{{ inspector.surname }}</div>
-                                        </td>
-                                        <td class="text-center">
-                                            <div>{{ inspector.license }}</div>
+                                            <img src="{{ asset('uploads/images/' ~ stamp.image) }}"
+                                                 style="width:200px; height:80px"
+                                                 class="img-fluid"
+                                                 alt="Pieczątka firmy">
                                         </td>
 
                                         <td>
-                                            <a href="{{ path('inspector_edit', { 'id': inspector.id }) }}"
+                                            <a href="{{ path('stamp_edit', { 'id': stamp.id }) }}"
                                                class="primary edit mr-1"><i class="la la-pencil"></i></a>
-                                            <a class="danger delete mr-1"><i class="la la-trash-o"></i></a>
+                                            <a href="{{ path('stamp_delete', { 'id': stamp.id }) }}"
+                                               class="danger delete mr-1"><i class="la la-trash-o"></i></a>
+
                                             <span class="dropdown">
                                                                 <a id="btnSearchDrop2" data-toggle="dropdown"
                                                                    aria-haspopup="true" aria-expanded="true"
@@ -89,13 +88,13 @@
                                                                             class="la la-ellipsis-v"></i></a>
                                                                 <span aria-labelledby="btnSearchDrop2"
                                                                       class="dropdown-menu mt-1 dropdown-menu-right">
-                                                                    <a href="{{ path('inspector_edit', { 'id': inspector.id }) }}"
+                                                                    <a href="{{ path('stamp_edit', { 'id': stamp.id }) }}"
                                                                        class="dropdown-item"><i
                                                                                 class="ft-edit-2"></i>
                                                                         Edytuj</a>
-                                                                    <a href="#" class="dropdown-item delete"><i
+                                                                    <a href="{{ path('stamp_delete', { 'id': stamp.id }) }}" class="dropdown-item delete"><i
                                                                                 class="ft-trash-2"></i> Usuń</a>
-                                                                    <a href="{{ path('inspector_new') }}"
+                                                                    <a href="{{ path('stamp_new') }}"
                                                                        class="dropdown-item"><i
                                                                                 class="ft-plus-circle warning"></i> Dodaj</a>
 
@@ -108,9 +107,8 @@
                                 <tfoot>
                                 <tr>
                                     <th>Id</th>
-                                    <th>Imie</th>
-                                    <th>Nazwisko</th>
-                                    <th>Numer uprawnienia</th>
+                                    <th>Nazwa</th>
+                                    <th>Pieczątka</th>
                                     <th>Akcje</th>
                                 </tr>
                                 </tfoot>
@@ -122,12 +120,11 @@
         </div>
     </section>
 
-
 {% endblock %}
 
 {% block scripts %}
-    <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
 
+    <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
     <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>
 
 {% endblock %}

@@ -1,0 +1,134 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dodaj Pieczątkę{% endblock %}
+
+{% block body %}
+    <!-- Content header -->
+    <div class="content-header row">
+        <div class="content-header-left col-md-6 col-12">
+            <h3 class="content-header-title mb-0">Lista pieczątek</h3>
+            <div class="row breadcrumbs-top">
+                <div class="breadcrumb-wrapper col-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ path('micro_default_index') }}">Główna</a>
+                        </li>
+                        <li class="breadcrumb-item"><a href="{{ path('stamp_index') }}">Pieczątki</a>
+                        </li>
+
+                        <li class="breadcrumb-item active">Dodaj Pieczątkę
+                        </li>
+
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="content-header-left col-md-6 col-12">
+            <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
+                <div class="btn-group" role="group">
+                    <a class="btn btn-outline-info round" href="{{ path('stamp_index') }}"><i
+                                class="la la-backward"></i> Wróć do listy pieczątek</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content header -->
+
+    <!-- Basic form layout section start -->
+    <section id="horizontal-form-layouts">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title" id="horz-layout-basic">Formularz dodawania nowej pieczątki</h4>
+                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                        <div class="heading-elements">
+                            <ul class="list-inline mb-0">
+                                <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+                                <li><a data-action="close"><i class="ft-x"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+                            {{ form_start(form, { 'attr': {'class': 'form form-horizontal inputmask'} }) }}
+
+
+                            <div class="form-body">
+                                <h4 class="form-section"><i class="ft-user"></i> Dane Pieczątki</h4>
+                                <div class="form-group row">
+                                    {{ form_label(form.name, 'Nazwa', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-6 mx-auto">
+                                        {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'Podaj nazwę'} }) }}
+
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(form.image, 'Pieczątka 200x80 pikseli (proporcje 5:2)', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-6 mx-auto">
+                                        <div class="custom-file mb-3">
+                                            {{ form_widget(form.image, { 'attr': {'class': 'custom-file-input'} }) }}
+                                            <label class="custom-file-label" for="microbundle_stamp_image">Wybierz
+                                                plik</label>
+                                            {{ form_errors(form.image, {'attr': {'class': 'text-danger'} }) }}
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3 label-control">Podgląd pieczątki</div>
+                                    <div class="col-md-6 mx-auto">
+
+                                        <a href="https://placeholder.com"><img id="preview"
+                                                                               src="https://via.placeholder.com/200x80"></a>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="form-actions">
+                                    <button type="button" onClick="javascript:history.go(-1)"
+                                            class="btn btn-warning mr-1">
+                                        <i class="ft-x"></i> Anuluj
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="la la-check-square-o"></i> Zapisz
+                                    </button>
+                                </div>
+                                {{ form_end(form) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+{% endblock %}
+
+{% block scripts %}
+    <!-- BEGIN: Page JS-->
+    <script src="{{ asset('app-assets/vendors/js/forms/extended/inputmask/jquery.inputmask.bundle.min.js') }}"></script>
+    <script src="{{ asset('app-assets/js/scripts/forms/extended/form-inputmask.js') }}"></script>
+    <script>
+
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+            loadFile(event);
+        });
+
+        var loadFile = function (event) {
+            var preview = document.getElementById('preview');
+            preview.src = URL.createObjectURL(event.target.files[0]);
+        };
+    </script>
+    <!-- END: Page JS-->
+{% endblock %}
