@@ -101,13 +101,15 @@ class DocumentController extends Controller
 // todo update
 //        $this->container->get('micro')->updateLastServiceDatedocument($document);
         $em = $this->getDoctrine()->getManager();
-
-
+        $stamp = $em->getRepository('MicroBundle:Stamp')->findOneBy(['id' => 4]);
+        $stamps[] = $stamp;
         $pdfSettings = $document->getPdfSettings();
         if (!$pdfSettings) {
             $pdfSettings = new PdfSettings($document);
             $document->setPdfSettings($pdfSettings);
         }
+
+        $em->persist($pdfSettings);
         //todo refactor this code
         $docInspectors = $document->getInspectors();
         $inspectors = [];
@@ -115,11 +117,12 @@ class DocumentController extends Controller
             $inspectors[$docInspector->getName() . " " . $docInspector->getSurname()] = $docInspector->getName() . " " . $docInspector->getSurname();
         }
 
-        $options = ['inspectors' => $inspectors];
+        $options = ['inspectors' => $inspectors, 'stamps' => $stamps];
         $pdfForm = $this->createForm('MicroBundle\Form\PdfSettingsType', $pdfSettings, $options);
 
         $pdfForm->handleRequest($request);
         if ($pdfForm->isSubmitted() && $pdfForm->isValid()) {
+//            dump($pdfSettings);die();
             $em->persist($pdfSettings);
             $em->flush();
             return $this->redirectToRoute('document_pdf', array('document' => $document->getId()));

@@ -3,6 +3,7 @@
 namespace MicroBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use MicroBundle\Entity\Document;
 
 /**
  * DocPosition
@@ -58,4 +59,110 @@ class DocPosition
         $this->test = true;
     }
 
+
+    /**
+     * Get id.
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name.
+     *
+     * @param string|null $name
+     *
+     * @return DocPosition
+     */
+    public function setName($name = null)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name.
+     *
+     * @return string|null
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set test.
+     *
+     * @param bool $test
+     *
+     * @return DocPosition
+     */
+    public function setTest($test)
+    {
+        $this->test = $test;
+
+        return $this;
+    }
+
+    /**
+     * Get test.
+     *
+     * @return bool
+     */
+    public function getTest()
+    {
+        return $this->test;
+    }
+
+    /**
+     * Set comment.
+     *
+     * @param string|null $comment
+     *
+     * @return DocPosition
+     */
+    public function setComment($comment = null)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get comment.
+     *
+     * @return string|null
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    /**
+     * Set document.
+     *
+     * @param Document|null $document
+     *
+     * @return DocPosition
+     */
+    public function setDocument(Document $document = null)
+    {
+        $this->document = $document;
+
+        return $this;
+    }
+
+    /**
+     * Get document.
+     *
+     * @return Document|null
+     */
+    public function getDocument()
+    {
+        return $this->document;
+    }
 }

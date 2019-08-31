@@ -63,12 +63,6 @@ class MyCompany
      */
     private $phoneNo;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="stamp", type="string", nullable=true)
-     */
-    private $stamp;
 
     /**
      * MyCompany constructor.
@@ -246,27 +240,4 @@ class MyCompany
         return $this->phoneNo;
     }
 
-    /**
-     * Set stamp.
-     *
-     * @param string $stamp
-     *
-     * @return MyCompany
-     */
-    public function setStamp($stamp)
-    {
-        $this->stamp = $stamp;
-
-        return $this;
-    }
-
-    /**
-     * Get stamp.
-     *
-     * @return string
-     */
-    public function getStamp()
-    {
-        return $this->stamp;
-    }
 }

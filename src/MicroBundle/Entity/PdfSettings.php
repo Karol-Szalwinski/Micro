@@ -50,6 +50,17 @@ class PdfSettings
      */
     private $showStamp;
 
+
+    /**
+     * Many PdfSetting have Many Stamps.
+     * @ORM\ManyToMany(targetEntity="Stamp")
+     * @ORM\JoinTable(name="pdf_settings_stamps",
+     *      joinColumns={@ORM\JoinColumn(name="pdr_settings_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="stamp_id", referencedColumnName="id")}
+     *      )
+     */
+    private $stamps;
+
     /**
      * @var string
      *
@@ -65,6 +76,7 @@ class PdfSettings
 
     /**
      * PdfSettings constructor.
+     * @param $document
      */
     public function __construct($document)
     {
@@ -73,6 +85,7 @@ class PdfSettings
         $this->showBuildingData = true;
         $this->showClientData = false;
         $this->showStamp = false;
+        $this->stamps = new ArrayCollection();
 
     }
 
@@ -229,5 +242,42 @@ class PdfSettings
     public function getDocument()
     {
         return $this->document;
+    }
+    
+
+    /**
+     * Add stamp.
+     *
+     * @param \MicroBundle\Entity\Stamp $stamp
+     *
+     * @return PdfSettings
+     */
+    public function addStamp(\MicroBundle\Entity\Stamp $stamp)
+    {
+        $this->stamps[] = $stamp;
+
+        return $this;
+    }
+
+    /**
+     * Remove stamp.
+     *
+     * @param \MicroBundle\Entity\Stamp $stamp
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeStamp(\MicroBundle\Entity\Stamp $stamp)
+    {
+        return $this->stamps->removeElement($stamp);
+    }
+
+    /**
+     * Get stamps.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getStamps()
+    {
+        return $this->stamps;
     }
 }

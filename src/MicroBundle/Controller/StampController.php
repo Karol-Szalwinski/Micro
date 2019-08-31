@@ -37,16 +37,23 @@ class StampController extends Controller
     /**
      * Creates a new stamp entity.
      *
-     * @Route("/new", name="stamp_new")
+     * @Route("/new/{type}", name="stamp_new")
      * @Method({"GET", "POST"})
      * @param Request $request
      * @param FileUploader $fileUploader
+     * @param $type
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function newAction(Request $request, FileUploader $fileUploader)
+    public function newAction(Request $request, FileUploader $fileUploader, $type)
     {
         $stamp = new Stamp();
-        $form = $this->createForm('MicroBundle\Form\StampType', $stamp);
+        if($type === 'main') {
+            $stamp->setMain(true);
+            $form = $this->createForm('MicroBundle\Form\StampMainType', $stamp);
+        }
+        else {
+            $form = $this->createForm('MicroBundle\Form\StampInspectorType', $stamp);
+        }
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -56,6 +63,7 @@ class StampController extends Controller
                 $stampFileName = $fileUploader->upload($stampFile);
                 $stamp->setImage($stampFileName);
             }
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($stamp);
             $em->flush();
@@ -65,6 +73,7 @@ class StampController extends Controller
 
         return $this->render('stamp/new.html.twig', array(
             'stamp' => $stamp,
+            'type' => $type,
             'form' => $form->createView(),
         ));
     }
@@ -82,7 +91,14 @@ class StampController extends Controller
         if(is_file($stampFile)) {
             $stamp->setImage(new File($stampFile));
         }
-        $editForm = $this->createForm('MicroBundle\Form\StampType', $stamp);
+        if($stamp->getMain()) {
+            $editForm = $this->createForm('MicroBundle\Form\StampMainType', $stamp);
+            $type = 'main';
+        }
+        else {
+            $editForm = $this->createForm('MicroBundle\Form\StampInspectorType', $stamp);
+            $type = 'inspector';
+        }
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
@@ -98,6 +114,7 @@ class StampController extends Controller
 
         return $this->render('stamp/edit.html.twig', array(
             'stamp' => $stamp,
+            'type' => $type,
             'edit_form' => $editForm->createView(),
         ));
     }

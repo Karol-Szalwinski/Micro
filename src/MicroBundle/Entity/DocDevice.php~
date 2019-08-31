@@ -24,7 +24,7 @@ class DocDevice
     /**
      * @var int
      *
-     * @ORM\Column(name="loop_no", type="integer", nullable=true)
+     * @ORM\Column(name="loop_no", type="integer")
      */
     private $loopNo;
 
@@ -39,7 +39,7 @@ class DocDevice
     /**
      * @var string
      *
-     * @ORM\Column(name="shortname", type="string", length=20)
+     * @ORM\Column(name="shortname", type="string", length=20, nullable=true)
      */
     private $shortname;
 
@@ -96,4 +96,242 @@ class DocDevice
     }
 
 
+
+    /**
+     * Get id.
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set loopNo.
+     *
+     * @param int|null $loopNo
+     *
+     * @return DocDevice
+     */
+    public function setLoopNo($loopNo = null)
+    {
+        $this->loopNo = $loopNo;
+
+        return $this;
+    }
+
+    /**
+     * Get loopNo.
+     *
+     * @return int|null
+     */
+    public function getLoopNo()
+    {
+        return $this->loopNo;
+    }
+
+    /**
+     * Set number.
+     *
+     * @param int $number
+     *
+     * @return DocDevice
+     */
+    public function setNumber($number)
+    {
+        $this->number = $number;
+
+        return $this;
+    }
+
+    /**
+     * Get number.
+     *
+     * @return int
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+
+    /**
+     * Set shortname.
+     *
+     * @param string $shortname
+     *
+     * @return DocDevice
+     */
+    public function setShortname($shortname)
+    {
+        $this->shortname = $shortname;
+
+        return $this;
+    }
+
+    /**
+     * Get shortname.
+     *
+     * @return string
+     */
+    public function getShortname()
+    {
+        return $this->shortname;
+    }
+
+    /**
+     * Set status.
+     *
+     * @param bool $status
+     *
+     * @return DocDevice
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status.
+     *
+     * @return bool
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set test.
+     *
+     * @param bool $test
+     *
+     * @return DocDevice
+     */
+    public function setTest($test)
+    {
+        $this->test = $test;
+
+        return $this;
+    }
+
+    /**
+     * Get test.
+     *
+     * @return bool
+     */
+    public function getTest()
+    {
+        return $this->test;
+    }
+
+    /**
+     * Set comment.
+     *
+     * @param string|null $comment
+     *
+     * @return DocDevice
+     */
+    public function setComment($comment = null)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get comment.
+     *
+     * @return string|null
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    /**
+     * Set visible.
+     *
+     * @param bool $visible
+     *
+     * @return DocDevice
+     */
+    public function setVisible($visible)
+    {
+        $this->visible = $visible;
+
+        return $this;
+    }
+
+    /**
+     * Get visible.
+     *
+     * @return bool
+     */
+    public function getVisible()
+    {
+        return $this->visible;
+    }
+
+    /**
+     * Toggle visible.
+     *
+     * @return bool
+     */
+    public function toggleVisible()
+    {
+        $this->visible = !$this->visible;
+
+        return $this->visible;
+    }
+
+    /**
+     * Set document.
+     *
+     * @param \MicroBundle\Entity\Document|null $document
+     *
+     * @return DocDevice
+     */
+    public function setDocument(\MicroBundle\Entity\Document $document = null)
+    {
+        $this->document = $document;
+
+        return $this;
+    }
+
+    /**
+     * Get document.
+     *
+     * @return \MicroBundle\Entity\Document|null
+     */
+    public function getDocument()
+    {
+        return $this->document;
+    }
+
+    /**
+     * Set buildDevice.
+     *
+     * @param \MicroBundle\Entity\BuildDevice|null $buildDevice
+     *
+     * @return DocDevice
+     */
+    public function setBuildDevice(\MicroBundle\Entity\BuildDevice $buildDevice = null)
+    {
+        $this->buildDevice = $buildDevice;
+
+        return $this;
+    }
+
+    /**
+     * Get buildDevice.
+     *
+     * @return \MicroBundle\Entity\BuildDevice|null
+     */
+    public function getBuildDevice()
+    {
+        return $this->buildDevice;
+    }
 }

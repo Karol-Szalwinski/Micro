@@ -66,6 +66,24 @@
 
                                     </div>
                                 </div>
+                                {%  if type=='main' %}
+                                    <div class="form-group row">
+                                        {{ form_label(edit_form.main, 'Pieczątka główna', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                        <div class="col-md-6 mx-auto">
+                                            {{ form_widget(edit_form.main, { 'attr': {'class': 'form-control'} }) }}
+
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {%  if type=='inspector' %}
+                                    <div class="form-group row">
+                                        {{ form_label(edit_form.inspector, 'Inspektor', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                        <div class="col-md-6 mx-auto">
+                                            {{ form_widget(edit_form.inspector, { 'attr': {'class': 'form-control'} }) }}
+
+                                        </div>
+                                    </div>
+                                {% endif %}
                                 <div class="form-group row">
                                     {{ form_label(edit_form.image, 'Pieczątka 200x80 pikseli (proporcje 5:2)', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-6 mx-auto">

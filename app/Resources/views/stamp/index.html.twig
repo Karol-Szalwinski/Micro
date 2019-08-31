@@ -23,8 +23,10 @@
         <div class="content-header-left col-md-6 col-12">
             <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
                 <div class="btn-group" role="group">
-                    <a class="btn btn-outline-info round" href="{{ path('stamp_new') }}"><i
-                                class="la la-user-plus"></i> Dodaj nową</a>
+                    <a class="btn btn-outline-info round" href="{{ path('stamp_new', {'type' : 'main'}) }}"><i
+                                class="la la-user-plus"></i> Dodaj pieczątkę główną</a>
+                    <a class="btn btn-outline-info round" href="{{ path('stamp_new', {'type' : 'inspector'}) }}"><i
+                                class="la la-user-plus"></i> Dodaj pieczątkę inspektora</a>
 
                 </div>
             </div>
@@ -53,6 +55,7 @@
                                 <tr>
                                     <th>Id</th>
                                     <th>Nazwa</th>
+                                    <th>Typ</th>
                                     <th>Pieczątka</th>
                                     <th>Akcje</th>
                                 </tr>
@@ -60,13 +63,22 @@
                                 <tbody>
                                 {% for stamp in stamps %}
                                     <tr>
-                                        <td>{{ stamp.id }}</td>
                                         <td>
-                                            <div class="media">
-                                                <div class="media-body media-middle">
-                                                    <a class="media-heading name">{{ stamp.name }}</a>
-                                                </div>
-                                            </div>
+                                            {{ stamp.id }}
+                                        </td>
+                                        <td>
+                                            {{ stamp.name }}
+                                        </td>
+                                        <td>
+                                            {% if stamp.main %}
+                                                Pieczątka główna
+                                            {% else %}
+                                                {% if stamp.inspector is not null %}
+                                                    {{ stamp.inspector.name }} {{ stamp.inspector.surname }}
+                                                {% else %}
+                                                    Nie wybrano typu
+                                                {% endif %}
+                                            {% endif %}
                                         </td>
                                         <td class="text-center">
                                             <img src="{{ asset('uploads/images/' ~ stamp.image) }}"
@@ -92,11 +104,9 @@
                                                                        class="dropdown-item"><i
                                                                                 class="ft-edit-2"></i>
                                                                         Edytuj</a>
-                                                                    <a href="{{ path('stamp_delete', { 'id': stamp.id }) }}" class="dropdown-item delete"><i
+                                                                    <a href="{{ path('stamp_delete', { 'id': stamp.id }) }}"
+                                                                       class="dropdown-item delete"><i
                                                                                 class="ft-trash-2"></i> Usuń</a>
-                                                                    <a href="{{ path('stamp_new') }}"
-                                                                       class="dropdown-item"><i
-                                                                                class="ft-plus-circle warning"></i> Dodaj</a>
 
                                                                 </span>
                                                             </span>
@@ -108,6 +118,7 @@
                                 <tr>
                                     <th>Id</th>
                                     <th>Nazwa</th>
+                                    <th>Typ</th>
                                     <th>Pieczątka</th>
                                     <th>Akcje</th>
                                 </tr>

@@ -50,6 +50,17 @@ class PdfSettings
      */
     private $showStamp;
 
+
+    /**
+     * Many PdfSetting have Many Stamps.
+     * @ORM\ManyToMany(targetEntity="Stamp")
+     * @ORM\JoinTable(name="pdf_settings_stamps",
+     *      joinColumns={@ORM\JoinColumn(name="pdr_settings_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="stamp_id", referencedColumnName="id")}
+     *      )
+     */
+    private $stamps;
+
     /**
      * @var string
      *
@@ -65,6 +76,7 @@ class PdfSettings
 
     /**
      * PdfSettings constructor.
+     * @param $document
      */
     public function __construct($document)
     {
@@ -73,7 +85,199 @@ class PdfSettings
         $this->showBuildingData = true;
         $this->showClientData = false;
         $this->showStamp = false;
+        $this->stamps = new ArrayCollection();
 
     }
 
+
+    /**
+     * Get id.
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set showTables.
+     *
+     * @param bool $showTables
+     *
+     * @return PdfSettings
+     */
+    public function setShowTables($showTables)
+    {
+        $this->showTables = $showTables;
+
+        return $this;
+    }
+
+    /**
+     * Get showTables.
+     *
+     * @return bool
+     */
+    public function getShowTables()
+    {
+        return $this->showTables;
+    }
+
+    /**
+     * Set showBuildingData.
+     *
+     * @param bool $showBuildingData
+     *
+     * @return PdfSettings
+     */
+    public function setShowBuildingData($showBuildingData)
+    {
+        $this->showBuildingData = $showBuildingData;
+
+        return $this;
+    }
+
+    /**
+     * Get showBuildingData.
+     *
+     * @return bool
+     */
+    public function getShowBuildingData()
+    {
+        return $this->showBuildingData;
+    }
+
+    /**
+     * Set showClientData.
+     *
+     * @param bool $showClientData
+     *
+     * @return PdfSettings
+     */
+    public function setShowClientData($showClientData)
+    {
+        $this->showClientData = $showClientData;
+
+        return $this;
+    }
+
+    /**
+     * Get showClientData.
+     *
+     * @return bool
+     */
+    public function getShowClientData()
+    {
+        return $this->showClientData;
+    }
+
+    /**
+     * Set showStamp.
+     *
+     * @param bool $showStamp
+     *
+     * @return PdfSettings
+     */
+    public function setShowStamp($showStamp)
+    {
+        $this->showStamp = $showStamp;
+
+        return $this;
+    }
+
+    /**
+     * Get showStamp.
+     *
+     * @return bool
+     */
+    public function getShowStamp()
+    {
+        return $this->showStamp;
+    }
+
+    /**
+     * Set inspectors.
+     *
+     * @param array $inspectors
+     *
+     * @return PdfSettings
+     */
+    public function setInspectors($inspectors)
+    {
+        $this->inspectors = $inspectors;
+
+        return $this;
+    }
+
+    /**
+     * Get inspectors.
+     *
+     * @return array
+     */
+    public function getInspectors()
+    {
+        return $this->inspectors;
+    }
+
+    /**
+     * Set document.
+     *
+     * @param \MicroBundle\Entity\Document|null $document
+     *
+     * @return PdfSettings
+     */
+    public function setDocument(\MicroBundle\Entity\Document $document = null)
+    {
+        $this->document = $document;
+
+        return $this;
+    }
+
+    /**
+     * Get document.
+     *
+     * @return \MicroBundle\Entity\Document|null
+     */
+    public function getDocument()
+    {
+        return $this->document;
+    }
+    
+
+    /**
+     * Add stamp.
+     *
+     * @param \MicroBundle\Entity\Stamp $stamp
+     *
+     * @return PdfSettings
+     */
+    public function addStamp(\MicroBundle\Entity\Stamp $stamp)
+    {
+        $this->stamps[] = $stamp;
+
+        return $this;
+    }
+
+    /**
+     * Remove stamp.
+     *
+     * @param \MicroBundle\Entity\Stamp $stamp
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeStamp(\MicroBundle\Entity\Stamp $stamp)
+    {
+        return $this->stamps->removeElement($stamp);
+    }
+
+    /**
+     * Get stamps.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getStamps()
+    {
+        return $this->stamps;
+    }
 }

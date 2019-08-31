@@ -413,3 +413,19 @@ $(document).on('click', '.loop-delete-row', function () {
 })
 
 });
+
+//hide stamps radiobuttons
+$(document).on('change', '#microbundle_pdfsettings_showStamp', function () {
+    showStampsRadio(this);
+});
+$(window).on('load', function() {
+    showStampsRadio($('#microbundle_pdfsettings_showStamp'));
+})
+
+function showStampsRadio(checkbox){
+    if(checkbox.checked) {
+        $('#chose-stamp').show();
+    } else {
+        $('#chose-stamp').hide();
+    }
+}

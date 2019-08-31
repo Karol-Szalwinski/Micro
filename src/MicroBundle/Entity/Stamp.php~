@@ -51,14 +51,6 @@ class Stamp
 
     private $imageView;
 
-    /**
-     * Stamp constructor.
-     */
-    public function __construct()
-    {
-        $this->main = false;
-    }
-
 
     /**
      * Get id.
@@ -126,53 +118,5 @@ class Stamp
     public function getImageView()
     {
         return "../uploads/images/" . $this->image;
-    }
-
-    /**
-     * Set main.
-     *
-     * @param bool $main
-     *
-     * @return Stamp
-     */
-    public function setMain($main)
-    {
-        $this->main = $main;
-
-        return $this;
-    }
-
-    /**
-     * Get main.
-     *
-     * @return bool
-     */
-    public function getMain()
-    {
-        return $this->main;
-    }
-
-    /**
-     * Set inspector.
-     *
-     * @param \MicroBundle\Entity\Inspector|null $inspector
-     *
-     * @return Stamp
-     */
-    public function setInspector(\MicroBundle\Entity\Inspector $inspector = null)
-    {
-        $this->inspector = $inspector;
-
-        return $this;
-    }
-
-    /**
-     * Get inspector.
-     *
-     * @return \MicroBundle\Entity\Inspector|null
-     */
-    public function getInspector()
-    {
-        return $this->inspector;
     }
 }

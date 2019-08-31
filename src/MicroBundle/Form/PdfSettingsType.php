@@ -2,6 +2,7 @@
 
 namespace MicroBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,14 +16,20 @@ class PdfSettingsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $inspectors = $options['inspectors'];
+        $stamps = $options['stamps'];
 
         $builder->add('showTables')
             ->add('showBuildingData')
             ->add('showClientData')
             ->add('showStamp')
-            ->add('inspectors', ChoiceType::class, [
+            ->add('stamps', EntityType::class, [
 
-                // uses the User.username property as the visible option string
+                'class' => 'MicroBundle:Stamp',
+                'choices' => $stamps,
+                'choice_label' => 'imageView',
+                'multiple' => true,
+                'expanded' => true,])
+            ->add('inspectors', ChoiceType::class, [
                 'choices' => $inspectors,
                 'multiple' => true,
                 'expanded' => true,])
@@ -37,6 +44,7 @@ class PdfSettingsType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'MicroBundle\Entity\PdfSettings',
             'inspectors' => [],
+            'stamps' => [],
 
         ));
     }

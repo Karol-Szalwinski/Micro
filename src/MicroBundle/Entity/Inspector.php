@@ -2,6 +2,7 @@
 
 namespace MicroBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -42,6 +43,19 @@ class Inspector
      */
     private $license;
 
+    /**
+     * One inspector has many stamps. This is the inverse side.
+     * @ORM\OneToMany(targetEntity="Stamp", mappedBy="inspector")
+     */
+    private $stamps;
+
+    /**
+     * Inspector constructor.
+     */
+    public function __construct()
+    {
+        $this->stamps = new ArrayCollection();
+    }
 
     /**
      * Get id.
@@ -133,5 +147,41 @@ class Inspector
     public function getFullname()
     {
         return $this->name . ' ' . $this->surname .' ';
+    }
+
+    /**
+     * Add stamp.
+     *
+     * @param \MicroBundle\Entity\Stamp $stamp
+     *
+     * @return Inspector
+     */
+    public function addStamp(\MicroBundle\Entity\Stamp $stamp)
+    {
+        $this->stamps[] = $stamp;
+
+        return $this;
+    }
+
+    /**
+     * Remove stamp.
+     *
+     * @param \MicroBundle\Entity\Stamp $stamp
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeStamp(\MicroBundle\Entity\Stamp $stamp)
+    {
+        return $this->stamps->removeElement($stamp);
+    }
+
+    /**
+     * Get stamps.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getStamps()
+    {
+        return $this->stamps;
     }
 }
