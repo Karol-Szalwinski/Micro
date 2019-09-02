@@ -62,6 +62,16 @@ class PdfSettings
     private $stamps;
 
     /**
+     * Many PdfSetting have Many Mainstamps.
+     * @ORM\ManyToMany(targetEntity="Stamp")
+     * @ORM\JoinTable(name="pdf_settings_main_stamps",
+     *      joinColumns={@ORM\JoinColumn(name="pdr_settings_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="stamp_id", referencedColumnName="id")}
+     *      )
+     */
+    private $mainStamps;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="inspectors", type="array")
@@ -279,5 +289,41 @@ class PdfSettings
     public function getStamps()
     {
         return $this->stamps;
+    }
+
+    /**
+     * Add mainStamp.
+     *
+     * @param \MicroBundle\Entity\Stamp $mainStamp
+     *
+     * @return PdfSettings
+     */
+    public function addMainStamp(\MicroBundle\Entity\Stamp $mainStamp)
+    {
+        $this->mainStamps[] = $mainStamp;
+
+        return $this;
+    }
+
+    /**
+     * Remove mainStamp.
+     *
+     * @param \MicroBundle\Entity\Stamp $mainStamp
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeMainStamp(\MicroBundle\Entity\Stamp $mainStamp)
+    {
+        return $this->mainStamps->removeElement($mainStamp);
+    }
+
+    /**
+     * Get mainStamps.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMainStamps()
+    {
+        return $this->mainStamps;
     }
 }

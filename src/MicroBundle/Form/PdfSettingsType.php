@@ -17,23 +17,28 @@ class PdfSettingsType extends AbstractType
     {
         $inspectors = $options['inspectors'];
         $stamps = $options['stamps'];
+        $mainStamps = $options['mainstamps'];
 
         $builder->add('showTables')
             ->add('showBuildingData')
             ->add('showClientData')
+            ->add('inspectors', ChoiceType::class, [
+                'choices' => $inspectors,
+                'multiple' => true,
+                'expanded' => true,])
             ->add('showStamp')
+            ->add('mainStamps', EntityType::class, [
+                'class' => 'MicroBundle:Stamp',
+                'choices' => $mainStamps,
+                'choice_label' => 'imageView',
+                'multiple' => true,
+                'expanded' => true,])
             ->add('stamps', EntityType::class, [
-
                 'class' => 'MicroBundle:Stamp',
                 'choices' => $stamps,
                 'choice_label' => 'imageView',
                 'multiple' => true,
                 'expanded' => true,])
-            ->add('inspectors', ChoiceType::class, [
-                'choices' => $inspectors,
-                'multiple' => true,
-                'expanded' => true,])
-
 
         ;
     }/**
@@ -45,6 +50,7 @@ class PdfSettingsType extends AbstractType
             'data_class' => 'MicroBundle\Entity\PdfSettings',
             'inspectors' => [],
             'stamps' => [],
+            'mainstamps' => [],
 
         ));
     }

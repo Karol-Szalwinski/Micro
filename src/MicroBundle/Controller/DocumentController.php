@@ -2,6 +2,7 @@
 
 namespace MicroBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use MicroBundle\Entity\Building;
 use MicroBundle\Entity\Document;
 use MicroBundle\Entity\BuildDevice;
@@ -101,8 +102,13 @@ class DocumentController extends Controller
 // todo update
 //        $this->container->get('micro')->updateLastServiceDatedocument($document);
         $em = $this->getDoctrine()->getManager();
-        $stamp = $em->getRepository('MicroBundle:Stamp')->findOneBy(['id' => 4]);
-        $stamps[] = $stamp;
+        $mainStamps = $em->getRepository('MicroBundle:Stamp')->findBy(['main' => true]);
+        $stamps = [];
+        foreach ($document->getInspectors() as $inspector) {
+            $inspectorStamps = $em->getRepository('MicroBundle:Stamp')->findBy(['inspector' => $inspector->getId()]);
+            $stamps = array_merge($inspectorStamps, $stamps);
+        }
+
         $pdfSettings = $document->getPdfSettings();
         if (!$pdfSettings) {
             $pdfSettings = new PdfSettings($document);
@@ -117,7 +123,7 @@ class DocumentController extends Controller
             $inspectors[$docInspector->getName() . " " . $docInspector->getSurname()] = $docInspector->getName() . " " . $docInspector->getSurname();
         }
 
-        $options = ['inspectors' => $inspectors, 'stamps' => $stamps];
+        $options = ['inspectors' => $inspectors, 'stamps' => $stamps, 'mainstamps' => $mainStamps];
         $pdfForm = $this->createForm('MicroBundle\Form\PdfSettingsType', $pdfSettings, $options);
 
         $pdfForm->handleRequest($request);

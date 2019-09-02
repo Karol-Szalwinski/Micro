@@ -46,8 +46,8 @@
 <body>
 <div class="vl"></div>
 {% if document.pdfSettings.showStamp == true %}
-    {% if mycompany.stamp %}
-        <img id="stamp" src="{{ pathToWeb }}/uploads/images/{{ mycompany.stamp }}"
+    {% if document.pdfSettings.mainStamps is not empty %}
+        <img id="stamp" src="{{ pathToWeb }}/uploads/images/{{ document.pdfSettings.mainStamps|first.image }}"
              class="img-fluid"
              alt="Pieczątka firmy">
     {% endif %}

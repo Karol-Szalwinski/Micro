@@ -148,4 +148,40 @@ class Inspector
     {
         return $this->name . ' ' . $this->surname .' ';
     }
+
+    /**
+     * Add stamp.
+     *
+     * @param \MicroBundle\Entity\Stamp $stamp
+     *
+     * @return Inspector
+     */
+    public function addStamp(\MicroBundle\Entity\Stamp $stamp)
+    {
+        $this->stamps[] = $stamp;
+
+        return $this;
+    }
+
+    /**
+     * Remove stamp.
+     *
+     * @param \MicroBundle\Entity\Stamp $stamp
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeStamp(\MicroBundle\Entity\Stamp $stamp)
+    {
+        return $this->stamps->removeElement($stamp);
+    }
+
+    /**
+     * Get stamps.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getStamps()
+    {
+        return $this->stamps;
+    }
 }

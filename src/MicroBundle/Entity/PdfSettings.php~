@@ -62,6 +62,16 @@ class PdfSettings
     private $stamps;
 
     /**
+     * Many PdfSetting have Many Mainstamps.
+     * @ORM\ManyToMany(targetEntity="Stamp")
+     * @ORM\JoinTable(name="pdf_settings_main_stamps",
+     *      joinColumns={@ORM\JoinColumn(name="pdr_settings_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="stamp_id", referencedColumnName="id")}
+     *      )
+     */
+    private $mainStamps;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="inspectors", type="array")

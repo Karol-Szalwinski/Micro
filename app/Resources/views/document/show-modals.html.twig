@@ -81,15 +81,21 @@
                             } }) }}
                         </div>
                     </div>
+                    {% form_theme pdf_form 'Form/fields.html.twig' %}
                     <div id="chose-stamp"  class="form-group row">
-                        {% form_theme pdf_form 'Form/fields.html.twig' %}
-                        <label class="col-md-4 label-control required">Wybierz pieczątkę</label>
+                        <label class="col-md-4 label-control required">Wybierz główna</label>
+                        <div class="col-md-8 mx-auto">
+
+                            {{ form_widget(pdf_form.mainStamps, { 'attr': {'class': 'form-control'} }) }}
+                        </div>
+                    </div>
+                    <div id=""  class="form-group row">
+                        <label class="col-md-4 label-control required">Wybierz pieczątkę dla inspektorów</label>
                         <div class="col-md-8 mx-auto">
 
                             {{ form_widget(pdf_form.stamps, { 'attr': {'class': 'form-control'} }) }}
                         </div>
                     </div>
-
 
                 </div>
                 <div class="modal-footer">
