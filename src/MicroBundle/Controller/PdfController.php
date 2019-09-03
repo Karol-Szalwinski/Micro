@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: karol
- * Date: 12.07.19
- * Time: 17:15
- */
 
 namespace MicroBundle\Controller;
 

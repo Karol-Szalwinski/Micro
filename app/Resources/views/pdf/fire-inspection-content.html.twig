@@ -40,14 +40,13 @@
         }
 
         /*.vl {*/
-            /*border-left: solid 2px #940e1f;*/
-            /*height: 100%;*/
-            /*position: absolute;*/
-            /*left: 10px;*/
-            /*margin-left: -3px;*/
-            /*top: 0;*/
+        /*border-left: solid 2px #940e1f;*/
+        /*height: 100%;*/
+        /*position: absolute;*/
+        /*left: 10px;*/
+        /*margin-left: -3px;*/
+        /*top: 0;*/
         /*}*/
-
 
         @media print {
             .table-striped > tbody > tr:nth-child(odd) > td,
@@ -164,7 +163,17 @@
                                     <tr>
                                         <td style="width: 33%">{{ inspector.fullname }}</td>
                                         <td style="width: 33%">{{ inspector.license }}</td>
-                                        <td style="width: 33%"></td>
+                                        <td style="width: 33%">
+                                            {% for stamp in document.pdfSettings.stamps %}
+                                                {% if stamp.inspector == inspector %}
+                                                    <img id="stamp"
+                                                         src="{{ pathToWeb }}/uploads/images/{{ stamp.image }}"
+                                                         class="img-fluid"
+                                                         alt="Pieczątka inspektora">
+
+                                                {% endif %}
+                                            {% endfor %}
+                                        </td>
                                     </tr>
                                 {% endfor %}
 
