@@ -69,23 +69,13 @@ class BuildingController extends Controller
      * @Route("/{id}", name="building_show")
      * @Method("GET")
      */
-    public function showAction(Building $building, Request $request)
+    public function showAction(Building $building)
     {
-
-
-        $tempFireProtectionDevice = new BuildDevice();
-//        $editForm = $this->createForm('MicroBundle\Form\BuildDeviceEditType', $tempFireProtectionDevice);
-//        $addForm = $this->createForm('MicroBundle\Form\BuildDeviceType', $tempFireProtectionDevice);
-
 
         //todo refactor this service
 //        $this->container->get('micro')->updateLastServiceDate($building);
 
-        return $this->render('building/show.html.twig',
-            array('building' => $building,
-//                'form' => $addForm->createView(),
-//                'edit_form' => $editForm->createView()
-            ));
+        return $this->render('building/show.html.twig', array('building' => $building,));
     }
 
     /**
@@ -105,7 +95,7 @@ class BuildingController extends Controller
             return $this->redirectToRoute('building_index');
         }
 
-        return $this->render('building/edit.html.twig', array('building' => $building, 'edit_form' => $editForm->createView() ));
+        return $this->render('building/edit.html.twig', array('building' => $building, 'edit_form' => $editForm->createView()));
     }
 
     /**
@@ -179,21 +169,24 @@ class BuildingController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $buildDevices = $em->getRepository('MicroBundle:BuildDevice')->findBy(['building' => $building, 'loopNo' => $loop]);
-        $devices=$em->getRepository('MicroBundle:Device')->findAll();
-        $shortnames=[];
+        //prepare shortnames to selects
+        $devices = $em->getRepository('MicroBundle:Device')->findAll();
+        $shortnames = [];
         foreach ($devices as $device) {
-            $shortnames[]=$device->getShortname();
+            $shortnames[] = $device->getShortname();
         }
+        $limit = 256 - count($buildDevices);
 
-
-        $loopForm = $this->createForm('MicroBundle\Form\LoopType', ['loop' => $loop]);
+        $loopForm = $this->createForm('MicroBundle\Form\LoopType', ['loop' => $loop, 'limit' => $limit]);
         $loopForm->handleRequest($request);
         if ($loopForm->isSubmitted() && $loopForm->isValid()) {
             $quantity = $loopForm->getData()['quantityDevices'];
-            for($i=1; $i <= $quantity; $i ++){
+            $number = 0;
+            for ($i = 1; $i <= $quantity; $i++) {
                 $device = new BuildDevice();
                 $device->setLoopNo($loop);
-                $device->setNumber($i);
+                $number = $this->getFirstEmptyNumberStartingAt($number, $loop, $building);
+                $device->setNumber($number);
                 $device->setBuilding($building);
                 $building->addBuildDevice($device);
                 $em->persist($device);
@@ -202,13 +195,21 @@ class BuildingController extends Controller
             return $this->redirectToRoute('building_devices', array('id' => $building->getId(), 'loop' => $loop));
         }
 
-        return $this->render('building/devices.html.twig', array(
-            'building' => $building,
-            'devices' => $buildDevices,
-            'shortnames' => $shortnames,
-            'loop_no' => $loop,
-            'loop_form' => $loopForm->createView(),
-        ));
+        return $this->render('building/devices.html.twig', array('building' => $building, 'devices' => $buildDevices, 'shortnames' => $shortnames, 'loop_no' => $loop, 'loop_form' => $loopForm->createView(),));
 
     }
+
+    private function getFirstEmptyNumberStartingAt($number,  $loop, $building)
+    {
+        $em = $this->getDoctrine()->getManager();
+        do  {
+            $number++;
+            $buildDevices = $em->getRepository('MicroBundle:BuildDevice')
+                ->findBy(['building' => $building, 'loopNo' => $loop, 'number' => $number]);
+
+        } while ($buildDevices != null);
+        return $number;
+    }
+
+
 }

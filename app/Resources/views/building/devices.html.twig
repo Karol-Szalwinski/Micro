@@ -10,26 +10,7 @@
     <!-- Content header -->
     <div class="content-header row">
         <div class="content-header-left col-md-4 col-12">
-            {#<h3 class="content-header-title mb-0">Baza budynków</h3>#}
-            {#<div class="row breadcrumbs-top">#}
-            {#<div class="breadcrumb-wrapper col-12">#}
-            {#<ol class="breadcrumb">#}
-            {#<li class="breadcrumb-item"><a#}
-            {#href="{{ path('micro_default_index') }}">Główna</a>#}
-            {#</li>#}
-            {#<li class="breadcrumb-item"><a href="{{ path('client_index') }}">Lista#}
-            {#klientów</a>#}
-            {#</li>#}
-            {#<li class="breadcrumb-item"><a href="{{ path('client_show', { 'id': building.client.id }) }}">#}
-            {#Klient {{ building.client.name }}</a>#}
-            {#</li>#}
 
-            {#<li class="breadcrumb-item active">Budynek o nazwie {{ building.name }}#}
-            {#</li>#}
-
-            {#</ol>#}
-            {#</div>#}
-            {#</div>#}
         </div>
         <div class="content-header-left col-md-8 col-12">
             <div class="btn-group float-md-right" role="group"
@@ -40,7 +21,7 @@
                     <button class="btn btn-outline-info round " data-toggle="modal"
                             data-target="#AddLoopModal">
                         <i class="la la-plus"></i>&nbsp
-                        Dodaj wstępnie urządzenia
+                        Dodaj wiele urządzeń
                     </button>
 
                 </div>
@@ -91,7 +72,6 @@
                                     <th>Skrót</th>
                                     <th>Serial</th>
                                     <th>Adress</th>
-                                    <th>Opis</th>
                                     <th>Ostatni przegląd</th>
                                     <th>Akcje</th>
                                 </tr>
@@ -107,7 +87,9 @@
                                             </td>
 
                                             <td class="text-right">{{ device.loopNo }} /
-                                                <input type="number" min="1" max="255" class="hidden-op hidden-input unique-input" id="i-number-{{ device.id }}"
+                                                <input type="number" min="1" max="255"
+                                                       class="hidden-op hidden-input unique-input"
+                                                       id="i-number-{{ device.id }}"
                                                        value="{{ device.number }}"
                                                        readonly>
                                             </td>
@@ -117,9 +99,11 @@
                                                    id="i-name-{{ device.id }}">{{ device.name }}</a>
                                             </td>
                                             <td class="text-center">
-                                                <select class=" hidden-op hidden-select" id="i-shortname-{{ device.id }}"
+                                                <select class=" hidden-op hidden-select"
+                                                        id="i-shortname-{{ device.id }}"
                                                         disabled>
-                                                    <option value="{{ device.shortname }}" selected>{{ device.shortname }}</option>
+                                                    <option value="{{ device.shortname }}"
+                                                            selected>{{ device.shortname }}</option>
                                                     {% for short in shortnames %}
                                                         {% if device.shortname != short %}
                                                             <option value="{{ short }}">{{ short }}</option>
@@ -130,16 +114,12 @@
                                             <td class="text-center">
                                                 <input class="hidden-op hidden-input" id="i-serial-{{ device.id }}"
                                                        value="{{ device.serial }}"
-                                                       readonly>
+                                                       readonly style="width:100%">
                                             </td>
                                             <td class="text-center">
                                                 <input class="hidden-op hidden-input" id="i-address-{{ device.id }}"
                                                        value="{{ device.address }}"
                                                        readonly>
-                                            </td>
-                                            <td class="text-center">
-                                                <a class="text-center "
-                                                   id="desc-{{ device.id }}">{{ device.desc }}</a>
                                             </td>
                                             <td class="text-center">
                                                 <a class="timeline-date">
@@ -148,8 +128,7 @@
                                             </td>
 
                                             <td>
-                                                <a type="button"
-                                                   id="edit-row-btn-{{ device.id }}"
+                                                <a id="edit-row-btn-{{ device.id }}"
                                                    class="primary edit-row-btn mr-1"><i
                                                             class="la la-pencil"></i></a>
                                                 <a data-device="{{ device.id }}"
@@ -170,12 +149,13 @@
                                     <th>Skrót</th>
                                     <th>Serial</th>
                                     <th>Adress</th>
-                                    <th>Opis</th>
                                     <th>Ostatni przegląd</th>
                                     <th>Akcje</th>
                                 </tfoot>
                             </table>
-                            <button id="add-row-btn"  data-building="{{ building.id }}" data-loopno="{{ loop_no }}">Dodaj nowe urządzenie</button>
+                            <button id="add-row-btn" data-building="{{ building.id }}" data-loopno="{{ loop_no }}">Dodaj
+                                nowe urządzenie
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -198,7 +178,8 @@
                     {{ form_start(loop_form, { 'attr': {'class': 'form form-horizontal inputmask contact-input'} }) }}
 
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel1">Dodaj nową pętlę</h5>
+                        <h4 class="modal-title" id="exampleModalLabel1"><i class="ft-file-plus"></i> Dodaj wiele
+                            urządzeń </h4>
                         <button type="button" class="close" data-dismiss="modal"
                                 aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -206,8 +187,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-body">
-                            <h4 class="form-section"><i class="ft-user"></i> Dane Pętli
-                            </h4>
+
                             <div class="form-group row">
                                 {{ form_label(loop_form.loop, 'Numer pętli', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                 <div class="col-md-9 mx-auto">
@@ -216,9 +196,10 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                {{ form_label(loop_form.quantityDevices, 'Ilość urządzeń w pętli', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                {{ form_label(loop_form.quantityDevices, 'Ilość urządzeń do dodania', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                 <div class="col-md-9 mx-auto">
                                     {{ form_widget(loop_form.quantityDevices, { 'attr': {'class': 'form-control'} }) }}
+                                    max {{ 256 - devices|length }}
                                 </div>
                             </div>
 

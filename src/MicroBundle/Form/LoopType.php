@@ -16,6 +16,7 @@ class LoopType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $limit = $options['data']['limit'];
         $builder
             ->add('loop', IntegerType::class, array(
                 'disabled' => true,
@@ -24,7 +25,7 @@ class LoopType extends AbstractType
             ->add('quantityDevices',IntegerType::class, array(
                 'attr' => [
                     'min' => 1,
-                    'max' => 120
+                    'max' => $limit
                 ]
             ));
     }

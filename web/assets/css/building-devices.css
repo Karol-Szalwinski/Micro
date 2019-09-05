@@ -39,3 +39,7 @@ select:disabled {
     background-color: #ffffff;
 }
 
+.table.table-sm th, .table.table-sm td {
+    padding: 2px;
+}
+
