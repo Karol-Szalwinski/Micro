@@ -111,7 +111,7 @@ function updateDocDevice(id) {
     var jsonString = JSON.stringify(docDevice);
 
     $.ajax({
-        url: '../../../doc-device/update/' + jsonString,
+        url: '../../../doc-device/update/' + encodeURIComponent(jsonString),
         type: 'POST',
         dataType: 'json',
         async: true,
@@ -283,14 +283,14 @@ function updateBuildDevice(id) {
 
     var buildDevice = {
         id: id,
-        serial: $('#dialog-serial').val(),
-        address: $('#dialog-address').val(),
-        desc : $('#dialog-description').val(),
+        serial: encodeURIComponent($('#dialog-serial').val()),
+        address: encodeURIComponent($('#dialog-address').val()),
+        desc : encodeURIComponent($('#dialog-description').val()),
     };
     var jsonString = JSON.stringify(buildDevice);
 
     $.ajax({
-        url: '../../../build-device/update/' + jsonString,
+        url: '../../../build-device/update/' + encodeURIComponent(jsonString),
         type: 'POST',
         dataType: 'json',
         async: true,
@@ -369,7 +369,7 @@ function changeInspectedDeviceVisible(id) {
     var jsonString = JSON.stringify(docDevice);
 
     $.ajax({
-        url: '../../../doc-device/update/' + jsonString,
+        url: '../../../doc-device/update/' + encodeURIComponent(jsonString),
         type: 'POST',
         dataType: 'json',
         async: true,

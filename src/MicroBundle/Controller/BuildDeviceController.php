@@ -233,13 +233,13 @@ class BuildDeviceController extends Controller
             $buildDevice->setNumber($device->{'number'});
         };
         if (array_key_exists('serial', $device)) {
-            $buildDevice->setSerial($device->{'serial'});
+            $buildDevice->setSerial(urldecode($device->{'serial'}));
         };
         if (array_key_exists('address', $device)) {
-            $buildDevice->setAddress($device->{'address'});
+            $buildDevice->setAddress(urldecode($device->{'address'}));
         };
         if (array_key_exists('desc', $device)) {
-            $buildDevice->setDesc($device->{'desc'});
+            $buildDevice->setDesc(urldecode($device->{'desc'}));
         };
         $em->flush();
 

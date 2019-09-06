@@ -1,0 +1,134 @@
+<!-- Info devices modal -->
+<div class="modal fade" id="info-modal" role="dialog">
+    <div class="modal-dialog modal-lg ">
+
+        <!-- Modal content-->
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h4 class="modal-title">Informacja o urządzeniu</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <p id="dialog-id" style="visibility:hidden"></p>
+            <div class="modal-body table-responsive">
+                <table class="table table-sm table-bordered ">
+                    <tbody>
+                    <tr>
+                        <th>Numer w pętli</th>
+                        <td id="dialog-number"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Nazwa urzadzenia</th>
+                        <td id="dialog-name"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Ostatni przegląd</th>
+                        <td id="dialog-temp-date"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Numer Seryjny</th>
+                        <td>
+                            <input class="info-input" id="dialog-serial"  "
+                                   readonly>
+                            {#onblur="readonly(this)#}
+                        </td>
+                        <td><a class=" info mr-1 edit-info-btn"><i
+                                        class="la la-edit "></i></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Adress</th>
+                        <td>
+                            <input class="info-input" id="dialog-address" readonly>
+                            {#onblur="readonly(this)#}
+                        </td>
+                        <td><a class=" info mr-1 edit-info-btn"><i
+                                        class="la la-edit "></i></a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>Opis</th>
+                        <td>
+
+                            <textarea class="info-input" rows=12 cols=50 id="dialog-description"
+                                       readonly>
+                            </textarea>
+                            {#onblur="readonly(this)#}
+                        </td>
+                        <td><a class=" info mr-1 edit-info-btn"><i
+                                        class="la la-edit "></i></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!--------------Begin AdLoopModal---------->
+<div class="modal fade" id="AddLoopModal" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <section class="contact-form">
+                {{ form_start(loop_form, { 'attr': {'class': 'form form-horizontal inputmask contact-input'} }) }}
+
+                <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalLabel1"><i class="ft-file-plus"></i> Dodaj wiele
+                        urządzeń </h4>
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-body">
+
+                        <div class="form-group row">
+                            {{ form_label(loop_form.loop, 'Numer pętli', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                            <div class="col-md-9 mx-auto">
+                                {{ form_widget(loop_form.loop, { 'attr': {'class': 'form-control'} }) }}
+
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            {{ form_label(loop_form.quantityDevices, 'Ilość urządzeń do dodania', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                            <div class="col-md-9 mx-auto">
+                                {{ form_widget(loop_form.quantityDevices, { 'attr': {'class': 'form-control'} }) }}
+                                max {{ 256 - devices|length }}
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="">
+                            <button type="button" data-dismiss="modal"
+                                    class="btn btn-warning mr-1">
+                                <i class="ft-x"></i> Anuluj
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="la la-check-square-o"></i> Zapisz
+                            </button>
+                        </div>
+                    </div>
+                    {{ form_end(loop_form) }}
+                </div>
+            </section>
+
+        </div>
+    </div>
+</div>
+<!--------------End AddLoopModal---------->

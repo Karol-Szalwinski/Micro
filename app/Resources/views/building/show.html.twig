@@ -17,10 +17,10 @@
                                 klientów</a>
                         </li>
                         <li class="breadcrumb-item"><a href="{{ path('client_show', { 'id': building.client.id }) }}">
-                                Klient {{ building.client.name }}</a>
+                                {{ building.client.name }}</a>
                         </li>
 
-                        <li class="breadcrumb-item active">Budynek o nazwie {{ building.name }}
+                        <li class="breadcrumb-item active">{{ building.name }}
                         </li>
 
                     </ol>
@@ -57,7 +57,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title" id="horz-layout-basic">Budynek</h4>
+                        <h4 class="card-title" id="horz-layout-basic">Dane Budynku</h4>
                         <a class="heading-elements-toggle"><i
                                     class="la la-ellipsis-v font-medium-3"></i></a>
                         <div class="heading-elements">
@@ -72,9 +72,6 @@
                     <div class="card-content collpase show">
                         <div class="card-body">
 
-
-                            <h4><i class="ft-home"></i> Dane Budynku</h4>
-                            <hr>
                             <div class="col-md-12">
                                 <table class="table table-sm table-borderless table-column">
                                     <tr>

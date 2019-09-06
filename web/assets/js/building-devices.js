@@ -125,7 +125,7 @@ function updateDevice(id) {
     var jsonString = JSON.stringify(device);
 
     $.ajax({
-        url: '../../../build-device/update/' + jsonString,
+        url: '../../../build-device/update/' + encodeURIComponent(jsonString),
         type: 'POST',
         dataType: 'json',
         async: true,
@@ -149,8 +149,6 @@ function updateDevice(id) {
 
 
 $(document).on('click', '.delete-row-btn ', function () {
-
-
 
     var id = $(this).data("device");
     swal({
@@ -228,3 +226,109 @@ $(document).on('change', '.unique-input', function () {
     $(this).addClass('unique-input');
 })
 ;
+
+// fill info modal
+$(".info-modal-btn").on("click", function () {
+    var id = this.id.substring(5);
+    $.ajax({
+        url: '../../../build-device/get/' + id,
+        type: 'POST',
+        dataType: 'json',
+        async: true,
+
+        success: function (data) {
+
+            var device = JSON.parse(data['device']);
+
+            $('#dialog-name').text(device.name);
+            $('#dialog-id').text(device.id);
+            $('#dialog-serial').val(device.serial);
+            $('#dialog-address').val(device.address);
+            $('#dialog-description').val(device.desc);
+            $('#dialog-number').text(device.loopNo + ' / ' + device.number);
+            $('#dialog-temp-date').text(device.tempServiceDate);
+
+
+            $('#info-modal').modal('show');
+
+        },
+        error: function () {
+            alert('Błąd przesyłania');
+        }
+    })
+
+});
+
+// animation dialog
+// $("#animation-dialog").dialog({
+//     autoOpen: false,
+//     width: 400,
+//     show: {
+//         effect: "fade",
+//         duration: 400
+//     },
+//     hide: {
+//         effect: "explode",
+//         duration: 1000
+//     },
+//     modal: true
+// });
+
+// activate input in info modal
+$(document).on('click', '.edit-info-btn ', function () {
+
+    $(this).parent().prev().children().removeAttr("readonly");
+    $(this).parent().prev().children().focus();
+    $(this).parent().prev().children().css("border", "2px solid #00bfff");
+    window.getSelection().removeAllRanges();
+});
+
+// deactivate input in info modal
+$(document).on('blur', '.info-input ', function () {
+
+    $(".info-input ").attr('readonly', true).css("border", "2px solid #ffffff");
+    $(".info-input:focus").css("outline", "2px solid #ffffff");
+
+});
+// update build device function
+function updateBuildDevice(id) {
+
+    var buildDevice = {
+        id: id,
+        serial: encodeURIComponent($('#dialog-serial').val()),
+        address: encodeURIComponent($('#dialog-address').val()),
+        desc : encodeURIComponent($('#dialog-description').val()),
+    };
+    var jsonString = JSON.stringify(buildDevice);
+
+    $.ajax({
+        url: '../../../build-device/update/' + encodeURIComponent(jsonString),
+        type: 'POST',
+        dataType: 'json',
+        async: true,
+
+        success: function (data) {
+
+            // update row
+            var device = JSON.parse(data['device']);
+            $('#dialog-id').text(device.id);
+            $('#dialog-name').text(device.name);
+            $('#dialog-serial').val(device.serial);
+            $('#dialog-address').val(device.address);
+            $('#dialog-description').val(device.desc);
+            //update row in datatable
+            $('#i-serial-' + device.id).val(device.serial);
+            $('#i-address-' + device.id).val(device.address);
+
+        },
+        error: function () {
+            alert('Błąd update device');
+        }
+    });
+};
+// update fire protection device after change input
+$(document).on('change', '.info-input', function () {
+
+    var id = $('#dialog-id').text();
+    updateBuildDevice(id);
+});
