@@ -71,11 +71,20 @@ class BuildingController extends Controller
      */
     public function showAction(Building $building)
     {
-
+        $em = $this->getDoctrine()->getManager();
+        $countDevices = $em->getRepository('MicroBundle:BuildDevice')->countDevicesByLoop($building->getId());
+        $countArray = ["1" => 0, "2" => 0, "3" => 0,"4" => 0 ];
+        foreach ($countDevices as $device) {
+            $countArray[$device['loop_no']] = $device['devicesCount'];
+        }
         //todo refactor this service
 //        $this->container->get('micro')->updateLastServiceDate($building);
 
-        return $this->render('building/show.html.twig', array('building' => $building,));
+        return $this->render('building/show.html.twig',
+            array(
+                'building' => $building,
+                'countDevices' => $countArray
+            ));
     }
 
     /**

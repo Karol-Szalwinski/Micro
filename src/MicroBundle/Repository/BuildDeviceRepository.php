@@ -27,5 +27,26 @@ class BuildDeviceRepository extends \Doctrine\ORM\EntityRepository
         return $dql;
     }
 
+    public function countDevicesByLoop( $building)
+    {
+        $em = $this->getEntityManager();
+        $RAW_QUERY ="
+SELECT build_device.loop_no, COUNT(build_device.loop_no) AS devicesCount
+FROM `build_device`
+WHERE build_device.building_id = ?
+AND build_device.del = false
+GROUP BY build_device.loop_no
+        ";
+
+
+        $statement = $em->getConnection()->prepare($RAW_QUERY);
+        // Set parameters
+        $statement->bindvalue(1, $building);
+        $statement->execute();
+
+        $result = $statement->fetchAll();
+
+        return $result;
+    }
 
 }

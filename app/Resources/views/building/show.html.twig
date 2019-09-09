@@ -35,13 +35,21 @@
                                 class="la la-backward"></i> Wróć do listy budynków</a>
 
                     <a class="btn btn-outline-info round" href="{{ path('building_devices', { 'id': building.id, 'loop': 1 }) }}">
-                        <i class="la la-circle-o-notch"></i> Pętla 1</a>
+                        <i class="la la-circle-o-notch"></i>&nbspPętla&nbsp1<br><br>
+                        <div class="badge badge-pill badge-info">{{ countDevices['1'] }}</div>
+                    </a>
                     <a class="btn btn-outline-info round" href="{{ path('building_devices', { 'id': building.id, 'loop': 2 }) }}">
-                        <i class="la la-circle-o-notch"></i> Pętla 2</a>
+                        <i class="la la-circle-o-notch"></i>&nbspPętla&nbsp2<br><br>
+                        <div class="badge badge-pill badge-info">{{ countDevices['2'] }}</div>
+                    </a>
                     <a class="btn btn-outline-info round" href="{{ path('building_devices', { 'id': building.id, 'loop': 3 }) }}">
-                        <i class="la la-circle-o-notch"></i> Pętla 3</a>
+                        <i class="la la-circle-o-notch"></i>&nbspPętla&nbsp3<br><br>
+                        <div class="badge badge-pill badge-info">{{ countDevices['3'] }}</div>
+                    </a>
                     <a class="btn btn-outline-info round" href="{{ path('building_devices', { 'id': building.id, 'loop': 4 }) }}">
-                        <i class="la la-circle-o-notch"></i> Pętla 4</a>
+                        <i class="la la-circle-o-notch"></i>&nbspPętla&nbsp4<br><br>
+                        <div class="badge badge-pill badge-info">{{ countDevices['4'] }}</div>
+                    </a>
                     <a class="btn btn-outline-info round" href="{{ path('building_document', { 'id': building.id }) }}"><i
                                 class="la la-file-photo-o"></i> Pokaż dokumenty</a>
 
