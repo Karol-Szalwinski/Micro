@@ -1,0 +1,40 @@
+input {
+    outline: none;
+    border: 2px solid #ffffff;
+    width:80%;
+    min-width: 55px;
+
+}
+
+
+/*.hidden-input:focus {*/
+    /*outline: none;*/
+    /*border:none;*/
+    /*width:100%;*/
+
+/*}*/
+
+.hidden-select {
+    /*outline: none;*/
+    border: 2px solid #ffffff;
+    width:100%;
+    min-width: 55px;
+
+}
+
+/*.hidden-select:focus {*/
+    /*border: solid 1px;*/
+    /*width: 100%;*/
+/*}*/
+
+input, textarea {
+    color: #6b6f82;
+}
+
+select:disabled {
+    color: #6b6f82;
+    background-color: #ffffff;
+}
+
+
+

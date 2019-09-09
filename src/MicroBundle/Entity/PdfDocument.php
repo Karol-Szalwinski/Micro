@@ -26,6 +26,13 @@ class PdfDocument
      * @ORM\Column(name="pdf_file_name", type="string", nullable=true)
      */
     private $pdfFileName;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", nullable=true)
+     */
+    private $name;
 
 
     /**
@@ -63,5 +70,33 @@ class PdfDocument
     public function getPdfFileName()
     {
         return $this->pdfFileName;
+    }
+
+    /**
+     * Set name.
+     *
+     * @param string|null $name
+     *
+     * @return PdfDocument
+     */
+    public function setName($name = 'bez nazwy')
+    {
+        if($name == "") {
+            $this->name = "bez nazwy";
+        } else {
+            $this->name = $name;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get name.
+     *
+     * @return string|null
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

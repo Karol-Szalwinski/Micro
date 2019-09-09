@@ -6,20 +6,16 @@
     <!-- Content header -->
     <div class="content-header row">
         <div class="content-header-left col-md-6 col-12">
-            <h3 class="content-header-title mb-0">Baza budynków</h3>
+            <h3 class="content-header-title mb-0">Budynek</h3>
             <div class="row breadcrumbs-top">
                 <div class="breadcrumb-wrapper col-12">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a
                                     href="{{ path('micro_default_index') }}">Główna</a>
                         </li>
-                        <li class="breadcrumb-item"><a href="{{ path('client_index') }}">Lista
-                                klientów</a>
-                        </li>
                         <li class="breadcrumb-item"><a href="{{ path('client_show', { 'id': building.client.id }) }}">
                                 {{ building.client.name }}</a>
                         </li>
-
                         <li class="breadcrumb-item active">{{ building.name }}
                         </li>
 
@@ -34,19 +30,23 @@
                     <a class="btn btn-outline-info round" href="{{ path('building_index') }}"><i
                                 class="la la-backward"></i> Wróć do listy budynków</a>
 
-                    <a class="btn btn-outline-info round" href="{{ path('building_devices', { 'id': building.id, 'loop': 1 }) }}">
+                    <a class="btn btn-outline-info round"
+                       href="{{ path('building_devices', { 'id': building.id, 'loop': 1 }) }}">
                         <i class="la la-circle-o-notch"></i>&nbspPętla&nbsp1<br><br>
                         <div class="badge badge-pill badge-info">{{ countDevices['1'] }}</div>
                     </a>
-                    <a class="btn btn-outline-info round" href="{{ path('building_devices', { 'id': building.id, 'loop': 2 }) }}">
+                    <a class="btn btn-outline-info round"
+                       href="{{ path('building_devices', { 'id': building.id, 'loop': 2 }) }}">
                         <i class="la la-circle-o-notch"></i>&nbspPętla&nbsp2<br><br>
                         <div class="badge badge-pill badge-info">{{ countDevices['2'] }}</div>
                     </a>
-                    <a class="btn btn-outline-info round" href="{{ path('building_devices', { 'id': building.id, 'loop': 3 }) }}">
+                    <a class="btn btn-outline-info round"
+                       href="{{ path('building_devices', { 'id': building.id, 'loop': 3 }) }}">
                         <i class="la la-circle-o-notch"></i>&nbspPętla&nbsp3<br><br>
                         <div class="badge badge-pill badge-info">{{ countDevices['3'] }}</div>
                     </a>
-                    <a class="btn btn-outline-info round" href="{{ path('building_devices', { 'id': building.id, 'loop': 4 }) }}">
+                    <a class="btn btn-outline-info round"
+                       href="{{ path('building_devices', { 'id': building.id, 'loop': 4 }) }}">
                         <i class="la la-circle-o-notch"></i>&nbspPętla&nbsp4<br><br>
                         <div class="badge badge-pill badge-info">{{ countDevices['4'] }}</div>
                     </a>
@@ -62,20 +62,11 @@
     <!-- Basic form layout section start -->
     <section id="horizontal-form-layouts">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title" id="horz-layout-basic">Dane Budynku</h4>
-                        <a class="heading-elements-toggle"><i
-                                    class="la la-ellipsis-v font-medium-3"></i></a>
-                        <div class="heading-elements">
-                            <ul class="list-inline mb-0">
-                                <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
-                                <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
-                                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
-                                <li><a data-action="close"><i class="ft-x"></i></a></li>
-                            </ul>
-                        </div>
+                        <h4 class="card-title" id="horz-layout-basic">Dane adresowe</h4>
+
                     </div>
                     <div class="card-content collpase show">
                         <div class="card-body">
@@ -85,8 +76,7 @@
                                     <tr>
                                         <th>Nazwa budynku:</th>
                                         <td>{{ building.name }}</td>
-                                        <th rowspan="3">Lista urządzeń:</th>
-                                        <td rowspan="3">{{ building.deviceShortlistPosition|nl2br }}</td>
+
                                     </tr>
                                     <tr>
                                         <th rowspan="2">Adres:</th>
@@ -104,140 +94,43 @@
                         </div>
                     </div>
                 </div>
+            </div><div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title" id="horz-layout-basic">Urządzenia</h4>
+
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+                            <div class="col-md-12">
+                                <table class="table table-sm table-borderless table-column">
+                                    <tr>
+                                        <th>Lista urządzeń:</th>
+                                        <td>{{ building.deviceShortlistPosition|nl2br }}</td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    {#{% for loopDev in building.loopDevs|sort %}#}
-        {#{% if loopDev.del %}#}
-        {#{% else %}#}
-            {#<section id="section-{{ loopDev.id }}" class="row all-contacts" >#}
-                {#<div class="col-12">#}
-                    {#<div class="card">#}
-                        {#<div class="card-head">#}
-                            {#<div class="card-header">#}
-                                {#<h4 class="card-title">Pętla urządzeń nr {{ loopDev.number }}</h4>#}
-                                {#<div class="heading-elements mt-0">#}
-                                    {#<button id="add-button-{{ loopDev.id }}"#}
-                                            {#class="btn btn-primary btn-sm add-device-button " data-toggle="modal"#}
-                                            {#data-target="#AddDeviceModal">#}
-                                        {#<i class="d-md-none d-block ft-plus white"></i>#}
-                                        {#<span class="d-md-block d-none ">Dodaj nowe urządzenie</span>#}
-                                    {#</button>#}
-                                    {#<button id="del-button-{{ loopDev.id }}"#}
-                                            {#class="btn btn-secondary btn-sm delete-loop-button">#}
-                                        {#<i class="d-md-none d-block ft-plus white"></i>#}
-                                        {#<span class="d-md-block d-none ">Usuń pętlę</span>#}
-                                    {#</button>#}
-
-
-                                {#</div>#}
-                            {#</div>#}
-                        {#</div>#}
-                        {#<div class="card-content">#}
-                            {#<div class="card-body">#}
-
-                                {#<!-- Device List table -->#}
-                                {#<button type="button" class="btn btn-sm btn-danger delete-all mb-1">Usuń Wszystkie</button>#}
-                                {#<div class="table-responsive">#}
-                                    {#<table#}
-                                            {#class=" devices-table table table-white-space table-sm table-bordered row-grouping display no-wrap icheck table-middle text-center">#}
-                                        {#<thead>#}
-
-                                        {#<tr>#}
-                                            {#<th>Nr</th>#}
-                                            {#<th>Nazwa</th>#}
-                                            {#<th>Skrót</th>#}
-                                            {#<th>Serial</th>#}
-                                            {#<th>Adress</th>#}
-                                            {#<th>Opis</th>#}
-                                            {#<th>Ostatni przegląd</th>#}
-                                            {#<th>Akcje</th>#}
-                                        {#</tr>#}
-
-                                        {#</thead>#}
-                                        {#<tbody id="tbody-{{ loopDev.id }}">#}
-                                        {#{% for device in loopDev.fireProtectionDevices|sort %}#}
-                                            {#{% if device.del != true %}#}
-                                                {#<tr id="row-{{ loopDev.id }}-{{ device.id }}">#}
-                                                    {#<td class="text-center">#}
-                                                        {#<a class="text-center"#}
-                                                           {#id="number-{{ device.id }}">{{ device.number }}</a>#}
-                                                    {#</td>#}
-                                                    {#<td class="text-center">#}
-                                                        {#<a class="text-center"#}
-                                                           {#id="name-{{ device.id }}">{{ device.name }}</a>#}
-                                                    {#</td>#}
-                                                    {#<td class="text-center">#}
-                                                        {#<a class="text-center "#}
-                                                           {#id="shortname-{{ device.id }}">{{ device.shortname }}</a>#}
-                                                    {#</td>#}
-                                                    {#<td class="text-center">#}
-                                                        {#<a class="text-center "#}
-                                                           {#id="serial-{{ device.id }}">{{ device.serial }}</a>#}
-                                                    {#</td>#}
-                                                    {#<td class="text-center">#}
-                                                        {#<a class="text-center "#}
-                                                           {#id="address-{{ device.id }}">{{ device.address }}</a>#}
-                                                    {#</td>#}
-                                                    {#<td class="text-center">#}
-                                                        {#<a class="text-center "#}
-                                                           {#id="desc-{{ device.id }}">{{ device.desc }}</a>#}
-                                                    {#</td>#}
-                                                    {#<td class="text-center">#}
-                                                        {#<a class="timeline-date">#}
-                                                            {#{{ device.lastServiceDate is empty ? "Brak" : device.lastServiceDate| date('Y/m/d') }}#}
-                                                        {#</a>#}
-                                                    {#</td>#}
-
-                                                    {#<td>#}
-                                                        {#<a data-toggle="modal" data-target="#EditDeviceModal"#}
-                                                           {#id="edit-{{ device.id }}"#}
-                                                           {#class="primary edit-row mr-1"><i#}
-                                                                    {#class="la la-pencil"></i></a>#}
-                                                        {#<a id="delete-{{ device.id }}"#}
-                                                           {#class="danger delete-row mr-1 cancel-delete"><i#}
-                                                                    {#class="la la-trash-o"></i></a>#}
-
-                                                    {#</td>#}
-                                                {#</tr>#}
-                                            {#{% endif %}#}
-                                        {#{% endfor %}#}
-                                        {#</tbody>#}
-                                        {#<tfoot>#}
-                                        {#<tr>#}
-                                            {#<th>Nr</th>#}
-                                            {#<th>Nazwa</th>#}
-                                            {#<th>Skrót</th>#}
-                                            {#<th>Serial</th>#}
-                                            {#<th>Adress</th>#}
-                                            {#<th>Opis</th>#}
-                                            {#<th>Ostatni przegląd</th>#}
-                                            {#<th>Akcje</th>#}
-                                        {#</tfoot>#}
-                                    {#</table>#}
-                                {#</div>#}
-                            {#</div>#}
-                        {#</div>#}
-                    {#</div>#}
-                {#</div>#}
-            {#</section>#}
-        {#{% endif %}#}
-    {#{% else %}#}
-        {#<div>brak</div>#}
-    {#{% endfor %}#}
 
     <section class="row all-contacts">
         <div class="col-12">
             <div class="card">
                 <div class="card-head">
                     <div class="card-header">
-                        <h4 class="card-title">Przeglądy PPOŻ dla tego budynku</h4>
+                        <h4 class="card-title">Dokumenty przeglądów</h4>
                         <div class="heading-elements mt-0">
                             <a class="btn btn-primary btn-sm "
                                href="{{ path('document_new', {'building': building.id}) }}"
                             ><i
-                                        class="la la-building"></i> Dodaj nowy przeglad</a>
+                                        class="la la-building"></i> Dodaj nowy dokument</a>
 
                             <span class="dropdown">
                                                 <button id="btnSearchDrop1" type="button" data-toggle="dropdown"
@@ -306,240 +199,6 @@
             </div>
         </div>
     </section>
-
-    <!---------------Modals----------------->
-
-    {#<!--------------Begin AdLoopModal---------->#}
-    {#<div class="modal fade" id="AddLoopModal" tabindex="-1" role="dialog"#}
-         {#aria-labelledby="exampleModalLabel1" aria-hidden="true">#}
-        {#<div class="modal-dialog" role="document">#}
-            {#<div class="modal-content">#}
-
-                {#<section class="contact-form">#}
-                    {#{{ form_start(loop_form, { 'attr': {'class': 'form form-horizontal inputmask contact-input'} }) }}#}
-
-                    {#<div class="modal-header">#}
-                        {#<h5 class="modal-title" id="exampleModalLabel1">Dodaj nową pętlę</h5>#}
-                        {#<button type="button" class="close" data-dismiss="modal"#}
-                                {#aria-label="Close">#}
-                            {#<span aria-hidden="true">&times;</span>#}
-                        {#</button>#}
-                    {#</div>#}
-                    {#<div class="modal-body">#}
-                        {#<div class="form-body">#}
-                            {#<h4 class="form-section"><i class="ft-user"></i> Dane Pętli#}
-                            {#</h4>#}
-                            {#<div class="form-group row">#}
-                                {#{{ form_label(loop_form.number, 'Numer pętli', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
-                                {#<div class="col-md-9 mx-auto">#}
-                                    {#{{ form_widget(loop_form.number, { 'attr': {'class': 'form-control'} }) }}#}
-
-                                {#</div>#}
-                            {#</div>#}
-                            {#<div class="form-group row">#}
-                                {#{{ form_label(loop_form.quantityDevices, 'Ilość urządzeń w pętli', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
-                                {#<div class="col-md-9 mx-auto">#}
-                                    {#{{ form_widget(loop_form.quantityDevices, { 'attr': {'class': 'form-control'} }) }}#}
-                                {#</div>#}
-                            {#</div>#}
-
-
-                        {#</div>#}
-
-                        {#<div class="modal-footer">#}
-                            {#<div class="">#}
-                                {#<button type="button" data-dismiss="modal"#}
-                                        {#class="btn btn-warning mr-1">#}
-                                    {#<i class="ft-x"></i> Anuluj#}
-                                {#</button>#}
-                                {#<button type="submit" class="btn btn-primary">#}
-                                    {#<i class="la la-check-square-o"></i> Zapisz#}
-                                {#</button>#}
-                            {#</div>#}
-                        {#</div>#}
-                        {#{{ form_end(loop_form) }}#}
-                    {#</div>#}
-                {#</section>#}
-
-            {#</div>#}
-        {#</div>#}
-    {#</div>#}
-    <!--------------End AddDeviceModal---------->
-
-    <!--------------Begin AdDeviceModal---------->
-    {#<div class="modal fade" id="AddDeviceModal" tabindex="-1" role="dialog"#}
-         {#aria-labelledby="exampleModalLabel" aria-hidden="true">#}
-        {#<div class="modal-dialog" role="document">#}
-            {#<div class="modal-content">#}
-
-                {#<section class="contact-form">#}
-                    {#{{ form_start(form, { 'attr': {'class': 'form form-horizontal inputmask contact-input', 'name' : 'test'} }) }}#}
-
-                    {#<div class="modal-header">#}
-                        {#<h5 class="modal-title" id="exampleModalLabel"> Dodaj nowe#}
-                            {#urządzenie</h5>#}
-                        {#<button type="button" class="close" data-dismiss="modal"#}
-                                {#aria-label="Close">#}
-                            {#<span aria-hidden="true">&times;</span>#}
-                        {#</button>#}
-                    {#</div>#}
-                    {#<div class="modal-body">#}
-                        {#<div class="form-body">#}
-                            {#<h4 class="form-section"><i class="ft-clipboard"></i> Dane urządzenia <span#}
-                                        {#id="add-form-id"></span>#}
-                            {#</h4>#}
-
-                            {#{{ form_widget(form.id, { 'attr': {'class': 'form-control'} }) }}#}
-                            {#{{ form_widget(form.loopDev, { 'attr': {'class': 'form-control'} }) }}#}
-
-                            {#<div class="form-group row">#}
-                                {#{{ form_label(form.number, 'Numer', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
-                                {#<div class="col-md-9 mx-auto">#}
-                                    {#{{ form_widget(form.number, { 'attr': {'class': 'form-control'} }) }}#}
-
-                                {#</div>#}
-                            {#</div>#}
-                            {#<div class="form-group row">#}
-                                {#{{ form_label(form.name, 'Nazwa', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
-                                {#<div class="col-md-9 mx-auto">#}
-                                    {#{{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}#}
-
-                                {#</div>#}
-                            {#</div>#}
-                            {#<div class="form-group row">#}
-                                {#{{ form_label(form.shortname, 'Skrót', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
-                                {#<div class="col-md-9 mx-auto">#}
-                                    {#{{ form_widget(form.shortname, { 'attr': {'class': 'form-control'} }) }}#}
-                                {#</div>#}
-                            {#</div>#}
-                            {#<div class="form-group row">#}
-                                {#{{ form_label(form.serial, 'Nr seryjny', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
-                                {#<div class="col-md-9 ">#}
-                                    {#{{ form_widget(form.serial, { 'attr': {'class': 'form-control '} }) }}#}
-                                {#</div>#}
-
-                            {#</div>#}
-                            {#<div class="form-group row">#}
-                                {#{{ form_label(form.address, 'Adres', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
-                                {#<div class="col-md-9 mx-auto">#}
-                                    {#{{ form_widget(form.address, { 'attr': {'class': 'form-control'} }) }}#}
-                                {#</div>#}
-                            {#</div>#}
-                            {#<div class="form-group row">#}
-                                {#{{ form_label(form.desc, 'Opis', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
-                                {#<div class="col-md-9 mx-auto">#}
-                                    {#{{ form_widget(form.desc, { 'attr': {'class': 'form-control', 'rows' : 10} }) }}#}
-                                {#</div>#}
-                            {#</div>#}
-
-                        {#</div>#}
-
-
-                        {#<div class="modal-footer">#}
-
-                            {#<div class="">#}
-                                {#<button type="button" data-dismiss="modal"#}
-                                        {#class="btn btn-warning mr-1">#}
-                                    {#<i class="ft-x"></i> Anuluj#}
-                                {#</button>#}
-                                {#<button id="submit-add" type="button" class="btn btn-primary" data-dismiss="modal">#}
-                                    {#<i class="la la-check-square-o"></i> Dodaj urządzenie#}
-                                {#</button>#}
-                            {#</div>#}
-                        {#</div>#}
-                        {#{{ form_end(form) }}#}
-                    {#</div>#}
-                {#</section>#}
-
-            {#</div>#}
-        {#</div>#}
-    {#</div>#}
-    <!--------------End AddDeviceModal---------->
-
-    <!--------------Begin EditDeviceModal---------->
-
-    {#<div class="modal fade" id="EditDeviceModal" tabindex="-1" role="dialog"#}
-         {#aria-labelledby="exampleModalLabel" aria-hidden="true">#}
-        {#<div class="modal-dialog" role="document">#}
-            {#<div class="modal-content">#}
-
-                {#<section class="contact-form">#}
-                    {#{{ form_start(edit_form, { 'attr': {'class': 'form form-horizontal inputmask contact-input', 'name' : 'test'} }) }}#}
-
-                    {#<div class="modal-header">#}
-                        {#<h5 class="modal-title" id="exampleModalLabel"> Modyfikuj#}
-                            {#urządzenie</h5>#}
-                        {#<button type="button" class="close" data-dismiss="modal"#}
-                                {#aria-label="Close">#}
-                            {#<span aria-hidden="true">&times;</span>#}
-                        {#</button>#}
-                    {#</div>#}
-                    {#<div class="modal-body">#}
-                        {#<div class="form-body">#}
-                            {#<h4 class="form-section"><i class="ft-clipboard"></i> Dane urządzenia Nr <span#}
-                                        {#id="edit-form-id"></span>#}
-                            {#</h4>#}
-
-                            {#{{ form_widget(edit_form.id, { 'attr': {'class': 'form-control'} }) }}#}
-
-
-                            {#<div class="form-group row">#}
-                                {#{{ form_label(edit_form.name, 'Nazwa', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
-                                {#<div class="col-md-9 mx-auto">#}
-                                    {#{{ form_widget(edit_form.name, { 'attr': {'class': 'form-control'} }) }}#}
-
-                                {#</div>#}
-                            {#</div>#}
-                            {#<div class="form-group row">#}
-                                {#{{ form_label(edit_form.shortname, 'Skrót', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
-                                {#<div class="col-md-9 mx-auto">#}
-                                    {#{{ form_widget(edit_form.shortname, { 'attr': {'class': 'form-control'} }) }}#}
-                                {#</div>#}
-                            {#</div>#}
-                            {#<div class="form-group row">#}
-                                {#{{ form_label(edit_form.serial, 'Nr seryjny', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
-                                {#<div class="col-md-9 ">#}
-                                    {#{{ form_widget(edit_form.serial, { 'attr': {'class': 'form-control '} }) }}#}
-                                {#</div>#}
-
-                            {#</div>#}
-                            {#<div class="form-group row">#}
-                                {#{{ form_label(edit_form.address, 'Adres', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
-                                {#<div class="col-md-9 mx-auto">#}
-                                    {#{{ form_widget(edit_form.address, { 'attr': {'class': 'form-control'} }) }}#}
-                                {#</div>#}
-                            {#</div>#}
-                            {#<div class="form-group row">#}
-                                {#{{ form_label(edit_form.desc, 'Opis', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
-                                {#<div class="col-md-9 mx-auto">#}
-                                    {#{{ form_widget(edit_form.desc, { 'attr': {'class': 'form-control', 'rows' : 10} }) }}#}
-                                {#</div>#}
-                            {#</div>#}
-
-                        {#</div>#}
-
-
-                        {#<div class="modal-footer">#}
-
-                            {#<div class="">#}
-                                {#<button type="button" data-dismiss="modal"#}
-                                        {#class="btn btn-warning mr-1">#}
-                                    {#<i class="ft-x"></i> Anuluj#}
-                                {#</button>#}
-                                {#<button id="submit-edit" type="button" class="btn btn-primary" data-dismiss="modal">#}
-                                    {#<i class="la la-check-square-o"></i> Zapisz zmiany#}
-                                {#</button>#}
-                            {#</div>#}
-                        {#</div>#}
-                        {#{{ form_end(edit_form) }}#}
-                    {#</div>#}
-                {#</section>#}
-
-            {#</div>#}
-        {#</div>#}
-    {#</div>#}
-    <!--------------Begin EditDeviceModal---------->
-
 
 {% endblock %}
 

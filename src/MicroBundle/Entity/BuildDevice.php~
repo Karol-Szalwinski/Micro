@@ -425,4 +425,5 @@ class BuildDevice
     {
         return $this->docDevices;
     }
+
 }

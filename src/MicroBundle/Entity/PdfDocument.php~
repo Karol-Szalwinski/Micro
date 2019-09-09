@@ -26,6 +26,13 @@ class PdfDocument
      * @ORM\Column(name="pdf_file_name", type="string", nullable=true)
      */
     private $pdfFileName;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", nullable=true)
+     */
+    private $name;
 
 
     /**

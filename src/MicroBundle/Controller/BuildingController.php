@@ -12,7 +12,11 @@ use MicroBundle\Services\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 
 /**
@@ -73,18 +77,14 @@ class BuildingController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $countDevices = $em->getRepository('MicroBundle:BuildDevice')->countDevicesByLoop($building->getId());
-        $countArray = ["1" => 0, "2" => 0, "3" => 0,"4" => 0 ];
+        $countArray = ["1" => 0, "2" => 0, "3" => 0, "4" => 0];
         foreach ($countDevices as $device) {
             $countArray[$device['loop_no']] = $device['devicesCount'];
         }
         //todo refactor this service
 //        $this->container->get('micro')->updateLastServiceDate($building);
 
-        return $this->render('building/show.html.twig',
-            array(
-                'building' => $building,
-                'countDevices' => $countArray
-            ));
+        return $this->render('building/show.html.twig', array('building' => $building, 'countDevices' => $countArray));
     }
 
     /**
@@ -118,9 +118,12 @@ class BuildingController extends Controller
      */
     public function documentAction(Building $building, Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
 
         $fileUploader = $this->get('MicroBundle\Services\FileUploader');
         $pdf = new PdfDocument();
+        $nextDocNumber = $building->getPdfDocuments()->count() + 1;
+        $pdf->setName("Document nr " . $nextDocNumber);
         $pdfForm = $this->createForm('MicroBundle\Form\PdfDocumentType', $pdf);
         $pdfForm->handleRequest($request);
 
@@ -133,7 +136,7 @@ class BuildingController extends Controller
                 $pdf->setPdfFileName($pdfFileName);
 
                 $building->addPdfDocument($pdf);
-                $em = $this->getDoctrine()->getManager();
+
                 $em->persist($pdf);
                 $em->flush();
 
@@ -147,7 +150,6 @@ class BuildingController extends Controller
 
     }
 
-
     /**
      * @Route("/{id}/document/{pdfDocument}/delete", name="building_document_delete")
      * @Method({"POST"})
@@ -155,7 +157,7 @@ class BuildingController extends Controller
      * @param PdfDocument $pdfDocument
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteDocumentAction(Building $building, PdfDocument $pdfDocument)
+    public function deletePdfDocumentAction(Building $building, PdfDocument $pdfDocument)
     {
         $em = $this->getDoctrine()->getManager();
         $building->removePdfDocument($pdfDocument);
@@ -204,21 +206,63 @@ class BuildingController extends Controller
             return $this->redirectToRoute('building_devices', array('id' => $building->getId(), 'loop' => $loop));
         }
 
-        return $this->render('building/devices.html.twig', array('building' => $building, 'devices' => $buildDevices, 'shortnames' => $shortnames, 'loop_no' => $loop, 'loop_form' => $loopForm->createView(),));
+        return $this->render('building/devices.html.twig',
+            array('building' => $building,
+                'devices' => $buildDevices,
+                'shortnames' => $shortnames,
+                'loop_no' => $loop,
+                'loop_form' => $loopForm->createView(),
+                ));
 
     }
 
-    private function getFirstEmptyNumberStartingAt($number,  $loop, $building)
+    private function getFirstEmptyNumberStartingAt($number, $loop, $building)
     {
         $em = $this->getDoctrine()->getManager();
-        do  {
+        do {
             $number++;
-            $buildDevices = $em->getRepository('MicroBundle:BuildDevice')
-                ->findBy(['building' => $building, 'loopNo' => $loop, 'number' => $number]);
+            $buildDevices = $em->getRepository('MicroBundle:BuildDevice')->findBy(['building' => $building, 'loopNo' => $loop, 'number' => $number]);
 
         } while ($buildDevices != null);
         return $number;
     }
 
+    /**
+     * Update Pdf Document name
+     * @Method({"GET", "POST"})
+     * @Route("/pdf-update/{jsondevice}", name="building_update_pdf")
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function updateAction(Request $request, $jsondevice)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $pdfDocumentJson = json_decode($jsondevice);
+
+        $pdfDocument = $em->getRepository('MicroBundle:PdfDocument')->findOneBy(['id' => $pdfDocumentJson->{'id'}]);
+
+        if (array_key_exists('name', $pdfDocumentJson)) {
+            $pdfDocument->setName(urldecode($pdfDocumentJson->{'name'}));
+        };
+
+        $em->flush();
+
+
+        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+
+            $normalizer = new ObjectNormalizer();
+            $encoder = new JsonEncoder();
+
+            $serializer = new Serializer([$normalizer], [$encoder]);
+            $serializedDocument = $serializer->serialize($pdfDocument, 'json');
+
+
+            $jsonData['pdfDocument'] = $serializedDocument;
+
+
+            return new JsonResponse($jsonData);
+        }
+    }
 
 }

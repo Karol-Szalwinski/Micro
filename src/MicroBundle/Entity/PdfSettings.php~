@@ -290,4 +290,40 @@ class PdfSettings
     {
         return $this->stamps;
     }
+
+    /**
+     * Add mainStamp.
+     *
+     * @param \MicroBundle\Entity\Stamp $mainStamp
+     *
+     * @return PdfSettings
+     */
+    public function addMainStamp(\MicroBundle\Entity\Stamp $mainStamp)
+    {
+        $this->mainStamps[] = $mainStamp;
+
+        return $this;
+    }
+
+    /**
+     * Remove mainStamp.
+     *
+     * @param \MicroBundle\Entity\Stamp $mainStamp
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeMainStamp(\MicroBundle\Entity\Stamp $mainStamp)
+    {
+        return $this->mainStamps->removeElement($mainStamp);
+    }
+
+    /**
+     * Get mainStamps.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMainStamps()
+    {
+        return $this->mainStamps;
+    }
 }
