@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 /**
- * Fireprotectiondevice controller.
+ * Build Device controller.
  *
  * @Route("build-device")
  */

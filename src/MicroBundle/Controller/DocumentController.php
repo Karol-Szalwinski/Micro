@@ -116,6 +116,13 @@ class DocumentController extends Controller
         }
 
         $em->persist($pdfSettings);
+
+        $countDevices = $em->getRepository('MicroBundle:DocDevice')->countDevicesByLoop($document->getId());
+        $countArray = ["1" => 0, "2" => 0, "3" => 0, "4" => 0];
+        foreach ($countDevices as $device) {
+            $countArray[$device['loop_no']] = $device['devicesCount'];
+        }
+
         //todo refactor this code
         $docInspectors = $document->getInspectors();
         $inspectors = [];
@@ -135,7 +142,11 @@ class DocumentController extends Controller
 
         }
 
-        return $this->render('document/show.html.twig', array('document' => $document, 'pdf_form' => $pdfForm->createView(),));
+        return $this->render('document/show.html.twig', array(
+            'document' => $document,
+            'pdf_form' => $pdfForm->createView(),
+            'countDevices' => $countArray
+        ));
     }
 
     /**
@@ -257,6 +268,7 @@ class DocumentController extends Controller
         $docDevices = new DocDevice();
         $docDevices->setNumber($device->getNumber());
         $docDevices->setShortname($device->getShortname());
+        $docDevices->setLoopNo($device->getLoopNo());
 
         $docDevices->setBuildDevice($device);
         $device->adddocDevice($docDevices);

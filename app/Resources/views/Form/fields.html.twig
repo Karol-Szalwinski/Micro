@@ -32,8 +32,9 @@
             {%- endif -%}
         {%- endif -%}
         <{{ element|default('label') }}{% if label_attr %}{% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}{% endif %}>
+        {% set labels = label|split('|') %}
         {%- if translation_domain is same as(false) -%}
-            <img src="{{- label -}}" id="{{ id }}">
+            <img src="{{- labels.0 -}}" id="{{ id }}" style="width:200px; height:80px"><span>  {{labels.1 }}</span>
         {%- endif -%}
         </{{ element|default('label') }}>
     {%- endif -%}

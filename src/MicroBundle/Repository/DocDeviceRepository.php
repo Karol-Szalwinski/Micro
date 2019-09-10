@@ -10,4 +10,26 @@ namespace MicroBundle\Repository;
  */
 class DocDeviceRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function countDevicesByLoop( $document)
+    {
+        $em = $this->getEntityManager();
+        $RAW_QUERY ="
+SELECT doc_device.loop_no, COUNT(doc_device.loop_no) AS devicesCount
+FROM `doc_device`
+WHERE doc_device.document_id = ?
+AND doc_device.visible = true
+GROUP BY doc_device.loop_no
+        ";
+
+
+        $statement = $em->getConnection()->prepare($RAW_QUERY);
+        // Set parameters
+        $statement->bindvalue(1, $document);
+        $statement->execute();
+
+        $result = $statement->fetchAll();
+
+        return $result;
+    }
 }

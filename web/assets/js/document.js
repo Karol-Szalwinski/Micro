@@ -418,9 +418,6 @@ $(document).on('click', '.loop-delete-row', function () {
 $(document).on('change', '#microbundle_pdfsettings_showStamp', function () {
     showStampsRadio(this);
 });
-$(window).on('load', function() {
-    showStampsRadio($('#microbundle_pdfsettings_showStamp'));
-})
 
 function showStampsRadio(checkbox){
     if(checkbox.checked) {
@@ -429,3 +426,13 @@ function showStampsRadio(checkbox){
         $('#chose-stamp').hide();
     }
 }
+
+$(window).on('load', function() {
+    var checkbox = $('#microbundle_pdfsettings_showStamp');
+    if(checkbox.prop('checked')) {
+        $('#chose-stamp').show();
+    } else {
+        $('#chose-stamp').hide();
+    }
+});
+

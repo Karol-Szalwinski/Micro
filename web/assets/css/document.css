@@ -11,4 +11,9 @@ input, textarea {
     color: #6b6f82;
 }
 
+.red-font-22 {
+    font-size: 1.5rem !important;
+    color: #ff0000;
+}
+
 

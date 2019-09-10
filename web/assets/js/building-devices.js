@@ -92,7 +92,9 @@ function addDevice(building, loop) {
             var tdSerial = "<td class='text-center'><input class='hidden-op hidden-input' id='i-serial-" + device.id + "' value='' readonly></td>";
             var tdAddress = "<td class='text-center'><input class='hidden-op hidden-input' id='i-address-" + device.id + "' value='' readonly></td>";
             var tdDate = "<td class='text-center'>Brak</td>";
-            var tdActions = "<td><a id='edit-row-btn-" + device.id + "' class='primary edit-row-btn mr-1'><i class='la la-pencil'></i></a>" +
+            var tdActions = "<td><a id='info-" + device.id + "' data-toggle='modal' data-target='#info-modal' title='Pokaż info'" +
+                "class=' info mr-1 info-modal-btn'><i class='la la-info'></i></a>'" +
+                "<a id='edit-row-btn-" + device.id + "' class='primary edit-row-btn mr-1'><i class='la la-pencil'></i></a>" +
                 "<a data-device='" + device.id + "' class='danger delete-row-btn mr-1'><i class='la la-trash-o'></i></a></td>";
 
             var row =
@@ -100,7 +102,7 @@ function addDevice(building, loop) {
                 tdOrder + tdNumber + tdName + tdShortname + tdSerial + tdAddress + tdDate + tdActions +
                 "</tr>";
 
-            $("tbody").append(row);
+            $("#tbody-devices").append(row);
 
 
 
@@ -228,7 +230,7 @@ $(document).on('change', '.unique-input', function () {
 ;
 
 // fill info modal
-$(".info-modal-btn").on("click", function () {
+$(document).on('click', '.info-modal-btn', function () {
     var id = this.id.substring(5);
     $.ajax({
         url: '../../../build-device/get/' + id,
