@@ -14,36 +14,44 @@ class BuildingRepository extends \Doctrine\ORM\EntityRepository
     public function updateLastServiceDates($building)
     {
         $em = $this->getEntityManager();
-        $RAW_QUERY ="UPDATE fire_protection_device AS Tabela1
-          INNER JOIN (
+        $RAW_QUERY ="UPDATE build_device AS Tabela1
+  INNER JOIN (
 
-            SELECT TabAllDevices.id, TabAllDevices.lastServiceDate, TabInspectedDevices.nowa_data FROM
-                (SELECT fire_protection_device.id, fire_protection_device.lastServiceDate FROM fire_protection_device 
-                INNER JOIN loop_dev
-                ON fire_protection_device.loop_dev_id=loop_dev.id
-                WHERE loop_dev.building_id= ?
-                AND fire_protection_device.del = false)
-                AS TabAllDevices
-        
-            LEFT JOIN (
-                SELECT fire_protection_device.id AS idd, fire_protection_device.name, fire_protection_device.lastServiceDate, 
-                MAX(fire_inspection.inspectionDate) AS nowa_data
-        
-                FROM fire_protection_device 
-                INNER JOIN inspected_device
-                ON fire_protection_device.id=inspected_device.fire_protection_device_id
-            INNER JOIN fire_inspection
-                ON fire_inspection.id=inspected_device.fire_inspection_id
-        
-                WHERE inspected_device.visible=true
-                GROUP BY fire_protection_device.id
-                ) 
-                AS TabInspectedDevices
-            ON TabAllDevices.id = TabInspectedDevices.idd
-            )AS Tabela2
-        ON Tabela1.id = Tabela2.id
-        SET Tabela1.lastServiceDate = Tabela2.nowa_data;
-        ";
+               SELECT
+                 BuildDeviceAll.id,
+                 BuildDeviceAll.last_service_date,
+                 DocDevices.new_date
+               FROM
+                 (SELECT
+                    build_device.id,
+                    build_device.last_service_date
+                  FROM build_device
+
+                  WHERE build_device.building_id = ?
+                        AND build_device.del = FALSE)
+                   AS BuildDeviceAll
+
+                 LEFT JOIN (
+                             SELECT
+                               build_device.id               AS idd,
+                               build_device.name,
+                               build_device.last_service_date,
+                               MAX(document.inspection_date) AS new_date
+
+                             FROM build_device
+                               INNER JOIN doc_device
+                                 ON build_device.id = doc_device.build_device_id
+                               INNER JOIN document
+                                 ON document.id = doc_device.document_id
+
+                             WHERE doc_device.visible = TRUE
+                             GROUP BY build_device.id
+                           )
+                 AS DocDevices
+                   ON BuildDeviceAll.id = DocDevices.idd
+             ) AS Tabela2
+    ON Tabela1.id = Tabela2.id
+SET Tabela1.last_service_date = Tabela2.new_date; ";
 
 
         $statement = $em->getConnection()->prepare($RAW_QUERY);
@@ -56,36 +64,45 @@ class BuildingRepository extends \Doctrine\ORM\EntityRepository
     public function updateLastServiceDateExceptOneDocument($building, $fireInspection)
     {
         $em = $this->getEntityManager();
-        $RAW_QUERY ="UPDATE fire_protection_device AS Tabela1
-          INNER JOIN (
+        $RAW_QUERY ="UPDATE build_device AS Tabela1
+  INNER JOIN (
 
-            SELECT TabAllDevices.id, TabAllDevices.tempServiceDate, TabInspectedDevices.nowa_data FROM
-                (SELECT fire_protection_device.id, fire_protection_device.tempServiceDate FROM fire_protection_device 
-                INNER JOIN loop_dev
-                ON fire_protection_device.loop_dev_id=loop_dev.id
-                WHERE loop_dev.building_id= ?
-                AND fire_protection_device.del = false)
-                AS TabAllDevices
-        
-            LEFT JOIN (
-                SELECT fire_protection_device.id AS idd, fire_protection_device.name, fire_protection_device.tempServiceDate, 
-                MAX(fire_inspection.inspectionDate) AS nowa_data
-        
-                FROM fire_protection_device 
-                INNER JOIN inspected_device
-                ON fire_protection_device.id=inspected_device.fire_protection_device_id
-            INNER JOIN fire_inspection
-                ON fire_inspection.id=inspected_device.fire_inspection_id
-        
-                WHERE inspected_device.visible=true
-                AND fire_inspection.id <> ?
-                GROUP BY fire_protection_device.id
-                ) 
-                AS TabInspectedDevices
-            ON TabAllDevices.id = TabInspectedDevices.idd
-            )AS Tabela2
-        ON Tabela1.id = Tabela2.id
-        SET Tabela1.tempServiceDate = Tabela2.nowa_data;
+               SELECT
+                 BuildDeviceAll.id,
+                 BuildDeviceAll.last_service_date,
+                 DocDevices.new_date
+               FROM
+                 (SELECT
+                    build_device.id,
+                    build_device.last_service_date
+                  FROM build_device
+
+                  WHERE build_device.building_id = ?
+                        AND build_device.del = FALSE)
+                   AS BuildDeviceAll
+
+                 LEFT JOIN (
+                             SELECT
+                               build_device.id               AS idd,
+                               build_device.name,
+                               build_device.last_service_date,
+                               MAX(document.inspection_date) AS new_date
+
+                             FROM build_device
+                               INNER JOIN doc_device
+                                 ON build_device.id = doc_device.build_device_id
+                               INNER JOIN document
+                                 ON document.id = doc_device.document_id
+
+                             WHERE doc_device.visible = TRUE
+                             AND document.id <> ?
+                             GROUP BY build_device.id
+                           )
+                 AS DocDevices
+                   ON BuildDeviceAll.id = DocDevices.idd
+             ) AS Tabela2
+    ON Tabela1.id = Tabela2.id
+SET Tabela1.temp_service_date = Tabela2.new_date
         ";
 
 

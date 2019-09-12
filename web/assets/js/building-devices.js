@@ -1,5 +1,5 @@
 // change tables in DatataTable
-$('.doc-devices-table').DataTable({
+$('.devices-table').DataTable({
     "language": {
         "lengthMenu": "Pokaż _MENU_ wierszy na stronie",
         "zeroRecords": "Niestety brak wyników",
@@ -248,7 +248,7 @@ $(document).on('click', '.info-modal-btn', function () {
             $('#dialog-address').val(device.address);
             $('#dialog-description').val(device.desc);
             $('#dialog-number').text(device.loopNo + ' / ' + device.number);
-            $('#dialog-temp-date').text(device.tempServiceDate);
+            $('#dialog-temp-date').text(device.lastServiceDate);
 
 
             $('#info-modal').modal('show');

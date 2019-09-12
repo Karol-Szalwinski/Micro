@@ -27,6 +27,7 @@ class PdfSettingsType extends AbstractType
                 'multiple' => true,
                 'expanded' => true,])
             ->add('showStamp')
+            ->add('showConclusion')
             ->add('mainStamps', EntityType::class, [
                 'class' => 'MicroBundle:Stamp',
                 'choices' => $mainStamps,

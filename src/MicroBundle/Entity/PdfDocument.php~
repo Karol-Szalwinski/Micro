@@ -71,4 +71,32 @@ class PdfDocument
     {
         return $this->pdfFileName;
     }
+
+    /**
+     * Set name.
+     *
+     * @param string|null $name
+     *
+     * @return PdfDocument
+     */
+    public function setName($name = 'bez nazwy')
+    {
+        if($name == "") {
+            $this->name = "bez nazwy";
+        } else {
+            $this->name = $name;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get name.
+     *
+     * @return string|null
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
 }

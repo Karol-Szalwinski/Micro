@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use MicroBundle\Entity\Inspector;
 
 
-class DefFireInspectionType extends AbstractType
+class DefDocumentType extends AbstractType
 {
     /**
      * {@inheritdoc}

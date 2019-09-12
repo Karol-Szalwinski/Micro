@@ -100,7 +100,7 @@ class DocumentController extends Controller
     public function showAction(Request $request, Document $document)
     {
 // todo update
-//        $this->container->get('micro')->updateLastServiceDatedocument($document);
+        $this->container->get('micro')->updateLastServiceDateDocument($document);
         $em = $this->getDoctrine()->getManager();
         $mainStamps = $em->getRepository('MicroBundle:Stamp')->findBy(['main' => true]);
         $stamps = [];

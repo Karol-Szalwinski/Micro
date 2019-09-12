@@ -82,7 +82,7 @@ class BuildingController extends Controller
             $countArray[$device['loop_no']] = $device['devicesCount'];
         }
         //todo refactor this service
-//        $this->container->get('micro')->updateLastServiceDate($building);
+        $this->container->get('micro')->updateLastServiceDate($building);
 
         return $this->render('building/show.html.twig', array('building' => $building, 'countDevices' => $countArray));
     }
@@ -240,7 +240,8 @@ class BuildingController extends Controller
 
         $pdfDocumentJson = json_decode($jsondevice);
 
-        $pdfDocument = $em->getRepository('MicroBundle:PdfDocument')->findOneBy(['id' => $pdfDocumentJson->{'id'}]);
+        $pdfDocument = $em->getRepository('MicroBundle:PdfDocument')
+            ->findOneBy(['id' => $pdfDocumentJson->{'id'}]);
 
         if (array_key_exists('name', $pdfDocumentJson)) {
             $pdfDocument->setName(urldecode($pdfDocumentJson->{'name'}));

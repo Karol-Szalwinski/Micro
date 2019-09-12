@@ -29,11 +29,11 @@ class BuildingUpdateService
         return $this->em->getRepository('MicroBundle:Building')->updateLastServiceDates($building->getId());
     }
 
-    public function updateLastServiceDateFireInspection(Document $fireInspection)
+    public function updateLastServiceDateDocument(Document $document)
     {
 
         return $this->em->getRepository('MicroBundle:Building')
-            ->updateLastServiceDateExceptOneDocument($fireInspection->getBuilding()->getId(), $fireInspection->getId());
+            ->updateLastServiceDateExceptOneDocument($document->getBuilding()->getId(), $document->getId());
     }
 
 }

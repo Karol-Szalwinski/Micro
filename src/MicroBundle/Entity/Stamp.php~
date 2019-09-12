@@ -49,7 +49,7 @@ class Stamp
      */
     private $inspector;
 
-    private $imageView;
+    private $imageLabel;
 
     /**
      * Stamp constructor.
@@ -123,9 +123,11 @@ class Stamp
      *
      * @return string
      */
-    public function getImageView()
+    public function getImageLabel()
     {
-        return "../uploads/images/" . $this->image;
+        $directPath = "../uploads/images/" . $this->image;
+        $inspector = ($this->inspector != null) ? $this->inspector->getFullname() : "Główna";
+        return $directPath . "|" . $inspector ;
     }
 
     /**

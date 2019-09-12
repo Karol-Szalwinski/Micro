@@ -81,6 +81,24 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        {{ form_label(pdf_form.showConclusion, 'Widoczne wnioski ', { 'label_attr': {'class': 'col-md-4 label-control'} }) }}
+                        <div class="col-md-7 mx-auto">
+                            {{ form_widget(pdf_form.showConclusion, { 'attr': {
+                                'class': ' switch',
+                                'data-icon-cls':'fa',
+                                'data-off-icon-cls':'fa ft-thumbs-down',
+                                'data-on-icon-cls':'fa ft-thumbs-up',
+                                'data-off-label':'Nie',
+                                'data-on-label':'Tak',
+                                'data-group-cls':'btn-group-sm'
+                            } }) }}
+                        </div>
+                        <div class="col-md-1 mx-auto" data-toggle="tooltip" data-placement="right"
+                             title="Wybierasz czy chcesz na dokumencie pole Wnioski">
+                            <i class="la la-question red-font-22"></i>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         {{ form_label(pdf_form.showStamp, 'Widoczna główna pieczątka na dole', { 'label_attr': {'class': 'col-md-4 label-control'} }) }}
                         <div class="col-md-7 mx-auto">
                             {{ form_widget(pdf_form.showStamp, { 'attr': {
@@ -100,7 +118,7 @@
                     </div>
                     {% form_theme pdf_form 'Form/fields.html.twig' %}
                     <div id="chose-stamp"  class="form-group row">
-                        <label class="col-md-4 label-control required">Wybierz główna</label>
+                        <label class="col-md-4 label-control required">Wybierz pieczątkę główną</label>
                         <div class="col-md-7 mx-auto">
 
                             {{ form_widget(pdf_form.mainStamps, { 'attr': {'class': 'form-control'} }) }}

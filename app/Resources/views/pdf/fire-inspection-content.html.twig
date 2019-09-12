@@ -139,13 +139,15 @@
 
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <p><b>Wnioski:</b><br>
-                                <b>{{ document.conclusion }}</b></p>
+                    {% if document.pdfSettings.showConclusion == true %}
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <p><b>Wnioski:</b><br>
+                                    <b>{{ document.conclusion }}</b></p>
 
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
                     <div class="row" style="page-break-inside: avoid">
                         <div class="col-sm-12">
                             <p><b>Osoby uprawnione do przeprowadzania przeglądu
@@ -225,19 +227,21 @@
                                     </thead>
                                     <tbody>
                                     {% for device in document.docDevices %}
-                                        <tr>
-                                            <td style="width: 6%">{{ loop.index }}</td>
-                                            <td style="width: 10%">{{ device.loopNo }}</td>
-                                            <td style="width: 10%">{{ device.number }}</td>
-                                            <td style="width: 10%">{{ device.shortname }}</td>
-                                            <td style="width: 10%">
-                                                {% if device.status==1 %}Włączony{% else %}Wyłączony{% endif %}
-                                            </td>
-                                            <td style="width: 10%">
-                                                {% if device.test==1 %}Pozytywny{% else %}Negatywny{% endif %}
-                                            </td>
-                                            <td>{{ device.comment }}</td>
-                                        </tr>
+                                        {% if device.visible %}
+                                            <tr>
+                                                <td style="width: 6%">{{ loop.index }}</td>
+                                                <td style="width: 10%">{{ device.loopNo }}</td>
+                                                <td style="width: 10%">{{ device.number }}</td>
+                                                <td style="width: 10%">{{ device.shortname }}</td>
+                                                <td style="width: 10%">
+                                                    {% if device.status==1 %}Włączony{% else %}Wyłączony{% endif %}
+                                                </td>
+                                                <td style="width: 10%">
+                                                    {% if device.test==1 %}Pozytywny{% else %}Negatywny{% endif %}
+                                                </td>
+                                                <td>{{ device.comment }}</td>
+                                            </tr>
+                                        {% endif %}
                                     {% endfor %}
                                     </tbody>
                                 </table>

@@ -235,19 +235,6 @@
                                                     class="la la-exclamation-triangle"></i>
 
                                         </a>
-                                        <a data-toggle="tooltip"
-                                           id="update-{{ device.docDevices|first.id }}"
-                                                {% if device.shortname != device.docDevices|first.shortname %}
-                                                    title="Zaktualizuj typ urządzenia na {{ device.shortname }}"
-                                                    class="warning mr-1 update-ins-device"
-                                                {% else %}
-                                                    title="" class="muted mr-1"
-                                                {% endif %}
-                                        ><i
-                                                    class="la la-refresh "></i>
-
-                                        </a>
-
 
                                     </td>
                                     <td class="text-center">

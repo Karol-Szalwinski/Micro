@@ -22,189 +22,189 @@ use Symfony\Component\Serializer\Serializer;
 class BuildDeviceController extends Controller
 {
 
-
-    /**
-     * Get BuildDevice object
-     * @Method({"GET", "POST"})
-     * @Route("/get-device/{id}")
-     * @param Request $request
-     * @param $id
-     * @return JsonResponse
-     */
-    public function getFireProtectionDeviceAction(Request $request, $id)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $fireProtectionDevice = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['id' => $id]);
-        $nameId = '1';
-        $deviceName = $em->getRepository('MicroBundle:Device')->findOneBy(['name' => $fireProtectionDevice->getName()]);
-
-        if (!$deviceName == null) {
-            $nameId = $deviceName->getId();
-        }
-
-
-        //remove refference
-        $fireProtectionDevice->removeAllInspectedDevices()->setLoopDev(null);
-        //Change date to string
-
-        $tempDate = ($fireProtectionDevice->getTempServiceDate()) ? $fireProtectionDevice->getTempServiceDate()->format('Y-m-d') : "brak";
-        $fireProtectionDevice->setTempServiceDate($tempDate);
-
-
-        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
-
-            //prepare serializer
-            $normalizer = new ObjectNormalizer();
+//
+//    /**
+//     * Get BuildDevice object
+//     * @Method({"GET", "POST"})
+//     * @Route("/get-device/{id}")
+//     * @param Request $request
+//     * @param $id
+//     * @return JsonResponse
+//     */
+//    public function getFireProtectionDeviceAction(Request $request, $id)
+//    {
+//        $em = $this->getDoctrine()->getManager();
+//        $fireProtectionDevice = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['id' => $id]);
+//        $nameId = '1';
+//        $deviceName = $em->getRepository('MicroBundle:Device')->findOneBy(['name' => $fireProtectionDevice->getName()]);
+//
+//        if (!$deviceName == null) {
+//            $nameId = $deviceName->getId();
+//        }
+//
+//
+//        //remove refference
+//        $fireProtectionDevice->removeAllInspectedDevices()->setLoopDev(null);
+//        //Change date to string
+//
+//        $tempDate = ($fireProtectionDevice->getTempServiceDate()) ? $fireProtectionDevice->getTempServiceDate()->format('Y-m-d') : "brak";
+//        $fireProtectionDevice->setTempServiceDate($tempDate);
+//
+//
+//        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+//
+//            //prepare serializer
+//            $normalizer = new ObjectNormalizer();
+////            $normalizer->setCircularReferenceLimit(0);
+////            // Add Circular reference handler
+////            $normalizer->setCircularReferenceHandler(function ($object) {
+////                return $object->getId();
+////            });
+//
+//            $normalizers = [$normalizer];
+//            $encoders = [new XmlEncoder(), new JsonEncoder()];
+//            $serializer = new Serializer($normalizers, $encoders);
+//            $serializeDevice = $serializer->serialize($fireProtectionDevice, 'json');
+//
+//            $jsonData['device'] = $serializeDevice;
+////            dump($serializeDevice);die();
+//            $jsonData['nameId'] = $nameId;
+//            $jsonData['tempServiceDate'] = $fireProtectionDevice->getTempServiceDate();
+//
+//
+//            return new JsonResponse($jsonData);
+//        }
+//    }
+//
+//
+//    /**
+//     * Add or Update Fire Protection Device
+//     * @Method({"GET", "POST"})
+//     * @Route("/update-device/{id}/{loop}/{number}/{name}/{serial}/{address}/{desc}")
+//     * @param Request $request
+//     * @param $id
+//     * @param $loop
+//     * @param $number
+//     * @param $name
+//     * @param $serial
+//     * @param $address
+//     * @param $desc
+//     * @return JsonResponse
+//     */
+//    public function updateFireProtectionDeviceAction(Request $request, $id, $loop, $number, $name, $serial, $address, $desc)
+//    {
+//        $em = $this->getDoctrine()->getManager();
+//        //if we dont have id
+//        if ($id == "null") {
+//            //try to search deleted device with the same number and loopdev
+//            $fireProtectionDevice = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['number' => $number, 'loopDev' => $loop]);
+//
+//            //if found change status on undeleted
+//            if ($fireProtectionDevice instanceof BuildDevice) {
+//                $fireProtectionDevice->setDel(false);
+//                //if not we create a new object
+//            } else {
+//                $fireProtectionDevice = new BuildDevice();
+//
+//                $loopDev = $em->getRepository('MicroBundle:LoopDev')->findOneBy(['id' => $loop]);
+//                $loopDev->addFireProtectionDevice($fireProtectionDevice);
+//
+//                $fireProtectionDevice->setLoopDev($loopDev);
+//                $fireProtectionDevice->setnumber($number);
+//            }
+//
+//        } else {
+//            $fireProtectionDevice = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['id' => $id]);
+//        }
+//
+//        if ($name != "null") {
+//            $deviceName = $em->getRepository('MicroBundle:Device')->findOneBy(['name' => $name]);
+//            if (!$deviceName instanceof Device) {
+//                $deviceName = $em->getRepository('MicroBundle:Device')->findOneBy(['id' => $name]);
+//            }
+//            $name = $deviceName->getName();
+//            $shortname = $deviceName->getShortname();
+//            $fireProtectionDevice->setName($name);
+//            $fireProtectionDevice->setShortname($shortname);
+//
+//        }
+//        //get loop id
+//        $loopid = $fireProtectionDevice->getLoopDev()->getId();
+//
+//        //prepare to serialization
+//        //chane nulles on ""
+//        $serial = ($serial == "null") ? "" : $serial;
+//        $address = ($address == "null") ? "" : $address;
+//        $desc = ($desc == "null") ? "" : $desc;
+//
+//
+//        $fireProtectionDevice->setSerial($serial);
+//        $fireProtectionDevice->setAddress($address);
+//        $fireProtectionDevice->setDesc($desc);
+//        $em->flush();
+//
+//
+//        //remove refference
+//        $fireProtectionDevice->removeAllInspectedDevices()->setLoopDev(null);
+//
+//
+//        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+//
+//            //prepare serializer
+//            $normalizer = new ObjectNormalizer();
 //            $normalizer->setCircularReferenceLimit(0);
 //            // Add Circular reference handler
 //            $normalizer->setCircularReferenceHandler(function ($object) {
 //                return $object->getId();
 //            });
-
-            $normalizers = [$normalizer];
-            $encoders = [new XmlEncoder(), new JsonEncoder()];
-            $serializer = new Serializer($normalizers, $encoders);
-            $serializeDevice = $serializer->serialize($fireProtectionDevice, 'json');
-
-            $jsonData['device'] = $serializeDevice;
-//            dump($serializeDevice);die();
-            $jsonData['nameId'] = $nameId;
-            $jsonData['tempServiceDate'] = $fireProtectionDevice->getTempServiceDate();
-
-
-            return new JsonResponse($jsonData);
-        }
-    }
-
-
-    /**
-     * Add or Update Fire Protection Device
-     * @Method({"GET", "POST"})
-     * @Route("/update-device/{id}/{loop}/{number}/{name}/{serial}/{address}/{desc}")
-     * @param Request $request
-     * @param $id
-     * @param $loop
-     * @param $number
-     * @param $name
-     * @param $serial
-     * @param $address
-     * @param $desc
-     * @return JsonResponse
-     */
-    public function updateFireProtectionDeviceAction(Request $request, $id, $loop, $number, $name, $serial, $address, $desc)
-    {
-        $em = $this->getDoctrine()->getManager();
-        //if we dont have id
-        if ($id == "null") {
-            //try to search deleted device with the same number and loopdev
-            $fireProtectionDevice = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['number' => $number, 'loopDev' => $loop]);
-
-            //if found change status on undeleted
-            if ($fireProtectionDevice instanceof BuildDevice) {
-                $fireProtectionDevice->setDel(false);
-                //if not we create a new object
-            } else {
-                $fireProtectionDevice = new BuildDevice();
-
-                $loopDev = $em->getRepository('MicroBundle:LoopDev')->findOneBy(['id' => $loop]);
-                $loopDev->addFireProtectionDevice($fireProtectionDevice);
-
-                $fireProtectionDevice->setLoopDev($loopDev);
-                $fireProtectionDevice->setnumber($number);
-            }
-
-        } else {
-            $fireProtectionDevice = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['id' => $id]);
-        }
-
-        if ($name != "null") {
-            $deviceName = $em->getRepository('MicroBundle:Device')->findOneBy(['name' => $name]);
-            if (!$deviceName instanceof Device) {
-                $deviceName = $em->getRepository('MicroBundle:Device')->findOneBy(['id' => $name]);
-            }
-            $name = $deviceName->getName();
-            $shortname = $deviceName->getShortname();
-            $fireProtectionDevice->setName($name);
-            $fireProtectionDevice->setShortname($shortname);
-
-        }
-        //get loop id
-        $loopid = $fireProtectionDevice->getLoopDev()->getId();
-
-        //prepare to serialization
-        //chane nulles on ""
-        $serial = ($serial == "null") ? "" : $serial;
-        $address = ($address == "null") ? "" : $address;
-        $desc = ($desc == "null") ? "" : $desc;
-
-
-        $fireProtectionDevice->setSerial($serial);
-        $fireProtectionDevice->setAddress($address);
-        $fireProtectionDevice->setDesc($desc);
-        $em->flush();
-
-
-        //remove refference
-        $fireProtectionDevice->removeAllInspectedDevices()->setLoopDev(null);
-
-
-        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
-
-            //prepare serializer
-            $normalizer = new ObjectNormalizer();
-            $normalizer->setCircularReferenceLimit(0);
-            // Add Circular reference handler
-            $normalizer->setCircularReferenceHandler(function ($object) {
-                return $object->getId();
-            });
-
-            $normalizers = [$normalizer];
-            $encoders = [new XmlEncoder(), new JsonEncoder()];
-            $serializer = new Serializer($normalizers, $encoders);
-            $serializeDevice = $serializer->serialize($fireProtectionDevice, 'json');
-
-            $jsonData['device'] = $serializeDevice;
-            $jsonData['loopid'] = $loopid;
-
-
-            return new JsonResponse($jsonData);
-        }
-    }
-
-    /**
-     * Add or Update Fire Protection Device
-     * @Method({"GET", "POST"})
-     * @Route("/delete-device/{id}")
-     * @param Request $request
-     * @param $id
-     * @return JsonResponse
-     */
-    public function deleteFireProtectionDeviceAction(Request $request, $id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $fireProtectionDevice = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['id' => $id]);
-
-        $fireProtectionDevice->setDel(true);
-        $em->flush();
-        $loopId = $fireProtectionDevice->getLoopDev()->getId();
-
-
-        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
-
-            $normalizers = [new ObjectNormalizer()];
-            $encoders = [new JsonEncoder()];
-            $serializer = new Serializer($normalizers, $encoders);
-            $serializeDevice = $serializer->serialize($fireProtectionDevice, 'json');
-
-            $jsonData['id'] = $id;
-            $jsonData['loop'] = $loopId;
-
-
-            return new JsonResponse($jsonData);
-        }
-
-    }
+//
+//            $normalizers = [$normalizer];
+//            $encoders = [new XmlEncoder(), new JsonEncoder()];
+//            $serializer = new Serializer($normalizers, $encoders);
+//            $serializeDevice = $serializer->serialize($fireProtectionDevice, 'json');
+//
+//            $jsonData['device'] = $serializeDevice;
+//            $jsonData['loopid'] = $loopid;
+//
+//
+//            return new JsonResponse($jsonData);
+//        }
+//    }
+//
+//    /**
+//     * Add or Update Fire Protection Device
+//     * @Method({"GET", "POST"})
+//     * @Route("/delete-device/{id}")
+//     * @param Request $request
+//     * @param $id
+//     * @return JsonResponse
+//     */
+//    public function deleteFireProtectionDeviceAction(Request $request, $id)
+//    {
+//        $em = $this->getDoctrine()->getManager();
+//
+//        $fireProtectionDevice = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['id' => $id]);
+//
+//        $fireProtectionDevice->setDel(true);
+//        $em->flush();
+//        $loopId = $fireProtectionDevice->getLoopDev()->getId();
+//
+//
+//        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+//
+//            $normalizers = [new ObjectNormalizer()];
+//            $encoders = [new JsonEncoder()];
+//            $serializer = new Serializer($normalizers, $encoders);
+//            $serializeDevice = $serializer->serialize($fireProtectionDevice, 'json');
+//
+//            $jsonData['id'] = $id;
+//            $jsonData['loop'] = $loopId;
+//
+//
+//            return new JsonResponse($jsonData);
+//        }
+//
+//    }
 /////////////////////////////////////////////NEW/////////////////////////////////////////////////////
 
     /**
@@ -227,6 +227,8 @@ class BuildDeviceController extends Controller
             $buildDevice->setName($name);
 
             $buildDevice->setShortname($device->{'shortname'});
+            //updating Name and ShortName in Document Devices only if they have empty shortname
+            $this->updateDocDevicesName($buildDevice);
         }
 
         if (array_key_exists('number', $device)) {
@@ -274,6 +276,10 @@ class BuildDeviceController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $buildDevice = $em->getRepository('MicroBundle:BuildDevice')->findOneBy(['id' => $id]);
+        $dateString = ($buildDevice->getLastServiceDate()) ? $buildDevice->getLastServiceDate()->format('Y-m-d'): "Brak";
+        $buildDevice->setLastServiceDate($dateString);
+        $dateString = ($buildDevice->getTempServiceDate()) ? $buildDevice->getTempServiceDate()->format('Y-m-d') : "Brak";
+        $buildDevice->setTempServiceDate($dateString);
 
 
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
@@ -323,7 +329,8 @@ class BuildDeviceController extends Controller
             $shortnames[] = $device->getShortname();
         }
 
-        $next = $em->getRepository('MicroBundle:BuildDevice')->count(['building' => $building, 'loopNo' => $loopNo, 'del' => false]);
+        $next = $em->getRepository('MicroBundle:BuildDevice')
+            ->count(['building' => $building, 'loopNo' => $loopNo, 'del' => false]);
 
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
 
@@ -370,5 +377,15 @@ class BuildDeviceController extends Controller
         }
 
 
+    }
+
+    private function updateDocDevicesName($buildDevice)
+    {
+        foreach ( $buildDevice->getDocDevices() as $docDevice) {
+            if (!$docDevice->getShortname()) {
+                $docDevice->setShortname($buildDevice->getShortname());
+            }
+        }
+        $this->getDoctrine()->getManager()->flush();
     }
 }

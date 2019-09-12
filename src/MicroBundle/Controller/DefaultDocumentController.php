@@ -50,9 +50,8 @@ class DefaultDocumentController extends Controller
         $em = $this->getDoctrine()->getManager();
         $document = $em->getRepository('MicroBundle:Document')
             ->findOneBy(['id' => 1 ]);
-        $editForm = $this->createForm('MicroBundle\Form\DefdocumentType', $document);
+        $editForm = $this->createForm('MicroBundle\Form\DefDocumentType', $document);
 
-//        dump($document); die();
         $editForm->handleRequest($request);
 
 

@@ -46,6 +46,13 @@ class PdfSettings
     /**
      * @var bool
      *
+     * @ORM\Column(name="show_conclusion", type="boolean")
+     */
+    private $showConclusion;
+
+    /**
+     * @var bool
+     *
      * @ORM\Column(name="show_stamp", type="boolean")
      */
     private $showStamp;
@@ -94,6 +101,7 @@ class PdfSettings
         $this->showTables = true;
         $this->showBuildingData = true;
         $this->showClientData = false;
+        $this->showConclusion = true;
         $this->showStamp = false;
         $this->stamps = new ArrayCollection();
 
