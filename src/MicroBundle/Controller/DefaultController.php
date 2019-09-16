@@ -19,7 +19,7 @@ class DefaultController extends Controller
 
 
     /**
-     * @Route("/ajax")
+     * @Route("/menu-counter")
      * @param Request $request
      * @return JsonResponse
      */

@@ -76,9 +76,9 @@
                         <!-- Device List table -->
                         {#<button type="button" class="btn btn-sm btn-danger delete-all mb-1">Usuń Wszystkie</button>#}
                         <table id="doc-devices-table"
-                               class=" inspected-devices-table table table-condensed table-white-space table-bordered
-                                       row-grouping display no-wrap icheck table-middle text-center
-                                       inspected-devices-table ">
+                               class="inspected-devices-table table table-condensed table-white-space table-bordered
+                                       row-grouping display no-wrap icheck table-middle text-center table-my-strips
+                                       ">
 
                             <thead>
                             <tr>
@@ -100,7 +100,8 @@
                             {% for device in devices %}
                                 <tr
                                         id="row-{{ device.docDevices|first.id }}"
-                                        style="{% if not device.docDevices|first.visible %}display:none{% endif %};"
+                                       {% if not device.docDevices|first.visible %}style="display:none"{% endif %}
+                                        {% if order % 2 == 0 %} class="grey" {% endif %}
                                 >
                                     <td class="text-center order">
                                         {{ order }}

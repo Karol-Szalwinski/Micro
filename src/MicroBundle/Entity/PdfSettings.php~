@@ -334,4 +334,28 @@ class PdfSettings
     {
         return $this->mainStamps;
     }
+
+    /**
+     * Set showConclusion.
+     *
+     * @param bool $showConclusion
+     *
+     * @return PdfSettings
+     */
+    public function setShowConclusion($showConclusion)
+    {
+        $this->showConclusion = $showConclusion;
+
+        return $this;
+    }
+
+    /**
+     * Get showConclusion.
+     *
+     * @return bool
+     */
+    public function getShowConclusion()
+    {
+        return $this->showConclusion;
+    }
 }

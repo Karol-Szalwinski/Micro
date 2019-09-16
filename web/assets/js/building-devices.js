@@ -19,10 +19,6 @@ $('.devices-table').DataTable({
 
 // activate input in device row
 $(document).on('click', '.edit-row-btn ', function () {
-    //clear another open inpu
-    $(".hidden-input ").attr('readonly', true).css("border", "2px solid #ffffff");
-    $(".hidden-select ").attr('disabled', true).css("border", "2px solid #ffffff");
-
     // add to tr status active
 
     $(this).closest('tr').find(':input').removeAttr("readonly");
@@ -36,14 +32,19 @@ $(document).on('click', '.edit-row-btn ', function () {
     window.getSelection().removeAllRanges();
 });
 
-// deactivate input in info modal except another info in this row
+// deactivate input in info modal except another input or select in this row
 $(document).on('blur', '.active', function (e) {
-    var id = this.closest('tr').id.substring(4);
+    var activeRow = this.closest('tr');
+    var id = activeRow.id.substring(4);
+
     setTimeout(function () {
-        console.log(document.activeElement);
-        if (!$(document.activeElement).hasClass('active')) {
-            $(".hidden-input ").attr('readonly', true).css("border", "2px solid #ffffff");
-            $(".hidden-select ").attr('disabled', true).css("border", "2px solid #ffffff");
+        var oldActiveRow = activeRow;
+        var newActiveRow = document.activeElement.closest('tr');
+        if (oldActiveRow !== newActiveRow) {
+            var bgcolor = $(oldActiveRow).find('input').css("background-color");
+
+            $(oldActiveRow).find('input').attr('readonly', true).css("border-color", bgcolor);
+            $(oldActiveRow).find('select').attr('disabled', true).css("border-color", bgcolor);
             $(".hidden-op").removeClass('active');
             updateDevice(id);
         }
@@ -62,7 +63,7 @@ $(document).on('click', '#add-row-btn ', function () {
 });
 
 
-// add fire protection device
+// add build-device
 function addDevice(building, loop) {
 
     $.ajax({
@@ -93,7 +94,7 @@ function addDevice(building, loop) {
             var tdAddress = "<td class='text-center'><input class='hidden-op hidden-input' id='i-address-" + device.id + "' value='' readonly></td>";
             var tdDate = "<td class='text-center'>Brak</td>";
             var tdActions = "<td><a id='info-" + device.id + "' data-toggle='modal' data-target='#info-modal' title='Pokaż info'" +
-                "class=' info mr-1 info-modal-btn'><i class='la la-info'></i></a>'" +
+                "class=' info mr-1 info-modal-btn'><i class='la la-info'></i></a>" +
                 "<a id='edit-row-btn-" + device.id + "' class='primary edit-row-btn mr-1'><i class='la la-pencil'></i></a>" +
                 "<a data-device='" + device.id + "' class='danger delete-row-btn mr-1'><i class='la la-trash-o'></i></a></td>";
 
@@ -103,6 +104,7 @@ function addDevice(building, loop) {
                 "</tr>";
 
             $("#tbody-devices").append(row);
+            repairRowOrderWithStripes();
 
 
 
@@ -195,16 +197,28 @@ function deleteDevice(id) {
             var id = data['id'];
             $('#row-'+ id).remove();
             //repair first column after remover row
-            var row = 1;
-            $('.order').each(function () {
-                $(this).text(row++);
-            })
+            repairRowOrderWithStripes();
         },
         error: function () {
             alert('Błąd delete device');
         }
     });
 };
+
+function repairRowOrderWithStripes() {
+    var row = 1;
+    $('.order').each(function () {
+        if($(this).is(':visible')) {
+            $(this).text(row++);
+            if (row % 2 === 1){ //odd row
+                $(this).parent().addClass('grey');
+            } else
+            {
+                $(this).parent().removeClass('grey');
+            }
+        }
+    })
+}
 
 //compare number inputs
 $(document).on('change', '.unique-input', function () {

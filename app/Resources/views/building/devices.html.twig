@@ -61,7 +61,7 @@
                         <!-- Device List table -->
                         {#<button type="button" class="btn btn-sm btn-danger delete-all mb-1">Usuń Wszystkie</button>#}
                         <div class="table-responsive">
-                            <table class="devices-table table table-striped table-white-space table-sm table-bordered
+                            <table class="devices-table table table-my-strips table-white-space table-sm table-bordered
                                             row-grouping display no-wrap icheck text-center">
                                 <thead>
 
@@ -70,7 +70,7 @@
                                     <th>Nr</th>
                                     <th>Nazwa</th>
                                     <th>Skrót</th>
-                                    <th>Serial</th>
+                                    <th>Nr seryjny</th>
                                     <th>Adress</th>
                                     <th>Ostatni przegląd</th>
                                     <th>Akcje</th>
@@ -81,7 +81,7 @@
                                 {% set order = 1 %}
                                 {% for device in devices|sort %}
                                     {% if device.del != true %}
-                                        <tr id="row-{{ device.id }}">
+                                        <tr id="row-{{ device.id }}" {% if order % 2 == 0 %} class="grey" {% endif %}>
                                             <td class="text-center order">
                                                 {{ ++order }}{% set order = order + 1 %}
                                             </td>
@@ -152,7 +152,7 @@
                                     <th>Nr</th>
                                     <th>Nazwa</th>
                                     <th>Skrót</th>
-                                    <th>Serial</th>
+                                    <th>Nr seryjny</th>
                                     <th>Adress</th>
                                     <th>Ostatni przegląd</th>
                                     <th>Akcje</th>

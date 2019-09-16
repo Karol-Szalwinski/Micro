@@ -19,10 +19,6 @@ $('#doc-devices-table').DataTable({
 
 // activate input in device row
 $(document).on('click', '.edit-row-btn ', function () {
-    //clear another open inpu
-    $(".hidden-input ").attr('readonly', true).css("border", "2px solid #ffffff");
-    $(".hidden-select ").attr('disabled', true).css("border", "2px solid #ffffff");
-
     // add to tr status active
 
     $(this).closest('tr').find('.hidden-input ').removeAttr("readonly");
@@ -36,14 +32,19 @@ $(document).on('click', '.edit-row-btn ', function () {
     window.getSelection().removeAllRanges();
 });
 
-// deactivate input in info modal except another info in this row
+// deactivate input in info modal except another input or select in this row
 $(document).on('blur', '.active', function (e) {
-    var id = this.closest('tr').id.substring(4);
+    var activeRow = this.closest('tr');
+    var id = activeRow.id.substring(4);
+
     setTimeout(function () {
-        console.log(document.activeElement);
-        if (!$(document.activeElement).hasClass('active')) {
-            $(".hidden-input ").attr('readonly', true).css("border", "2px solid #ffffff");
-            $(".hidden-select ").attr('disabled', true).css("border", "2px solid #ffffff");
+        var oldActiveRow = activeRow;
+        var newActiveRow = document.activeElement.closest('tr');
+        if (oldActiveRow !== newActiveRow) {
+            var bgcolor = $(oldActiveRow).find('input').css("background-color");
+
+            $(oldActiveRow).find('input').attr('readonly', true).css("border-color", bgcolor);
+            $(oldActiveRow).find('select').attr('disabled', true).css("border-color", bgcolor);
             $(".hidden-op").removeClass('active');
             updateDocDevice(id);
         }
@@ -380,7 +381,7 @@ function changeInspectedDeviceVisible(id) {
             var docDevice = JSON.parse(data['doc_device']);
             $('#row-' + id).toggle();
             $('#mod-' + id).toggle();
-            repairRowOrder();
+            repairRowOrderWithStripes();
 
         },
         error: function () {
@@ -389,11 +390,17 @@ function changeInspectedDeviceVisible(id) {
     });
 };
 
-function repairRowOrder() {
+function repairRowOrderWithStripes() {
     var row = 1;
     $('.order').each(function () {
         if($(this).is(':visible')) {
             $(this).text(row++);
+            if (row % 2 === 1){ //odd row
+                $(this).parent().addClass('grey');
+            } else
+            {
+                $(this).parent().removeClass('grey');
+            }
         }
     })
 }
@@ -402,3 +409,4 @@ $(document).on('click', '.device-restore', function () {
     var id = this.id.substring(4);
     changeInspectedDeviceVisible(id);
 });
+

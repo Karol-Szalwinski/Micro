@@ -1,0 +1,140 @@
+{% extends 'base_product.html.twig' %}
+
+{% block title %}Lista produktów{% endblock %}
+
+{% block body %}
+    <!-- Content header -->
+    <div class="content-header row">
+        <div class="content-header-left col-md-6 col-12">
+            <h3 class="content-header-title mb-0">Lista produktów</h3>
+            <div class="row breadcrumbs-top">
+                <div class="breadcrumb-wrapper col-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ path('micro_default_index') }}">Główna</a>
+                        </li>
+
+                        <li class="breadcrumb-item active">Lista produktów
+                        </li>
+
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="content-header-left col-md-6 col-12">
+            <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
+                <div class="btn-group" role="group">
+                    <a class="btn btn-outline-info round" href="{{ path('product_new') }}"><i
+                                class="la la-user-plus"></i> Dodaj nowego</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content header -->
+
+
+    <section class="row all-contacts">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-head">
+                    <div class="card-header">
+                        <h4 class="card-title">Lista produktów</h4>
+                        <div class="heading-elements mt-0">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                        <!-- Task List table -->
+                        {#<button type="button" class="btn btn-sm btn-danger delete-all mb-1">Delete All</button>#}
+                        <div class="table-responsive">
+                            <table id="table-clients"
+                                   class="table table-borderless mb-0 row-grouping display no-wrap icheck table-middle text-center">
+                                <thead>
+                                <tr>
+                                    <th>Zdjęcie</th>
+                                    <th>Nazwa</th>
+                                    <th>Cena netto</th>
+                                    <th>Akcje</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for product in products %}
+                                    <tr>
+                                        <td>
+                                            <div class="media">
+                                                <div class="media-left pr-1"><span
+                                                class="avatar avatar-sm avatar-online rounded-circle"><img
+                                                src="../../../app-assets/images/portrait/small/avatar-s-2.png"
+                                                alt="avatar"><i></i></span></div>
+
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href = "{{ path('product_show', { 'id': product.id }) }}">{{ product.name }} ({{ product.id }})</a>
+                                        </td>
+                                        <td>
+
+                                            {{ product.price / 100 }}
+                                        </td>
+
+                                        <td>
+                                            <a href="{{ path('product_edit', { 'id': product.id }) }}"
+                                               class="primary edit mr-1"><i class="la la-pencil"></i></a>
+                                            <a class="danger delete mr-1"><i class="la la-trash-o"></i></a>
+                                            <span class="dropdown">
+                                                                <a id="btnSearchDrop2" data-toggle="dropdown"
+                                                                   aria-haspopup="true" aria-expanded="true"
+                                                                   class="dropdown-toggle dropdown-menu-right"><i
+                                                                            class="la la-ellipsis-v"></i></a>
+                                                                <span aria-labelledby="btnSearchDrop2"
+                                                                      class="dropdown-menu mt-1 dropdown-menu-right">
+                                                                    <a href="{{ path('product_edit', { 'id': product.id }) }}"
+                                                                       class="dropdown-item"><i
+                                                                                class="ft-edit-2"></i>
+                                                                        Edytuj</a>
+                                                                    <a href="#" class="dropdown-item delete"><i
+                                                                                class="ft-trash-2"></i> Usuń</a>
+                                                                    <a href="{{ path('product_new') }}"
+                                                                       class="dropdown-item"><i
+                                                                                class="ft-plus-circle warning"></i> Dodaj</a>
+
+                                                                </span>
+                                                            </span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
+
+    <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>
+
+    <script>
+        $('#table-clients').DataTable({
+            "language": {
+                "lengthMenu": "Pokaż _MENU_ wierszy na stronie",
+                "zeroRecords": "Niestety brak wyników",
+                "info": "Stron _PAGE_ z _PAGES_",
+                "infoEmpty": "Brak wierszy",
+                "infoFiltered": "(znaleziono z _MAX_ wszystkich wierszy)",
+                "search": "Szukaj"
+            },
+            "paging": false,
+        });
+    </script>
+
+{% endblock %}
+

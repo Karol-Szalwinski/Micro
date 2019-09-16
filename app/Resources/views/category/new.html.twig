@@ -1,0 +1,239 @@
+{% extends 'base_product.html.twig' %}
+
+{% block title %}Dodaj kategorię{% endblock %}
+
+{% block styles %}
+
+    <style>
+        .vl {
+            border-left: 1px solid dimgrey;
+            height: auto;
+        }
+
+        .category-li:hover {
+            background-color: #C0E4FB;
+
+        }
+
+        ol.category-ul {
+            list-style-type: none;
+        }
+
+    </style>
+{% endblock %}
+
+{% block body %}
+    <!-- Content header -->
+    <div class="content-header row">
+        <div class="content-header-left col-md-6 col-12">
+            <h3 class="content-header-title mb-0">Kategorie</h3>
+            <div class="row breadcrumbs-top">
+                <div class="breadcrumb-wrapper col-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ path('micro_default_index') }}">Główna</a>
+                        </li>
+                        <li class="breadcrumb-item"><a href="{{ path('category_index') }}">Lista kategorii</a>
+                        </li>
+
+                        <li class="breadcrumb-item active">Dodaj kategorię
+                        </li>
+
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content header -->
+
+    <!-- Basic form layout section start -->
+    <section id="horizontal-form-layouts">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title" id="horz-layout-basic">Formularz tworzenia nowego klienta</h4>
+                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+                            {{ form_start(form, { 'attr': {'class': 'form form-horizontal inputmask'} }) }}
+
+
+                            <div class="form-body">
+                                <h4 class="form-section"><i class="ft-user"></i> Kategoria produktu</h4>
+                                <div class="form-group row">
+                                    {{ form_label(form.name, 'Nazwa kategorii', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}
+
+                                    </div>
+                                </div>
+                                <div class="form-group row" id="wrap">
+                                    {{ form_label(form.parent, 'Kategoria nadrzędna', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto " style="display:none">
+                                        {{ form_widget(form.parent, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź skrót'} }) }}
+                                    </div>
+                                    <div id="temp-input" class="col-md-9 mx-auto ">
+                                        <input class="form-control " id="modal-trigger" readonly value="Brak">
+                                        </input>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(form.parameters, 'Parametry', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        {{ form_widget(form.parameters, { 'attr': {'class': 'form-control'} }) }}
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="button" onClick="javascript:history.go(-1)"
+                                            class="btn btn-warning mr-1">
+                                        <i class="ft-x"></i> Anuluj
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="la la-check-square-o"></i> Zapisz
+                                    </button>
+                                </div>
+                                {{ form_end(form) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Category -->
+    <!-- Modal -->
+    <div id="category-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <h4 class="modal-title">Wybierz kategorię </h4>
+                            </div>
+                            <div class="vl col-md-1 "></div>
+                            <div class="col-md-5">
+                                <h4 class="modal-title">{{ categories|first.name }}</h4>
+                            </div>
+                            <div class="col-md-1">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-5" id="main-category-list">
+                                <ol class="category-ul">
+                                    {% for parentCategory in categories %}
+                                        {% if parentCategory.children is not empty %}
+                                            {% set last = "false" %}
+                                            {% set sign = ">" %}
+                                        {% else %}
+                                            {% set last = "true" %}
+                                            {% set sign = "" %}
+                                        {% endif %}
+                                        {% if parentCategory.parent is null %}
+                                            <li class="category-li"><a class="category-name info"
+                                                                       data-id="{{ parentCategory.id }}"
+                                                                       data-last={{ last }}
+                                                >{{ parentCategory.name }}{{ sign }}</a></li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ol>
+                            </div>
+                            <div class="vl col-md-1 "></div>
+                            <div class="col-md-6" id="sub-category-list">
+                                <ol class="category-ul">
+                                    {% for childCategory in categories|first.children %}
+                                        {% if childCategory.children is not empty %}
+                                            {% set last = "false" %}
+                                            {% set sign = ">" %}
+                                        {% else %}
+                                            {% set last = "true" %}
+                                            {% set sign = "" %}
+                                        {% endif %}
+                                        <li class="category-li"><a class="category-name info"
+                                               data-id="{{ childCategory.id }}"
+                                               data-last={{ last }}
+                                            >{{ childCategory.name }}</a></li>
+                                    {% endfor %}
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+    </div>
+    <!-- Modal Category -->
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $("#modal-trigger").on("click", function () {
+            $("#category-modal").modal();
+        });
+
+    </script>
+    <script>
+        function setChoosenCategoryPathInForm(id) {
+
+            $.ajax({
+                url: '../category/get-path/' + id,
+                type: 'POST',
+                dataType: 'json',
+                async: true,
+
+                success: function (data) {
+                    var id = data['id'];
+                    var path = data['path'];
+                    $('#modal-trigger').val(path);
+
+                },
+                error: function () {
+                    alert('Błąd');
+                }
+            });
+        }
+
+        function setCategory(id) {
+            alert("setCategory");
+            //set select
+            $("#microbundle_category_parent").val(id);
+            //set div with category info
+            setChoosenCategoryPathInForm(id);
+            //close modal
+            $("#category-modal").modal('hide');
+        }
+
+        $(".category-li").on("click", function () {
+            var id = $(this).find('a').data('id');
+            var last = $(this).find('a').data('last');
+            alert("Kliknołeś kategorię nr " + id + " . To jest ostatnia? " + last);
+            if (last == true) {
+                setCategory(id);
+            }
+        });
+
+    </script>
+
+
+{% endblock %}

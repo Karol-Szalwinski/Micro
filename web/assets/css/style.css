@@ -31,3 +31,30 @@ input[type=radio] + label {
     transition: left 0.7s;
     -webkit-transition: left 0.7s;
 }
+
+/*stripped table*/
+.table-my-strips tr.grey {
+    background-color: #c7c2c1;
+
+}
+.table-my-strips tr.grey input{
+    background-color: #c7c2c1;
+    border-color : #c7c2c1;
+
+}
+.table-my-strips tr.grey select{
+    background-color: #c7c2c1;
+    border-color : #c7c2c1;
+
+}
+
+.navigation-main .nav-item:hover {
+    background-color: #730b16;
+}
+
+.navigation-main .nav-item .menu-content:hover {
+    background-color: #730b16;
+}
+.badge-danger {
+    background-color: #730b16 !important;
+}

@@ -7,10 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta name="description"
-          content="Modern admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities with bitcoin dashboard.">
-    <meta name="keywords"
-          content="admin template, modern admin template, dashboard template, flat admin template, responsive admin template, web app, crypto dashboard, bitcoin dashboard">
-    <meta name="author" content="PIXINVENT">
+          content="Micro app">
+
 
     <title>{% block title %}Micro{% endblock %}</title>
 
@@ -436,106 +434,9 @@
 </nav>
 <!-- END: Header-->
 
+{% block mainmenu %}
 
-<!-- BEGIN: Main Menu-->
-
-<div class="main-menu menu-fixed menu-dark menu-accordion menu-shadow" data-scroll-to-active="true">
-    <div class="main-menu-content">
-        <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-            <li class=" nav-item"><a href="{{ path('client_index') }}"><i class="la la-group "></i><span
-                            class="menu-title"
-                            data-i18n="nav.dash.main">Klienci</span><span
-                            id="counter-clients"
-                            class="badge badge-pill float-right mr-2"></span></a>
-                <ul class="menu-content">
-                    <li><a class="menu-item" href="{{ path('client_index') }}"><i></i><span
-                                    data-i18n="nav.dash.ecommerce">Lista klientów</span></a>
-                    </li>
-
-                </ul>
-                <ul class="menu-content">
-                    <li><a class="menu-item" href="{{ path('client_new') }}"><i></i><span
-                                    data-i18n="nav.dash.ecommerce">Dodaj nowego</span></a>
-                    </li>
-
-                </ul>
-            </li>
-            <li class=" nav-item"><a href="{{ path('building_index') }}"><i class="la la-building-o"></i><span
-                            class="menu-title"
-                            data-i18n="nav.dash.main">Budynki</span><span
-                            id="counter-buildings"
-                            class="badge badge-pill float-right mr-2"></span></a>
-                <ul class="menu-content">
-                    <li><a class="menu-item" href="{{ path('building_index') }}"><i></i><span
-                                    data-i18n="nav.dash.ecommerce">Lista budynków</span></a>
-                    </li>
-
-                </ul>
-            </li>
-            <li class=" nav-item"><a href="{{ path('document_index') }}"><i class="la la-list-alt "></i><span
-                            class="menu-title"
-                            data-i18n="nav.dash.main">Przeglądy</span><span
-                            id="counter-documents"
-                            class="badge badge-pill float-right mr-2"></span></a>
-                <ul class="menu-content">
-                    <li><a class="menu-item" href="{{ path('document_index') }}"><i></i><span
-                                    data-i18n="nav.dash.ecommerce">Lista przeglądów</span></a>
-                    </li>
-
-                </ul>
-            </li>
-            <li class=" nav-item"><a href="{{ path('building_index') }}"><i class="la la-book"></i><span
-                            class="menu-title"
-                            data-i18n="nav.dash.main">Słowniki</span></a>
-                <ul class="menu-content">
-                    <li><a class="menu-item" href="{{ path('devicename_index') }}"><i></i><span
-                                    data-i18n="nav.dash.ecommerce">Słownik Urządzeń PPOŻ</span></a>
-                    </li>
-
-                </ul>
-                <ul class="menu-content">
-                    <li><a class="menu-item" href="{{ path('inspector_index') }}"><i></i><span
-                                    data-i18n="nav.dash.ecommerce">Inspektorzy</span></a>
-                    </li>
-
-                </ul>
-                <ul class="menu-content">
-                    <li><a class="menu-item" href="{{ path('stamp_index') }}"><i></i><span
-                                    data-i18n="nav.dash.ecommerce">Pieczątki</span></a>
-                    </li>
-
-                </ul>
-                <ul class="menu-content">
-                    <li><a class="menu-item" href="{{ path('def_document_show') }}"><i></i><span
-                                    data-i18n="nav.dash.ecommerce">Szablon Przeglądu</span></a>
-                    </li>
-
-                </ul>
-                <ul class="menu-content">
-                    <li><a class="menu-item" href="{{ path('mycompany_show') }}"><i></i><span
-                                    data-i18n="nav.dash.ecommerce">Dane mojej firmy</span></a>
-                    </li>
-
-                </ul>
-            </li>
-            <li class=" nav-item"><a href="{{ path('user_index') }}"><i class="la la-user "></i><span
-                            class="menu-title"
-                            data-i18n="nav.dash.main">Użytkownicy</span><span
-                            id="counter-users"
-                            class="badge badge-pill float-right mr-2"></span></a>
-                <ul class="menu-content">
-                    <li><a class="menu-item" href="{{ path('user_index') }}"><i></i><span
-                                    data-i18n="nav.dash.ecommerce">Lista Użytkowników</span></a>
-                    </li>
-
-                </ul>
-            </li>
-
-        </ul>
-    </div>
-</div>
-
-<!-- END: Main Menu-->
+{% endblock %}
 
 <!-- BEGIN: Content-->
 <div class="app-content content">
@@ -587,36 +488,10 @@
 <!-- END: Theme JS-->
 
 
-<!-- BEGIN: AJAX menu -->
-<script>
-    function fillBadges() {
-        $.ajax({
-            url: '/ajax',
-            type: 'POST',
-            dataType: 'json',
-            async: true,
-
-            success: function (data, status) {
-
-                $('#counter-clients').addClass("badge-info").text(data['clients']);
-                $('#counter-buildings').addClass("badge-info").text(data['buildings']);
-                $('#counter-documents').addClass("badge-info").text(data['documents']);
-
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                alert('Ajax request failed.');
-            }
-        });
-    }
-
-    fillBadges();
-    setInterval(fillBadges, 120000);
-
-</script>
-
-<!-- END: AJAX menu-->
-
 <!-- BEGIN: Page extra JS-->
+{% block base_scripts %}
+
+{% endblock %}
 {% block scripts %}
 
 {% endblock %}
