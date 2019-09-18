@@ -8,6 +8,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * Category controller.
@@ -141,7 +144,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Delete BuildDevice
+     * get vcategory path
      * @Method({"POST"})
      * @Route("/get-path/{categoryId}", name="category_get_path_ajax")
      * @param Request $request
@@ -164,7 +167,43 @@ class CategoryController extends Controller
 
             return new JsonResponse($jsonData);
         }
+    }
+
+    /**
+     * get category children
+     * @Method({"POST"})
+     * @Route("/get-children/{categoryId}", name="category_get_children_ajax")
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getChildrenAction(Request $request, $categoryId)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $category = $em->getRepository('MicroBundle:Category')->findOneBy(['id' => $categoryId]);
+
+        $children = ($category) ? $category->getChildren() : null;
 
 
+        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+            $name = $category->getName();
+
+            $normalizer = new ObjectNormalizer();
+            $normalizer->setIgnoredAttributes(['children']);
+            $encoder = new JsonEncoder();
+            $serializer = new Serializer([$normalizer], [$encoder]);
+            $serializedChildren =[];
+
+            foreach ($children as $child) {
+                $serializedChildren[] = $serializer->serialize($child, 'json');
+            }
+
+            $jsonData['id'] = $categoryId;
+            $jsonData['name'] = $name;
+            $jsonData['children'] = $serializedChildren;
+
+
+            return new JsonResponse($jsonData);
+        }
     }
 }

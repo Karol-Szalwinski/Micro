@@ -1,0 +1,17 @@
+.vl {
+    border-left: 1px solid dimgrey;
+    height: auto;
+}
+
+.category-li:hover {
+    background-color: #C0E4FB;
+
+}
+
+#main-category-ol, #sub-category-ol {
+    list-style-type: none;
+}
+
+.choosen {
+    background-color: #C0E4FB;
+}

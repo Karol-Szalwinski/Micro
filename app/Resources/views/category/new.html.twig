@@ -3,23 +3,7 @@
 {% block title %}Dodaj kategorię{% endblock %}
 
 {% block styles %}
-
-    <style>
-        .vl {
-            border-left: 1px solid dimgrey;
-            height: auto;
-        }
-
-        .category-li:hover {
-            background-color: #C0E4FB;
-
-        }
-
-        ol.category-ul {
-            list-style-type: none;
-        }
-
-    </style>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/category-new.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -119,21 +103,19 @@
                             </div>
                             <div class="vl col-md-1 "></div>
                             <div class="col-md-5">
-                                <h4 class="modal-title">{{ categories|first.name }}</h4>
+                                <h4 id="sub-category-name" class="modal-title">{{ categories|first.name }}</h4>
                             </div>
                             <div class="col-md-1">
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                         </div>
                     </div>
-
-
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-5" id="main-category-list">
-                                <ol class="category-ul">
+                                <ol id="main-category-ol">
                                     {% for parentCategory in categories %}
                                         {% if parentCategory.children is not empty %}
                                             {% set last = "false" %}
@@ -145,15 +127,17 @@
                                         {% if parentCategory.parent is null %}
                                             <li class="category-li"><a class="category-name info"
                                                                        data-id="{{ parentCategory.id }}"
+                                                                       data-parent-id="false"
                                                                        data-last={{ last }}
-                                                >{{ parentCategory.name }}{{ sign }}</a></li>
+                                                >{{ parentCategory.name }} {{ sign }}</a>
+                                            </li>
                                         {% endif %}
                                     {% endfor %}
                                 </ol>
                             </div>
                             <div class="vl col-md-1 "></div>
                             <div class="col-md-6" id="sub-category-list">
-                                <ol class="category-ul">
+                                <ol id="sub-category-ol">
                                     {% for childCategory in categories|first.children %}
                                         {% if childCategory.children is not empty %}
                                             {% set last = "false" %}
@@ -163,8 +147,9 @@
                                             {% set sign = "" %}
                                         {% endif %}
                                         <li class="category-li"><a class="category-name info"
-                                               data-id="{{ childCategory.id }}"
-                                               data-last={{ last }}
+                                                                   data-id="{{ childCategory.id }}"
+                                                                   data-parent-id="{{ categories|first.id }}"
+                                                                   data-last={{ last }}
                                             >{{ childCategory.name }}</a></li>
                                     {% endfor %}
                                 </ol>
@@ -174,66 +159,19 @@
                     </div>
                 </div>
 
+                <div class="modal-footer">
+                    <button id="choose-button" type="button" class="btn btn-default">Wybierz</button>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
 
-    </div>
+        </div>
     </div>
     <!-- Modal Category -->
 
 {% endblock %}
 
 {% block scripts %}
-    <script>
-        $("#modal-trigger").on("click", function () {
-            $("#category-modal").modal();
-        });
-
-    </script>
-    <script>
-        function setChoosenCategoryPathInForm(id) {
-
-            $.ajax({
-                url: '../category/get-path/' + id,
-                type: 'POST',
-                dataType: 'json',
-                async: true,
-
-                success: function (data) {
-                    var id = data['id'];
-                    var path = data['path'];
-                    $('#modal-trigger').val(path);
-
-                },
-                error: function () {
-                    alert('Błąd');
-                }
-            });
-        }
-
-        function setCategory(id) {
-            alert("setCategory");
-            //set select
-            $("#microbundle_category_parent").val(id);
-            //set div with category info
-            setChoosenCategoryPathInForm(id);
-            //close modal
-            $("#category-modal").modal('hide');
-        }
-
-        $(".category-li").on("click", function () {
-            var id = $(this).find('a').data('id');
-            var last = $(this).find('a').data('last');
-            alert("Kliknołeś kategorię nr " + id + " . To jest ostatnia? " + last);
-            if (last == true) {
-                setCategory(id);
-            }
-        });
-
-    </script>
-
-
+    <!-- BEGIN: My JS-->
+    <script src="{{ asset('assets/js/category-new.js') }}"></script>
+    <!-- END: My JS-->
 {% endblock %}
