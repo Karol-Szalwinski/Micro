@@ -5,6 +5,7 @@ namespace MicroBundle\Form;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -24,7 +25,14 @@ class CategoryType extends AbstractType
                 'required' => false,
 
             ])
-            ->add('parameters')
+            ->add('parameters', CollectionType::class, [
+                'entry_type' => ParameterType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'label' => false
+            ])
             ;
 
     }/**

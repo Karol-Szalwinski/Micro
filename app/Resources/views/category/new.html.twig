@@ -64,9 +64,14 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    {{ form_label(form.parameters, 'Parametry', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    {{ form_label(form.parameters, 'Lista parametrów', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
-                                        {{ form_widget(form.parameters, { 'attr': {'class': 'form-control'} }) }}
+                                        <ul class="parameters" data-prototype="{{ form_widget(form.parameters.vars.prototype.name)|e('html_attr') }}">
+                                            {# iterate over each existing tag and render its only field: name #}
+                                            {% for parameter in form.parameters %}
+                                                <li>{{ form_widget(parameter.name) }}</li>
+                                            {% endfor %}
+                                        </ul>
                                     </div>
                                 </div>
 
@@ -98,14 +103,14 @@
                 <div class="modal-header">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-md-5">
+                            <div id="main-header-modal">
                                 <h4 class="modal-title">Wybierz kategorię </h4>
                             </div>
-                            <div class="vl col-md-1 "></div>
-                            <div class="col-md-5">
+                            <div class="vl"></div>
+                            <div id="sub-header-modal">
                                 <h4 id="sub-category-name" class="modal-title">{{ categories|first.name }}</h4>
                             </div>
-                            <div class="col-md-1">
+                            <div>
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                         </div>
@@ -114,7 +119,7 @@
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-md-5" id="main-category-list">
+                            <div id="main-category-list">
                                 <ol id="main-category-ol">
                                     {% for parentCategory in categories %}
                                         {% if parentCategory.children is not empty %}
@@ -135,8 +140,8 @@
                                     {% endfor %}
                                 </ol>
                             </div>
-                            <div class="vl col-md-1 "></div>
-                            <div class="col-md-6" id="sub-category-list">
+                            <div class="vl"></div>
+                            <div id="sub-category-list">
                                 <ol id="sub-category-ol">
                                     {% for childCategory in categories|first.children %}
                                         {% if childCategory.children is not empty %}
@@ -160,7 +165,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button id="choose-button" type="button" class="btn btn-default">Wybierz</button>
+                    <button id="choose-button" type="button" class="btn btn-outline-info"><i class="la la-check"></i> Wybierz</button>
                 </div>
             </div>
 

@@ -4,6 +4,7 @@ namespace MicroBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use MicroBundle\Entity\Parameter;
 
 /**
  * Category
@@ -30,9 +31,7 @@ class Category
     private $name;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="parameters", type="string", length=255, nullable=true)
+     * @ORM\OneToMany(targetEntity="Parameter", mappedBy="category",  cascade={"persist"})
      */
     private $parameters;
 
@@ -219,5 +218,32 @@ class Category
             $path = $category->getName() . " >> " . $path ;
         }
         return $path;
+    }
+
+    /**
+     * Add parameter.
+     *
+     * @param Parameter $parameter
+     *
+     * @return Category
+     */
+    public function addParameter(Parameter $parameter)
+    {
+        $parameter->setCategory($this);
+        $this->parameters[] = $parameter;
+
+        return $this;
+    }
+
+    /**
+     * Remove parameter.
+     *
+     * @param Parameter $parameter
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeParameter(Parameter $parameter)
+    {
+        return $this->parameters->removeElement($parameter);
     }
 }

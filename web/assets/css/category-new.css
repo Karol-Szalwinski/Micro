@@ -15,3 +15,35 @@
 .choosen {
     background-color: #C0E4FB;
 }
+
+ul {
+    list-style-type: none;
+}
+
+ul.parameters {
+    padding-inline-start: 0;
+}
+
+ul.parameters li {
+    padding-bottom: 10px;
+}
+
+#main-category-list {
+    width: 47%;
+    padding-right : 6%;
+}
+#sub-category-list{
+    width: 47%;
+}
+#main-header-modal {
+    width: 47%;
+    padding-left : 5%;
+}
+#sub-header-modal {
+    width: 45% ;
+    padding-left : 5%;
+
+}
+  .vl {
+    text-align: center;
+}

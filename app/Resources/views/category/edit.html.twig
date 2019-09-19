@@ -1,21 +1,182 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_product.html.twig' %}
+
+{% block title %}Edytuj kategorię{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/category-new.css') }}">
+{% endblock %}
 
 {% block body %}
-    <h1>Category edit</h1>
+    <!-- Content header -->
+    <div class="content-header row">
+        <div class="content-header-left col-md-6 col-12">
+            <h3 class="content-header-title mb-0">Kategorie</h3>
+            <div class="row breadcrumbs-top">
+                <div class="breadcrumb-wrapper col-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ path('micro_default_index') }}">Główna</a>
+                        </li>
+                        <li class="breadcrumb-item"><a href="{{ path('category_show', { id : category.id}) }}">{{ category.name }}</a>
+                        </li>
 
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
-    {{ form_end(edit_form) }}
+                        <li class="breadcrumb-item active">Edytuj kategorię
+                        </li>
 
-    <ul>
-        <li>
-            <a href="{{ path('category_index') }}">Back to the list</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content header -->
+
+    <!-- Basic form layout section start -->
+    <section id="horizontal-form-layouts">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title" id="horz-layout-basic">Formularz edycji kategorii</h4>
+                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+                            {{ form_start(edit_form, { 'attr': {'class': 'form form-horizontal inputmask'} }) }}
+
+
+                            <div class="form-body">
+                                <h4 class="form-section"><i class="ft-user"></i> Kategoria produktu</h4>
+                                <div class="form-group row">
+                                    {{ form_label(edit_form.name, 'Nazwa kategorii', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        {{ form_widget(edit_form.name, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}
+
+                                    </div>
+                                </div>
+                                <div class="form-group row" id="wrap">
+                                    {{ form_label(edit_form.parent, 'Kategoria nadrzędna', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto " style="display:none">
+                                        {{ form_widget(edit_form.parent, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź skrót'} }) }}
+                                    </div>
+                                    <div id="temp-input" class="col-md-9 mx-auto ">
+                                        <input class="form-control " id="modal-trigger" readonly value="Brak">
+                                        </input>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(edit_form.parameters, 'Lista parametrów', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        <ul class="parameters" data-prototype="{{ form_widget(edit_form.parameters.vars.prototype.name)|e('html_attr') }}">
+                                            {# iterate over each existing tag and render its only field: name #}
+                                            {% for parameter in form.parameters %}
+                                                <li>{{ form_widget(parameter.name) }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="button" onClick="javascript:history.go(-1)"
+                                            class="btn btn-warning mr-1">
+                                        <i class="ft-x"></i> Anuluj
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="la la-check-square-o"></i> Zapisz
+                                    </button>
+                                </div>
+                                {{ form_end(edit_form) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Category -->
+    <!-- Modal -->
+    <div id="category-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div id="main-header-modal">
+                                <h4 class="modal-title">Wybierz kategorię </h4>
+                            </div>
+                            <div class="vl"></div>
+                            <div id="sub-header-modal">
+                                <h4 id="sub-category-name" class="modal-title">{{ categories|first.name }}</h4>
+                            </div>
+                            <div>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div id="main-category-list">
+                                <ol id="main-category-ol">
+                                    {% for parentCategory in categories %}
+                                        {% if parentCategory.children is not empty %}
+                                            {% set last = "false" %}
+                                            {% set sign = ">" %}
+                                        {% else %}
+                                            {% set last = "true" %}
+                                            {% set sign = "" %}
+                                        {% endif %}
+                                        {% if parentCategory.parent is null %}
+                                            <li class="category-li"><a class="category-name info"
+                                                                       data-id="{{ parentCategory.id }}"
+                                                                       data-parent-id="false"
+                                                                       data-last={{ last }}
+                                                >{{ parentCategory.name }} {{ sign }}</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ol>
+                            </div>
+                            <div class="vl"></div>
+                            <div id="sub-category-list">
+                                <ol id="sub-category-ol">
+                                    {% for childCategory in categories|first.children %}
+                                        {% if childCategory.children is not empty %}
+                                            {% set last = "false" %}
+                                            {% set sign = ">" %}
+                                        {% else %}
+                                            {% set last = "true" %}
+                                            {% set sign = "" %}
+                                        {% endif %}
+                                        <li class="category-li"><a class="category-name info"
+                                                                   data-id="{{ childCategory.id }}"
+                                                                   data-parent-id="{{ categories|first.id }}"
+                                                                   data-last={{ last }}
+                                            >{{ childCategory.name }}</a></li>
+                                    {% endfor %}
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="choose-button" type="button" class="btn btn-outline-info"><i class="la la-check"></i> Wybierz</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Modal Category -->
+
+{% endblock %}
+
+{% block scripts %}
+    <!-- BEGIN: My JS-->
+    <script src="{{ asset('assets/js/category-new.js') }}"></script>
+    <!-- END: My JS-->
 {% endblock %}

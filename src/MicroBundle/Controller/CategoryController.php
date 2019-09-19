@@ -31,9 +31,7 @@ class CategoryController extends Controller
 
         $categories = $em->getRepository('MicroBundle:Category')->findAll();
 
-        return $this->render('category/index.html.twig', array(
-            'categories' => $categories,
-        ));
+        return $this->render('category/index.html.twig', array('categories' => $categories,));
     }
 
     /**
@@ -59,11 +57,7 @@ class CategoryController extends Controller
             return $this->redirectToRoute('category_show', array('id' => $category->getId()));
         }
 
-        return $this->render('category/new.html.twig', array(
-            'category' => $category,
-            'categories' => $categories,
-            'form' => $form->createView(),
-        ));
+        return $this->render('category/new.html.twig', array('category' => $category, 'categories' => $categories, 'form' => $form->createView(),));
     }
 
     /**
@@ -76,10 +70,7 @@ class CategoryController extends Controller
     {
         $deleteForm = $this->createDeleteForm($category);
 
-        return $this->render('category/show.html.twig', array(
-            'category' => $category,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('category/show.html.twig', array('category' => $category, 'delete_form' => $deleteForm->createView(),));
     }
 
     /**
@@ -100,11 +91,7 @@ class CategoryController extends Controller
             return $this->redirectToRoute('category_edit', array('id' => $category->getId()));
         }
 
-        return $this->render('category/edit.html.twig', array(
-            'category' => $category,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('category/edit.html.twig', array('category' => $category, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView(),));
     }
 
     /**
@@ -136,11 +123,7 @@ class CategoryController extends Controller
      */
     private function createDeleteForm(Category $category)
     {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('category_delete', array('id' => $category->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
+        return $this->createFormBuilder()->setAction($this->generateUrl('category_delete', array('id' => $category->getId())))->setMethod('DELETE')->getForm();
     }
 
     /**
@@ -178,24 +161,25 @@ class CategoryController extends Controller
      */
     public function getChildrenAction(Request $request, $categoryId)
     {
-        $em = $this->getDoctrine()->getManager();
+        $serializedChildren = [];
 
+        $em = $this->getDoctrine()->getManager();
         $category = $em->getRepository('MicroBundle:Category')->findOneBy(['id' => $categoryId]);
 
         $children = ($category) ? $category->getChildren() : null;
 
-
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
             $name = $category->getName();
 
-            $normalizer = new ObjectNormalizer();
-            $normalizer->setIgnoredAttributes(['children']);
-            $encoder = new JsonEncoder();
-            $serializer = new Serializer([$normalizer], [$encoder]);
-            $serializedChildren =[];
+            if ($children) {
+                $normalizer = new ObjectNormalizer();
+                $normalizer->setIgnoredAttributes(['children', 'parameters']);
+                $encoder = new JsonEncoder();
+                $serializer = new Serializer([$normalizer], [$encoder]);
 
-            foreach ($children as $child) {
-                $serializedChildren[] = $serializer->serialize($child, 'json');
+                foreach ($children as $child) {
+                    $serializedChildren[] = $serializer->serialize($child, 'json');
+                }
             }
 
             $jsonData['id'] = $categoryId;
