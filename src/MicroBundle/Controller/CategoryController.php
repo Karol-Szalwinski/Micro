@@ -2,6 +2,7 @@
 
 namespace MicroBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use MicroBundle\Entity\Category;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -81,17 +82,40 @@ class CategoryController extends Controller
      */
     public function editAction(Request $request, Category $category)
     {
+        $em = $this->getDoctrine()->getManager();
+        $categories = $em->getRepository('MicroBundle:Category')->findAll();
+
+        $originalParameters = new ArrayCollection();
+        foreach ($category->getParameters() as $parameter) {
+            $originalParameters->add($parameter);
+        }
+
         $deleteForm = $this->createDeleteForm($category);
         $editForm = $this->createForm('MicroBundle\Form\CategoryType', $category);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('category_edit', array('id' => $category->getId()));
+            // remove the relationship between the tag and the Task
+            foreach ($originalParameters as $parameter) {
+                if (false === $category->getParameters()->contains($parameter)) {
+                    $category->removeParameter($parameter);
+                    $parameter->setCategory(null);
+
+                    $em->remove($parameter);
+
+                }
+            }
+            $em->flush();
+
+            return $this->redirectToRoute('category_show', array('id' => $category->getId()));
         }
 
-        return $this->render('category/edit.html.twig', array('category' => $category, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView(),));
+        return $this->render('category/edit.html.twig', array(
+            'category' => $category,
+            'categories' => $categories,
+            'edit_form' => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),));
     }
 
     /**

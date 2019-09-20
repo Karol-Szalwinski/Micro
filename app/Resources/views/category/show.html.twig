@@ -100,7 +100,7 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title" id="horz-layout-basic">Kategorie podrzędne</h4>
+                        <h4 class="card-title" id="horz-layout-basic">Parametry</h4>
 
                     </div>
                     <div class="card-content collpase show">
@@ -111,7 +111,7 @@
                                     <tr>
                                         <th>Lista parametrów:</th>
                                         <td>{% for parameter in category.parameters %}
-                                                {{ parameter.name }}
+                                                {{ parameter.name }} <br>
                                             {% endfor %}
                                         </td>
                                     </tr>
@@ -140,10 +140,6 @@
         <script src="{{ asset('assets/js/sweet-alerts.js') }}"></script>
         <!-- END: Page JS-->
 
-
-        <!-- BEGIN: My JS-->
-        <script src="{{ asset('assets/js/category.js') }}"></script>
-        <!-- END: My JS-->
 
 
     {% endblock %}

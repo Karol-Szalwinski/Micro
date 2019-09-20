@@ -3,23 +3,30 @@ $("#modal-trigger").on("click", function () {
     $("#category-modal").modal();
 });
 
+function getRootUrl() {
+    return window.location.origin;
+}
+
 function setChoosenCategoryPathInForm(id) {
+    if (id === "Brak") {
+        $('#modal-trigger').val(id);
+    } else {
+        $.ajax({
+            url: getRootUrl() + '/category/get-path/' + id,
+            type: 'POST',
+            dataType: 'json',
+            async: true,
 
-    $.ajax({
-        url: '../category/get-path/' + id,
-        type: 'POST',
-        dataType: 'json',
-        async: true,
+            success: function (data) {
+                var id = data['id'];
+                var path = data['path'];
+                $('#modal-trigger').val(path);
 
-        success: function (data) {
-            var id = data['id'];
-            var path = data['path'];
-            $('#modal-trigger').val(path);
-
-        },
-        error: function () {
-        }
-    });
+            },
+            error: function () {
+            }
+        });
+    }
 }
 
 function setCategory(id) {
@@ -33,7 +40,7 @@ function setCategory(id) {
 
 function loadChildrenCategories(id) {
     $.ajax({
-        url: '../category/get-children/' + id,
+        url: getRootUrl() + '/category/get-children/' + id,
         type: 'POST',
         dataType: 'json',
         async: true,
@@ -100,6 +107,11 @@ $(document).on('click', '#choose-button', function () {
 
     setCategory(id);
 
+});
+
+$(document).on('click', '#reset-button', function () {
+    var id = "Brak";
+    setCategory(id);
 
 });
 
@@ -109,12 +121,12 @@ var $collectionHolder;
 var $addParameterButton = $('<a class ="btn btn-outline-info info"><i class="la la-plus"></i> Dodaj parametr</a>');
 var $newLinkLi = $('<li></li>').append($addParameterButton);
 
-$(document).ready(function() {
+$(document).ready(function () {
     // Get the ul that holds the collection of parameters
     $collectionHolder = $('ul.parameters');
 
     // add a delete link to all of the existing tag form li elements
-    $collectionHolder.find('li').each(function() {
+    $collectionHolder.find('li').each(function () {
         addParameterFormDeleteLink($(this));
     });
 
@@ -125,7 +137,7 @@ $(document).ready(function() {
     // index when inserting a new item (e.g. 2)
     $collectionHolder.data('index', $collectionHolder.find(':input').length);
 
-    $addParameterButton.on('click', function(e) {
+    $addParameterButton.on('click', function (e) {
         // add a new parameter form (see next code block)
         addParameterForm($collectionHolder, $newLinkLi);
     });
@@ -165,7 +177,7 @@ function addParameterFormDeleteLink($parameterFormLi) {
     var $removeFormButton = $('<a class ="col-md-1 danger"><i class="la la-close"></i></a>');
     $parameterFormLi.find('input').parent().append($removeFormButton);
 
-    $removeFormButton.on('click', function(e) {
+    $removeFormButton.on('click', function (e) {
         // remove the li for the tag form
         $parameterFormLi.remove();
     });

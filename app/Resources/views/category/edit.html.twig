@@ -3,7 +3,7 @@
 {% block title %}Edytuj kategorię{% endblock %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/category-new.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/category-new-edit.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -16,7 +16,8 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ path('micro_default_index') }}">Główna</a>
                         </li>
-                        <li class="breadcrumb-item"><a href="{{ path('category_show', { id : category.id}) }}">{{ category.name }}</a>
+                        <li class="breadcrumb-item"><a
+                                    href="{{ path('category_show', { id : category.id}) }}">{{ category.name }}</a>
                         </li>
 
                         <li class="breadcrumb-item active">Edytuj kategorię
@@ -59,16 +60,22 @@
                                         {{ form_widget(edit_form.parent, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź skrót'} }) }}
                                     </div>
                                     <div id="temp-input" class="col-md-9 mx-auto ">
-                                        <input class="form-control " id="modal-trigger" readonly value="Brak">
+                                        {% set categoryParentPath = "Brak" %}
+                                        {% if category.parent %}
+                                            {% set categoryParentPath = category.parent.fullpath %}
+                                        {% endif %}
+                                        <input class="form-control " id="modal-trigger" readonly
+                                               value="{{ categoryParentPath }}">
                                         </input>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(edit_form.parameters, 'Lista parametrów', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
-                                        <ul class="parameters" data-prototype="{{ form_widget(edit_form.parameters.vars.prototype.name)|e('html_attr') }}">
+                                        <ul class="parameters"
+                                            data-prototype="{{ form_widget(edit_form.parameters.vars.prototype.name)|e('html_attr') }}">
                                             {# iterate over each existing tag and render its only field: name #}
-                                            {% for parameter in form.parameters %}
+                                            {% for parameter in edit_form.parameters %}
                                                 <li>{{ form_widget(parameter.name) }}</li>
                                             {% endfor %}
                                         </ul>
@@ -165,7 +172,12 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button id="choose-button" type="button" class="btn btn-outline-info"><i class="la la-check"></i> Wybierz</button>
+                    <button id="reset-button" type="button" class="btn btn-outline-warning"><i class="la la-refresh"></i>
+                        Zresetuj
+                    </button>
+                    <button id="choose-button" type="button" class="btn btn-outline-info"><i class="la la-check"></i>
+                        Wybierz
+                    </button>
                 </div>
             </div>
 
@@ -177,6 +189,6 @@
 
 {% block scripts %}
     <!-- BEGIN: My JS-->
-    <script src="{{ asset('assets/js/category-new.js') }}"></script>
+    <script src="{{ asset('assets/js/category-new-edit.js') }}"></script>
     <!-- END: My JS-->
 {% endblock %}

@@ -59,6 +59,20 @@ class Product
     /**
      * @var string
      *
+     * @ORM\Column(name="product_parameter", type="string", length=255, nullable=true)
+     */
+    private $productParameters;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $descript;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="images", type="string", length=255, nullable=true)
      */
     private $images;
