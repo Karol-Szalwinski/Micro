@@ -39,12 +39,14 @@ class ProductController extends Controller
      */
     public function newAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+
+        $categories = $em->getRepository('MicroBundle:Category')->findAll();
         $product = new Product();
         $form = $this->createForm('MicroBundle\Form\ProductType', $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $em->persist($product);
             $em->flush();
 
@@ -53,6 +55,7 @@ class ProductController extends Controller
 
         return $this->render('product/new.html.twig', array(
             'product' => $product,
+            'categories' => $categories,
             'form' => $form->createView(),
         ));
     }

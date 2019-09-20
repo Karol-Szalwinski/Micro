@@ -2,6 +2,7 @@
 
 namespace MicroBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -13,7 +14,20 @@ class ProductType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name')->add('model')->add('producent')->add('price')->add('category')->add('images');
+        $builder
+            ->add('name')
+            ->add('model')
+            ->add('producent')
+            ->add('price')
+            ->add('category', EntityType::class,[
+                'class' => 'MicroBundle:Category',
+                'choice_label' => 'id',
+                'placeholder'  => "Brak",
+                'required' => false,
+
+            ])
+            ->add('description')
+            ;
     }/**
      * {@inheritdoc}
      */

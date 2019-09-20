@@ -4,6 +4,7 @@ namespace MicroBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use MicroBundle\Entity\Parameter;
 
 /**
  * Category
@@ -53,6 +54,11 @@ class Category
      * @ORM\Column(name="icon", type="string", length=255, nullable=true)
      */
     private $icon;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Product", mappedBy="category",  cascade={"persist"})
+     */
+    private $products;
 
     /**
      * Constructor
@@ -222,12 +228,13 @@ class Category
     /**
      * Add parameter.
      *
-     * @param \MicroBundle\Entity\Parameter $parameter
+     * @param Parameter $parameter
      *
      * @return Category
      */
-    public function addParameter(\MicroBundle\Entity\Parameter $parameter)
+    public function addParameter(Parameter $parameter)
     {
+        $parameter->setCategory($this);
         $this->parameters[] = $parameter;
 
         return $this;
@@ -236,11 +243,11 @@ class Category
     /**
      * Remove parameter.
      *
-     * @param \MicroBundle\Entity\Parameter $parameter
+     * @param Parameter $parameter
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeParameter(\MicroBundle\Entity\Parameter $parameter)
+    public function removeParameter(Parameter $parameter)
     {
         return $this->parameters->removeElement($parameter);
     }

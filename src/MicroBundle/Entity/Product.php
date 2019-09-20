@@ -50,9 +50,8 @@ class Product
     private $price;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="category", type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="products")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     private $category;
 
@@ -68,7 +67,7 @@ class Product
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    private $descript;
+    private $description;
 
     /**
      * @var string
@@ -230,5 +229,77 @@ class Product
     public function getImages()
     {
         return $this->images;
+    }
+
+    /**
+     * Set productParameters.
+     *
+     * @param string|null $productParameters
+     *
+     * @return Product
+     */
+    public function setProductParameters($productParameters = null)
+    {
+        $this->productParameters = $productParameters;
+
+        return $this;
+    }
+
+    /**
+     * Get productParameters.
+     *
+     * @return string|null
+     */
+    public function getProductParameters()
+    {
+        return $this->productParameters;
+    }
+
+    /**
+     * Set descript.
+     *
+     * @param string|null $descript
+     *
+     * @return Product
+     */
+    public function setDescript($descript = null)
+    {
+        $this->descript = $descript;
+
+        return $this;
+    }
+
+    /**
+     * Get descript.
+     *
+     * @return string|null
+     */
+    public function getDescript()
+    {
+        return $this->descript;
+    }
+
+    /**
+     * Set description.
+     *
+     * @param string|null $description
+     *
+     * @return Product
+     */
+    public function setDescription($description = null)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description.
+     *
+     * @return string|null
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 }

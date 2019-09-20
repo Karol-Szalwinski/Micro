@@ -1,0 +1,51 @@
+.vl {
+    border-left: 1px solid dimgrey;
+    height: auto;
+}
+
+.category-li:hover {
+    background-color: #C0E4FB;
+
+}
+
+#ol-level-0, #ol-level-1, #ol-level-2 {
+    list-style-type: none;
+}
+
+.choosen {
+    background-color: #C0E4FB;
+}
+
+ul {
+    list-style-type: none;
+}
+
+ul.parameters, .modal-body ol {
+    padding-inline-start: 0;
+}
+
+ul.parameters li {
+    padding-bottom: 10px;
+}
+
+#main-category-list, #mid-category-list, #sub-category-list {
+
+    width: 33%;
+    padding-right : 3%;
+    padding-left : 3%;
+}
+
+#main-header-modal, #mid-header-modal {
+    width: 33%;
+    padding-right : 3%;
+    padding-left : 3%;
+}
+
+#sub-header-modal {
+    width: 30% ;
+    padding-left : 3%;
+
+}
+  .vl {
+    text-align: center;
+}

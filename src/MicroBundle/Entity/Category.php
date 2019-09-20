@@ -56,6 +56,11 @@ class Category
     private $icon;
 
     /**
+     * @ORM\OneToMany(targetEntity="Product", mappedBy="category",  cascade={"persist"})
+     */
+    private $products;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -245,5 +250,41 @@ class Category
     public function removeParameter(Parameter $parameter)
     {
         return $this->parameters->removeElement($parameter);
+    }
+
+    /**
+     * Add product.
+     *
+     * @param \MicroBundle\Entity\Product $product
+     *
+     * @return Category
+     */
+    public function addProduct(\MicroBundle\Entity\Product $product)
+    {
+        $this->products[] = $product;
+
+        return $this;
+    }
+
+    /**
+     * Remove product.
+     *
+     * @param \MicroBundle\Entity\Product $product
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeProduct(\MicroBundle\Entity\Product $product)
+    {
+        return $this->products->removeElement($product);
+    }
+
+    /**
+     * Get products.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProducts()
+    {
+        return $this->products;
     }
 }
