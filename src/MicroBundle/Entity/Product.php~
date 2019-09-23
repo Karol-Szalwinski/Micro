@@ -55,10 +55,8 @@ class Product
      */
     private $category;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="product_parameter", type="string", length=255, nullable=true)
+        /**
+     * @ORM\OneToMany(targetEntity="ProductParameter", mappedBy="product",  cascade={"persist"})
      */
     private $productParameters;
 
@@ -75,8 +73,6 @@ class Product
      * @ORM\Column(name="images", type="string", length=255, nullable=true)
      */
     private $images;
-
-
 
 
     /**

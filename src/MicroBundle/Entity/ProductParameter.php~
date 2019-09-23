@@ -1,0 +1,45 @@
+<?php
+
+namespace MicroBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use MicroBundle\Entity\Category;
+
+/**
+ * Parameter
+ *
+ * @ORM\Table(name="product_parameter")
+ * @ORM\Entity(repositoryClass="MicroBundle\Repository\ProductParameterRepository")
+ */
+class ProductParameter
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=100)
+     */
+    private $name;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="value", type="string", length=100)
+     */
+    private $value;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Product", inversedBy="productParameters")
+     * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
+     */
+    private $product;
+
+
+}

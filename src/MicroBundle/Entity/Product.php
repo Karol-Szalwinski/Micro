@@ -3,6 +3,7 @@
 namespace MicroBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use MicroBundle\Entity\ProductParameter;
 
 /**
  * Product
@@ -55,10 +56,8 @@ class Product
      */
     private $category;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="product_parameter", type="string", length=255, nullable=true)
+        /**
+     * @ORM\OneToMany(targetEntity="ProductParameter", mappedBy="product",  cascade={"persist"})
      */
     private $productParameters;
 
@@ -301,5 +300,39 @@ class Product
     public function getDescription()
     {
         return $this->description;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->productParameters = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add productParameter.
+     *
+     * @param ProductParameter $productParameter
+     *
+     * @return Product
+     */
+    public function addProductParameter(ProductParameter $productParameter)
+    {
+        $productParameter->setProduct($this);
+        $this->productParameters[] = $productParameter;
+
+        return $this;
+    }
+
+    /**
+     * Remove productParameter.
+     *
+     * @param ProductParameter $productParameter
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeProductParameter(ProductParameter $productParameter)
+    {
+        return $this->productParameters->removeElement($productParameter);
     }
 }

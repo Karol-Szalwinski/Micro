@@ -56,19 +56,19 @@ function loadChildrenCategories(id, level) {
                 var id = data['id'];
                 var name = data['name'];
                 var children = data['children'];
-                var last = data['last'];
 
-                //$("#sub-category-name").html(name);
                 $('#header-name-level-' + childListLevel).html(name);
                 children.forEach(addToSubCategories);
 
                 function addToSubCategories(value, index, array) {
                     var category = JSON.parse(value);
+                    var last = (category.children.length === 0);
+                    var sign = (last) ? "" : " >";
                     var categoryLi = "<li class='category-li'><a class='category-name info'" +
                         " data-id='" + category.id + "' " +
                         " data-parent-id='" + id + "' " +
                         "data-last='" + last + "' " +
-                        ">" + category.name + "</a></li>";
+                        ">" + category.name + sign + "</a></li>";
 
                     $('#ol-level-' + childListLevel).append(categoryLi);
                 }
@@ -139,6 +139,10 @@ function clickCategoryAtLevel(categoryId, level, isLast) {
 
 };
 
+//input type price
+$('#microbundle_product_price').attr('type', 'number').attr('min', '0.00').attr('max', '100000').attr('step', '0.01');
+
+
 
 // collection dynamic form
 var $collectionHolder;
@@ -208,3 +212,9 @@ function addParameterFormDeleteLink($parameterFormLi) {
         $parameterFormLi.remove();
     });
 }
+
+// Basic Summernote
+
+$(document).ready(function() {
+    $('#microbundle_product_description').summernote();
+});

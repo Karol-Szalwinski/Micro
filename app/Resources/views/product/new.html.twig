@@ -4,6 +4,8 @@
 
 {% block styles %}
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/product-new-edit.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/editors/summernote.css') }}">
+
 {% endblock %}
 
 {% block body %}
@@ -70,7 +72,7 @@
                                 <div class="form-group row">
                                     {{ form_label(form.price, 'Cena', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
-                                        {{ form_widget(form.price, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}
+                                        {{ form_widget(form.price, { 'attr': {'class': 'form-control', 'placeholder': '0.00'} }) }}
 
                                     </div>
                                 </div>
@@ -85,24 +87,24 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    {{ form_label(form.productParameters, 'Lista parametrów', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        <ul class="parameters"
+                                            data-prototype="{{ form_widget(form.productParameters.vars.prototype.value)|e('html_attr') }}">
+                                             //iterate over each existing tag and render its only field: value
+                                            {% for productParameters in form.productParameters %}
+                                                <li>{{ productParameters.name }}{{ form_widget(productParameters.value) }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     {{ form_label(form.description, 'Opis produktu', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
-                                        {{ form_widget(form.description, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}
+                                        {{ form_widget(form.description, { 'attr': {'class': 'form-control summernote', 'placeholder': 'Wprowadź nazwę'} }) }}
 
                                     </div>
                                 </div>
-                                {#<div class="form-group row">#}
-                                    {#{{ form_label(form.parameters, 'Lista parametrów', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
-                                    {#<div class="col-md-9 mx-auto">#}
-                                        {#<ul class="parameters"#}
-                                            {#data-prototype="{{ form_widget(form.parameters.vars.prototype.name)|e('html_attr') }}">#}
-                                            {# iterate over each existing tag and render its only field: name #}
-                                            {#{% for parameter in form.parameters %}#}
-                                                {#<li>{{ form_widget(parameter.name) }}</li>#}
-                                            {#{% endfor %}#}
-                                        {#</ul>#}
-                                    {#</div>#}
-                                {#</div>#}
 
                                 <div class="form-actions">
                                     <button type="button" onClick="javascript:history.go(-1)"
@@ -176,39 +178,13 @@
                             <div class="vl"></div>
                             <div id="mid-category-list">
                                 <ol id="ol-level-1" data-level="1">
-                                    {% for childCategory in categories|first.children %}
-                                        {% if childCategory.children is not empty %}
-                                            {% set last = "false" %}
-                                            {% set sign = ">" %}
-                                        {% else %}
-                                            {% set last = "true" %}
-                                            {% set sign = "" %}
-                                        {% endif %}
-                                        <li class="category-li"><a class="category-name info"
-                                                                   data-id="{{ childCategory.id }}"
-                                                                   data-parent-id="{{ categories|first.id }}"
-                                                                   data-last={{ last }}
-                                            >{{ childCategory.name }}</a></li>
-                                    {% endfor %}
+
                                 </ol>
                             </div>
                             <div class="vl"></div>
                             <div id="sub-category-list">
                                 <ol id="ol-level-2" data-level="2">
-                                    {% for childCategory in categories|first.children %}
-                                        {% if childCategory.children is not empty %}
-                                            {% set last = "false" %}
-                                            {% set sign = ">" %}
-                                        {% else %}
-                                            {% set last = "true" %}
-                                            {% set sign = "" %}
-                                        {% endif %}
-                                        <li class="category-li"><a class="category-name info"
-                                                                   data-id="{{ childCategory.id }}"
-                                                                   data-parent-id="{{ categories|first.id }}"
-                                                                   data-last={{ last }}
-                                            >{{ childCategory.name }}</a></li>
-                                    {% endfor %}
+
                                 </ol>
                             </div>
 
@@ -236,5 +212,7 @@
 {% block scripts %}
     <!-- BEGIN: My JS-->
     <script src="{{ asset('assets/js/product-new-edit.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/editors/summernote/summernote.js') }}"></script>
+    app-assets/vendors/js/editors/summernote/summernote.js
     <!-- END: My JS-->
 {% endblock %}

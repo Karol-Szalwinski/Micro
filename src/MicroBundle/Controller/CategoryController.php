@@ -190,7 +190,6 @@ class CategoryController extends Controller
         $em = $this->getDoctrine()->getManager();
         $category = $em->getRepository('MicroBundle:Category')->findOneBy(['id' => $categoryId]);
         $hasParent = $category->getParent();
-        $last = (empty($category->getChildren()));
         $children = ($category) ? $category->getChildren() : null;
 
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
@@ -198,11 +197,18 @@ class CategoryController extends Controller
 
             if ($children) {
                 $normalizer = new ObjectNormalizer();
-                $normalizer->setIgnoredAttributes(['children', 'parameters']);
+                $normalizer->setIgnoredAttributes(['parameters']);
+                $normalizer->setCircularReferenceLimit(1);
+                $normalizer->setCircularReferenceHandler(function ($object) {
+                    return $object->getId();
+                });
                 $encoder = new JsonEncoder();
                 $serializer = new Serializer([$normalizer], [$encoder]);
 
+
+
                 foreach ($children as $child) {
+
                     $serializedChildren[] = $serializer->serialize($child, 'json');
                 }
             }
@@ -211,8 +217,6 @@ class CategoryController extends Controller
             $jsonData['name'] = $name;
             $jsonData['children'] = $serializedChildren;
             $jsonData['hasParent'] = $hasParent;
-            $jsonData['last'] = $last;
-
 
             return new JsonResponse($jsonData);
         }
