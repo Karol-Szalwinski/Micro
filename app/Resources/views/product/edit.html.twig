@@ -1,21 +1,220 @@
 {% extends 'base_product.html.twig' %}
 
+{% block title %}Edytuj produkt{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/product-new-edit.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/editors/summernote.css') }}">
+
+{% endblock %}
+
 {% block body %}
-    <h1>Product edit</h1>
+    <!-- Content header -->
+    <div class="content-header row">
+        <div class="content-header-left col-md-6 col-12">
+            <h3 class="content-header-title mb-0">Produkt</h3>
+            <div class="row breadcrumbs-top">
+                <div class="breadcrumb-wrapper col-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ path('micro_default_index') }}">Główna</a>
+                        </li>
+                        <li class="breadcrumb-item"><a href="{{ path('product_index') }}">Lista produktów</a>
+                        </li>
 
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
-    {{ form_end(edit_form) }}
+                        <li class="breadcrumb-item active">Edytuj produkt
+                        </li>
 
-    <ul>
-        <li>
-            <a href="{{ path('product_index') }}">Back to the list</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content header -->
+
+    <!-- Basic form layout section start -->
+    <section id="horizontal-form-layouts">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title" id="horz-layout-basic">Formularz tworzenia nowego produktu</h4>
+                        <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                    </div>
+                    <div class="card-content collpase show">
+                        <div class="card-body">
+
+                            {{ form_start(edit_form, { 'attr': {'class': 'form form-horizontal inputmask'} }) }}
+
+
+                            <div class="form-body">
+                                <h4 class="form-section"><i class="ft-user"></i> Produkt</h4>
+                                <div class="form-group row">
+                                    {{ form_label(edit_form.name, 'Nazwa produktu', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        {{ form_widget(edit_form.name, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}
+
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(edit_form.model, 'Model', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        {{ form_widget(edit_form.model, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź model'} }) }}
+
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(edit_form.producent, 'Producent', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        {{ form_widget(edit_form.producent, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź producenta'} }) }}
+
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(edit_form.price, 'Cena', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        {{ form_widget(edit_form.price, { 'attr': {'class': 'form-control', 'placeholder': '0.00'} }) }}
+
+                                    </div>
+                                </div>
+                                <div class="form-group row" id="wrap">
+                                    {{ form_label(edit_form.category, 'Kategoria', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto " style="display:none">
+                                        {{ form_widget(edit_form.category, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź skrót'} }) }}
+                                    </div>
+                                    <div id="temp-input" class="col-md-9 mx-auto ">
+                                        <input class="form-control " id="input-modal-trigger" readonly
+                                               value="{% if product.category %}{{ product.category.fullPath }}{% endif %}">
+                                        </input>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(edit_form.productParameters, 'Lista parametrów', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        <ul class="parameters"
+                                            data-prototype="{{ form_widget(edit_form.productParameters.vars.prototype)|e('html_attr') }}">
+                                            {#iterate over each existing tag and render its all fields#}
+                                            {% for productParameters in edit_form.productParameters %}
+
+                                                <li>{{ form_widget(productParameters) }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(edit_form.description, 'Opis produktu', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        {{ form_widget(edit_form.description, { 'attr': {'class': 'form-control summernote', 'placeholder': 'Wprowadź nazwę'} }) }}
+
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="button" onClick="javascript:history.go(-1)"
+                                            class="btn btn-warning mr-1">
+                                        <i class="ft-x"></i> Anuluj
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="la la-check-square-o"></i> Zapisz zmiany
+                                    </button>
+                                </div>
+                                {{ form_end(edit_form) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Category -->
+    <!-- Modal -->
+    <div id="category-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div id="main-header-modal">
+                                <h4 class="modal-title">Wybierz kategorię </h4>
+                            </div>
+                            <div class="vl"></div>
+                            <div id="mid-header-modal">
+                                <h4 id="header-name-level-1" class="modal-title">{{ categories|first.name }}</h4>
+                            </div><div class="vl"></div>
+                            <div id="sub-header-modal">
+                                <h4 id="header-name-level-2" class="modal-title"></h4>
+                            </div>
+                            <div>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+
+                            <div id="main-category-list">
+                                <ol id="ol-level-0" data-level="0">
+                                    {% for parentCategory in categories %}
+                                        {% if parentCategory.children is not empty %}
+                                            {% set last = "false" %}
+                                            {% set sign = ">" %}
+                                        {% else %}
+                                            {% set last = "true" %}
+                                            {% set sign = "" %}
+                                        {% endif %}
+                                        {% if parentCategory.parent is null %}
+                                            <li class="category-li"><a class="category-name info"
+                                                                       data-id="{{ parentCategory.id }}"
+                                                                       data-parent-id="false"
+                                                                       data-last={{ last }}
+                                                >{{ parentCategory.name }} {{ sign }}</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ol>
+                            </div>
+                            <div class="vl"></div>
+                            <div id="mid-category-list">
+                                <ol id="ol-level-1" data-level="1">
+
+                                </ol>
+                            </div>
+                            <div class="vl"></div>
+                            <div id="sub-category-list">
+                                <ol id="ol-level-2" data-level="2">
+
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="reset-button" type="button" class="btn btn-outline-warning"><i
+                                class="la la-refresh"></i>
+                        Zresetuj
+                    </button>
+                    <button id="choose-button" type="button" class="btn btn-outline-info"><i class="la la-check"></i>
+                        Wybierz
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Modal Category -->
+
+{% endblock %}
+
+{% block scripts %}
+    <!-- BEGIN: My JS-->
+    <script src="{{ asset('assets/js/product-new-edit.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/editors/summernote/summernote.js') }}"></script>
+    app-assets/vendors/js/editors/summernote/summernote.js
+    <!-- END: My JS-->
 {% endblock %}

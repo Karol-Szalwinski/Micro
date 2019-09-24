@@ -13,14 +13,14 @@ function getRootUrl() {
 function setChoosenCategoryPathInForm(id) {
 
     $.ajax({
-        url: getRootUrl() + '/category/get-path/' + id,
+        url: getRootUrl() + '/category/get/' + id,
         type: 'POST',
         dataType: 'json',
         async: true,
 
         success: function (data) {
-            var id = data['id'];
-            var path = data['path'];
+            var category = JSON.parse(data['category']);
+            var path = category.fullPath;
             $('#input-modal-trigger').val(path);
 
         },
@@ -97,9 +97,8 @@ function clearChildList(level) {
     var childListLevel = level + 1;
 
     if (level !== lastListLevel) {
-        var $tempListOl =  $("#ol-level-" + childListLevel);
-        console.log("clearChildList Opróżniam element " + $tempListOl);
-        $('#ol-level-' + childListLevel).empty();
+        var $tempListOl = $("#ol-level-" + childListLevel);
+        $tempListOl.empty();
     }
     if (level === firstListLevel) {
         clearChildList(childListLevel);
@@ -119,11 +118,50 @@ function markSelectCategory(id) {
     $categoryLi.addClass('choosen');
 }
 
+function clearParameterList() {
+    // $collectionHolder.find('li').remove();
+    $collectionHolder.find('li').each(function () {
+        $(this).remove();
+    });
+}
+
+function loadCategoryParameters(id) {
+    $.ajax({
+        url: getRootUrl() + '/category/get/' + id,
+        type: 'POST',
+        dataType: 'json',
+        async: true,
+
+        success: function (data) {
+            var category = JSON.parse(data['category']);
+            var parameters = category.parameters;
+            clearParameterList();
+            for (var i = 0; i < category.parameters.length; i++) {
+                addParameterForm($collectionHolder, parameters[i].name);
+            }
+
+        },
+        error: function () {
+        }
+    });
+}
+
+function showProductParametersInputs(categoryId) {
+    if (categoryId == backupCategoryId) {
+        clearParameterList();
+        //restore li inputs from backups
+        $collectionHolder.html(backupStartParameters);
+    } else {
+        loadCategoryParameters(categoryId);
+    }
+}
+
 // todo ----------------NEW---------------------- //
 function setCategoryOrLoadChildren(categoryId, level, isLast) {
     //alert("setCategoryOrLoadChildren " + categoryId + " " + level + " " + isLast );
     if (isLast) {
         setCategory(categoryId);
+        showProductParametersInputs(categoryId);
     } else {
         loadChildrenCategories(categoryId, level);
     }
@@ -140,8 +178,10 @@ function clickCategoryAtLevel(categoryId, level, isLast) {
 };
 
 //input type price
-$('#microbundle_product_price').attr('type', 'number').attr('min', '0.00').attr('max', '100000').attr('step', '0.01');
-
+var $inputPrice = $('#microbundle_product_price');
+var inputValue = $inputPrice.val();
+var newinputValue = inputValue.replace(",", ".");
+$inputPrice.attr('type', 'number').attr('min', '0.00').attr('max', '100000').attr('step', '0.01').val(newinputValue);
 
 
 // collection dynamic form
@@ -155,14 +195,6 @@ $(document).ready(function () {
     // Get the ul that holds the collection of parameters
     $collectionHolder = $('ul.parameters');
 
-    // add a delete link to all of the existing tag form li elements
-    $collectionHolder.find('li').each(function () {
-        addParameterFormDeleteLink($(this));
-    });
-
-    // add the "add a parameter" anchor and li to the parameters ul
-    $collectionHolder.append($newLinkLi);
-
     // count the current form inputs we have (e.g. 2), use that as the new
     // index when inserting a new item (e.g. 2)
     $collectionHolder.data('index', $collectionHolder.find(':input').length);
@@ -174,18 +206,29 @@ $(document).ready(function () {
 
 });
 
-function addParameterForm($collectionHolder, $newLinkLi) {
+function addInputValueToPrototype(stringExpression, inputName, inputValue) {
+    var insertExpression = ' value="' + inputValue + '"';
+    var searchExpression = 'microbundle_product_productParameters___name___' + inputName + '"';
+    return stringExpression.replace(searchExpression, searchExpression + insertExpression);
+}
+
+function addParameterForm($collectionHolder, nameParameter) {
     // Get the data-prototype explained earlier
     var prototype = $collectionHolder.data('prototype');
 
+
     // get the new index
     var index = $collectionHolder.data('index');
+
+    console.log(index);
 
     var newForm = prototype;
     // You need this only if you didn't set 'label' => false in your tags field in TaskType
     // Replace '__name__label__' in the prototype's HTML to
     // instead be a number based on how many items we have
     // newForm = newForm.replace(/__name__label__/g, index);
+
+    newForm = addInputValueToPrototype(newForm, "name", nameParameter);
 
     // Replace '__name__' in the prototype's HTML to
     // instead be a number based on how many items we have
@@ -194,27 +237,20 @@ function addParameterForm($collectionHolder, $newLinkLi) {
     // increase the index with one for the next item
     $collectionHolder.data('index', index + 1);
 
-    // Display the form in the page in an li, before the "Add a tag" link li
+    // Display the form in the page in an li
     var $newFormLi = $('<li></li>').append(newForm);
-    $newLinkLi.before($newFormLi);
+    console.log($newFormLi);
+    $collectionHolder.append($newFormLi);
 
-    // add a delete link to the new form
-    addParameterFormDeleteLink($newFormLi);
 
 }
 
-function addParameterFormDeleteLink($parameterFormLi) {
-    var $removeFormButton = $('<a class ="col-md-1 danger"><i class="la la-close"></i></a>');
-    $parameterFormLi.find('input').parent().append($removeFormButton);
+var backupCategoryId = $('#microbundle_product_category').val();
+var backupStartParameters = $(".parameters").html();
 
-    $removeFormButton.on('click', function (e) {
-        // remove the li for the tag form
-        $parameterFormLi.remove();
-    });
-}
 
 // Basic Summernote
 
-$(document).ready(function() {
+$(document).ready(function () {
     $('#microbundle_product_description').summernote();
 });

@@ -90,10 +90,10 @@
                                     {{ form_label(form.productParameters, 'Lista parametrów', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         <ul class="parameters"
-                                            data-prototype="{{ form_widget(form.productParameters.vars.prototype.value)|e('html_attr') }}">
-                                             //iterate over each existing tag and render its only field: value
+                                            data-prototype="{{ form_widget(form.productParameters.vars.prototype)|e('html_attr') }}">
+                                             {#iterate over each existing tag and render its only field: value#}
                                             {% for productParameters in form.productParameters %}
-                                                <li>{{ productParameters.name }}{{ form_widget(productParameters.value) }}</li>
+                                                <li>{{ form_widget(productParameters.name) }}/{{ form_widget(productParameters.value) }}</li>
                                             {% endfor %}
                                         </ul>
                                     </div>

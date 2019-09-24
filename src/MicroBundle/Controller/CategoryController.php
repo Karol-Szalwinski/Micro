@@ -111,11 +111,7 @@ class CategoryController extends Controller
             return $this->redirectToRoute('category_show', array('id' => $category->getId()));
         }
 
-        return $this->render('category/edit.html.twig', array(
-            'category' => $category,
-            'categories' => $categories,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),));
+        return $this->render('category/edit.html.twig', array('category' => $category, 'categories' => $categories, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView(),));
     }
 
     /**
@@ -153,28 +149,36 @@ class CategoryController extends Controller
     /**
      * get vcategory path
      * @Method({"POST"})
-     * @Route("/get-path/{categoryId}", name="category_get_path_ajax")
+     * @Route("/get/{categoryId}", name="category_get_ajax")
      * @param Request $request
      * @return JsonResponse
      */
-    public function getPathAction(Request $request, $categoryId)
+    public function getCategoryAjaxAction(Request $request, $categoryId)
     {
         $em = $this->getDoctrine()->getManager();
 
         $category = $em->getRepository('MicroBundle:Category')->findOneBy(['id' => $categoryId]);
 
-        $path = ($category) ? $category->getFullPath() : null;
-
-
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
 
-            $jsonData['id'] = $categoryId;
-            $jsonData['path'] = $path;
+            $normalizer = new ObjectNormalizer();
+            $normalizer->setCircularReferenceLimit(1);
+            $normalizer->setCircularReferenceHandler(function ($object) {
+                return $object->getId();
+            });
+            $encoder = new JsonEncoder();
+            $serializer = new Serializer([$normalizer], [$encoder]);
 
+            $serializedCategory = $serializer->serialize($category, 'json');
+
+            $jsonData['category'] = $serializedCategory;
 
             return new JsonResponse($jsonData);
         }
+
+
     }
+
 
     /**
      * get category children
@@ -204,7 +208,6 @@ class CategoryController extends Controller
                 });
                 $encoder = new JsonEncoder();
                 $serializer = new Serializer([$normalizer], [$encoder]);
-
 
 
                 foreach ($children as $child) {

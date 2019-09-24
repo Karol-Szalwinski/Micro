@@ -57,6 +57,19 @@ class ProductParameter
     /**
      * Set name.
      *
+     * @param string $id
+     *
+     * @return ProductParameter
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+
+    }/**
+     * Set name.
+     *
      * @param string $name
      *
      * @return ProductParameter
@@ -122,6 +135,16 @@ class ProductParameter
      * @return Product|null
      */
     public function getProduct()
+    {
+        return $this->product;
+    }
+
+    /**
+     * Add category.
+     *
+     * @return Product|null
+     */
+    public function addProduct(Product $product)
     {
         return $this->product;
     }

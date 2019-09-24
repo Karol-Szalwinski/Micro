@@ -49,3 +49,6 @@ ul.parameters li {
   .vl {
     text-align: center;
 }
+  li > div >div{
+      display: inline;
+  }

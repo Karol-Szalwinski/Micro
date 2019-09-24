@@ -2,6 +2,7 @@
 
 namespace MicroBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use MicroBundle\Entity\Product;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -84,18 +85,40 @@ class ProductController extends Controller
      */
     public function editAction(Request $request, Product $product)
     {
+        $em = $this->getDoctrine()->getManager();
+
+        $categories = $em->getRepository('MicroBundle:Category')->findAll();
+
+        $originalProductParameters = new ArrayCollection();
+        foreach ($product->getProductParameters() as $productParameter) {
+            $originalProductParameters->add($productParameter);
+        }
+
         $deleteForm = $this->createDeleteForm($product);
         $editForm = $this->createForm('MicroBundle\Form\ProductType', $product);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            // remove the relationship between the Product and the ProductParameters and delete them
+            foreach ($originalProductParameters as $productParameter) {
+                if (false === $product->getProductParameters()->contains($productParameter)) {
+                    $product->removeProductParameter($productParameter);
+                    $productParameter->setProduct(null);
 
-            return $this->redirectToRoute('product_edit', array('id' => $product->getId()));
+                    $em->remove($productParameter);
+
+                }
+            }
+
+
+            $em->flush();
+
+            return $this->redirectToRoute('product_show', array('id' => $product->getId()));
         }
 
         return $this->render('product/edit.html.twig', array(
             'product' => $product,
+            'categories' => $categories,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));

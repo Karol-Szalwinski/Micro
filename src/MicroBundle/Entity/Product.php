@@ -48,7 +48,7 @@ class Product
      *
      * @ORM\Column(name="price", type="integer")
      */
-    private $price;
+    private $price = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="products")
@@ -56,7 +56,7 @@ class Product
      */
     private $category;
 
-        /**
+    /**
      * @ORM\OneToMany(targetEntity="ProductParameter", mappedBy="product",  cascade={"persist"})
      */
     private $productParameters;
@@ -254,29 +254,6 @@ class Product
         return $this->productParameters;
     }
 
-    /**
-     * Set descript.
-     *
-     * @param string|null $descript
-     *
-     * @return Product
-     */
-    public function setDescript($descript = null)
-    {
-        $this->descript = $descript;
-
-        return $this;
-    }
-
-    /**
-     * Get descript.
-     *
-     * @return string|null
-     */
-    public function getDescript()
-    {
-        return $this->descript;
-    }
 
     /**
      * Set description.
