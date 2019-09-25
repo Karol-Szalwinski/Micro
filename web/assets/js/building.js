@@ -250,7 +250,6 @@ function deleteDevice(id) {
 
 $(document).on('click', '.cancel-delete', function () {
     var id = this.id.substr(7);
-    alert(id);
     swal({
         title: "Jesteś pewny?",
         text: "Usunięcie tego urządzenia jest nieodwracalne!",

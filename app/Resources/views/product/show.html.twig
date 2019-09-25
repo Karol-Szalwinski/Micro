@@ -19,7 +19,15 @@
                                     </img>
                                 </div>
                             </div>
+
                             <div class="col-8">
+                                    <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
+                                        <div class="btn-group" role="group">
+                                            <a class="btn btn-outline-info " href="{{ path('product_edit', { id : product.id }) }}"><i
+                                                        class="la la-pencil"></i> Edytuj produkt</a>
+
+                                        </div>
+                                    </div>
                                 <div class="title-area clearfix">
                                     <h2 class="product-title float-left">
                                         {{ product.name }}

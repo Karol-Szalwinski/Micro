@@ -4,9 +4,11 @@ namespace MicroBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use MicroBundle\Entity\Product;
+use MicroBundle\Entity\ProductParameter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Product controller.
@@ -27,9 +29,7 @@ class ProductController extends Controller
 
         $products = $em->getRepository('MicroBundle:Product')->findAll();
 
-        return $this->render('product/index.html.twig', array(
-            'products' => $products,
-        ));
+        return $this->render('product/index.html.twig', array('products' => $products,));
     }
 
     /**
@@ -54,11 +54,7 @@ class ProductController extends Controller
             return $this->redirectToRoute('product_show', array('id' => $product->getId()));
         }
 
-        return $this->render('product/new.html.twig', array(
-            'product' => $product,
-            'categories' => $categories,
-            'form' => $form->createView(),
-        ));
+        return $this->render('product/new.html.twig', array('product' => $product, 'categories' => $categories, 'form' => $form->createView(),));
     }
 
     /**
@@ -71,10 +67,32 @@ class ProductController extends Controller
     {
         $deleteForm = $this->createDeleteForm($product);
 
-        return $this->render('product/show.html.twig', array(
-            'product' => $product,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('product/show.html.twig', array('product' => $product, 'delete_form' => $deleteForm->createView(),));
+    }
+
+    private function checkForNewParameters(Product $product): array
+    {
+        $namesParameters = [];
+        $namesProductParameters = [];
+        foreach ($product->getCategory()->getParameters() as $parameter) {
+            $namesParameters[] = $parameter->getName();
+        }
+        foreach ($product->getProductParameters() as $productParameter) {
+            $namesProductParameters[] = $productParameter->getName();
+        }
+        $diffNames = array_diff($namesParameters, $namesProductParameters);
+
+        return $diffNames;
+    }
+
+    private function updateNewParameters(Product $product, $names): Product
+    {
+
+        foreach ($names as $name) {
+            $product->addProductParameter(new ProductParameter($name));
+        }
+        return $product;
+
     }
 
     /**
@@ -89,10 +107,13 @@ class ProductController extends Controller
 
         $categories = $em->getRepository('MicroBundle:Category')->findAll();
 
+        //backup ProductParameters
         $originalProductParameters = new ArrayCollection();
         foreach ($product->getProductParameters() as $productParameter) {
             $originalProductParameters->add($productParameter);
         }
+        $newParametersNames = $this->checkForNewParameters($product);
+        $product = $this->updateNewParameters($product, $newParametersNames);
 
         $deleteForm = $this->createDeleteForm($product);
         $editForm = $this->createForm('MicroBundle\Form\ProductType', $product);
@@ -110,18 +131,12 @@ class ProductController extends Controller
                 }
             }
 
-
             $em->flush();
 
             return $this->redirectToRoute('product_show', array('id' => $product->getId()));
         }
 
-        return $this->render('product/edit.html.twig', array(
-            'product' => $product,
-            'categories' => $categories,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('product/edit.html.twig', array('product' => $product, 'categories' => $categories, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView(),));
     }
 
     /**
@@ -153,10 +168,6 @@ class ProductController extends Controller
      */
     private function createDeleteForm(Product $product)
     {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('product_delete', array('id' => $product->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
+        return $this->createFormBuilder()->setAction($this->generateUrl('product_delete', array('id' => $product->getId())))->setMethod('DELETE')->getForm();
     }
 }

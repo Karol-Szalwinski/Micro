@@ -35,6 +35,10 @@ class Parameter
      */
     private $category;
 
+
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
@@ -53,6 +57,11 @@ class Parameter
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /**

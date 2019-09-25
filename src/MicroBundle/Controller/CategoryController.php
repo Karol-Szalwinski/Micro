@@ -96,16 +96,7 @@ class CategoryController extends Controller
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
 
-            // remove the relationship between the tag and the Task
-            foreach ($originalParameters as $parameter) {
-                if (false === $category->getParameters()->contains($parameter)) {
-                    $category->removeParameter($parameter);
-                    $parameter->setCategory(null);
-
-                    $em->remove($parameter);
-
-                }
-            }
+            $this->checkChangesInParameters($category, $originalParameters, $em);
             $em->flush();
 
             return $this->redirectToRoute('category_show', array('id' => $category->getId()));
@@ -224,4 +215,28 @@ class CategoryController extends Controller
             return new JsonResponse($jsonData);
         }
     }
+
+    /**
+     * get product associated with parameter
+     * @Method({"POST"})
+     * @Route("/count-products/{parameterId}", name="category_count_products_ajax")
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function countProductsAction(Request $request, $parameterId)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $parameter = $em->getRepository('MicroBundle:Parameter')->findOneBy(['id' => $parameterId]);
+        $productsCount = $parameter->getCategory()->getProducts()->count();
+
+        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+
+            $jsonData['productsCount'] = $productsCount;
+
+            return new JsonResponse($jsonData);
+        }
+    }
+
+
 }

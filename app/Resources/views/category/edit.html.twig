@@ -1,4 +1,4 @@
-ka{% extends 'base_product.html.twig' %}
+{% extends 'base_product.html.twig' %}
 
 {% block title %}Edytuj kategorię{% endblock %}
 
@@ -19,7 +19,6 @@ ka{% extends 'base_product.html.twig' %}
                         <li class="breadcrumb-item"><a
                                     href="{{ path('category_show', { id : category.id}) }}">{{ category.name }}</a>
                         </li>
-
                         <li class="breadcrumb-item active">Edytuj kategorię
                         </li>
 
@@ -76,7 +75,7 @@ ka{% extends 'base_product.html.twig' %}
                                             data-prototype="{{ form_widget(edit_form.parameters.vars.prototype.name)|e('html_attr') }}">
                                             {# iterate over each existing tag and render its only field: name #}
                                             {% for parameter in edit_form.parameters %}
-                                                <li>{{ form_widget(parameter.name) }}</li>
+                                                <li>{{ form_widget(parameter.name) }}{{ form_widget(parameter.id) }}</li>
                                             {% endfor %}
                                         </ul>
                                     </div>
@@ -87,7 +86,7 @@ ka{% extends 'base_product.html.twig' %}
                                             class="btn btn-warning mr-1">
                                         <i class="ft-x"></i> Anuluj
                                     </button>
-                                    <button type="submit" class="btn btn-primary">
+                                    <button id="submit-btn" type="submit" class="btn btn-primary">
                                         <i class="la la-check-square-o"></i> Zapisz
                                     </button>
                                 </div>
@@ -188,7 +187,12 @@ ka{% extends 'base_product.html.twig' %}
 {% endblock %}
 
 {% block scripts %}
+    <!-- BEGIN: Vendor JS-->
+    <script src="{{ asset('app-assets/vendors/js/vendors.min.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/extensions/sweetalert.min.js') }}"></script>
+    <!-- END: Page Vendor JS-->
     <!-- BEGIN: My JS-->
     <script src="{{ asset('assets/js/category-new-edit.js') }}"></script>
     <!-- END: My JS-->
+
 {% endblock %}
