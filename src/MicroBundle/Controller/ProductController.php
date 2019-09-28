@@ -48,6 +48,10 @@ class ProductController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            dump($product);
+            //add parameters to productParameter
+            $product = $this->container->get('parameters')->connectNewProductParameterWithParent($product);
+            dump($product);
             $em->persist($product);
             $em->flush();
 
@@ -70,30 +74,7 @@ class ProductController extends Controller
         return $this->render('product/show.html.twig', array('product' => $product, 'delete_form' => $deleteForm->createView(),));
     }
 
-    private function checkForNewParameters(Product $product): array
-    {
-        $namesParameters = [];
-        $namesProductParameters = [];
-        foreach ($product->getCategory()->getParameters() as $parameter) {
-            $namesParameters[] = $parameter->getName();
-        }
-        foreach ($product->getProductParameters() as $productParameter) {
-            $namesProductParameters[] = $productParameter->getName();
-        }
-        $diffNames = array_diff($namesParameters, $namesProductParameters);
 
-        return $diffNames;
-    }
-
-    private function updateNewParameters(Product $product, $names): Product
-    {
-
-        foreach ($names as $name) {
-            $product->addProductParameter(new ProductParameter($name));
-        }
-        return $product;
-
-    }
 
     /**
      * Displays a form to edit an existing product entity.
@@ -112,8 +93,7 @@ class ProductController extends Controller
         foreach ($product->getProductParameters() as $productParameter) {
             $originalProductParameters->add($productParameter);
         }
-        $newParametersNames = $this->checkForNewParameters($product);
-        $product = $this->updateNewParameters($product, $newParametersNames);
+        $product = $this->container->get('parameters')->updateProductParameters($product);
 
         $deleteForm = $this->createDeleteForm($product);
         $editForm = $this->createForm('MicroBundle\Form\ProductType', $product);
@@ -130,6 +110,7 @@ class ProductController extends Controller
 
                 }
             }
+            $product = $this->container->get('parameters')->connectNewProductParameterWithParent($product);
 
             $em->flush();
 

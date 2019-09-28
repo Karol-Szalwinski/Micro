@@ -2,6 +2,7 @@
 
 namespace MicroBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use MicroBundle\Entity\Category;
 
@@ -35,6 +36,16 @@ class Parameter
      */
     private $category;
 
+
+    /**
+     * One parameter has many productParameters. This is the inverse side.
+     * @ORM\OneToMany(targetEntity="ProductParameter", mappedBy="parameter")
+     */
+    private $productParameters;
+
+    public function __construct() {
+        $this->productParameters = new ArrayCollection();
+    }
 
     /**
      * @return string
@@ -95,5 +106,41 @@ class Parameter
     public function addCategory(Category $category)
     {
         return $this->category;
+    }
+
+    /**
+     * Add productParameter.
+     *
+     * @param \MicroBundle\Entity\ProductParameter $productParameter
+     *
+     * @return Parameter
+     */
+    public function addProductParameter(\MicroBundle\Entity\ProductParameter $productParameter)
+    {
+        $this->productParameters[] = $productParameter;
+
+        return $this;
+    }
+
+    /**
+     * Remove productParameter.
+     *
+     * @param \MicroBundle\Entity\ProductParameter $productParameter
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeProductParameter(\MicroBundle\Entity\ProductParameter $productParameter)
+    {
+        return $this->productParameters->removeElement($productParameter);
+    }
+
+    /**
+     * Get productParameters.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProductParameters()
+    {
+        return $this->productParameters;
     }
 }

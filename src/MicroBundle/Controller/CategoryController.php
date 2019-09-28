@@ -96,7 +96,7 @@ class CategoryController extends Controller
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
 
-            $this->checkChangesInParameters($category, $originalParameters, $em);
+            $this->container->get('parameters')->handleChangesInParameters($category, $originalParameters, $em);
             $em->flush();
 
             return $this->redirectToRoute('category_show', array('id' => $category->getId()));
@@ -152,15 +152,7 @@ class CategoryController extends Controller
 
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
 
-            $normalizer = new ObjectNormalizer();
-            $normalizer->setCircularReferenceLimit(1);
-            $normalizer->setCircularReferenceHandler(function ($object) {
-                return $object->getId();
-            });
-            $encoder = new JsonEncoder();
-            $serializer = new Serializer([$normalizer], [$encoder]);
-
-            $serializedCategory = $serializer->serialize($category, 'json');
+            $serializedCategory = $this->container->get('serialize')->serlializeJson($category, 1, []);
 
             $jsonData['category'] = $serializedCategory;
 
@@ -191,19 +183,10 @@ class CategoryController extends Controller
             $name = $category->getName();
 
             if ($children) {
-                $normalizer = new ObjectNormalizer();
-                $normalizer->setIgnoredAttributes(['parameters']);
-                $normalizer->setCircularReferenceLimit(1);
-                $normalizer->setCircularReferenceHandler(function ($object) {
-                    return $object->getId();
-                });
-                $encoder = new JsonEncoder();
-                $serializer = new Serializer([$normalizer], [$encoder]);
-
 
                 foreach ($children as $child) {
 
-                    $serializedChildren[] = $serializer->serialize($child, 'json');
+                    $serializedChildren[] = $this->container->get('serialize')->serlializeJson($child, 1, ['parameters']);
                 }
             }
 
@@ -228,7 +211,7 @@ class CategoryController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $parameter = $em->getRepository('MicroBundle:Parameter')->findOneBy(['id' => $parameterId]);
-        $productsCount = $parameter->getCategory()->getProducts()->count();
+        $productsCount = $parameter->getProductParameters()->count();
 
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
 
@@ -237,6 +220,7 @@ class CategoryController extends Controller
             return new JsonResponse($jsonData);
         }
     }
+
 
 
 }

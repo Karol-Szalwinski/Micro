@@ -109,7 +109,8 @@
                             </div>
                             <div class="vl"></div>
                             <div id="sub-header-modal">
-                                <h4 id="sub-category-name" class="modal-title">{{ categories|first.name }}</h4>
+                                <h4 id="sub-category-name" class="modal-title">
+                                    {% if categories is not empty %}{{ categories|first.name }}{% endif %}</h4>
                             </div>
                             <div>
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -144,20 +145,22 @@
                             <div class="vl"></div>
                             <div id="sub-category-list">
                                 <ol id="sub-category-ol">
-                                    {% for childCategory in categories|first.children %}
-                                        {% if childCategory.children is not empty %}
-                                            {% set last = "false" %}
-                                            {% set sign = ">" %}
-                                        {% else %}
-                                            {% set last = "true" %}
-                                            {% set sign = "" %}
-                                        {% endif %}
-                                        <li class="category-li"><a class="category-name info"
-                                                                   data-id="{{ childCategory.id }}"
-                                                                   data-parent-id="{{ categories|first.id }}"
-                                                                   data-last={{ last }}
-                                            >{{ childCategory.name }}</a></li>
-                                    {% endfor %}
+                                    {% if categories is not empty %}
+                                        {% for childCategory in categories|first.children %}
+                                            {% if childCategory.children is not empty %}
+                                                {% set last = "false" %}
+                                                {% set sign = ">" %}
+                                            {% else %}
+                                                {% set last = "true" %}
+                                                {% set sign = "" %}
+                                            {% endif %}
+                                            <li class="category-li"><a class="category-name info"
+                                                                       data-id="{{ childCategory.id }}"
+                                                                       data-parent-id="{{ categories|first.id }}"
+                                                                       data-last={{ last }}
+                                                >{{ childCategory.name }}</a></li>
+                                        {% endfor %}
+                                    {% endif %}
                                 </ol>
                             </div>
 

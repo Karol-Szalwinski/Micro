@@ -43,6 +43,20 @@ class ProductParameter
     private $product;
 
     /**
+     * Many features have one product. This is the owning side.
+     * @ORM\ManyToOne(targetEntity="Parameter", inversedBy="productParameters")
+     * @ORM\JoinColumn(name="parameter_id", referencedColumnName="id")
+     */
+    private $parameter;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="prototypeId", type="integer", nullable=true)
+     */
+    private $prototypeId;
+
+    /**
      * ProductParameter constructor.
      * @param string $name
      */
@@ -155,5 +169,29 @@ class ProductParameter
     public function addProduct(Product $product)
     {
         return $this->product;
+    }
+
+    /**
+     * Set parameter.
+     *
+     * @param \MicroBundle\Entity\Parameter|null $parameter
+     *
+     * @return ProductParameter
+     */
+    public function setParameter(\MicroBundle\Entity\Parameter $parameter = null)
+    {
+        $this->parameter = $parameter;
+
+        return $this;
+    }
+
+    /**
+     * Get parameter.
+     *
+     * @return \MicroBundle\Entity\Parameter|null
+     */
+    public function getParameter()
+    {
+        return $this->parameter;
     }
 }

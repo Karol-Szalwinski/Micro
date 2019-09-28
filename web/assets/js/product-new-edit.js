@@ -137,7 +137,7 @@ function loadCategoryParameters(id) {
             var parameters = category.parameters;
             clearParameterList();
             for (var i = 0; i < category.parameters.length; i++) {
-                addParameterForm($collectionHolder, parameters[i].name);
+                addParameterForm($collectionHolder, parameters[i].name, parameters[i].id);
             }
 
         },
@@ -199,10 +199,10 @@ $(document).ready(function () {
     // index when inserting a new item (e.g. 2)
     $collectionHolder.data('index', $collectionHolder.find(':input').length);
 
-    $addParameterButton.on('click', function (e) {
-        // add a new parameter form (see next code block)
-        addParameterForm($collectionHolder, $newLinkLi);
-    });
+    // $addParameterButton.on('click', function (e) {
+    //     // add a new parameter form (see next code block)
+    //     addParameterForm($collectionHolder, $newLinkLi);
+    // });
 
 });
 
@@ -212,15 +212,13 @@ function addInputValueToPrototype(stringExpression, inputName, inputValue) {
     return stringExpression.replace(searchExpression, searchExpression + insertExpression);
 }
 
-function addParameterForm($collectionHolder, nameParameter) {
+function addParameterForm($collectionHolder, nameParameter, prototypeId) {
     // Get the data-prototype explained earlier
     var prototype = $collectionHolder.data('prototype');
 
 
     // get the new index
     var index = $collectionHolder.data('index');
-
-    console.log(index);
 
     var newForm = prototype;
     // You need this only if you didn't set 'label' => false in your tags field in TaskType
@@ -229,6 +227,7 @@ function addParameterForm($collectionHolder, nameParameter) {
     // newForm = newForm.replace(/__name__label__/g, index);
 
     newForm = addInputValueToPrototype(newForm, "name", nameParameter);
+    newForm = addInputValueToPrototype(newForm, "prototypeId", prototypeId);
 
     // Replace '__name__' in the prototype's HTML to
     // instead be a number based on how many items we have
