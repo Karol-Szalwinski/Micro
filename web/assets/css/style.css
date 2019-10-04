@@ -58,3 +58,6 @@ input[type=radio] + label {
 .badge-danger {
     background-color: #730b16 !important;
 }
+.table-striped tbody tr:nth-of-type(odd) {
+background-color: #d4e1ef;
+}
