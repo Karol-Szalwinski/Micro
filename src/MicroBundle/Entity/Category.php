@@ -193,9 +193,23 @@ class Category
      *
      * @return Category
      */
-    public function setParent(\MicroBundle\Entity\Category $parent = null)
+    public function setParent(Category $parent = null)
     {
-        $this->parent = $parent;
+
+        $loopTrouble = false;
+        $category = $parent;
+        while ($category!= null) {
+            if ($category===$this){
+                $loopTrouble = true;
+                $category = null;
+            } else {
+                $category = $category->getParent();
+            }
+        }
+
+        if (!$loopTrouble) {
+            $this->parent = $parent;
+        }
 
         return $this;
     }
@@ -220,7 +234,7 @@ class Category
         $category = $this;
         while ($category->getParent()) {
             $category = $category->getParent();
-            $path = $category->getName() . " >> " . $path ;
+            $path = $category->getName() . " >> " . $path;
         }
         return $path;
     }

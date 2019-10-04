@@ -8,7 +8,7 @@
 
 {% block body %}
     <!-- Content header -->
-    <div class="content-header row">
+    <div id="editing-category-id" class="content-header row" data-id="{{ category.id }}">
         <div class="content-header-left col-md-6 col-12">
             <h3 class="content-header-title mb-0">Kategorie</h3>
             <div class="row breadcrumbs-top">
@@ -45,7 +45,7 @@
 
 
                             <div class="form-body">
-                                <h4 class="form-section"><i class="ft-user"></i> Kategoria produktu</h4>
+                                <h4 class="form-section"><i class="ft-user"></i> Kategoria produktów</h4>
                                 <div class="form-group row">
                                     {{ form_label(edit_form.name, 'Nazwa kategorii', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
@@ -149,20 +149,7 @@
                             <div class="vl"></div>
                             <div id="sub-category-list">
                                 <ol id="sub-category-ol">
-                                    {% for childCategory in categories|first.children %}
-                                        {% if childCategory.children is not empty %}
-                                            {% set last = "false" %}
-                                            {% set sign = ">" %}
-                                        {% else %}
-                                            {% set last = "true" %}
-                                            {% set sign = "" %}
-                                        {% endif %}
-                                        <li class="category-li"><a class="category-name info"
-                                                                   data-id="{{ childCategory.id }}"
-                                                                   data-parent-id="{{ categories|first.id }}"
-                                                                   data-last={{ last }}
-                                            >{{ childCategory.name }}</a></li>
-                                    {% endfor %}
+
                                 </ol>
                             </div>
 

@@ -91,12 +91,14 @@ function markCategoryAsSelected(id) {
 //click on single category
 $(document).on('click', '.category-li', function () {
 
+    var editingCategoryId = $('#editing-category-id').data('id');
     var id = $(this).find('a').data('id');
+    if (id !== editingCategoryId) {
+        var parentCategoryId = markCategoryAsSelected(id);
 
-    var parentCategoryId = markCategoryAsSelected(id);
-
-    if (!parentCategoryId) {
-        loadChildrenCategories(id);
+        if (!parentCategoryId) {
+            loadChildrenCategories(id);
+        }
     }
 });
 
@@ -167,7 +169,7 @@ function addParameterForm($collectionHolder, $newLinkLi) {
     newForm = newForm.replace(/__name__/g, index);
 
     //add badge new
-    var badge =' <span class="new-input"></span> ';
+    var badge = ' <span class="new-input"></span> ';
     newForm += badge;
 
     // increase the index with one for the next item
@@ -211,13 +213,13 @@ function throwDeleteInfoToUser(parameterId, productsCount) {
         }
     })
         .then((isConfirm) => {
-        if (isConfirm) {
-            removeLiElement(parameterId);
-            swal("Usunięte!", "Po zapisaniu formularza ten parametr zniknie również z " + productsCount + " produktów.", "success");
-        } else {
-            swal("Anulowano", "Parametr pozostał na swoim miejscu", "error");
-}
-})
+            if (isConfirm) {
+                removeLiElement(parameterId);
+                swal("Usunięte!", "Po zapisaniu formularza ten parametr zniknie również z " + productsCount + " produktów.", "success");
+            } else {
+                swal("Anulowano", "Parametr pozostał na swoim miejscu", "error");
+            }
+        })
 
 
 }
@@ -268,16 +270,16 @@ function getInformationToUser(parameterId, type) {
         success: function (data) {
 
             var productsCount = data['productsCount'];
-            if(type === "delete"){
+            if (type === "delete") {
                 if (productsCount === 0) {
                     removeLiElement(parameterId);
                 } else {
                     throwDeleteInfoToUser(parameterId, productsCount);
                 }
             }
-            if(type === "changeName"){
+            if (type === "changeName") {
                 if (productsCount > 0) {
-                   throwChangeNameInfoToUser(parameterId, productsCount);
+                    throwChangeNameInfoToUser(parameterId, productsCount);
                 }
             }
 
@@ -291,7 +293,7 @@ function getInformationToUser(parameterId, type) {
 function checkRemoveParameter($elementLi, $parameterFormLi) {
     var parameterId = $elementLi.find('input[type="hidden"]').val();
 
-    if(parameterId) {
+    if (parameterId) {
         getInformationToUser(parameterId, "delete");
         console.log(parameterId);
     } else {
@@ -313,7 +315,7 @@ function addParameterFormDeleteLink($parameterFormLi) {
 
 function checkChangeNameParameter($inputName) {
     var parameterId = $inputName.next().val();
-    if(parameterId) {
+    if (parameterId) {
         getInformationToUser(parameterId, "changeName");
         console.log(parameterId);
     }
