@@ -52,12 +52,22 @@ input[type=radio] + label {
     background-color: #730b16;
 }
 
-.navigation-main .nav-item .menu-content:hover {
+.navigation-main .nav-item .is-shown:hover {
     background-color: #730b16;
 }
+
 .badge-danger {
     background-color: #730b16 !important;
 }
 .table-striped tbody tr:nth-of-type(odd) {
 background-color: #d4e1ef;
+}
+
+.ft-shopping-cart {
+    font-size: 20px;
+
+}
+
+.group-fixed-width-120{
+    width: 120px;
 }

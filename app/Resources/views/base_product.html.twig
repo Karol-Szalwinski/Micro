@@ -2,77 +2,109 @@
 
 {% block mainmenu %}
 
-<!-- BEGIN: Main Menu-->
+    <!-- BEGIN: Main Menu-->
 
-<div class="main-menu menu-fixed menu-dark menu-accordion menu-shadow" data-scroll-to-active="true">
-    <div class="main-menu-content">
-        <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-            <li class=" nav-item"><a href="{{ path('micro_default_index') }}"><i class="la la-home "></i><span
-                            class="menu-title"
-                            data-i18n="nav.dash.main">Główna strona</span></a>
-                            </li>
-            <li class=" nav-item"><a href="{{ path('client_index') }}"><i class="la la-group "></i><span
-                            class="menu-title"
-                            data-i18n="nav.dash.main">Klienci</span><span
-                            id="counter-clients"
-                            class="badge badge-pill float-right mr-2"></span></a>
-                <ul class="menu-content">
-                    <li><a class="menu-item" href="{{ path('client_index') }}"><i></i><span
-                                    data-i18n="nav.dash.ecommerce">Lista produktów</span></a>
-                    </li>
+    <div class="main-menu menu-fixed menu-dark menu-accordion menu-shadow" data-scroll-to-active="true">
+        <div class="main-menu-content">
+            <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+                <li class=" nav-item"><a href="{{ path('micro_default_index') }}"><i class="la la-home "></i><span
+                                class="menu-title"
+                                data-i18n="nav.dash.main">Główna strona</span></a>
+                </li>
+                <li class=" nav-item"><a href="{{ path('client_index') }}"><i class="la la-group "></i><span
+                                class="menu-title"
+                                data-i18n="nav.dash.main">Klienci</span><span
+                                id="counter-clients"
+                                class="badge badge-pill float-right mr-2"></span></a>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('client_index') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Lista produktów</span></a>
+                        </li>
 
-                </ul>
-                <ul class="menu-content">
-                    <li><a class="menu-item" href="{{ path('client_new') }}"><i></i><span
-                                    data-i18n="nav.dash.ecommerce">Dodaj nowy</span></a>
-                    </li>
+                    </ul>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('client_new') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Dodaj nowy</span></a>
+                        </li>
 
-                </ul>
-            </li>
-            <li class=" nav-item"><a href="{{ path('product_index') }}"><i class="la la-building-o"></i><span
-                            class="menu-title"
-                            data-i18n="nav.dash.main">Produkty</span><span
-                            id="counter-buildings"
-                            class="badge badge-pill float-right mr-2"></span></a>
-                <ul class="menu-content">
-                    <li><a class="menu-item" href="{{ path('product_index') }}"><i></i><span
-                                    data-i18n="nav.dash.ecommerce">Lista produktów</span></a>
-                    </li>
+                    </ul>
+                </li>
+                <li class=" nav-item"><a href="{{ path('offert_index') }}"><i class="la la-newspaper-o"></i><span
+                                class="menu-title"
+                                data-i18n="nav.dash.main">Oferty</span><span
+                                id="counter-buildings"
+                                class="badge badge-pill float-right mr-2"></span></a>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('offert_index') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Lista ofert</span></a>
+                        </li>
 
-                </ul>
-            </li>
-            <li class=" nav-item"><a href="{{ path('category_index') }}"><i class="la la-list-alt "></i><span
-                            class="menu-title "
+                    </ul>
+                </li>
+                <li class=" nav-item"><a href="{{ path('product_index') }}"><i class="la la-building-o"></i><span
+                                class="menu-title"
+                                data-i18n="nav.dash.main">Produkty</span><span
+                                id="counter-buildings"
+                                class="badge badge-pill float-right mr-2"></span></a>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('product_index') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Lista produktów</span></a>
+                        </li>
 
-                            data-i18n="nav.dash.main">Kategorie</span><span
-                            id ="counter-documents"
-                            class="badge badge-pill float-right mr-2"></span></a>
-                <ul class="menu-content">
-                    <li><a class="menu-item" href="{{ path('category_index') }}"><i></i><span
-                                    data-i18n="nav.dash.ecommerce">Lista kategorii</span></a>
-                    </li>
+                    </ul>
+                </li>
+                <li class=" nav-item"><a href="{{ path('category_index') }}"><i class="la la-list-alt "></i><span
+                                class="menu-title "
 
-                </ul>
-            </li>
+                                data-i18n="nav.dash.main">Kategorie</span><span
+                                id="counter-documents"
+                                class="badge badge-pill float-right mr-2"></span></a>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('category_index') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Lista kategorii</span></a>
+                        </li>
 
-            <li class=" nav-item"><a href="{{ path('user_index') }}"><i class="la la-user "></i><span
-                            class="menu-title"
-                            data-i18n="nav.dash.main">Użytkownicy</span><span
-                            id="counter-users"
-                            class="badge badge-pill float-right mr-2"></span></a>
-                <ul class="menu-content">
-                    <li><a class="menu-item" href="{{ path('user_index') }}"><i></i><span
-                                    data-i18n="nav.dash.ecommerce">Lista Użytkowników</span></a>
-                    </li>
+                    </ul>
+                </li>
 
-                </ul>
-            </li>
+                <li class=" nav-item"><a href="{{ path('user_index') }}"><i class="la la-user "></i><span
+                                class="menu-title"
+                                data-i18n="nav.dash.main">Użytkownicy</span><span
+                                id="counter-users"
+                                class="badge badge-pill float-right mr-2"></span></a>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('user_index') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Lista Użytkowników</span></a>
+                        </li>
 
-        </ul>
+                    </ul>
+                </li>
+                {% if mainCategories is defined %}
+                    {% for mainCategory in mainCategories %}
+                        <li class=" nav-item"><a href="{{ path('product_index_category', { categoryId : mainCategory.id}) }}"><i class="la la-laptop "></i><span
+                                        class="menu-title"
+                                        data-i18n="nav.dash.main">{{ mainCategory.name }}</span><span
+                                        id="counter-users"
+                                        class="badge badge-pill float-right mr-2"></span></a>
+                            <ul class="menu-content">
+                                <li><a href="{{ path('product_index_category', { categoryId : mainCategory.id}) }}" class="menu-item" href="{{ path('user_index') }}"><i></i><span
+                                                data-i18n="nav.dash.ecommerce">Pokaż wszystkie</span></a>
+                                </li>
+                                {% for subCategory in mainCategory.children %}
+                                    <li><a class="menu-item" href="{{ path('product_index_category', { categoryId : subCategory.id}) }}"><i></i><span
+                                                    data-i18n="nav.dash.ecommerce">{{ subCategory.name }}</span></a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+
+            </ul>
+        </div>
     </div>
-</div>
 
-<!-- END: Main Menu-->
+    <!-- END: Main Menu-->
 
 {% endblock %}
 

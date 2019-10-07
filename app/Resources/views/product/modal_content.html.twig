@@ -1,0 +1,117 @@
+<!-- BEGIN: Content-->
+
+<div class="content-body">
+    <div class="product-detail">
+        <div class="card">
+            <div class="card-body">
+                <div class="card-content">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="input-group group-fixed-width-120 float-md-right" role="group"
+                                 aria-label="Button group with nested dropdown">
+                                <input class="form-control" type="text" placeholder="Ilość" name="quantity"
+                                       autocomplete="off">
+                                <button type="submit" class="form-control btn btn-outline-info "
+                                        href="#"><i class="ft-shopping-cart"></i></button>
+
+                            </div>
+                            {#<div class="input-group col-3 float-md-right">#}
+                            {#<input class="form-control" type="text" placeholder="Ilość" name="quantity"#}
+                            {#autocomplete="off">#}
+                            {#<span class="input-group-btn">#}
+                            {#<button class="btn btn-default addToOrder" type="submit">#}
+                            {#<i class="la la-cart-arrow-down"></i></button>#}
+                            {#</span>#}
+                            {#</div>#}
+                            <h2 class="product-title float-left">{{ product.name }}</h2><br><br>
+                            <h4 class=>{{ product.category.fullPath }}</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="product-img d-flex align-items-center">
+                                <img alt="Card image cap" class="img-fluid mb-1"
+                                     src="../../../app-assets/images/elements/fitbit-watch.png">
+                                </img>
+                            </div>
+                            <div>
+                                <table class="table table-borderless  table-striped">
+                                    <tbody>
+                                    <tr>
+                                        <th>
+                                            Produkt Id
+                                        </th>
+                                        <td>
+                                            {{ product.id }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            Model
+                                        </th>
+                                        <td>
+                                            {{ product.model }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            Producent
+                                        </th>
+                                        <td>
+                                            {{ product.producent }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            Moja Cena
+                                        </th>
+                                        <td>
+                                            <b>{{ product.price|price }}</b>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-7">
+                            <table class="table table-borderless table-striped">
+                                <tbody>
+                                {% for parameter in product.productParameters %}
+                                    <tr>
+                                        <th>
+                                            {{ parameter.name }}
+                                        </th>
+                                        <td>
+                                            {{ parameter.value }}
+                                        </td>
+                                    </tr>
+
+                                {% endfor %}
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-content">
+                    <div class="card-body">
+                        {#<div class="container">#}
+                        <a href="#description" class="btn btn-outline-info btn-block" data-toggle="collapse"
+                        >Opis</a><br>
+                        <div id="description" class="collapse">{{ product.description|raw }}</div>
+                        {#</div>#}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- END: Content-->

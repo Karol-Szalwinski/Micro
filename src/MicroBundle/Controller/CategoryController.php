@@ -31,8 +31,9 @@ class CategoryController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $categories = $em->getRepository('MicroBundle:Category')->findAll();
+        $mainCategories = $em->getRepository('MicroBundle:Category')->findBy(['parent' => null]);
 
-        return $this->render('category/index.html.twig', array('categories' => $categories,));
+        return $this->render('category/index.html.twig', array('categories' => $categories,'mainCategories' => $mainCategories,));
     }
 
     /**
@@ -138,7 +139,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * get vcategory path
+     * get category path
      * @Method({"POST"})
      * @Route("/get/{categoryId}", name="category_get_ajax")
      * @param Request $request

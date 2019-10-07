@@ -8,6 +8,7 @@ use MicroBundle\Entity\ProductParameter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -28,8 +29,32 @@ class ProductController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $products = $em->getRepository('MicroBundle:Product')->findAll();
+        $mainCategories = $em->getRepository('MicroBundle:Category')->findBy(['parent' => null]);
 
-        return $this->render('product/index.html.twig', array('products' => $products,));
+        return $this->render('product/index.html.twig', array('products' => $products, 'mainCategories' => $mainCategories,));
+    }
+    /**
+     * Lists all product by category.
+     *
+     * @Route("/category/{categoryId}", name="product_index_category")
+     * @Method("GET")
+     */
+    public function showByCategoryAction($categoryId)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $category = $em->getRepository('MicroBundle:Category')->findOneBy(['id' => $categoryId]);
+
+        $products = $em->getRepository('MicroBundle:Product')->findBy(['category' => $categoryId]);
+
+        foreach ($category->getChildren() as $child) {
+            $childProducts = $em->getRepository('MicroBundle:Product')->findBy(['category' => $child->getId()]);
+            $products = array_merge($products,$childProducts);
+            dump($childProducts);
+        }
+        $mainCategories = $em->getRepository('MicroBundle:Category')->findBy(['parent' => null]);
+
+        return $this->render('product/index_cat.html.twig', array('products' => $products, 'category' => $category, 'mainCategories' => $mainCategories,));
     }
 
     /**
@@ -150,5 +175,31 @@ class ProductController extends Controller
     private function createDeleteForm(Product $product)
     {
         return $this->createFormBuilder()->setAction($this->generateUrl('product_delete', array('id' => $product->getId())))->setMethod('DELETE')->getForm();
+    }
+
+    /**
+     * get product info view
+     * @Method({"POST"})
+     * @Route("/get/{productId}", name="product_get_ajax")
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getCategoryAjaxAction(Request $request, $productId)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $product = $em->getRepository('MicroBundle:Product')->findOneBy(['id' => $productId]);
+
+        $productView = $this->render('product/modal_content.html.twig', array('product' => $product))->getContent();
+
+
+        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+
+            $jsonData['productView'] = $productView;
+
+            return new JsonResponse($jsonData);
+        }
+
+
     }
 }

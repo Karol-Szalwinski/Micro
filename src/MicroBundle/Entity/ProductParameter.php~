@@ -4,6 +4,7 @@ namespace MicroBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use MicroBundle\Entity\Category;
+use MicroBundle\Entity\Parameter;
 use MicroBundle\Entity\Product;
 
 /**
@@ -45,7 +46,7 @@ class ProductParameter
     /**
      * Many features have one product. This is the owning side.
      * @ORM\ManyToOne(targetEntity="Parameter", inversedBy="productParameters")
-     * @ORM\JoinColumn(name="parameter_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="parameter_id", referencedColumnName="id", onDelete="cascade")
      */
     private $parameter;
 
@@ -59,10 +60,12 @@ class ProductParameter
     /**
      * ProductParameter constructor.
      * @param string $name
+     * @param $parameter
      */
-    public function __construct($name = "")
+    public function __construct($name = "", $parameter = null)
     {
         $this->name = $name;
+        $this->parameter = $parameter;
     }
 
 
@@ -174,11 +177,11 @@ class ProductParameter
     /**
      * Set parameter.
      *
-     * @param \MicroBundle\Entity\Parameter|null $parameter
+     * @param Parameter|null $parameter
      *
      * @return ProductParameter
      */
-    public function setParameter(\MicroBundle\Entity\Parameter $parameter = null)
+    public function setParameter(Parameter $parameter = null)
     {
         $this->parameter = $parameter;
 
@@ -188,10 +191,34 @@ class ProductParameter
     /**
      * Get parameter.
      *
-     * @return \MicroBundle\Entity\Parameter|null
+     * @return Parameter|null
      */
     public function getParameter()
     {
         return $this->parameter;
+    }
+
+    /**
+     * Set prototypeId.
+     *
+     * @param int|null $prototypeId
+     *
+     * @return ProductParameter
+     */
+    public function setPrototypeId($prototypeId = null)
+    {
+        $this->prototypeId = $prototypeId;
+
+        return $this;
+    }
+
+    /**
+     * Get prototypeId.
+     *
+     * @return int|null
+     */
+    public function getPrototypeId()
+    {
+        return $this->prototypeId;
     }
 }

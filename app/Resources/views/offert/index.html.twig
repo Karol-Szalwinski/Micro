@@ -1,19 +1,19 @@
 {% extends 'base_product.html.twig' %}
 
-{% block title %}Lista produktów{% endblock %}
+{% block title %}Lista ofert{% endblock %}
 
 {% block body %}
     <!-- Content header -->
     <div class="content-header row">
         <div class="content-header-left col-md-6 col-12">
-            <h3 class="content-header-title mb-0">Lista produktów</h3>
+            <h3 class="content-header-title mb-0">Lista ofert</h3>
             <div class="row breadcrumbs-top">
                 <div class="breadcrumb-wrapper col-12">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ path('micro_default_index') }}">Główna</a>
                         </li>
 
-                        <li class="breadcrumb-item active">Lista produktów
+                        <li class="breadcrumb-item active">Lista ofert
                         </li>
 
                     </ol>
@@ -24,7 +24,7 @@
             <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
                 <div class="btn-group" role="group">
                     <a class="btn btn-outline-info" href="{{ path('product_new') }}"><i
-                                class="la la-plus"></i> Dodaj nowy</a>
+                                class="la la-plus"></i> Dodaj nową</a>
 
                 </div>
             </div>
@@ -38,7 +38,7 @@
             <div class="card">
                 <div class="card-head">
                     <div class="card-header">
-                        <h4 class="card-title">Lista produktów</h4>
+                        <h4 class="card-title">Lista ofert</h4>
                         <div class="heading-elements mt-0">
                         </div>
                     </div>
@@ -52,34 +52,29 @@
                                    class="table table-borderless mb-0 row-grouping display no-wrap icheck table-middle text-center">
                                 <thead>
                                 <tr>
-                                    <th>Zdjęcie</th>
+                                    <th>Id</th>
                                     <th>Nazwa</th>
-                                    <th>Cena netto</th>
+                                    <th>Klient</th>
+                                    <th>Data dodania</th>
+                                    <th>Wygasa</th>
+                                    <th>Status</th>
+                                    <th>Wartość</th>
                                     <th>Akcje</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for product in products %}
+                                {% for offert in offerts %}
                                     <tr>
-                                        <td>
-                                            <div class="media">
-                                                <div class="media-left pr-1"><span
-                                                class="avatar avatar-sm avatar-online rounded-circle"><img
-                                                src="../../../app-assets/images/portrait/small/avatar-s-2.png"
-                                                alt="avatar"><i></i></span></div>
-
-                                            </div>
+                                        <td><a href="{{ path('offert_show', { 'id': offert.id }) }}">{{ offert.id }}</a>
                                         </td>
-                                        <td class="text-center">
-                                            <a href = "{{ path('product_show', { 'id': product.id }) }}">{{ product.name }} ({{ product.id }})</a>
-                                        </td>
+                                        <td>{{ offert.name }}</td>
+                                        <td>{{ offert.client }}</td>
+                                        <td>{% if offert.addDate %}{{ offert.addDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                                        <td>{% if offert.expireDate %}{{ offert.expireDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                                        <td>{{ offert.status }}</td>
+                                        <td>{{ offert.totalValue }}</td>
                                         <td>
-
-                                            {{ product.price|price}}
-                                        </td>
-
-                                        <td>
-                                            <a href="{{ path('product_edit', { 'id': product.id }) }}"
+                                            <a href="{{ path('offert_edit', { 'id': offert.id }) }}"
                                                class="primary edit mr-1"><i class="la la-pencil"></i></a>
                                             <a class="danger delete mr-1"><i class="la la-trash-o"></i></a>
                                             <span class="dropdown">
@@ -89,13 +84,13 @@
                                                                             class="la la-ellipsis-v"></i></a>
                                                                 <span aria-labelledby="btnSearchDrop2"
                                                                       class="dropdown-menu mt-1 dropdown-menu-right">
-                                                                    <a href="{{ path('product_edit', { 'id': product.id }) }}"
+                                                                    <a href="{{ path('offert_edit', { 'id': offert.id }) }}"
                                                                        class="dropdown-item"><i
                                                                                 class="ft-edit-2"></i>
                                                                         Edytuj</a>
                                                                     <a href="#" class="dropdown-item delete"><i
                                                                                 class="ft-trash-2"></i> Usuń</a>
-                                                                    <a href="{{ path('product_new') }}"
+                                                                    <a href="{{ path('offert_new') }}"
                                                                        class="dropdown-item"><i
                                                                                 class="ft-plus-circle warning"></i> Dodaj</a>
 

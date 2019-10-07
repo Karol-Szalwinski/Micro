@@ -14,7 +14,12 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('default/index.html.twig');
+
+        $em = $this->getDoctrine()->getManager();
+
+        $mainCategories = $em->getRepository('MicroBundle:Category')->findBy(['parent' => null]);
+
+        return $this->render('default/index.html.twig', array('mainCategories' => $mainCategories,));
     }
 
 
