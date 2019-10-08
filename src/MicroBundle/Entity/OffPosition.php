@@ -29,11 +29,18 @@ class OffPosition
     private $name;
 
     /**
-     * @var string|null
+     * @var int
      *
-     * @ORM\Column(name="amount", type="string", length=255, nullable=true)
+     * @ORM\Column(name="amount", type="integer")
      */
     private $amount;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="purchase_price", type="integer", nullable=true)
+     */
+    private $purchasePrice;
 
     /**
      * @var int|null
@@ -215,5 +222,29 @@ class OffPosition
     public function getOffert()
     {
         return $this->offert;
+    }
+
+    /**
+     * Set purchasePrice.
+     *
+     * @param int|null $purchasePrice
+     *
+     * @return OffPosition
+     */
+    public function setPurchasePrice($purchasePrice = null)
+    {
+        $this->purchasePrice = $purchasePrice;
+
+        return $this;
+    }
+
+    /**
+     * Get purchasePrice.
+     *
+     * @return int|null
+     */
+    public function getPurchasePrice()
+    {
+        return $this->purchasePrice;
     }
 }

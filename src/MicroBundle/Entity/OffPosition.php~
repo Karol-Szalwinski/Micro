@@ -29,11 +29,18 @@ class OffPosition
     private $name;
 
     /**
-     * @var string|null
+     * @var int
      *
-     * @ORM\Column(name="amount", type="string", length=255, nullable=true)
+     * @ORM\Column(name="amount", type="integer")
      */
     private $amount;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="purchase_price", type="integer", nullable=true)
+     */
+    private $purchasePrice;
 
     /**
      * @var int|null

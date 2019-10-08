@@ -124,29 +124,63 @@
                 </div>
                 <div class="card-content">
                     <div class="card-body">
-                        <div class="table-responsive">
+                        <div class="table-responsive-md">
                             <table id="table-clients"
-                                   class="table table-borderless mb-0 row-grouping display no-wrap icheck table-middle text-center">
+                                   class="table table-borderless table-middle text-center">
                                 <thead>
                                 <tr>
                                     <th>Nazwa</th>
                                     <th>Ilość</th>
-                                    <th>Cena</th>
+                                    <th>Cena zakupu</th>
+                                    <th>Cena dla klienta</th>
+                                    <th>Łączna wartość</th>
+                                    <th>Usuń</th>
                                 </tr>
                                 </thead>
 
                                 <tbody class="parameters"
                                        data-prototype="{{ form_widget(form.offPositions.vars.prototype)|e('html_attr') }}">
                                 {#iterate over each existing tag and render its all fields#}
-                                {% for offPositions in form.offPositions %}
+                                {% for offPosition in form.offPositions %}
 
                                     <tr>
-                                        <td>{{ form_widget(offPositions.name) }}</td>
-                                        <td>{{ form_widget(offPositions.amount) }}</td>
-                                        <td>{{ form_widget(offPositions.price) }}</td>
+                                        <td>{{ form_widget(offPosition.name, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}</td>
+                                        <td>
+                                            <div class="touchspin-input-size-1 mx-auto ">{{ form_widget(offPosition.amount, {
+                                                    'attr': {'class': 'touchspin-color form-control',
+                                                        'data-bts-button-down-class' : 'btn btn-outline-info',
+                                                        'data-bts-button-up-class' : 'btn btn-outline-info',
+                                                        'data-bts-min' : '1',
+                                                        'data-bts-max' : '100000',
+                                                    } }) }}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>{{ offPosition.purchasePrice.vars.value|price }}</div>
+                                        </td>
+                                        <td>
+                                            <div class="touchspin-input-size-2 mx-auto input-group">{{ form_widget(offPosition.price, {
+                                                    'attr': {'class': ' form-control',
+                                                        'data-bts-button-down-class' : 'btn btn-outline-info',
+                                                        'data-bts-button-up-class' : 'btn btn-outline-info',
+                                                        'data-bts-min' : '1',
+                                                        'data-bts-max' : '100000',
+                                                        'data-bts-decimal' : '2',
+                                                        'data-bts-step' : '1',
+                                                        'data-bts-postfix' : '<b class="info">&#122;&#322;</b>',
+                                                    } }) }}
+                                                <div class="input-group-append info">
+                                                    <span class="input-group-text"><b class="info">&#122;&#322;</b></span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td id="summary-row">
+                                            {% set summary = offPosition.amount.vars.value|number_format * offPosition.price.vars.value|number_format * 100 %}
+                                            <div>{{ summary|price }}</div>
+                                        </td>
+                                        <td><a class="text-danger"><i class="la la-close"></i></a></td>
                                     </tr>
                                 {% endfor %}
-
                                 </tbody>
                                 <tfoot>
                                 </tfoot>
@@ -164,6 +198,7 @@
         <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
 
         <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>
+        <script src="{{ asset('app-assets/js/scripts/forms/input-groups.min.js') }}"></script>
 
         <script>
             $('#table-clients').DataTable({

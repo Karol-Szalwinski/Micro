@@ -4,6 +4,7 @@ namespace MicroBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use MicroBundle\Enums\OffertStatusEnum;
 
 /**
  * Offert
@@ -87,7 +88,8 @@ class Offert
      */
     public function __construct()
     {
-        $this->features = new ArrayCollection();
+        $this->offPositions = new ArrayCollection();
+        $this->status = OffertStatusEnum::BASKET;
     }
 
 
@@ -317,5 +319,35 @@ class Offert
     public function removeOffPosition(\MicroBundle\Entity\OffPosition $offPosition)
     {
         return $this->offPositions->removeElement($offPosition);
+    }
+
+    /**
+     * Set status.
+     *
+     * @param string $status
+     *
+     * @return Offert
+     */
+    public function setStatus($status)
+
+    {
+        if (!in_array($status, OffertStatusEnum::getAvailableStatuses())) {
+            throw new \InvalidArgumentException("Invalid type");
+        }
+
+        $this->status = $status;
+
+        return $this;
+    }
+
+
+    /**
+     * Get status.
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }
