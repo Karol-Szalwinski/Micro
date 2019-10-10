@@ -223,4 +223,28 @@ class OffPosition
     {
         return $this->offert;
     }
+
+    /**
+     * Set purchasePrice.
+     *
+     * @param int|null $purchasePrice
+     *
+     * @return OffPosition
+     */
+    public function setPurchasePrice($purchasePrice = null)
+    {
+        $this->purchasePrice = $purchasePrice;
+
+        return $this;
+    }
+
+    /**
+     * Get purchasePrice.
+     *
+     * @return int|null
+     */
+    public function getPurchasePrice()
+    {
+        return $this->purchasePrice;
+    }
 }

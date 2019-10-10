@@ -243,8 +243,8 @@ $(document).ready(function(){
 			density: 3,
 			filter: filter500,
 			format: wNumb({
-				decimals: 2,
-				prefix: '$'
+				decimals: 1,
+				prefix: '%'
 			})
 		}
 	});

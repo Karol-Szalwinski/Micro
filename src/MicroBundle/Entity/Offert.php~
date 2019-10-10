@@ -40,7 +40,7 @@ class Offert
     /**
      * @var string
      *
-     * @ORM\Column(name="myCompany", type="string", length=255)
+     * @ORM\Column(name="myCompany", type="text", nullable=true)
      */
     private $myCompany;
 
@@ -74,9 +74,15 @@ class Offert
 
     /**
      * One Offert has many OffPositions. This is the inverse side.
-     * @ORM\OneToMany(targetEntity="OffPosition", mappedBy="offert")
+     * @ORM\OneToMany(targetEntity="OffPosition", mappedBy="offert", cascade={"persist"})
      */
     private $offPositions;
+
+    /**
+     * One Offert has many OffServices. This is the inverse side.
+     * @ORM\OneToMany(targetEntity="OffServices", mappedBy="offert", cascade={"persist"})
+     */
+    private $offServices;
 
     /**
      * @ORM\Column(name="status", type="string", length=255)

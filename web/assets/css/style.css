@@ -74,13 +74,14 @@ background-color: #d4e1ef;
     width: 120px;
 }
 
+/*inputs in offert show*/
 .touchspin-input-size-1 {
-    width: 160px;
+    width: 150px;
     text-align: center;
 }
 .touchspin-input-size-1 input, .touchspin-input-size-2 input {
     text-align: center;
 }
 .touchspin-input-size-2 {
-    width: 120px;
+    width: 130px;
 }

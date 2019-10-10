@@ -40,7 +40,7 @@ class Offert
     /**
      * @var string
      *
-     * @ORM\Column(name="myCompany", type="string", length=255)
+     * @ORM\Column(name="myCompany", type="text", nullable=true)
      */
     private $myCompany;
 
@@ -68,15 +68,21 @@ class Offert
     /**
      * @var string|null
      *
-     * @ORM\Column(name="comment", type="string", length=255, nullable=true)
+     * @ORM\Column(name="comment", type="text", nullable=true)
      */
     private $comment;
 
     /**
      * One Offert has many OffPositions. This is the inverse side.
-     * @ORM\OneToMany(targetEntity="OffPosition", mappedBy="offert")
+     * @ORM\OneToMany(targetEntity="OffPosition", mappedBy="offert", cascade={"persist"})
      */
     private $offPositions;
+
+    /**
+     * One Offert has many OffService. This is the inverse side.
+     * @ORM\OneToMany(targetEntity="OffService", mappedBy="offert", cascade={"persist"})
+     */
+    private $offServices;
 
     /**
      * @ORM\Column(name="status", type="string", length=255)
@@ -349,5 +355,41 @@ class Offert
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Add offService.
+     *
+     * @param \MicroBundle\Entity\OffService $offService
+     *
+     * @return Offert
+     */
+    public function addOffService(\MicroBundle\Entity\OffService $offService)
+    {
+        $this->offServices[] = $offService;
+
+        return $this;
+    }
+
+    /**
+     * Remove offService.
+     *
+     * @param \MicroBundle\Entity\OffService $offService
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeOffService(\MicroBundle\Entity\OffService $offService)
+    {
+        return $this->offServices->removeElement($offService);
+    }
+
+    /**
+     * Get offServices.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getOffServices()
+    {
+        return $this->offServices;
     }
 }

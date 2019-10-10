@@ -2,7 +2,18 @@
 
 {% block title %}Oferta{% endblock %}
 
+{% block styles %}
+    <link rel="stylesheet" type="text/css"
+          href="{{ asset('app-assets/vendors/css/ui/jquery-ui-slider-pips.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/ui/jquery-ui.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/extensions/nouislider.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/noUiSlider.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/core/colors/palette-noui.css') }}">
+{% endblock %}
+
 {% block body %}
+
+
     <!-- Content header -->
     <div class="content-header row">
         <div class="content-header-left col-md-6 col-12">
@@ -32,7 +43,7 @@
     </div>
     <!-- Content header -->
 
-
+    {{ form_start(form) }}
     <section class="row all-contacts">
         <div class="col-12">
             <div class="card">
@@ -57,7 +68,7 @@
                             <div class="form-group row">
                                 {{ form_label(form.addDate, 'Data wystawienia', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                 <div class="col-md-9 mx-auto">
-                                    {{ form_widget(form.addDate, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}
+                                    {{ form_widget(form.addDate, { 'attr': {'class': 'form-control'} }) }}
 
                                 </div>
 
@@ -65,7 +76,7 @@
                             <div class="form-group row">
                                 {{ form_label(form.expireDate, 'Oferta ważna do', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                 <div class="col-md-9 mx-auto">
-                                    {{ form_widget(form.expireDate, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}
+                                    {{ form_widget(form.expireDate, { 'attr': {'class': 'form-control'} }) }}
 
                                 </div>
 
@@ -122,10 +133,21 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="card-content">
                     <div class="card-body">
+
+                        <div class="form-group">
+                            <div id="pips-steps-filter" class="my-3"></div>
+                        </div>
+                        <div>
+                            <br>
+                            <h3 class="text-center text-danger">Twój zysk wynosi <span id="profit"></span> %</h3>
+                            <br>
+                        </div>
+
                         <div class="table-responsive-md">
-                            <table id="table-clients"
+                            <table id="table-positions"
                                    class="table table-borderless table-middle text-center">
                                 <thead>
                                 <tr>
@@ -138,16 +160,18 @@
                                 </tr>
                                 </thead>
 
-                                <tbody class="parameters"
+
+                                <tbody class="positions"
                                        data-prototype="{{ form_widget(form.offPositions.vars.prototype)|e('html_attr') }}">
                                 {#iterate over each existing tag and render its all fields#}
                                 {% for offPosition in form.offPositions %}
+
 
                                     <tr>
                                         <td>{{ form_widget(offPosition.name, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}</td>
                                         <td>
                                             <div class="touchspin-input-size-1 mx-auto ">{{ form_widget(offPosition.amount, {
-                                                    'attr': {'class': 'touchspin-color form-control',
+                                                    'attr': {'class': 'touchspin-info form-control',
                                                         'data-bts-button-down-class' : 'btn btn-outline-info',
                                                         'data-bts-button-up-class' : 'btn btn-outline-info',
                                                         'data-bts-min' : '1',
@@ -156,7 +180,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <div>{{ offPosition.purchasePrice.vars.value|price }}</div>
+                                            <div class="purchasePrice">{{ offPosition.purchasePrice.vars.value|price }}</div>
                                         </td>
                                         <td>
                                             <div class="touchspin-input-size-2 mx-auto input-group">{{ form_widget(offPosition.price, {
@@ -170,11 +194,12 @@
                                                         'data-bts-postfix' : '<b class="info">&#122;&#322;</b>',
                                                     } }) }}
                                                 <div class="input-group-append info">
-                                                    <span class="input-group-text"><b class="info">&#122;&#322;</b></span>
+                                                    <span class="input-group-text"><b
+                                                                class="info">&#122;&#322;</b></span>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td id="summary-row">
+                                        <td class="summary-row">
                                             {% set summary = offPosition.amount.vars.value|number_format * offPosition.price.vars.value|number_format * 100 %}
                                             <div>{{ summary|price }}</div>
                                         </td>
@@ -185,6 +210,133 @@
                                 <tfoot>
                                 </tfoot>
                             </table>
+                            <!-- Button to Open the Modal -->
+                            <button type="button" class="btn btn-outline-info" data-toggle="modal"
+                                    data-target="#newProduct">
+                                Dodaj nowy produkt <i class="la la-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="row all-contacts">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-head">
+                    <div class="card-header">
+                        <h4 class="card-title">Usługi / Pozostałe produkty</h4>
+                        <div class="heading-elements mt-0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-content">
+                    <div class="card-body">
+
+                        {#<div class="form-group">#}
+                        {#<div id="pips-steps-filter" class="my-3"></div>#}
+                        {#</div>#}
+                        {#<div>#}
+                        {#<br>#}
+                        {#<h3 class="text-center text-danger">Twój zysk wynosi <span id="profit"></span> %</h3>#}
+                        {#<br>#}
+                        {#</div>#}
+
+                        <div class="table-responsive-md">
+                            <table id="table-services"
+                                   class="table table-borderless table-middle text-center">
+                                <thead>
+                                <tr>
+                                    <th>Nazwa</th>
+                                    <th>Ilość</th>
+                                    <th>Cena dla klienta</th>
+                                    <th>Łączna wartość</th>
+                                    <th>Usuń</th>
+                                </tr>
+                                </thead>
+
+
+                                <tbody class="services"
+                                       data-prototype="{{ form_widget(form.offServices.vars.prototype)|e('html_attr') }}">
+                                {#iterate over each existing tag and render its all fields#}
+                                {% for offService in form.offServices %}
+
+
+                                    <tr>
+                                        <td>{{ form_widget(offService.name, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}</td>
+                                        <td>
+                                            <div class="touchspin-input-size-1 mx-auto ">{{ form_widget(offService.amount, {
+                                                    'attr': {'class': 'touchspin-info form-control',
+                                                        'data-bts-button-down-class' : 'btn btn-outline-info',
+                                                        'data-bts-button-up-class' : 'btn btn-outline-info',
+                                                        'data-bts-min' : '1',
+                                                        'data-bts-max' : '100000',
+                                                    } }) }}
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="touchspin-input-size-2 mx-auto input-group">{{ form_widget(offService.price, {
+                                                    'attr': {'class': ' form-control',
+                                                        'data-bts-button-down-class' : 'btn btn-outline-info',
+                                                        'data-bts-button-up-class' : 'btn btn-outline-info',
+                                                        'data-bts-min' : '1',
+                                                        'data-bts-max' : '100000',
+                                                        'data-bts-decimal' : '2',
+                                                        'data-bts-step' : '1',
+                                                        'data-bts-postfix' : '<b class="info">&#122;&#322;</b>',
+                                                    } }) }}
+                                                <div class="input-group-append info">
+                                                    <span class="input-group-text"><b
+                                                                class="info">&#122;&#322;</b></span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="summary-row">
+                                            {% set summary = offService.amount.vars.value|number_format * offService.price.vars.value|number_format * 100 %}
+                                            <div>{{ summary|price }}</div>
+                                        </td>
+                                        <td><a class="text-danger"><i class="la la-close"></i></a></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                </tfoot>
+                            </table>
+                            <!-- Button to Open the Modal -->
+                            <button id="add-service-btn" type="button" class="btn btn-outline-info">
+                                Dodaj inny koszt <i class="la la-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="row all-contacts">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-head">
+                    <div class="card-header">
+                        <h4 class="card-title">Komentarz widoczny dla klienta</h4>
+                        <div class="heading-elements mt-0">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-content">
+                    <div class="card-body">
+                        <div class="form-body col-md-12">
+                            <div class="form-group row">
+                                <div class="col-md-11 mx-auto">
+                                    {{ form_widget(form.comment, { 'attr': {'class': 'form-control', 'placeholder': 'Uwagi do oferty'} }) }}
+
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -192,27 +344,135 @@
         </div>
     </section>
 
+    <!-- The Modal -->
+    <div class="modal fade" id="newProduct">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Modal Heading</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <table id="table-clients"
+                           class="table table-borderless table-striped mb-0 row-grouping display no-wrap icheck table-middle text-center">
+                        <thead>
+                        <tr>
+                            <th>Zdjęcie</th>
+                            <th>Nazwa</th>
+                            <th>Cena netto</th>
+                            <th>Akcje</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for product in products %}
+                            <tr>
+                                <td>
+                                    <div class="media">
+                                        <div class="media-left pr-1"><span
+                                                    class="avatar avatar-sm avatar-online rounded-circle"><img
+                                                        src="../../../app-assets/images/portrait/small/avatar-s-2.png"
+                                                        alt="avatar"><i></i></span></div>
+
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <a href="#" class="product-modal-trigger"
+                                       data-id="{{ product.id }}">{{ product.name }} ({{ product.id }})</a><br>
+                                    <p href="#" class="product-modal-trigger" data-id="{{ product.id }}">
+                                        {% for param in product.productParameters %}
+                                            {{ param.value }}
+                                        {% endfor %}
+                                    </p>
+                                </td>
+                                <td>
+
+                                    {{ product.price|price }}
+                                </td>
+
+                                <td class="mx-auto">
+                                    <button data-id="{{ product.id }}"
+                                            data-name="{{ product.name }}"
+                                            data-price="{{ product.price }}"
+                                            class="btn btn-outline-info add-product-btn"><span>Dodaj&nbsp;</span><i
+                                                class="la la-plus"></i></button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
-    {% block scripts %}
-        <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
+{% block fixedFooter %}
+    <!-- BEGIN: Footer-->
+    <footer class="footer fixed-bottom footer-dark footer-shadow navbar-border navbar-shadow">
+        {#<p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2">#}
+            {#<span class="float-md-left d-block d-md-inline-block">Copyright &copy; 2019 </span>#}
+            {#<span class="float-md-right d-none d-lg-block">Hand-crafted & Made with <i class="ft-heart pink"></i>#}
+                {#<span id="scroll-top"></span>#}
+            {#</span>#}
+        {#</p>#}
+        <h3 class="float-left red">Łączne koszty zakupu <span id="total-purchase"></span> zł</h3>
+        <h3 class="float-left white">&nbsp;|&nbsp;</h3>
+        <h3 class="float-left blue">Łączna wartość dla klienta <span id="total-sell"></span> zł</h3>
+        <h3 class="float-left white">&nbsp;|&nbsp;</h3>
+        <h3 class="float-left yellow" >Zysk łączny <span id="total-profit"></span> zł </h3>
+        <span class="float-md-right">
+            <button type="submit" class="btn btn-outline-amber">Zapisz ofertę</button>
+        </span>
+        {{ form_end(form) }}
+    </footer>
+    <!-- END: Footer-->
 
-        <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>
-        <script src="{{ asset('app-assets/js/scripts/forms/input-groups.min.js') }}"></script>
 
-        <script>
-            $('#table-clients').DataTable({
-                "language": {
-                    "lengthMenu": "Pokaż _MENU_ wierszy na stronie",
-                    "zeroRecords": "Niestety brak wyników",
-                    "info": "Stron _PAGE_ z _PAGES_",
-                    "infoEmpty": "Brak wierszy",
-                    "infoFiltered": "(znaleziono z _MAX_ wszystkich wierszy)",
-                    "search": "Szukaj"
-                },
-                "paging": false,
-            });
-        </script>
+{% endblock %}
 
-    {% endblock %}
+{#{% block fixedFooter %}#}
+
+{#<!-- START FOOTER DARK-->#}
+{#<footer class="navbar footer fixed-bottom footer-light footer-shadow content container-fluid">#}
+    {#<p>Stopka</p>#}
+{#</footer>#}
+{#<!-- START FOOTER DARK->#}
+
+{#{% endblock %}#}
+
+{% block scripts %}
+    <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
+
+    <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>
+    <script src="{{ asset('app-assets/js/core/libraries/jquery_ui/jquery-ui.min.js') }}"></script>
+
+    {#<script src="{{ asset('app-assets/vendors/js/ui/jquery-ui-slider-pips.min.js') }}"></script>#}
+    <script src="{{ asset('app-assets/vendors/js/extensions/wNumb.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/extensions/nouislider.min.js') }}"></script>
+
+    <script src="{{ asset('app-assets/js/scripts/ui/jquery-ui/slider-spinner.min.js') }}"></script>
+    {#<script src="{{ asset('app-assets/js/scripts/forms/input-groups.min.js') }}"></script>#}
+
+
+    {#<script src="{{ asset('app-assets/js/scripts/extensions/noui-slider.js') }}"></script>#}
+
+    <script src="{{ asset('assets/js/offert.js') }}"></script>
+    <script>
+
+    </script>
+
+
+{% endblock %}
 

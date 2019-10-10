@@ -68,17 +68,20 @@ class OffertController extends Controller
      */
     public function showAction(Request $request,Offert $offert)
     {
+        $em = $this->getDoctrine()->getManager();
+        $products = $em->getRepository('MicroBundle:Product')->findAll();
         $form = $this->createForm('MicroBundle\Form\OffertType', $offert);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $em->flush();
 
             return $this->redirectToRoute('offert_index');
         }
 
         return $this->render('offert/show.html.twig', array(
             'offert' => $offert,
+            'products' => $products,
             'form' => $form->createView(),
         ));
     }
