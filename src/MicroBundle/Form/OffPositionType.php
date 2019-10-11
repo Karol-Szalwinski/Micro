@@ -19,10 +19,15 @@ class OffPositionType extends AbstractType
         $builder
             ->add('name')
             ->add('amount', TextType::class )
-            ->add('purchasePrice')
+            ->add('purchasePrice', MoneyType::class, [
+                'divisor' => 100,
+                'currency' => false,
+                'attr'=> [ 'readonly' => true ]
+            ])
             ->add('price', MoneyType::class, [
                 'divisor' => 100,
                 'currency' => false,
+
             ])
             ;
 

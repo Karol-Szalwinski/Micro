@@ -1,0 +1,163 @@
+
+    <!-- BEGIN: Main Menu-->
+
+    <div class="main-menu menu-fixed menu-dark menu-accordion menu-shadow" data-scroll-to-active="true">
+        <div class="main-menu-content">
+            <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+                <li class=" nav-item"><a href="{{ path('micro_default_index') }}"><i class="la la-home "></i><span
+                                class="menu-title"
+                                data-i18n="nav.dash.main">Główna strona</span></a>
+                </li>
+                <li class=" nav-item"><a href="{{ path('client_index') }}"><i class="la la-group "></i><span
+                                class="menu-title"
+                                data-i18n="nav.dash.main">Klienci</span><span
+                                id="counter-clients"
+                                class="badge badge-pill float-right mr-2"></span></a>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('client_index') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Lista produktów</span></a>
+                        </li>
+
+                    </ul>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('client_new') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Dodaj nowy</span></a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class=" nav-item"><a href="{{ path('offert_index') }}"><i class="la la-newspaper-o"></i><span
+                                class="menu-title"
+                                data-i18n="nav.dash.main">Oferty</span><span
+                                id="counter-buildings"
+                                class="badge badge-pill float-right mr-2"></span></a>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('offert_index') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Lista ofert</span></a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class=" nav-item"><a href="{{ path('product_index') }}"><i class="la la-building-o"></i><span
+                                class="menu-title"
+                                data-i18n="nav.dash.main">Produkty</span><span
+                                id="counter-buildings"
+                                class="badge badge-pill float-right mr-2"></span></a>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('product_index') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Lista produktów</span></a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class=" nav-item"><a href="{{ path('category_index') }}"><i class="la la-list-alt "></i><span
+                                class="menu-title "
+
+                                data-i18n="nav.dash.main">Kategorie</span><span
+                                id="counter-documents"
+                                class="badge badge-pill float-right mr-2"></span></a>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('category_index') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Lista kategorii</span></a>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <li class=" nav-item"><a href="{{ path('user_index') }}"><i class="la la-user "></i><span
+                                class="menu-title"
+                                data-i18n="nav.dash.main">Użytkownicy</span><span
+                                id="counter-users"
+                                class="badge badge-pill float-right mr-2"></span></a>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('user_index') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Lista Użytkowników</span></a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class=" nav-item"><a href="{{ path('building_index') }}"><i class="la la-book"></i><span
+                                class="menu-title"
+                                data-i18n="nav.dash.main">Słowniki</span></a>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('devicename_index') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Słownik Urządzeń PPOŻ</span></a>
+                        </li>
+
+                    </ul>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('inspector_index') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Inspektorzy</span></a>
+                        </li>
+
+                    </ul>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('stamp_index') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Pieczątki</span></a>
+                        </li>
+
+                    </ul>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('def_document_show') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Szablon Przeglądu</span></a>
+                        </li>
+
+                    </ul>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('mycompany_show') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Dane mojej firmy</span></a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class=" nav-item"><a href="{{ path('user_index') }}"><i class="la la-user "></i><span
+                                class="menu-title"
+                                data-i18n="nav.dash.main">Użytkownicy</span><span
+                                id="counter-users"
+                                class="badge badge-pill float-right mr-2"></span></a>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('user_index') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Lista Użytkowników</span></a>
+                        </li>
+
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <!-- END: Main Menu-->
+
+
+{#{% block scripts %}#}
+    {#<!-- BEGIN: AJAX menu -->#}
+    {#<script>#}
+        {#function fillBadges() {#}
+            {#$.ajax({#}
+                {#url: '/menu-counter',#}
+                {#type: 'POST',#}
+                {#dataType: 'json',#}
+                {#async: true,#}
+
+                {#success: function (data, status) {#}
+
+                    {#$('#counter-clients').addClass("badge-info").text(data['clients']);#}
+                    {#$('#counter-buildings').addClass("badge-info").text(data['buildings']);#}
+                    {#$('#counter-documents').addClass("badge-info").text(data['documents']);#}
+                    {#$('.counter-documents').text(data['documents']);#}
+
+                {#},#}
+
+            {#});#}
+        {#}#}
+
+        {#fillBadges();#}
+        {#setInterval(fillBadges, 120000);#}
+
+    {#</script>#}
+
+    {#<!-- END: AJAX menu-->#}
+{#{% endblock %}#}
+
+

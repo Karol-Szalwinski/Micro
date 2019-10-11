@@ -15,12 +15,21 @@ $('#table-clients').DataTable({
 jQuery(document).ready(function () {
     updateAllValues();
 });
-function updateAllValues(){
+
+function updateTotalValue(totalProducts, totalServices) {
+    $totalValueInput = $('#microbundle_offert_totalValue');
+
+    $totalValueInput.val((totalProducts + totalServices).toFixed(2) * 100);
+
+}
+
+function updateAllValues() {
     var totalProductArr = refreshTotalValues();
     var totalPurchase = totalProductArr[0];
     var totalProducts = totalProductArr[1];
     var totalServices = refreshServicesTotalValues();
-    updateFooter(totalPurchase, totalProducts, totalServices );
+    updateFooter(totalPurchase, totalProducts, totalServices);
+    updateTotalValue(totalProducts, totalServices);
 }
 
 //refresh total column and footer after blur input
@@ -29,9 +38,8 @@ $(document).on('change', 'input ', function () {
 });
 
 
-
 /****************************************************
- *                Prepare Inputs        *
+ *                Prepare Inputs                    *
  ****************************************************/
 //change type of input from text to date for run datepicker
 $("#microbundle_offert_addDate").get(0).type = 'date';
@@ -87,15 +95,14 @@ jQuery(document).ready(function () {
     // });
     $addProductsButton.on('click', function (e) {
         priceDec = $(this).data("price") / 100;
-        var price = priceDec.toLocaleString('pl-PL', {
-            style: 'currency',
-            currency: 'PLN',
-        });
+        var purchasePrice = priceDec;
+        var price = priceDec + priceDec * 15 / 100;
 
         var product =
             {
                 id: $(this).data("id"),
                 name: $(this).data("name"),
+                purchasePrice: purchasePrice,
                 price: price,
             }
         console.log(product);
@@ -120,7 +127,11 @@ function addTagForm($collectionHolder, $newLinkTr, product) {
         "    </div>\n" +
         "</td>\n" +
         "<td>\n" +
-        "    <div class='purchasePrice' >" + product.price + "</div>\n" +
+        "<div class='purchasePrice'>" +
+        "    <input type='text' id='microbundle_offert_offPositions___name___purchasePrice'" +
+        "           name='microbundle_offert[offPositions][__name__][purchasePrice]' required='required' readonly='readonly'" +
+        "           class='form-control hide-input ' value='" + product.purchasePrice + "'>" +
+        "</div>" +
         "</td>\n" +
         "<td>\n" +
         "    <div class='touchspin-input-size-2 mx-auto input-group'><input type='text' id='microbundle_offert_offPositions___name___price' " +
@@ -194,8 +205,8 @@ function refreshTotalValues() {
 
 
         if (!isNaN(amount)) {
-            var purchasePriceDiv = tr.find(".purchasePrice");
-            var purchasePrice = parseFloat(purchasePriceDiv.html().replace(",", "."));
+            var purchasePriceInput= tr.find(".purchasePrice input");
+            var purchasePrice = parseFloat(purchasePriceInput.val().replace(",", "."));
             summaryPurchaseValue += purchasePrice * amount;
 
             var price = parseFloat(tr.find('input[id$="price"]').val().replace(",", "."));
@@ -228,17 +239,17 @@ function refreshInputValuesAfterChangeSlider(profit) {
 
     $('tbody.positions').find('tr').each(function () {
         var tr = $(this);
-        var purchasePriceDiv = tr.find(".purchasePrice");
+        var purchasePriceInput= tr.find(".purchasePrice input");
+        var purchasePrice = parseFloat(purchasePriceInput.val().replace(",", "."));
         var priceInput = tr.find('input[id$="price"]');
 
-        var purchasePrice = parseFloat(purchasePriceDiv.html().replace(",", "."));
         var newValueFloat = purchasePrice + purchasePrice * profit / 100;
         var newValueCurrency = newValueFloat.toLocaleString('pl-PL', {
             style: 'currency',
             currency: 'PLN',
         });
         var newValue = newValueCurrency.substr(0, newValueCurrency.toString().length - 3);
-            //update input
+        //update input
         priceInput.val(newValue);
 
 
@@ -288,12 +299,18 @@ noUiSlider.create(pipsStepsFilter, {
 });
 
 pipsStepsFilter.noUiSlider.on('change', function (values) {
+    if (isNaN(values)) {
+        values = 0.00;
+    }
     profit.innerHTML = values;
     refreshInputValuesAfterChangeSlider(values);
     updateAllValues();
 });
 
 function setSlider(value) {
+    if (isNaN(value)) {
+        value = 0.00;
+    }
     pipsStepsFilter.noUiSlider.set(value);
     profit.innerHTML = value;
 }
@@ -326,7 +343,7 @@ jQuery(document).ready(function () {
     // index when inserting a new item (e.g. 2)
     $servicesCollectionHolder.data('index', $servicesCollectionHolder.find('tr').length);
 
-    $addServicesButton.on('click', function(e) {
+    $addServicesButton.on('click', function (e) {
         // add a new tag form (see next code block)
         addTagFormService($servicesCollectionHolder, $newLinkTrService);
     });
@@ -442,18 +459,14 @@ function refreshServicesTotalValues() {
  *        Refreshing footer values                  *
  ****************************************************/
 
-function updateFooter(totalPurchase, totalProducts, totalServices ) {
-var $totalPurchaseSpan = $('#total-purchase');
-var $totalSellSpan = $('#total-sell');
-var $totalProfitSpan = $('#total-profit');
+function updateFooter(totalPurchase, totalProducts, totalServices) {
+    var $totalPurchaseSpan = $('#total-purchase');
+    var $totalSellSpan = $('#total-sell');
+    var $totalProfitSpan = $('#total-profit');
 
-    totalPurchase = roundTo2Decimal(totalPurchase);
-    totalProducts = roundTo2Decimal(totalProducts);
-    totalServices = roundTo2Decimal(totalServices);
-
-    $totalPurchaseSpan.html(totalPurchase);
-    $totalSellSpan.html(totalProducts + totalServices);
-    $totalProfitSpan.html(roundTo2Decimal((totalProducts + totalServices - totalPurchase)));
+    $totalPurchaseSpan.html(totalPurchase.toFixed(2));
+    $totalSellSpan.html((totalProducts + totalServices).toFixed(2));
+    $totalProfitSpan.html(roundTo2Decimal((totalProducts + totalServices - totalPurchase).toFixed(2)));
 
 
 }

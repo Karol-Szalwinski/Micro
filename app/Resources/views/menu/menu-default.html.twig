@@ -1,6 +1,4 @@
-{% extends 'base.html.twig' %}
 
-{% block mainmenu %}
 
     <!-- BEGIN: Main Menu-->
 
@@ -79,26 +77,52 @@
 
                     </ul>
                 </li>
-                {% if mainCategories is defined %}
-                    {% for mainCategory in mainCategories %}
-                        <li class=" nav-item"><a href="{{ path('product_index_category', { categoryId : mainCategory.id}) }}"><i class="la la-laptop "></i><span
-                                        class="menu-title"
-                                        data-i18n="nav.dash.main">{{ mainCategory.name }}</span><span
-                                        id="counter-users"
-                                        class="badge badge-pill float-right mr-2"></span></a>
-                            <ul class="menu-content">
-                                <li><a href="{{ path('product_index_category', { categoryId : mainCategory.id}) }}" class="menu-item" href="{{ path('user_index') }}"><i></i><span
-                                                data-i18n="nav.dash.ecommerce">Pokaż wszystkie</span></a>
-                                </li>
-                                {% for subCategory in mainCategory.children %}
-                                    <li><a class="menu-item" href="{{ path('product_index_category', { categoryId : subCategory.id}) }}"><i></i><span
-                                                    data-i18n="nav.dash.ecommerce">{{ subCategory.name }}</span></a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
+                <li class=" nav-item"><a href="{{ path('building_index') }}"><i class="la la-book"></i><span
+                                class="menu-title"
+                                data-i18n="nav.dash.main">Słowniki</span></a>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('devicename_index') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Słownik Urządzeń PPOŻ</span></a>
                         </li>
-                    {% endfor %}
-                {% endif %}
+
+                    </ul>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('inspector_index') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Inspektorzy</span></a>
+                        </li>
+
+                    </ul>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('stamp_index') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Pieczątki</span></a>
+                        </li>
+
+                    </ul>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('def_document_show') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Szablon Przeglądu</span></a>
+                        </li>
+
+                    </ul>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('mycompany_show') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Dane mojej firmy</span></a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class=" nav-item"><a href="{{ path('user_index') }}"><i class="la la-user "></i><span
+                                class="menu-title"
+                                data-i18n="nav.dash.main">Użytkownicy</span><span
+                                id="counter-users"
+                                class="badge badge-pill float-right mr-2"></span></a>
+                    <ul class="menu-content">
+                        <li><a class="menu-item" href="{{ path('user_index') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Lista Użytkowników</span></a>
+                        </li>
+
+                    </ul>
+                </li>
 
             </ul>
         </div>
@@ -106,37 +130,35 @@
 
     <!-- END: Main Menu-->
 
-{% endblock %}
 
+{#{% block scripts %}#}
+    {#<!-- BEGIN: AJAX menu -->#}
+    {#<script>#}
+        {#function fillBadges() {#}
+            {#$.ajax({#}
+                {#url: '/menu-counter',#}
+                {#type: 'POST',#}
+                {#dataType: 'json',#}
+                {#async: true,#}
 
-{% block scripts %}
-    <!-- BEGIN: AJAX menu -->
-    <script>
-        function fillBadges() {
-            $.ajax({
-                url: '/menu-counter',
-                type: 'POST',
-                dataType: 'json',
-                async: true,
+                {#success: function (data, status) {#}
 
-                success: function (data, status) {
+                    {#$('#counter-clients').addClass("badge-info").text(data['clients']);#}
+                    {#$('#counter-buildings').addClass("badge-info").text(data['buildings']);#}
+                    {#$('#counter-documents').addClass("badge-info").text(data['documents']);#}
+                    {#$('.counter-documents').text(data['documents']);#}
 
-                    $('#counter-clients').addClass("badge-info").text(data['clients']);
-                    $('#counter-buildings').addClass("badge-info").text(data['buildings']);
-                    $('#counter-documents').addClass("badge-info").text(data['documents']);
-                    $('.counter-documents').text(data['documents']);
+                {#},#}
 
-                },
+            {#});#}
+        {#}#}
 
-            });
-        }
+        {#fillBadges();#}
+        {#setInterval(fillBadges, 120000);#}
 
-        fillBadges();
-        setInterval(fillBadges, 120000);
+    {#</script>#}
 
-    </script>
-
-    <!-- END: AJAX menu-->
-{% endblock %}
+    {#<!-- END: AJAX menu-->#}
+{#{% endblock %}#}
 
 

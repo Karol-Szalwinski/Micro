@@ -23,9 +23,12 @@
           href="{{ asset('app-assets/vendors/css/tables/datatable/datatables.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/ui/jquery-ui.min.css') }}">
 
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/tables/extensions/buttons.dataTables.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/tables/datatable/buttons.bootstrap4.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/forms/spinner/jquery.bootstrap-touchspin.css') }}">
+    <link rel="stylesheet" type="text/css"
+          href="{{ asset('app-assets/vendors/css/tables/extensions/buttons.dataTables.min.css') }}">
+    <link rel="stylesheet" type="text/css"
+          href="{{ asset('app-assets/vendors/css/tables/datatable/buttons.bootstrap4.min.css') }}">
+    <link rel="stylesheet" type="text/css"
+          href="{{ asset('app-assets/vendors/css/forms/spinner/jquery.bootstrap-touchspin.css') }}">
 
     <!-- END: Vendor CSS-->
 
@@ -425,7 +428,8 @@
                                                                                 href="app-chat.html"><i
                                         class="ft-message-square"></i> Chats</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item"  href="{{ path('fos_user_security_logout') }}"><i class="ft-power"></i> Logout</a>
+                            <a class="dropdown-item" href="{{ path('fos_user_security_logout') }}"><i
+                                        class="ft-power"></i> Logout</a>
                         </div>
                     </li>
                 </ul>
@@ -434,10 +438,18 @@
     </div>
 </nav>
 <!-- END: Header-->
+{% set menu = app.session.get('menu') %}
 
-{% block mainmenu %}
+{% if menu == 'admin' %}
+    {% include 'menu/menu-admin.html.twig' %}
+{% elseif menu == 'document' %}
+    {% include 'menu/menu-document.html.twig' %}
+{% elseif menu == 'product' %}
+    {% include 'menu/menu-product.html.twig' %}
+{% else %}
+    {% include 'menu/menu-default.html.twig' %}
+{% endif %}
 
-{% endblock %}
 
 <!-- BEGIN: Content-->
 <div class="app-content content">
@@ -458,16 +470,16 @@
 <div class="sidenav-overlay"></div>
 <div class="drag-target"></div>
 {% block fixedFooter %}
-<!-- BEGIN: Footer-->
-<footer class="footer footer-static footer-light navbar-border navbar-shadow">
-    <p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2"><span
-                class="float-md-left d-block d-md-inline-block">Copyright &copy; 2019 <a
-                    class="text-bold-800 grey darken-2"
-                    href="https://pl.linkedin.com/in/karol-szalwinski" target="_blank">Shalvinsky</a></span><span
-                class="float-md-right d-none d-lg-block">Hand-crafted & Made with <i class="ft-heart pink"></i><span
-                    id="scroll-top"></span></span></p>
-</footer>
-<!-- END: Footer-->
+    <!-- BEGIN: Footer-->
+    <footer class="footer footer-static footer-light navbar-border navbar-shadow">
+        <p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2"><span
+                    class="float-md-left d-block d-md-inline-block">Copyright &copy; 2019 <a
+                        class="text-bold-800 grey darken-2"
+                        href="https://pl.linkedin.com/in/karol-szalwinski" target="_blank">Shalvinsky</a></span><span
+                    class="float-md-right d-none d-lg-block">Hand-crafted & Made with <i class="ft-heart pink"></i><span
+                        id="scroll-top"></span></span></p>
+    </footer>
+    <!-- END: Footer-->
 
 
 {% endblock %}
@@ -492,14 +504,57 @@
 <script src="{{ asset('app-assets/js/core/app.js') }}"></script>
 <!-- END: Theme JS-->
 
-
-<!-- BEGIN: Page extra JS-->
-{% block base_scripts %}
-
-{% endblock %}
 {% block scripts %}
 
 {% endblock %}
+<!-- BEGIN: Page extra JS-->
+{% block base_scripts %}
+    <!-- BEGIN: AJAX menu -->
+    {#<script>#}
+        {#function getRootUrl() {#}
+            {#return window.location.origin;#}
+        {#}#}
+        {#var $badgeClients = $('#counter-clients');#}
+        {#var $badgeBuildings = $('#counter-buildings');#}
+        {#var $badgeDocuments = $('#counter-documents');#}
+
+
+        {#function fillBadges($badgeClients, $badgeBuildings, $badgeDocuments) {#}
+            {#console.log('run fillbadg');#}
+            {#$.ajax({#}
+                {#url: getRootUrl() + '/menu-counter',#}
+                {#type: 'POST',#}
+                {#dataType: 'json',#}
+                {#async: true,#}
+
+                {#success: function (data) {#}
+
+                    {#if ($badgeClients.length !== 0) {#}
+                        {#$badgeClients.addClass("badge-danger").text(data['clients']);#}
+                    {#}#}
+                    {#if ($badgeBuildings.length !== 0) {#}
+                        {#$badgeBuildings.addClass("badge-danger").text(data['buildings']);#}
+                    {#}#}
+                    {#if ($badgeDocuments.length !== 0) {#}
+                        {#$badgeDocuments.addClass("badge-danger").text(data['documents']);#}
+                    {#}#}
+
+                {#},#}
+                {#error: function(request, status, error){#}
+                    {#alert(request.responseText);#}
+                {#}#}
+
+            {#});#}
+        {#}#}
+
+        {#fillBadges($badgeClients, $badgeBuildings, $badgeDocuments);#}
+        {#setInterval(fillBadges($badgeClients, $badgeBuildings, $badgeDocuments), 120000);#}
+
+    {#</script>#}
+
+    <!-- END: AJAX menu-->
+{% endblock %}
+
 <!-- END: Page JS-->
 
 </body>

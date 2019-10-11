@@ -1,4 +1,4 @@
-{% extends 'base_product.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Lista ofert{% endblock %}
 
@@ -69,10 +69,10 @@
                                         </td>
                                         <td>{{ offert.name }}</td>
                                         <td>{{ offert.client }}</td>
-                                        <td>{% if offert.addDate %}{{ offert.addDate|date('Y-m-d H:i:s') }}{% endif %}</td>
-                                        <td>{% if offert.expireDate %}{{ offert.expireDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                                        <td>{% if offert.addDate %}{{ offert.addDate|date('Y-m-d') }}{% endif %}</td>
+                                        <td>{% if offert.expireDate %}{{ offert.expireDate|date('Y-m-d') }}{% endif %}</td>
                                         <td>{{ offert.status }}</td>
-                                        <td>{{ offert.totalValue }}</td>
+                                        <td>{{ offert.totalValue|price }}</td>
                                         <td>
                                             <a href="{{ path('offert_edit', { 'id': offert.id }) }}"
                                                class="primary edit mr-1"><i class="la la-pencil"></i></a>
@@ -93,7 +93,6 @@
                                                                     <a href="{{ path('offert_new') }}"
                                                                        class="dropdown-item"><i
                                                                                 class="ft-plus-circle warning"></i> Dodaj</a>
-
                                                                 </span>
                                                             </span>
                                         </td>

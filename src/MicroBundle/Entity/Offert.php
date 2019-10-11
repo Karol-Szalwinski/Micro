@@ -310,6 +310,7 @@ class Offert
      */
     public function addOffPosition(\MicroBundle\Entity\OffPosition $offPosition)
     {
+        $offPosition->setOffert($this);
         $this->offPositions[] = $offPosition;
 
         return $this;
@@ -366,6 +367,7 @@ class Offert
      */
     public function addOffService(\MicroBundle\Entity\OffService $offService)
     {
+        $offService->setOffert($this);
         $this->offServices[] = $offService;
 
         return $this;

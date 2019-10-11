@@ -1,4 +1,4 @@
-{% extends 'base_product.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Oferta{% endblock %}
 
@@ -31,19 +31,14 @@
                 </div>
             </div>
         </div>
-        <div class="content-header-left col-md-6 col-12">
-            <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
-                <div class="btn-group" role="group">
-                    <a class="btn btn-outline-info" href="{{ path('product_new') }}"><i
-                                class="la la-plus"></i> Dodaj nową</a>
 
-                </div>
-            </div>
-        </div>
     </div>
     <!-- Content header -->
 
     {{ form_start(form) }}
+    <div class="my-custom-class-for-errors">
+        {{ form_errors(form) }}
+    </div>
     <section class="row all-contacts">
         <div class="col-12">
             <div class="card">
@@ -166,7 +161,9 @@
                                 {#iterate over each existing tag and render its all fields#}
                                 {% for offPosition in form.offPositions %}
 
-
+                                    <div class="my-custom-class-for-errors">
+                                        {{ form_errors(form) }}
+                                    </div>
                                     <tr>
                                         <td>{{ form_widget(offPosition.name, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}</td>
                                         <td>
@@ -180,7 +177,10 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="purchasePrice">{{ offPosition.purchasePrice.vars.value|price }}</div>
+                                            <div class="purchasePrice">{{ form_widget(offPosition.purchasePrice, {
+                                                    'attr': {'class': 'form-control hide-input ',
+
+                                                    } }) }}</div>
                                         </td>
                                         <td>
                                             <div class="touchspin-input-size-2 mx-auto input-group">{{ form_widget(offPosition.price, {
@@ -333,6 +333,7 @@
                             <div class="form-group row">
                                 <div class="col-md-11 mx-auto">
                                     {{ form_widget(form.comment, { 'attr': {'class': 'form-control', 'placeholder': 'Uwagi do oferty'} }) }}
+                                    {{ form_widget(form.totalValue, { 'attr': {'class': 'form-control', 'placeholder': 'Uwagi do oferty'} }) }}
 
                                 </div>
 
@@ -394,7 +395,7 @@
                                 </td>
 
                                 <td class="mx-auto">
-                                    <button data-id="{{ product.id }}"
+                                    <button type="button" data-id="{{ product.id }}"
                                             data-name="{{ product.name }}"
                                             data-price="{{ product.price }}"
                                             class="btn btn-outline-info add-product-btn"><span>Dodaj&nbsp;</span><i

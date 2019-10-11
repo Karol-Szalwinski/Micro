@@ -2,6 +2,7 @@
 
 namespace MicroBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use MicroBundle\Entity\Offert;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -66,14 +67,49 @@ class OffertController extends Controller
      * @param Offert $offert
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function showAction(Request $request,Offert $offert)
+    public function showAction(Request $request, Offert $offert)
     {
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('MicroBundle:Product')->findAll();
+
+        //backup OffPositions and OffServices
+        $originalOffPositions = new ArrayCollection();
+        $originalOffServices = new ArrayCollection();
+        foreach ($offert->getOffPositions() as $offPosition) {
+            $originalOffPositions->add($offPosition);
+        }
+        foreach ($offert->getoffServices() as $offService) {
+            $originalOffServices->add($offService);
+        }
+
+
+
         $form = $this->createForm('MicroBundle\Form\OffertType', $offert);
         $form->handleRequest($request);
+//        && $form->isValid()
+        if ($form->isSubmitted() ) {
+            // remove the relationship between the Offert and the OffPositions and delete them
+            foreach ($originalOffPositions as $offPosition) {
+                if (false === $offert->getOffPositions()->contains($offPosition)) {
+                    $offert->removeOffPosition($offPosition);
+                    $offPosition->setOffert(null);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+                    $em->remove($offPosition);
+
+                }
+            }
+            foreach ($originalOffServices as $offService) {
+                if (false === $offert->getOffServices()->contains($offService)) {
+                    $offert->removeOffService($offService);
+                    $offService->setOffert(null);
+
+                    $em->remove($offService);
+
+                }
+            }
+
+
+
             $em->flush();
 
             return $this->redirectToRoute('offert_index');

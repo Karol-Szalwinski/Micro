@@ -85,3 +85,9 @@ background-color: #d4e1ef;
 .touchspin-input-size-2 {
     width: 130px;
 }
+
+.hide-input{
+    border:none !important;
+    background-color: white !important;
+    text-align: center !important;
+}
