@@ -11,6 +11,7 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFilter('price', [$this, 'formatPrice']),
+            new TwigFilter('priceLow', [$this, 'formatPriceLow']),
         ];
     }
 
@@ -19,6 +20,15 @@ class AppExtension extends AbstractExtension
         $number /= 100;
         $price = number_format($number, $decimals, $decPoint, $thousandsSep);
         $price = $price. ' ZŁ';
+
+        return $price;
+    }
+
+    public function formatPriceLow($number, $decimals = 2, $decPoint = ',', $thousandsSep = ' ')
+    {
+        $number /= 100;
+        $price = number_format($number, $decimals, $decPoint, $thousandsSep);
+        $price = $price. ' zł';
 
         return $price;
     }

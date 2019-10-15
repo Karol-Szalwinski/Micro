@@ -107,8 +107,15 @@ class OffertController extends Controller
 
                 }
             }
-
-
+            foreach ($offert->getOffPositions() as $offPosition) {
+                $prodId = $offPosition->getProductId();
+                if($prodId) {
+                    $product = $em->getRepository('MicroBundle:Product')->findOneById($prodId);
+                    if($product) {
+                        $offPosition->setProduct($product);
+                    }
+                }
+            }
 
             $em->flush();
 

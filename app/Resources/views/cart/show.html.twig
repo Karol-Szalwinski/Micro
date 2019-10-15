@@ -1,0 +1,187 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Koszyk{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" type="text/css"
+          href="{{ asset('app-assets/vendors/css/ui/jquery-ui-slider-pips.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/ui/jquery-ui.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/extensions/nouislider.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/noUiSlider.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/core/colors/palette-noui.css') }}">
+{% endblock %}
+
+{% block body %}
+
+
+    <!-- Content header -->
+    <div class="content-header row">
+        <div class="content-header-left col-md-6 col-12">
+            <h3 class="content-header-title mb-0">Koszyk</h3>
+            <div class="row breadcrumbs-top">
+                <div class="breadcrumb-wrapper col-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ path('micro_default_index') }}">Główna</a>
+                        </li>
+
+                        <li class="breadcrumb-item active">Koszyk
+                        </li>
+
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- Content header -->
+
+    {{ form_start(form) }}
+
+    <section class="row all-contacts">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-head">
+                    <div class="card-header">
+                        <h4 class="card-title">Produkty w koszyku</h4>
+                        <div class="heading-elements mt-0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-content">
+                    <div class="card-body">
+
+                        <div class="table-responsive-md">
+                            <table id="table-positions"
+                                   class="table table-borderless table-middle text-center">
+                                <thead>
+                                <tr>
+                                    <th>Nazwa</th>
+                                    <th>Ilość</th>
+                                    <th>Cena zakupu</th>
+                                    <th>Cena dla klienta</th>
+                                    <th>Łączna wartość</th>
+                                    <th>Usuń</th>
+                                </tr>
+                                </thead>
+
+                                {{ form_start(form) }}
+                                <tbody class="positions">
+                                {%  set total = 0 %}
+                                {#iterate over each existing tag and render its all fields#}
+                                {% for offPosition in form.offPositions %}
+
+                                    <div class="my-custom-class-for-errors">
+                                        {{ form_errors(form) }}
+                                    </div>
+                                    <tr>
+                                        <td>{{ form_widget(offPosition.name, { 'attr': {'class': 'form-control  hide-input'} }) }}</td>
+                                        <td>
+                                            <div class="touchspin-input-size-1 mx-auto ">{{ form_widget(offPosition.amount, {
+                                                    'attr': {'class': 'touchspin-info form-control',
+                                                        'data-bts-button-down-class' : 'btn btn-outline-info',
+                                                        'data-bts-button-up-class' : 'btn btn-outline-info',
+                                                        'data-bts-min' : '1',
+                                                        'data-bts-max' : '100000',
+                                                    } }) }}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="purchasePrice">{{ form_widget(offPosition.purchasePrice, {
+                                                    'attr': {'class': 'form-control hide-input ',
+
+                                                    } }) }}</div>
+                                        </td>
+                                        <td>
+                                            <div class="touchspin-input-size-2 mx-auto input-group">{{ form_widget(offPosition.price, {
+                                                    'attr': {'class': ' form-control',
+                                                        'data-bts-button-down-class' : 'btn btn-outline-info',
+                                                        'data-bts-button-up-class' : 'btn btn-outline-info',
+                                                        'data-bts-min' : '1',
+                                                        'data-bts-max' : '100000',
+                                                        'data-bts-decimal' : '2',
+                                                        'data-bts-step' : '1',
+                                                        'data-bts-postfix' : '<b class="info">&#122;&#322;</b>',
+                                                    } }) }}
+                                                <div class="input-group-append info">
+                                                    <span class="input-group-text"><b
+                                                                class="info">&#122;&#322;</b></span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="summary-row">
+                                            {% set summary = offPosition.amount.vars.value|number_format * offPosition.price.vars.value|number_format * 100 %}
+                                            {%  set total = total + summary %}
+                                            <div>{{ summary|price }}</div>
+                                        </td>
+                                        <td><a class="text-danger"><i class="la la-close"></i></a></td>
+                                        {{ form_widget(offPosition.productId) }}
+                                    </tr>
+
+                                {% endfor %}
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><h4 class="red">Razem</h4></td>
+                                    <td><h4 class="red">{{ total|price }}</h4></td>
+                                    <td></td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                </tfoot>
+
+                            </table>
+                            <!-- Button to Open the Modal -->
+                            <button type="submit" class="btn btn-outline-info">
+                                Generuj ofertę dla klienta <i class="la la-plus"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-danger">
+                                Usuń wszystkie pozycje <i class="la la-close"></i>
+                            </button>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+
+
+{#{% block fixedFooter %}#}
+
+{#<!-- START FOOTER DARK-->#}
+{#<footer class="navbar footer fixed-bottom footer-light footer-shadow content container-fluid">#}
+    {#<p>Stopka</p>#}
+{#</footer>#}
+{#<!-- START FOOTER DARK->#}
+
+{#{% endblock %}#}
+
+{% block scripts %}
+    <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
+
+    <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>
+    <script src="{{ asset('app-assets/js/core/libraries/jquery_ui/jquery-ui.min.js') }}"></script>
+
+    {#<script src="{{ asset('app-assets/vendors/js/ui/jquery-ui-slider-pips.min.js') }}"></script>#}
+    <script src="{{ asset('app-assets/vendors/js/extensions/wNumb.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/extensions/nouislider.min.js') }}"></script>
+
+    <script src="{{ asset('app-assets/js/scripts/ui/jquery-ui/slider-spinner.min.js') }}"></script>
+    {#<script src="{{ asset('app-assets/js/scripts/forms/input-groups.min.js') }}"></script>#}
+
+
+    {#<script src="{{ asset('app-assets/js/scripts/extensions/noui-slider.js') }}"></script>#}
+
+    <script src="{{ asset('assets/js/cart.js') }}"></script>
+    <script>
+
+    </script>
+
+
+{% endblock %}
+

@@ -68,7 +68,7 @@ class Offert
     /**
      * @var string|null
      *
-     * @ORM\Column(name="comment", type="string", length=255, nullable=true)
+     * @ORM\Column(name="comment", type="text", nullable=true)
      */
     private $comment;
 
@@ -79,8 +79,8 @@ class Offert
     private $offPositions;
 
     /**
-     * One Offert has many OffServices. This is the inverse side.
-     * @ORM\OneToMany(targetEntity="OffServices", mappedBy="offert", cascade={"persist"})
+     * One Offert has many OffService. This is the inverse side.
+     * @ORM\OneToMany(targetEntity="OffService", mappedBy="offert", cascade={"persist"})
      */
     private $offServices;
 
@@ -310,6 +310,7 @@ class Offert
      */
     public function addOffPosition(\MicroBundle\Entity\OffPosition $offPosition)
     {
+        $offPosition->setOffert($this);
         $this->offPositions[] = $offPosition;
 
         return $this;
@@ -355,5 +356,42 @@ class Offert
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Add offService.
+     *
+     * @param \MicroBundle\Entity\OffService $offService
+     *
+     * @return Offert
+     */
+    public function addOffService(\MicroBundle\Entity\OffService $offService)
+    {
+        $offService->setOffert($this);
+        $this->offServices[] = $offService;
+
+        return $this;
+    }
+
+    /**
+     * Remove offService.
+     *
+     * @param \MicroBundle\Entity\OffService $offService
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeOffService(\MicroBundle\Entity\OffService $offService)
+    {
+        return $this->offServices->removeElement($offService);
+    }
+
+    /**
+     * Get offServices.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getOffServices()
+    {
+        return $this->offServices;
     }
 }

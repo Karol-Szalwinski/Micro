@@ -34,7 +34,7 @@
 
 
     <section class="row all-contacts">
-        <div class="col-12">
+        <div class="col-10 col-sm-9">
             <div class="card">
                 <div class="card-head">
                     <div class="card-header">
@@ -48,7 +48,7 @@
                         <!-- Task List table -->
                         {#<button type="button" class="btn btn-sm btn-danger delete-all mb-1">Delete All</button>#}
                         <div class="table-responsive">
-                            <table id="table-clients"
+                            <table id="product-table"
                                    class="table table-borderless table-striped mb-0 row-grouping display no-wrap icheck table-middle text-center">
                                 <thead>
                                 <tr>
@@ -58,9 +58,9 @@
                                     <th>Akcje</th>
                                 </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="product-table-body">
                                 {% for product in products %}
-                                    <tr>
+                                    <tr data-product-id="{{ product.id }}">
                                         <td>
                                             <div class="media">
                                                 <div class="media-left pr-1"><span
@@ -87,35 +87,13 @@
                                         <td class="mx-auto">
                                             <div class="input-group group-fixed-width-120 mx-auto" role="group"
                                                  aria-label="Button group with nested dropdown">
-                                                <input class="form-control" type="text" placeholder="Ilość"
+                                                <input class="form-control quantity-input" type="text" placeholder="Ilość"
                                                        name="quantity"
                                                        autocomplete="off">
-                                                <button type="submit" class="form-control btn btn-outline-info "
+                                                <button type="submit" class="quantity-input-btn form-control btn btn-outline-info "
                                                         href="#"><i class="ft-shopping-cart"></i></button>
 
                                             </div>
-                                            {#<a href="{{ path('product_edit', { 'id': product.id }) }}"#}
-                                            {#class="primary edit mr-1"><i class="la la-pencil"></i></a>#}
-                                            {#<a class="danger delete mr-1"><i class="la la-trash-o"></i></a>#}
-                                            {#<span class="dropdown">#}
-                                            {#<a id="btnSearchDrop2" data-toggle="dropdown"#}
-                                            {#aria-haspopup="true" aria-expanded="true"#}
-                                            {#class="dropdown-toggle dropdown-menu-right"><i#}
-                                            {#class="la la-ellipsis-v"></i></a>#}
-                                            {#<span aria-labelledby="btnSearchDrop2"#}
-                                            {#class="dropdown-menu mt-1 dropdown-menu-right">#}
-                                            {#<a href="{{ path('product_edit', { 'id': product.id }) }}"#}
-                                            {#class="dropdown-item"><i#}
-                                            {#class="ft-edit-2"></i>#}
-                                            {#Edytuj</a>#}
-                                            {#<a href="#" class="dropdown-item delete"><i#}
-                                            {#class="ft-trash-2"></i> Usuń</a>#}
-                                            {#<a href="{{ path('product_new') }}"#}
-                                            {#class="dropdown-item"><i#}
-                                            {#class="ft-plus-circle warning"></i> Dodaj</a>#}
-
-                                            {#</span>#}
-                                            {#</span>#}
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -128,8 +106,50 @@
                 </div>
             </div>
         </div>
-    </section>
 
+        <div class="col-2 col-sm-3">
+            <div class="card">
+                {#<div class="card-head">#}
+                    {#<div class="card-header mx-auto">#}
+                        {#<span class="font-large-1 card-title">Koszyk</span><i class="la la-shopping-cart font-large-2"></i>#}
+                    {#</div>#}
+                {#</div>#}
+                <div class="card-header text-center">
+                    <div class="d-flex align-items-center">
+                        <span class="mx-auto w-100 font-large-1">Koszyk</span>
+                        <i class="la la-shopping-cart font-large-2 ml-auto"></i>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                        <table id="cart-table" class="table">
+                            <thead></thead>
+                            <tbody id="cart-table-body">
+                            {% for position in cart.offPositions %}
+                                <tr data-product-id="{% if position.product %}{{ position.product.id }}{% else %}0{% endif %}"
+                                    data-amount="{{ position.amount }}">
+                                    <td>{{ position.name }}<br>
+                                        <span class="red">
+                                            <span class="cart-pos-amount">{{ position.amount }}</span>
+                                            <span> X </span>
+                                        <span class="cart-pos-price" >{{ position.price|priceLow }}</span>
+                                        </span>
+                                    </td>
+                                    <td><a class="text-danger delete-cart-position"><i class="la la-close"></i></a></td>
+
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+
+                        </table>
+                        <h4 class="float-right red" id="total-cart"></h4>
+                        <br>
+                        <a href="{{ path('cart_show') }}" class="btn btn-sm btn-outline-amber">Przejdź do koszyka</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     <!------------------------ Modal section -------------->
     {% include 'product/index_cat_modals.html.twig' %}
 
@@ -143,48 +163,8 @@
     <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
     <!-- END: Vendor JS-->
     <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>
+    <script src="{{ asset('assets/js/index-cat.js') }}"></script>
 
-    <script>
-        $('#table-clients').DataTable({
-            "language": {
-                "lengthMenu": "Pokaż _MENU_ wierszy na stronie",
-                "zeroRecords": "Niestety brak wyników",
-                "info": "Stron _PAGE_ z _PAGES_",
-                "infoEmpty": "Brak wierszy",
-                "infoFiltered": "(znaleziono z _MAX_ wszystkich wierszy)",
-                "search": "Szukaj"
-            },
-            "paging": false,
-        });
-
-        function getRootUrl() {
-            return window.location.origin;
-        }
-
-        $(".product-modal-trigger").on("click", function () {
-            var id = $(this).data('id');
-            loadProduct(id);
-            $("#product-modal").modal();
-        });
-
-        function loadProduct(id) {
-            $.ajax({
-                url: getRootUrl() + '/product/get/' + id,
-                type: 'POST',
-                dataType: 'json',
-                async: true,
-
-                success: function (data) {
-                    var productView = data['productView'];
-                    $('#product-modal-body').html(productView);
-                },
-                error: function () {
-                }
-            });
-        }
-
-
-    </script>
 
 {% endblock %}
 

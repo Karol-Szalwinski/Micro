@@ -55,6 +55,12 @@ class OffPosition
      * @ORM\Column(name="taxrate", type="integer", nullable=true)
      */
     private $taxrate;
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="product_temp_id", type="integer", nullable=true)
+     */
+    private $productId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Product")

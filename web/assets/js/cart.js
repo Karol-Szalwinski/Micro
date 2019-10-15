@@ -41,9 +41,6 @@ $(document).on('change', 'input ', function () {
 /****************************************************
  *                Prepare Inputs                    *
  ****************************************************/
-//change type of input from text to date for run datepicker
-$("#microbundle_offert_addDate").get(0).type = 'date';
-$("#microbundle_offert_expireDate").get(0).type = 'date';
 
 
 //autosize textarea
@@ -229,7 +226,6 @@ function refreshTotalValues() {
 
     });
     var percentProfit = (summaryValue - summaryPurchaseValue) / summaryPurchaseValue * 100;
-    setSlider(roundTo2Decimal(percentProfit));
 
     return [summaryPurchaseValue, summaryValue];
 }
@@ -262,62 +258,6 @@ function refreshInputValuesAfterChangeSlider(profit) {
 }
 
 
-/****************************************************
- *                Slider Scales / Pips                *
- ****************************************************/
-
-var range_all_sliders = {
-    'min': 0,
-    '10%': 3,
-    '20%': 6,
-    '30%': 9,
-    '40%': 12,
-    '50%': 15,
-    '60%': 18,
-    '70%': 21,
-    '80%': 24,
-    '90%': 27,
-    'max': 30
-};
-
-function filter(value) {
-
-    return value % 3 ? 2 : 1;
-
-}
-
-var pipsStepsFilter = document.getElementById('pips-steps-filter');
-var profit = document.getElementById('profit');
-noUiSlider.create(pipsStepsFilter, {
-    range: range_all_sliders,
-    start: 15,
-    pips: {
-        mode: 'steps',
-        density: 4,
-        filter: filter,
-        format: wNumb({
-            decimals: 0,
-            prefix: '%'
-        })
-    }
-});
-
-pipsStepsFilter.noUiSlider.on('change', function (values) {
-    if (isNaN(values)) {
-        values = 0.00;
-    }
-    profit.innerHTML = values;
-    refreshInputValuesAfterChangeSlider(values);
-    updateAllValues();
-});
-
-function setSlider(value) {
-    if (isNaN(value)) {
-        value = 0.00;
-    }
-    pipsStepsFilter.noUiSlider.set(value);
-    profit.innerHTML = value;
-}
 
 /****************************************************
  *    Services Collection forms dynamically add     *

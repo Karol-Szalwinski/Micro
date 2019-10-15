@@ -2,6 +2,7 @@
 
 namespace MicroBundle\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use MicroBundle\Enums\OffertStatusEnum;
@@ -26,42 +27,42 @@ class Offert
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
     private $name;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="client", type="integer")
+     * @ORM\Column(name="client", type="integer", nullable=true)
      */
     private $client;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="myCompany", type="text", nullable=true)
+     * @ORM\Column(name="myCompany", type="text", nullable=true, nullable=true)
      */
     private $myCompany;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="addDate", type="datetime")
+     * @ORM\Column(name="addDate", type="datetime", nullable=true)
      */
     private $addDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="expireDate", type="datetime")
+     * @ORM\Column(name="expireDate", type="datetime", nullable=true)
      */
     private $expireDate;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="totalValue", type="integer")
+     * @ORM\Column(name="totalValue", type="integer", nullable=true)
      */
     private $totalValue;
 
@@ -96,6 +97,9 @@ class Offert
     {
         $this->offPositions = new ArrayCollection();
         $this->status = OffertStatusEnum::BASKET;
+        $this->addDate = new DateTime();
+        $this->expireDate = new DateTime('+1 month');
+        $this->name = "Oferta ";
     }
 
 

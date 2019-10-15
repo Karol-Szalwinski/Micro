@@ -55,6 +55,12 @@ class OffPosition
      * @ORM\Column(name="taxrate", type="integer", nullable=true)
      */
     private $taxrate;
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="product_temp_id", type="integer", nullable=true)
+     */
+    private $productId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Product")
@@ -246,5 +252,29 @@ class OffPosition
     public function getPurchasePrice()
     {
         return $this->purchasePrice;
+    }
+
+    /**
+     * Set productId.
+     *
+     * @param int|null $productId
+     *
+     * @return OffPosition
+     */
+    public function setProductId($productId = null)
+    {
+        $this->productId = $productId;
+
+        return $this;
+    }
+
+    /**
+     * Get productId.
+     *
+     * @return int|null
+     */
+    public function getProductId()
+    {
+        return $this->productId;
     }
 }

@@ -3,8 +3,11 @@
 namespace MicroBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use MicroBundle\Entity\Offert;
+use MicroBundle\Entity\OffPosition;
 use MicroBundle\Entity\Product;
 use MicroBundle\Entity\ProductParameter;
+use MicroBundle\Enums\OffertStatusEnum;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -47,14 +50,28 @@ class ProductController extends Controller
 
         $products = $em->getRepository('MicroBundle:Product')->findBy(['category' => $categoryId]);
 
+        $cart = $em->getRepository('MicroBundle:Offert')->findOneBy(['status' => OffertStatusEnum::BASKET ]);
+// create new cart if doesnt exist one
+        if(!$cart) {
+            $cart = new Offert();
+            $em->persist($cart);
+            $em->flush();
+        }
+
+
+
         foreach ($category->getChildren() as $child) {
             $childProducts = $em->getRepository('MicroBundle:Product')->findBy(['category' => $child->getId()]);
             $products = array_merge($products,$childProducts);
-            dump($childProducts);
         }
         $mainCategories = $em->getRepository('MicroBundle:Category')->findBy(['parent' => null]);
 
-        return $this->render('product/index_cat.html.twig', array('products' => $products, 'category' => $category, 'mainCategories' => $mainCategories,));
+        return $this->render('product/index_cat.html.twig', array(
+            'products' => $products,
+            'category' => $category,
+            'mainCategories' => $mainCategories,
+            'cart' => $cart,
+            ));
     }
 
     /**
@@ -196,6 +213,72 @@ class ProductController extends Controller
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
 
             $jsonData['productView'] = $productView;
+
+            return new JsonResponse($jsonData);
+        }
+
+
+    }
+
+    /**
+     * update cart by product
+     * @Method({"POST"})
+     * @Route("/update-cart/{productId}/{quantity}", name="update_cart_ajax")
+     * @param Request $request
+     * @param $productId
+     * @param $quantity
+     * @return JsonResponse
+     */
+    public function updateCartAjaxAction(Request $request, $productId, $quantity )
+    {
+        $em = $this->getDoctrine()->getManager();
+        $newCartPositionSerialized = null;
+        $type = null;
+
+        $cart = $em->getRepository('MicroBundle:Offert')->findOneBy(['status' => OffertStatusEnum::BASKET ]);
+
+        $product = $em->getRepository('MicroBundle:Product')->findOneBy(['id' => $productId]);
+
+        foreach ($cart->getOffPositions() as $cartPosition) {
+            if($cartPosition->getProduct() == $product) {
+
+                if($quantity != 0){
+                    $cartPosition->setAmount($quantity);
+                    $type = 'change';
+                } else{
+                    $cart->removeOffPosition($cartPosition);
+                    $cartPosition->setOffert(null);
+                    $em->remove($cartPosition);
+                    $type = 'delete';
+                }
+
+            }
+        }
+
+        if (!$type) {
+            $newCartPosition = new OffPosition();
+            $newCartPosition->setName($product->getName());
+            $newCartPosition->setPrice($product->getPrice() * 115/100);
+            $newCartPosition->setPurchasePrice($product->getPrice());
+            $newCartPosition->setAmount($quantity);
+            $newCartPosition->setProduct($product);
+            $newCartPosition->setProductId($product->getId());
+            $newCartPosition->setOffert($cart);
+            $cart->addOffPosition($newCartPosition);
+
+            $em->persist($newCartPosition);
+            $type = 'new';
+
+            $newCartPositionSerialized = $this->container->get('serialize')->serlializeJson($newCartPosition, 1, ['offert', 'product']);
+
+        }
+
+        $em->flush();
+
+        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+
+            $jsonData['type'] = $type;
+            $jsonData['cartPosition'] = $newCartPositionSerialized;
 
             return new JsonResponse($jsonData);
         }

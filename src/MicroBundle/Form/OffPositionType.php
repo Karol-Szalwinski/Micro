@@ -2,8 +2,10 @@
 
 namespace MicroBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,6 +20,8 @@ class OffPositionType extends AbstractType
     {
         $builder
             ->add('name')
+            ->add('productId', HiddenType::class)
+
             ->add('amount', TextType::class )
             ->add('purchasePrice', MoneyType::class, [
                 'divisor' => 100,

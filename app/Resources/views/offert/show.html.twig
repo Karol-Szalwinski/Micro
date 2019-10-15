@@ -204,6 +204,7 @@
                                             <div>{{ summary|price }}</div>
                                         </td>
                                         <td><a class="text-danger"><i class="la la-close"></i></a></td>
+                                        {{ form_widget(offPosition.productId) }}
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -298,7 +299,9 @@
                                             {% set summary = offService.amount.vars.value|number_format * offService.price.vars.value|number_format * 100 %}
                                             <div>{{ summary|price }}</div>
                                         </td>
-                                        <td><a class="text-danger"><i class="la la-close"></i></a></td>
+                                        <td><a class="text-danger"><i class="la la-close"></i></a>
+                                        </td>
+
                                     </tr>
                                 {% endfor %}
                                 </tbody>
