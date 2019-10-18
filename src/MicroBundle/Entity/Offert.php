@@ -32,11 +32,10 @@ class Offert
     private $name;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="client", type="integer", nullable=true)
+     * @ORM\ManyToMany(targetEntity="Client", inversedBy="offerts")
+     * @ORM\JoinTable(name="clients_offerts")
      */
-    private $client;
+    private $clients;
 
     /**
      * @var string
@@ -96,6 +95,7 @@ class Offert
     public function __construct()
     {
         $this->offPositions = new ArrayCollection();
+        $this->clients = new ArrayCollection();
         $this->status = OffertStatusEnum::BASKET;
         $this->addDate = new DateTime();
         $this->expireDate = new DateTime('+1 month');
@@ -135,30 +135,6 @@ class Offert
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set client.
-     *
-     * @param int $client
-     *
-     * @return Offert
-     */
-    public function setClient($client)
-    {
-        $this->client = $client;
-
-        return $this;
-    }
-
-    /**
-     * Get client.
-     *
-     * @return int
-     */
-    public function getClient()
-    {
-        return $this->client;
     }
 
     /**
@@ -397,5 +373,43 @@ class Offert
     public function getOffServices()
     {
         return $this->offServices;
+    }
+
+    /**
+     * Add client.
+     *
+     * @param \MicroBundle\Entity\Client $client
+     *
+     * @return Offert
+     */
+    public function addClient(\MicroBundle\Entity\Client $client)
+    {
+        $client->addOffert($this);
+        $this->clients[] = $client;
+
+        return $this;
+    }
+
+    /**
+     * Remove client.
+     *
+     * @param \MicroBundle\Entity\Client $client
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeClient(\MicroBundle\Entity\Client $client)
+    {
+//        $client->removeOffert($this);
+        return $this->clients->removeElement($client);
+    }
+
+    /**
+     * Get clients.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getClients()
+    {
+        return $this->clients;
     }
 }

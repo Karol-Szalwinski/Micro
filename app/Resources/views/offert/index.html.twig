@@ -68,7 +68,7 @@
                                         <td><a href="{{ path('offert_show', { 'id': offert.id }) }}">{{ offert.id }}</a>
                                         </td>
                                         <td>{{ offert.name }}</td>
-                                        <td>{{ offert.client }}</td>
+                                        <td>{% if offert.clients is not empty %}{{ offert.clients|first.name }}{% endif %}</td>
                                         <td>{% if offert.addDate %}{{ offert.addDate|date('Y-m-d') }}{% endif %}</td>
                                         <td>{% if offert.expireDate %}{{ offert.expireDate|date('Y-m-d') }}{% endif %}</td>
                                         <td>{{ offert.status }}</td>

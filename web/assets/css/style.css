@@ -90,4 +90,9 @@ background-color: #d4e1ef;
     border:none !important;
     background-color: white !important;
     text-align: center !important;
+
+}
+
+.width-min-300 {
+    min-width: 300px;
 }

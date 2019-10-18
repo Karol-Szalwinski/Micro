@@ -14,6 +14,7 @@ $('#table-clients').DataTable({
 });
 jQuery(document).ready(function () {
     updateAllValues();
+    setNewClientLabelAndButton();
 });
 
 function updateTotalValue(totalProducts, totalServices) {
@@ -472,5 +473,75 @@ function updateFooter(totalPurchase, totalProducts, totalServices) {
     $totalSellSpan.html((totalProducts + totalServices).toFixed(2));
     $totalProfitSpan.html(roundTo2Decimal((totalProducts + totalServices - totalPurchase).toFixed(2)));
 
+
+}
+/****************************************************
+ *        Choose Client                             *
+ ****************************************************/
+
+var $chooseClientBtn = $('.choose-client-btn');
+var $newClientBtn = $('#new-client-btn');
+var nullClient =
+    {
+        id: null,
+        name: null,
+        street: null,
+        houseNo: null,
+        flatNo: null,
+        city: null,
+        postalCode: null,
+
+    }
+
+$chooseClientBtn.on('click', function (e) {
+
+    var client =
+        {
+            id: $(this).data("id"),
+            name: $(this).data("name"),
+            street: $(this).data("street"),
+            houseNo: $(this).data("houseno"),
+            flatNo: $(this).data("flatno"),
+            city: $(this).data("city"),
+            postalCode: $(this).data("postalCode")
+
+        }
+    console.log(client);
+    updateClientInput(client);
+    setNewClientLabelAndButton();
+
+
+    $('#choose-client').modal("hide");
+});
+
+function updateClientInput(client) {
+
+    $('#microbundle_offert_clients_0_id').val(client.id);
+    $('#microbundle_offert_clients_0_name').val(client.name);
+    $('#microbundle_offert_clients_0_street').val(client.street);
+    $('#microbundle_offert_clients_0_houseNo').val(client.houseNo);
+    $('#microbundle_offert_clients_0_flatNo').val(client.flatNo);
+    $('#microbundle_offert_clients_0_city').val(client.city);
+    $('#microbundle_offert_clients_0_postalCode').val(client.postalCode);
+
+}
+
+
+
+$newClientBtn.on('click', function (e) {
+    updateClientInput(nullClient);
+    setNewClientLabelAndButton()
+});
+
+function setNewClientLabelAndButton(){
+    var clientId = $('#microbundle_offert_clients_0_id').val();
+    var isNew = (clientId === '');
+    if(isNew) {
+        $('#new-client-label').show();
+        $('#new-client-btn').hide();
+    } else {
+        $('#new-client-label').hide();
+        $('#new-client-btn').show();
+    }
 
 }

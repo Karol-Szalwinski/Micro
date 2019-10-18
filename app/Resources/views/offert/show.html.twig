@@ -87,7 +87,70 @@
             <div class="card">
                 <div class="card-head">
                     <div class="card-header">
-                        <h4 class="card-title">Firmy</h4>
+                        <h4 class="card-title">Dane Klienta<span id="new-client-label" class="red" style="Display: none"> (Nowy)</span></h4>
+                        <div class="heading-elements mt-0">
+                            <button id="new-client-btn" type="button" class="btn btn-outline-secondary" style="Display: none" >Dodaj nowego</button>
+                            <button type="button" class="btn btn-outline-info" data-toggle="modal"
+                                    data-target="#choose-client">Wybierz z listy</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                        <div class="form-body col-md-12">
+                            <div class="form-group row">
+                                {{ form_label(form.clients|first.name, 'Dane klienta', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                <div class="col-md-9 mx-auto">
+                                    {{ form_widget(form.clients|first.name, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}
+
+                                </div>
+
+                            </div>
+                            <div class="form-group row">
+                                {{ form_label(form.clients|first.street, 'Ulica', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                <div class="col-md-9 mx-auto">
+                                    {{ form_widget(form.clients|first.street, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź ulicę'} }) }}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                {{ form_label(form.clients|first.houseNo, 'Nr domu / Nr mieszkania', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                <div class="col-md-4 ">
+                                    {{ form_widget(form.clients|first.houseNo, { 'attr': {'class': 'form-control ', 'placeholder': 'Numer domu'} }) }}
+                                </div>
+                                <h2>/</h2>
+                                {#</div>#}
+                                {#<div class="form-group row">#}
+                                {#{{ form_label(form.flatNo, 'Nr mieszkania', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
+                                <div class="col-md-4 ">
+                                    {{ form_widget(form.clients|first.flatNo, { 'attr': {'class': 'form-control', 'placeholder': 'Numer mieszkania'} }) }}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                {{ form_label(form.clients|first.city, 'Miasto', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                <div class="col-md-9 mx-auto">
+                                    {{ form_widget(form.clients|first.city, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź miasto'} }) }}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                {{ form_label(form.clients|first.postalCode, 'Kod pocztowy', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                <div class="col-md-9 mx-auto">
+                                    {{ form_widget(form.clients|first.postalCode, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź kod pocztowy'} }) }}
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="row all-contacts">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-head">
+                    <div class="card-header">
+                        <h4 class="card-title">Dane Klienta</h4>
                         <div class="heading-elements mt-0">
                         </div>
                     </div>
@@ -96,14 +159,6 @@
                     <div class="card-body">
                         <div class="form-body col-md-12">
                             <div class="form-group row">
-                                {{ form_label(form.client, 'Dane klienta', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
-                                <div class="col-md-9 mx-auto">
-                                    {{ form_widget(form.client, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}
-
-                                </div>
-
-                            </div>
-                            <div class="form-group row">
                                 {{ form_label(form.myCompany, 'Nasze dane', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                 <div class="col-md-9 mx-auto">
                                     {{ form_widget(form.myCompany, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}
@@ -111,7 +166,6 @@
                                 </div>
 
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -143,7 +197,7 @@
 
                         <div class="table-responsive-md">
                             <table id="table-positions"
-                                   class="table table-borderless table-middle text-center">
+                                   class="table table-borderless table-middle table-condensed text-center">
                                 <thead>
                                 <tr>
                                     <th>Nazwa</th>
@@ -165,7 +219,7 @@
                                         {{ form_errors(form) }}
                                     </div>
                                     <tr>
-                                        <td>{{ form_widget(offPosition.name, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}</td>
+                                        <td>{{ form_widget(offPosition.name, { 'attr': {'class': 'form-control width-min-300', 'placeholder': 'Wprowadź nazwę'} }) }}</td>
                                         <td>
                                             <div class="touchspin-input-size-1 mx-auto ">{{ form_widget(offPosition.amount, {
                                                     'attr': {'class': 'touchspin-info form-control',
@@ -247,7 +301,7 @@
 
                         <div class="table-responsive-md">
                             <table id="table-services"
-                                   class="table table-borderless table-middle text-center">
+                                   class="table table-borderless table-middle table-condensed text-center">
                                 <thead>
                                 <tr>
                                     <th>Nazwa</th>
@@ -348,7 +402,7 @@
         </div>
     </section>
 
-    <!-- The Modal -->
+    <!-- The Modal New Product -->
     <div class="modal fade" id="newProduct">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -362,7 +416,7 @@
                 <!-- Modal body -->
                 <div class="modal-body">
                     <table id="table-clients"
-                           class="table table-borderless table-striped mb-0 row-grouping display no-wrap icheck table-middle text-center">
+                           class="table table-borderless table-striped table-condensed mb-0 row-grouping display no-wrap icheck table-middle text-center">
                         <thead>
                         <tr>
                             <th>Zdjęcie</th>
@@ -420,22 +474,96 @@
             </div>
         </div>
     </div>
+
+    <!-- The Modal chose Client -->
+    <div class="modal fade" id="choose-client">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Wybierz Klienta</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <table id="table-clients"
+                           class="table table-borderless table-striped table-condensed mb-0 row-grouping display no-wrap icheck table-middle text-center">
+                        <thead>
+                        <tr>
+                            <th>Nazwa</th>
+                            <th>Ulica</th>
+                            <th>Miasto</th>
+                            <th>Akcje</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for client in clients %}
+                            <tr>
+
+                                <td class="text-center">
+                                    <a href="#" class="product-modal-trigger"
+                                       data-id="{{ client.id }}">{{ client.name }}</a><br>
+
+                                </td>
+                                <td>
+
+                                    {{ client.street }} {{ client.houseNo }}{% if client.flatNo is not null %} / {{ client.flatNo }}{% endif %}
+                                </td>
+                                <td>
+
+                                    {{ client.city }} {{ client.postalCode }}
+                                </td>
+
+                                <td class="mx-auto">
+                                    <button type="button"
+                                            data-id="{{ client.id }}"
+                                            data-name="{{ client.name }}"
+                                            data-street="{{ client.street }}"
+                                            data-houseNo="{{ client.houseNo }}"
+                                            data-flatNo="{{ client.flatNo }}"
+                                            data-city="{{ client.city }}"
+                                            data-postalCode="{{ client.postalCode }}"
+
+
+                                            class="btn btn-outline-info choose-client-btn"><span>Wybierz&nbsp;</span><i
+                                                class="la la-plus"></i></button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
 {% endblock %}
 
 {% block fixedFooter %}
     <!-- BEGIN: Footer-->
     <footer class="footer fixed-bottom footer-dark footer-shadow navbar-border navbar-shadow">
         {#<p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2">#}
-            {#<span class="float-md-left d-block d-md-inline-block">Copyright &copy; 2019 </span>#}
-            {#<span class="float-md-right d-none d-lg-block">Hand-crafted & Made with <i class="ft-heart pink"></i>#}
-                {#<span id="scroll-top"></span>#}
-            {#</span>#}
+        {#<span class="float-md-left d-block d-md-inline-block">Copyright &copy; 2019 </span>#}
+        {#<span class="float-md-right d-none d-lg-block">Hand-crafted & Made with <i class="ft-heart pink"></i>#}
+        {#<span id="scroll-top"></span>#}
+        {#</span>#}
         {#</p>#}
         <h3 class="float-left red">Łączne koszty zakupu <span id="total-purchase"></span> zł</h3>
         <h3 class="float-left white">&nbsp;|&nbsp;</h3>
         <h3 class="float-left blue">Łączna wartość dla klienta <span id="total-sell"></span> zł</h3>
         <h3 class="float-left white">&nbsp;|&nbsp;</h3>
-        <h3 class="float-left yellow" >Zysk łączny <span id="total-profit"></span> zł </h3>
+        <h3 class="float-left yellow">Zysk łączny <span id="total-profit"></span> zł </h3>
         <span class="float-md-right">
             <button type="submit" class="btn btn-outline-amber">Zapisz ofertę</button>
         </span>

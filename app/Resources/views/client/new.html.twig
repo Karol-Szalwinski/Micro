@@ -81,6 +81,37 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    {{ form_label(form.street, 'Ulica', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        {{ form_widget(form.street, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź ulicę'} }) }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(form.houseNo, 'Nr domu / Nr mieszkania', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-4 ">
+                                        {{ form_widget(form.houseNo, { 'attr': {'class': 'form-control ', 'placeholder': 'Numer domu'} }) }}
+                                    </div>
+                                    <h2>/</h2>
+                                    {#</div>#}
+                                    {#<div class="form-group row">#}
+                                    {#{{ form_label(form.flatNo, 'Nr mieszkania', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
+                                    <div class="col-md-4 ">
+                                        {{ form_widget(form.flatNo, { 'attr': {'class': 'form-control', 'placeholder': 'Numer mieszkania'} }) }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(form.city, 'Miasto', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        {{ form_widget(form.city, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź miasto'} }) }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(form.postalCode, 'Kod pocztowy', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-9 mx-auto">
+                                        {{ form_widget(form.postalCode, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź kod pocztowy'} }) }}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     {{ form_label(form.email, 'E-mail', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(form.email, { 'attr': {'class': 'form-control email-inputmask', 'placeholder': 'Wprowadź email', 'im-insert': 'true'} }) }}

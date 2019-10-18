@@ -3,13 +3,14 @@
 namespace MicroBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-class ClientType extends AbstractType
+class OffertClientType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -17,15 +18,13 @@ class ClientType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('id', HiddenType::class)
             ->add('name')
-            ->add('shortname')
             ->add('street')
             ->add('houseNo')
             ->add('flatNo')
             ->add('city')
             ->add('postalCode')
-            ->add('email', TextType::class, ['required' => false])
-            ->add('phoneNumber', TelType::class, ['required' => false])
 
         ;
     }/**

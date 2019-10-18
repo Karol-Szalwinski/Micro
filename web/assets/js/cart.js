@@ -16,10 +16,12 @@ jQuery(document).ready(function () {
     updateAllValues();
 });
 
-function updateTotalValue(totalProducts, totalServices) {
-    $totalValueInput = $('#microbundle_offert_totalValue');
-
-    $totalValueInput.val((totalProducts + totalServices).toFixed(2) * 100);
+function updateTotalValue(totalProducts) {
+    var newValueCurrency = totalProducts.toLocaleString('pl-PL', {
+        style: 'currency',
+        currency: 'PLN',
+    });
+    $('#total-value').html(newValueCurrency);
 
 }
 
@@ -27,9 +29,8 @@ function updateAllValues() {
     var totalProductArr = refreshTotalValues();
     var totalPurchase = totalProductArr[0];
     var totalProducts = totalProductArr[1];
-    var totalServices = refreshServicesTotalValues();
-    updateFooter(totalPurchase, totalProducts, totalServices);
-    updateTotalValue(totalProducts, totalServices);
+    // updateFooter(totalPurchase, totalProducts, totalServices);
+    updateTotalValue(totalProducts);
 }
 
 //refresh total column and footer after blur input
@@ -75,7 +76,7 @@ jQuery(document).ready(function () {
     $collectionHolder = $('tbody.positions');
 
     // add a delete link to all of the existing tag form li elements
-    $collectionHolder.find('tr').each(function () {
+    $collectionHolder.find('tr:not(:last)').each(function () {
         addTagFormDeleteLink($(this));
     });
 
@@ -259,144 +260,9 @@ function refreshInputValuesAfterChangeSlider(profit) {
 
 
 
-/****************************************************
- *    Services Collection forms dynamically add     *
- ****************************************************/
-var $servicesCollectionHolder;
 
 
-// setup an "add a tag" link
-// var $addProductButton = $('<button type="button" class="add_tag_link">Dodaj nowy</button>');
-var $newLinkTrService = $('<tr></tr>');
 
-var $addServicesButton = $('#add-service-btn');
-
-jQuery(document).ready(function () {
-    // Get the ul that holds the collection of tags
-    $servicesCollectionHolder = $('tbody.services');
-
-    // add a delete link to all of the existing tag form li elements
-    $servicesCollectionHolder.find('tr').each(function () {
-        addTagFormDeleteLinkServices($(this));
-    });
-
-    // add the "add a tag" anchor and li to the tags ul
-    // $servicesCollectionHolder.append($newLinkTrService);
-
-    // count the current form inputs we have (e.g. 2), use that as the new
-    // index when inserting a new item (e.g. 2)
-    $servicesCollectionHolder.data('index', $servicesCollectionHolder.find('tr').length);
-
-    $addServicesButton.on('click', function (e) {
-        // add a new tag form (see next code block)
-        addTagFormService($servicesCollectionHolder, $newLinkTrService);
-    });
-
-});
-
-function addTagFormService($servicesCollectionHolder, $newLinkTrService) {
-    // Get the data-prototype explained earlier
-//            var prototype = $servicesCollectionHolder.data('prototype');
-
-    var prototype =
-        "<td><input type='text' id='microbundle_offert_offServices___name___name' name='microbundle_offert[offServices][__name__][name]'" +
-        " required='required' maxlength='255' class='form-control' placeholder='np.Koszt instalcji' value=''></td>\n" +
-        "<td>\n" +
-        "    <div class='touchspin-input-size-1 mx-auto '><div class='input-group bootstrap-touchspin bootstrap-touchspin-injected'>" +
-        "<input type='text' id='microbundle_offert_offServices___name___amount' name='microbundle_offert[offServices][__name__][amount]'" +
-        " required='required' class='touchspin-info form-control' data-bts-min='1' data-bts-max='100000' value='1'>" +
-        "</div>\n" +
-        "    </div>\n" +
-        "</td>\n" +
-        "<td>\n" +
-        "    <div class='touchspin-input-size-2 mx-auto input-group'><input type='text' id='microbundle_offert_offServices___name___price' " +
-        "name='microbundle_offert[offServices][__name__][price]' required='required'" +
-        " class=' form-control' data-bts-button-down-class='btn btn-outline-info'" +
-        " data-bts-button-up-class='btn btn-outline-info' data-bts-min='1'" +
-        " data-bts-max='100000' data-bts-decimal='2' data-bts-step='1' data-bts-postfix='<b class=&quot;info&quot;>&amp;#122;&amp;#322;</b>' " +
-        " value='0,00'>" +
-        "        <div class='input-group-append info'>\n" +
-        "            <span class='input-group-text'><b class='info'>zł</b></span>\n" +
-        "        </div>\n" +
-        "    </div>\n" +
-        "</td>\n" +
-        "<td class='summary-row'>\n" +
-        "    <div>0,00 zł</div>\n" +
-        "</td>\n" +
-        "<td></td>\n";
-
-    // get the new index
-    var index = $servicesCollectionHolder.data('index');
-
-    var newForm = prototype;
-    // You need this only if you didn't set 'label' => false in your tags field in TaskType
-    // Replace '__name__label__' in the prototype's HTML to
-    // instead be a number based on how many items we have
-    // newForm = newForm.replace(/__name__label__/g, index);
-
-    // Replace '__name__' in the prototype's HTML to
-    // instead be a number based on how many items we have
-    newForm = newForm.replace(/__name__/g, index);
-
-    // increase the index with one for the next item
-    $servicesCollectionHolder.data('index', index + 1);
-
-    // Display the form in the page in an li, before the "Add a tag" link li
-    var $newFormTr = $('<tr></tr>').append(newForm);
-    $servicesCollectionHolder.append($newFormTr);
-
-
-    addTagFormDeleteLinkServices($newFormTr);
-    //refresh touchspin
-    $(".touchspin-info").TouchSpin({
-        buttondown_class: "btn btn-outline-info",
-        buttonup_class: "btn btn-outline-info",
-        buttondown_txt: '<i class="ft-minus"></i>',
-        buttonup_txt: '<i class="ft-plus"></i>'
-    });
-}
-
-function addTagFormDeleteLinkServices($tagFormTr) {
-    var $removeFormButton = $('<a class="text-danger"><i class="la la-close"></i></a>');
-    $tagFormTr.find('td:last').html($removeFormButton);
-
-    $removeFormButton.on('click', function (e) {
-        // remove the li for the tag form
-        $tagFormTr.remove();
-        updateAllValues();
-    });
-}
-
-/****************************************************
- *        Refreshing values in services table        *
- ****************************************************/
-
-function refreshServicesTotalValues() {
-    var summaryValue = 0.00;
-    $('tbody.services').find('tr').each(function () {
-        var tr = $(this);
-        var amount = parseInt(tr.find("input[id$='amount']").val());
-
-
-        if (!isNaN(amount)) {
-
-            var price = parseFloat(tr.find('input[id$="price"]').val().replace(",", "."));
-            var newValue = amount * price;
-            var newValueCurrency = newValue.toLocaleString('pl-PL', {
-                style: 'currency',
-                currency: 'PLN',
-            });
-            summaryValue += newValue;
-
-
-            //update column
-            tr.find('.summary-row').html(newValueCurrency);
-        }
-
-
-    });
-    return summaryValue;
-}
 
 
 /****************************************************

@@ -51,6 +51,42 @@ class Client
     private $phoneNumber;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="street", type="string", length=255, nullable=true)
+     */
+    private $street;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="house_no", type="string", length=255, nullable=true)
+     */
+    private $houseNo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="flat_no", type="string", length=255, nullable=true)
+     */
+    private $flatNo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="city", type="string", length=255, nullable=true)
+     */
+    private $city;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="postal_code", type="string", length=255, nullable=true)
+     */
+    private $postalCode;
+
+
+    /**
      * @var \DateTime|null
      *
      * @ORM\Column(name="add_date", type="datetime", nullable=true)
@@ -63,15 +99,22 @@ class Client
      */
     private $buildings;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Offert", mappedBy="client")
+     */
+    private $offerts;
+
 
     
 
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct($name = "")
     {
-        $this->buildings = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->name = $name;
+        $this->buildings = new ArrayCollection();
+        $this->offerts = new ArrayCollection();
         $this->addDate = new \DateTime();
     }
 
@@ -83,6 +126,20 @@ class Client
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set id.
+     *
+     * @param int $id
+     *
+     * @return Client
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -239,5 +296,161 @@ class Client
     public function getBuildings()
     {
         return $this->buildings;
+    }
+
+    /**
+     * Set street.
+     *
+     * @param string|null $street
+     *
+     * @return Client
+     */
+    public function setStreet($street = null)
+    {
+        $this->street = $street;
+
+        return $this;
+    }
+
+    /**
+     * Get street.
+     *
+     * @return string|null
+     */
+    public function getStreet()
+    {
+        return $this->street;
+    }
+
+    /**
+     * Set houseNo.
+     *
+     * @param string|null $houseNo
+     *
+     * @return Client
+     */
+    public function setHouseNo($houseNo = null)
+    {
+        $this->houseNo = $houseNo;
+
+        return $this;
+    }
+
+    /**
+     * Get houseNo.
+     *
+     * @return string|null
+     */
+    public function getHouseNo()
+    {
+        return $this->houseNo;
+    }
+
+    /**
+     * Set flatNo.
+     *
+     * @param string|null $flatNo
+     *
+     * @return Client
+     */
+    public function setFlatNo($flatNo = null)
+    {
+        $this->flatNo = $flatNo;
+
+        return $this;
+    }
+
+    /**
+     * Get flatNo.
+     *
+     * @return string|null
+     */
+    public function getFlatNo()
+    {
+        return $this->flatNo;
+    }
+
+    /**
+     * Set city.
+     *
+     * @param string|null $city
+     *
+     * @return Client
+     */
+    public function setCity($city = null)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Get city.
+     *
+     * @return string|null
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * Set postalCode.
+     *
+     * @param string|null $postalCode
+     *
+     * @return Client
+     */
+    public function setPostalCode($postalCode = null)
+    {
+        $this->postalCode = $postalCode;
+
+        return $this;
+    }
+
+    /**
+     * Get postalCode.
+     *
+     * @return string|null
+     */
+    public function getPostalCode()
+    {
+        return $this->postalCode;
+    }
+
+    /**
+     * Add offert.
+     *
+     * @param \MicroBundle\Entity\Offert $offert
+     *
+     * @return Client
+     */
+    public function addOffert(\MicroBundle\Entity\Offert $offert)
+    {
+        $this->offerts[] = $offert;
+
+        return $this;
+    }
+
+    /**
+     * Remove offert.
+     *
+     * @param \MicroBundle\Entity\Offert $offert
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeOffert(\MicroBundle\Entity\Offert $offert)
+    {
+        return $this->offerts->removeElement($offert);
+    }
+
+    /**
+     * Get offerts.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getOfferts()
+    {
+        return $this->offerts;
     }
 }

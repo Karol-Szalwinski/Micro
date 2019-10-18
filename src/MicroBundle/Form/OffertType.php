@@ -18,8 +18,17 @@ class OffertType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+
             ->add('name')
-            ->add('client')
+
+            ->add('clients', CollectionType::class, [
+                'entry_type' => OffertClientType::class,
+                'entry_options' => ['label' => true],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'label' => false
+            ])
             ->add('myCompany')
             ->add('addDate', DateType::class, ['widget' => 'single_text', 'html5' => false,])
             ->add('expireDate', DateType::class, ['widget' => 'single_text', 'html5' => false,])
@@ -30,7 +39,8 @@ class OffertType extends AbstractType
                 'allow_delete' => true,
                 'by_reference' => false,
                 'label' => false
-            ])->add('offServices', CollectionType::class, [
+            ])
+            ->add('offServices', CollectionType::class, [
                 'entry_type' => OffServiceType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,

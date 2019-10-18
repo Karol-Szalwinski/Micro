@@ -65,8 +65,11 @@ class CartController extends Controller
                 }
             }
             $offert->setStatus(OffertStatusEnum::ACTIVE);
+
+
             //close cart and create new
             $newCart = new Offert;
+
             $em->persist($newCart);
             $em->flush();
 

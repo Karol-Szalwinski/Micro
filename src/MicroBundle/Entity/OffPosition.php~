@@ -253,4 +253,28 @@ class OffPosition
     {
         return $this->purchasePrice;
     }
+
+    /**
+     * Set productId.
+     *
+     * @param int|null $productId
+     *
+     * @return OffPosition
+     */
+    public function setProductId($productId = null)
+    {
+        $this->productId = $productId;
+
+        return $this;
+    }
+
+    /**
+     * Get productId.
+     *
+     * @return int|null
+     */
+    public function getProductId()
+    {
+        return $this->productId;
+    }
 }

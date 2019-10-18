@@ -53,7 +53,7 @@
 
                         <div class="table-responsive-md">
                             <table id="table-positions"
-                                   class="table table-borderless table-middle text-center">
+                                   class="table table-borderless table-middle text-center table-condensed">
                                 <thead>
                                 <tr>
                                     <th>Nazwa</th>
@@ -75,9 +75,9 @@
                                         {{ form_errors(form) }}
                                     </div>
                                     <tr>
-                                        <td>{{ form_widget(offPosition.name, { 'attr': {'class': 'form-control  hide-input'} }) }}</td>
+                                        <td>{{ form_widget(offPosition.name, { 'attr': {'class': 'form-control hide-input width-min-300'} }) }}</td>
                                         <td>
-                                            <div class="touchspin-input-size-1 mx-auto ">{{ form_widget(offPosition.amount, {
+                                            <div class="touchspin-input-size-1 mx-auto  ">{{ form_widget(offPosition.amount, {
                                                     'attr': {'class': 'touchspin-info form-control',
                                                         'data-bts-button-down-class' : 'btn btn-outline-info',
                                                         'data-bts-button-up-class' : 'btn btn-outline-info',
@@ -119,12 +119,12 @@
                                     </tr>
 
                                 {% endfor %}
-                                <tr>
+                                <tr class="last" >
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td><h4 class="red">Razem</h4></td>
-                                    <td><h4 class="red">{{ total|price }}</h4></td>
+                                    <td><h4 id="total-value" class="red">{{ total|price }}</h4></td>
                                     <td></td>
                                 </tr>
                                 </tbody>
@@ -136,9 +136,9 @@
                             <button type="submit" class="btn btn-outline-info">
                                 Generuj ofertę dla klienta <i class="la la-plus"></i>
                             </button>
-                            <button type="button" class="btn btn-outline-danger">
-                                Usuń wszystkie pozycje <i class="la la-close"></i>
-                            </button>
+                            {#<button type="button" class="btn btn-outline-danger">#}
+                                {#Usuń wszystkie pozycje <i class="la la-close"></i>#}
+                            {#</button>#}
                             {{ form_end(form) }}
                         </div>
                     </div>
