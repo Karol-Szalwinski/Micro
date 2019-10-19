@@ -26,9 +26,18 @@
                         <div class="row">
                             <div class="col-5">
                                 <div class="product-img d-flex align-items-center">
-                                    <img alt="Card image cap" class="img-fluid mb-1"
-                                         src="../../../app-assets/images/elements/fitbit-watch.png">
-                                    </img>
+                                    {% if product.image %}
+                                    <a href="{{ asset('uploads/images/' ~ product.image) }}">
+                                        <img
+                                                src="{{ asset('uploads/images/' ~ product.image) }}"
+                                                style="width:600px; "
+                                                class="img-fluid"
+                                                alt="Pieczątka firmy">
+
+                                    </a>
+                                        {%  else %}
+                                            <img id="preview" width="600" src="https://via.placeholder.com/600x600>
+                                        {% endif %}
                                 </div>
                                 <div>
                                     <table class="table table-borderless  table-striped">
@@ -98,9 +107,9 @@
                     <div class="card-content">
                         <div class="card-body">
                             {#<div class="container">#}
-                                <a href="#description" class="btn btn-outline-info btn-block" data-toggle="collapse"
-                                >Opis</a><br>
-                                <div id="description" class="collapse">{{ product.description|raw }}</div>
+                            <a href="#description" class="btn btn-outline-info btn-block" data-toggle="collapse"
+                            >Opis</a><br>
+                            <div id="description" class="collapse">{{ product.description|raw }}</div>
                             {#</div>#}
                         </div>
                     </div>

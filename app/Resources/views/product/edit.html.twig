@@ -101,6 +101,34 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    {{ form_label(edit_form.image, 'Zdjęcie produktu (JPG lub PNG)', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-6 mx-auto">
+                                        <div class="custom-file mb-3">
+                                            {{ form_widget(edit_form.image, { 'attr': {'class': 'custom-file-input'} }) }}
+                                            <label class="custom-file-label" for="microbundle_product_image">Wybierz
+                                                plik</label>
+                                            {{ form_errors(edit_form.image, {'attr': {'class': 'text-danger'} }) }}
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-3 label-control">Podgląd zdjęcia i miniaturki</div>
+                                    <div class="col-md-6 mx-auto">
+
+                                        <a href="https://placeholder.com">
+                                            {% if product.image %}
+                                            <img id="preview" width="400" src="{{ asset('uploads/images/' ~ product.image) }}">
+                                            <img id="preview-min" width="70" src="{{ asset('uploads/images/' ~ product.image) }}">
+                                            {% else %}
+                                                <img id="preview" width="400" src="https://via.placeholder.com/400X400">
+                                                <img id="preview-min" width="70" src="https://via.placeholder.com/70X70">
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     {{ form_label(edit_form.description, 'Opis produktu', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(edit_form.description, { 'attr': {'class': 'form-control summernote', 'placeholder': 'Wprowadź nazwę'} }) }}
@@ -215,6 +243,20 @@
     <!-- BEGIN: My JS-->
     <script src="{{ asset('assets/js/product-new-edit.js') }}"></script>
     <script src="{{ asset('app-assets/vendors/js/editors/summernote/summernote.js') }}"></script>
-    app-assets/vendors/js/editors/summernote/summernote.js
+    <script>
+
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+            loadFile(event);
+        });
+
+        var loadFile = function (event) {
+            var preview = document.getElementById('preview');
+            var previewMin = document.getElementById('preview-min');
+            preview.src = URL.createObjectURL(event.target.files[0]);
+            previewMin.src = URL.createObjectURL(event.target.files[0]);
+        };
+    </script>
     <!-- END: My JS-->
 {% endblock %}

@@ -8,9 +8,11 @@ use MicroBundle\Entity\OffPosition;
 use MicroBundle\Entity\Product;
 use MicroBundle\Entity\ProductParameter;
 use MicroBundle\Enums\OffertStatusEnum;
+use MicroBundle\Services\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -80,7 +82,7 @@ class ProductController extends Controller
      * @Route("/new", name="product_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request, FileUploader $fileUploader )
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -90,10 +92,14 @@ class ProductController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            dump($product);
             //add parameters to productParameter
             $product = $this->container->get('parameters')->connectNewProductParameterWithParent($product);
-            dump($product);
+
+            $imageFile = $form['image']->getData();
+            if ($imageFile) {
+                $imageFileName = $fileUploader->uploadWithThumbs($imageFile, [70]);
+                $product->setImage($imageFileName);
+            }
             $em->persist($product);
             $em->flush();
 
@@ -124,11 +130,16 @@ class ProductController extends Controller
      * @Route("/{id}/edit", name="product_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Product $product)
+    public function editAction(Request $request, Product $product,  FileUploader $fileUploader)
     {
         $em = $this->getDoctrine()->getManager();
 
         $categories = $em->getRepository('MicroBundle:Category')->findAll();
+
+        $imageFile = $this->getParameter('target_directory') . '/images' . $product->getImage();
+        if(is_file($imageFile)) {
+            $product->setImage(new File($imageFile));
+        }
 
         //backup ProductParameters
         $originalProductParameters = new ArrayCollection();
@@ -151,6 +162,11 @@ class ProductController extends Controller
                     $em->remove($productParameter);
 
                 }
+            }
+            $imageFile = $editForm['image']->getData();
+            if ($imageFile) {
+                $imageFileName = $fileUploader->uploadWithThumbs($imageFile, [70]);
+                $product->setImage($imageFileName);
             }
             $product = $this->container->get('parameters')->connectNewProductParameterWithParent($product);
 

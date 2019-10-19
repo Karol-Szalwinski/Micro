@@ -85,8 +85,19 @@ class MyCompany
         $this->phoneNo = $phoneNo;
     }
 
+    public function __toString()
+    {
+        $output = "";
+        $output .= $this->name . "\n";
+        $output .= $this->street . " ";
+        $output .= $this->postCode . " " . $this->city ."\n";
+        $output .= "tel: " . $this->phoneNo ."\n";
+        return $output;
+    }
 
-    /**
+
+
+        /**
      * Get id.
      *
      * @return int

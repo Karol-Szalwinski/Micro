@@ -71,9 +71,9 @@ class Product
     /**
      * @var string
      *
-     * @ORM\Column(name="images", type="string", length=255, nullable=true)
+     * @ORM\Column(name="image", type="string", nullable=true)
      */
-    private $images;
+    private $image;
 
 
     /**
@@ -206,29 +206,6 @@ class Product
         return $this->category;
     }
 
-    /**
-     * Set images.
-     *
-     * @param string $images
-     *
-     * @return Product
-     */
-    public function setImages($images)
-    {
-        $this->images = $images;
-
-        return $this;
-    }
-
-    /**
-     * Get images.
-     *
-     * @return string
-     */
-    public function getImages()
-    {
-        return $this->images;
-    }
 
     /**
      * Set productParameters.
@@ -311,5 +288,29 @@ class Product
     public function removeProductParameter(ProductParameter $productParameter)
     {
         return $this->productParameters->removeElement($productParameter);
+    }
+
+    /**
+     * Set image.
+     *
+     * @param string|null $image
+     *
+     * @return Product
+     */
+    public function setImage($image = null)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image.
+     *
+     * @return string|null
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 }
