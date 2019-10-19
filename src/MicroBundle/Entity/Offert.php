@@ -99,7 +99,6 @@ class Offert
         $this->status = OffertStatusEnum::BASKET;
         $this->addDate = new DateTime();
         $this->expireDate = new DateTime('+1 month');
-        $this->name = "Oferta ";
     }
 
 

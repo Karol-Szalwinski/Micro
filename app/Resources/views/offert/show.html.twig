@@ -150,7 +150,7 @@
             <div class="card">
                 <div class="card-head">
                     <div class="card-header">
-                        <h4 class="card-title">Dane Klienta</h4>
+                        <h4 class="card-title">Nasze dane</h4>
                         <div class="heading-elements mt-0">
                         </div>
                     </div>
@@ -161,7 +161,7 @@
                             <div class="form-group row">
                                 {{ form_label(form.myCompany, 'Nasze dane', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                 <div class="col-md-9 mx-auto">
-                                    {{ form_widget(form.myCompany, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}
+                                    {{ form_widget(form.myCompany, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę', 'rows' : '4'} }) }}
 
                                 </div>
 

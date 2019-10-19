@@ -64,11 +64,14 @@ class CartController extends Controller
                     }
                 }
             }
+            $nextOffertNumber= $em->getRepository('MicroBundle:Offert')->Count([]) + 1;
+            $offert->setName("Oferta " . $nextOffertNumber );
             $offert->setStatus(OffertStatusEnum::ACTIVE);
+            $offert->setMyCompany($this->container->get('mycompany')->getOrCreateDefaultMyCompany());
 
 
             //close cart and create new
-            $newCart = new Offert;
+            $newCart = new Offert();
 
             $em->persist($newCart);
             $em->flush();
