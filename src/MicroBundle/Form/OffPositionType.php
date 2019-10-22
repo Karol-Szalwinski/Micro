@@ -21,6 +21,7 @@ class OffPositionType extends AbstractType
         $builder
             ->add('name')
             ->add('productId', HiddenType::class)
+            ->add('image', HiddenType::class)
 
             ->add('amount', TextType::class )
             ->add('purchasePrice', MoneyType::class, [

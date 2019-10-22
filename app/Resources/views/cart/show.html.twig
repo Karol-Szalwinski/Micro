@@ -56,6 +56,7 @@
                                    class="table table-borderless table-middle text-center table-condensed">
                                 <thead>
                                 <tr>
+                                    <th>Zdjęcie</th>
                                     <th>Nazwa</th>
                                     <th>Ilość</th>
                                     <th>Cena zakupu</th>
@@ -67,7 +68,7 @@
 
                                 {{ form_start(form) }}
                                 <tbody class="positions">
-                                {%  set total = 0 %}
+                                {% set total = 0 %}
                                 {#iterate over each existing tag and render its all fields#}
                                 {% for offPosition in form.offPositions %}
 
@@ -75,6 +76,21 @@
                                         {{ form_errors(form) }}
                                     </div>
                                     <tr>
+                                        <td>
+                                            {{ form_widget(offPosition.image) }}
+                                            {%  set image = offPosition.image.vars.value %}
+                                            {% if image|length > 0 %}
+                                                {% set thumb70 = image|replace({'.': "thumb70."}) %}
+                                                <a href="{{ asset('uploads/images/' ~ image) }}">
+                                                    <img src="{{ asset('uploads/images/thumb70/' ~ thumb70) }}"
+                                                         alt="Desktop"
+                                                         height="70">
+                                                </a>
+                                            {% else %}
+                                                <img id="preview" width="70"
+                                                     src="https://via.placeholder.com/70x70">
+                                            {% endif %}
+                                        </td>
                                         <td>{{ form_widget(offPosition.name, { 'attr': {'class': 'form-control hide-input width-min-300'} }) }}</td>
                                         <td>
                                             <div class="touchspin-input-size-1 mx-auto  ">{{ form_widget(offPosition.amount, {
@@ -111,7 +127,7 @@
                                         </td>
                                         <td class="summary-row">
                                             {% set summary = offPosition.amount.vars.value|number_format * offPosition.price.vars.value|number_format * 100 %}
-                                            {%  set total = total + summary %}
+                                            {% set total = total + summary %}
                                             <div>{{ summary|price }}</div>
                                         </td>
                                         <td><a class="text-danger"><i class="la la-close"></i></a></td>
@@ -119,7 +135,7 @@
                                     </tr>
 
                                 {% endfor %}
-                                <tr class="last" >
+                                <tr class="last">
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -137,7 +153,7 @@
                                 Generuj ofertę dla klienta <i class="la la-plus"></i>
                             </button>
                             {#<button type="button" class="btn btn-outline-danger">#}
-                                {#Usuń wszystkie pozycje <i class="la la-close"></i>#}
+                            {#Usuń wszystkie pozycje <i class="la la-close"></i>#}
                             {#</button>#}
                             {{ form_end(form) }}
                         </div>

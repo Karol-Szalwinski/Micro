@@ -138,7 +138,7 @@ class DocumentController extends Controller
 //            dump($pdfSettings);die();
             $em->persist($pdfSettings);
             $em->flush();
-            return $this->redirectToRoute('document_pdf', array('document' => $document->getId()));
+            return $this->redirectToRoute('document_pdf', array('documentId' => $document->getId()));
 
         }
 

@@ -5,11 +5,12 @@ namespace MicroBundle\Enums;
 abstract class OffertStatusEnum
 {
     const BASKET = "W koszyku";
-    const ACTIVE = "Aktywne";
+    const ACTIVE = "Aktywna";
+    const EXPIRE = "Wygasa";
     const CLOSED = "Zamknięte";
 
     /** @var array user friendly named type */
-    protected static $typeName = [self::BASKET => "W koszyku", self::ACTIVE => "Aktywne", self::CLOSED => "Zamknięte",];
+    protected static $typeName = [self::BASKET => "W koszyku", self::ACTIVE => "Aktywne", self::EXPIRE => "Wygasa", self::CLOSED => "Zamknięte",];
 
     /**
      * @param  string $typeShortName
@@ -29,6 +30,6 @@ abstract class OffertStatusEnum
      */
     public static function getAvailableStatuses()
     {
-        return [self::BASKET, self::ACTIVE, self::CLOSED,];
+        return [self::BASKET, self::ACTIVE, self::EXPIRE, self::CLOSED,];
     }
 }

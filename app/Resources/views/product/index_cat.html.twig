@@ -63,11 +63,19 @@
                                     <tr data-product-id="{{ product.id }}">
                                         <td>
                                             <div class="media">
-                                                <div class="media-left pr-1"><span
-                                                            class="avatar avatar-sm avatar-online rounded-circle"><img
-                                                                src="../../../app-assets/images/portrait/small/avatar-s-2.png"
-                                                                alt="avatar"><i></i></span></div>
-
+                                                <div class="media-left pr-1">
+                                                    {% if product.image %}
+                                                        {% set thumb70 = product.image|replace({'.': "thumb70."}) %}
+                                                        <a href="{{ asset('uploads/images/' ~ product.image) }}">
+                                                            <img src="{{ asset('uploads/images/thumb70/' ~ thumb70) }}"
+                                                                 alt="Desktop"
+                                                                 height="70">
+                                                        </a>
+                                                    {% else %}
+                                                        <img id="preview" width="70"
+                                                             src="https://via.placeholder.com/70x70">
+                                                    {% endif %}
+                                                </div>
                                             </div>
                                         </td>
                                         <td class="text-center">
@@ -87,7 +95,7 @@
                                         <td class="mx-auto">
                                             <div class="input-group group-fixed-width-120 mx-auto" role="group"
                                                  aria-label="Button group with nested dropdown">
-                                                <input class="form-control quantity-input" type="text" placeholder="Ilość"
+                                                <input class="form-control quantity-input" type="number" placeholder="Ilość"
                                                        name="quantity"
                                                        autocomplete="off">
                                                 <button type="submit" class="quantity-input-btn form-control btn btn-outline-info "

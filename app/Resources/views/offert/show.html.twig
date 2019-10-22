@@ -87,11 +87,15 @@
             <div class="card">
                 <div class="card-head">
                     <div class="card-header">
-                        <h4 class="card-title">Dane Klienta<span id="new-client-label" class="red" style="Display: none"> (Nowy)</span></h4>
+                        <h4 class="card-title">Dane Klienta<span id="new-client-label" class="red"
+                                                                 style="Display: none"> (Nowy)</span></h4>
                         <div class="heading-elements mt-0">
-                            <button id="new-client-btn" type="button" class="btn btn-outline-secondary" style="Display: none" >Dodaj nowego</button>
+                            <button id="new-client-btn" type="button" class="btn btn-outline-secondary"
+                                    style="Display: none">Dodaj nowego
+                            </button>
                             <button type="button" class="btn btn-outline-info" data-toggle="modal"
-                                    data-target="#choose-client">Wybierz z listy</button>
+                                    data-target="#choose-client">Wybierz z listy
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -200,6 +204,7 @@
                                    class="table table-borderless table-middle table-condensed text-center">
                                 <thead>
                                 <tr>
+                                    <th>Zdjęcie</th>
                                     <th>Nazwa</th>
                                     <th>Ilość</th>
                                     <th>Cena zakupu</th>
@@ -219,6 +224,21 @@
                                         {{ form_errors(form) }}
                                     </div>
                                     <tr>
+                                        <td>
+                                            {{ form_widget(offPosition.image) }}
+                                            {% set image = offPosition.image.vars.value %}
+                                            {% if image|length > 0 %}
+                                                {% set thumb70 = image|replace({'.': "thumb70."}) %}
+                                                <a href="{{ asset('uploads/images/' ~ image) }}">
+                                                    <img src="{{ asset('uploads/images/thumb70/' ~ thumb70) }}"
+                                                         alt="Desktop"
+                                                         height="70">
+                                                </a>
+                                            {% else %}
+                                                <img id="preview" width="70"
+                                                     src="https://via.placeholder.com/70x70">
+                                            {% endif %}
+                                        </td>
                                         <td>{{ form_widget(offPosition.name, { 'attr': {'class': 'form-control width-min-300', 'placeholder': 'Wprowadź nazwę'} }) }}</td>
                                         <td>
                                             <div class="touchspin-input-size-1 mx-auto ">{{ form_widget(offPosition.amount, {
@@ -429,12 +449,20 @@
                         {% for product in products %}
                             <tr>
                                 <td>
-                                    <div class="media">
-                                        <div class="media-left pr-1"><span
-                                                    class="avatar avatar-sm avatar-online rounded-circle"><img
-                                                        src="../../../app-assets/images/portrait/small/avatar-s-2.png"
-                                                        alt="avatar"><i></i></span></div>
 
+                                    <div class="mx-auto bg-white pr-1">
+                                        {% if product.image %}
+                                            {% set thumb70 = product.image|replace({'.': "thumb70."}) %}
+                                            <a class="text-center "
+                                               href="{{ asset('uploads/images/' ~ product.image) }}">
+                                                <img src="{{ asset('uploads/images/thumb70/' ~ thumb70) }}"
+                                                     alt="Zdjęcie produktu"
+                                                     height="70">
+                                            </a>
+                                        {% else %}
+                                            <img id="preview" width="70"
+                                                 src="https://via.placeholder.com/70x70">
+                                        {% endif %}
                                     </div>
                                 </td>
                                 <td class="text-center">
@@ -455,6 +483,7 @@
                                     <button type="button" data-id="{{ product.id }}"
                                             data-name="{{ product.name }}"
                                             data-price="{{ product.price }}"
+                                            data-image="{{ product.image }}"
                                             class="btn btn-outline-info add-product-btn"><span>Dodaj&nbsp;</span><i
                                                 class="la la-plus"></i></button>
                                 </td>

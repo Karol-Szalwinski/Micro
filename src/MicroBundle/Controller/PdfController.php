@@ -1,39 +1,23 @@
 <?php
 
 namespace MicroBundle\Controller;
-
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use MicroBundle\Entity\Document;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Response;
 
 
-/**
- * @Route("document")
- */
-class PdfController extends Controller
+
+abstract class PdfController extends Controller
 {
-
-
     /**
-     * Print to pdf Document
-     *
-     * @Route("/pdf/{document}", name="document_pdf")
-     * @param Document $document
+     * @param $filename
+     * @param $header
+     * @param $footer
+     * @param $marginBottom
+     * @param $html
      * @return PdfResponse
      */
-    public function pdfDocumentAction(Document $document)
+    protected function generatePdf($filename, $header, $footer, $marginBottom, $html): PdfResponse
     {
-        $prepareService = $this->get('prepareHtmlToPdf');
-        $html = $prepareService->getContent($document);
-        $header = $prepareService->getHeader($document);
-        $footer = $prepareService->getFooter($document);
-
-        $marginBottom = ($document->getPdfSettings()->getShowStamp() || !empty($document->getPdfSettings()->getInspectors()))
-            ? '45mm' : '25mm';
-
         $options = [
 
             'images' => true,
@@ -46,20 +30,18 @@ class PdfController extends Controller
             'margin-right' => '10mm',
             'margin-top' => '33mm',
             'margin-bottom' => $marginBottom,
-            'header-spacing'=> '3',
+            'header-spacing' => '3',
 
         ];
-        $snappy =  $this->get('knp_snappy.pdf');
+        $snappy = $this->get('knp_snappy.pdf');
 
 
         $snappy->setOption('header-html', $header);
         $snappy->setOption('footer-html', $footer);
         $snappy->setTimeout(40);
-        $filename = "Document_nr_" . $document->getId() . ".pdf";
+
 
         return new PdfResponse($snappy->getOutputFromHtml($html, $options), $filename);
     }
-
-
+    abstract function pdfCreateAction($object) : PdfResponse;
 }
-

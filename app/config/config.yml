@@ -90,7 +90,7 @@ fos_user:
 knp_snappy:
     pdf:
         enabled:    true
-        binary:     ../wk/bin/wkhtmltopdf
+        binary:     wkhtmltopdf
         options:    []
 
 

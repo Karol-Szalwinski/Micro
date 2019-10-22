@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <title>Podgląd wydruku</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <style>
+        html
+        body {
+            font-family: Georgia, "Times New Roman", Times, serif;
+            font-size: 18px;
+        }
+
+        .table-striped {
+            font-size: 14px;
+        }
+
+        table.table-bordered {
+            border: 1px solid black;
+            margin-top: 20px;
+        }
+
+        table.table-bordered > thead > tr > th {
+            border: 1px solid black;
+        }
+
+        table.table-bordered > tbody > tr > td {
+            border: 1px solid black;
+        }
+
+        .table-striped > tbody > tr:nth-child(odd) > td,
+        .table-striped > tbody > tr:nth-child(odd) > th {
+            background-color: darkgrey;
+        / / Choose your own color here
+        }
+
+        /*.vl {*/
+        /*border-left: solid 2px #940e1f;*/
+        /*height: 100%;*/
+        /*position: absolute;*/
+        /*left: 10px;*/
+        /*margin-left: -3px;*/
+        /*top: 0;*/
+        /*}*/
+
+        @media print {
+            .table-striped > tbody > tr:nth-child(odd) > td,
+            .table-striped > tbody > tr:nth-child(odd) > th {
+                background-color: darkgrey !important;
+                -webkit-print-color-adjust: exact;
+
+            }
+
+            .page {
+                width: 100% !important;
+                height: 100% !important;
+            }
+        }
+
+
+    </style>
+</head>
+
+<body>
+<div class="vl"></div>
+<!--------------------->
+<table class="col-sm-12">
+    <tbody>
+    <tr>
+        <td>
+
+            <!--------------------->
+            <div class="content">
+
+                <div class="container-fluid">
+
+                    <div class="row">
+                        <div>&nbsp</div>
+                        <div class="col-sm-12">
+                            <p class=" text-right small">Skierniewice, {{ offert.addDate|date('d.m.Y') }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p class="text-center"><b>{{ offert.name }}</b></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p >Oferta ważna do {{ offert.expireDate|date('d.m.Y') }}.</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p><b>Ofertobiorca: </b><br>
+                                <b>{{ offert.clients|first.name }}</b><br/>
+                                <span>ul. {{ offert.clients|first.street }} {{ offert.clients|first.houseNo }}
+                                    {% if  offert.clients|first.flatNo  is not null %} / {{ offert.clients|first.flatNo }}
+                                    {% endif %}<br/>
+                                    {{ offert.clients|first.city }} {{ offert.clients|first.postalCode }}
+                                </span></p>
+
+                        </div>
+                    </div>
+
+
+                    <div class="row" style="page-break-inside: avoid">
+                        <div class="col-sm-12">
+                            <p class="text-center"><b>Produkty i usługi</b></p>
+                            <table class="table table-bordered table-striped text-center col-sm-12 table-sm"
+                            >
+                                <thead>
+                                <tr>
+                                    <th class="align-middle">L.p.</th>
+                                    <th class="align-middle">Nazwa</th>
+                                    <th class="align-middle">Ilość</th>
+                                    <th class="align-middle">Cena netto</th>
+                                    <th class="align-middle">Łączna wartość</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% set firstTabLoopIndex = 0 %}
+                                {% set summaryNetto = 0 %}
+                                {% for product in offert.offPositions %}
+                                    <tr>
+                                        <td style="width: 6%">{{ loop.index }}</td>
+                                        <td style="width: 25%">{{ product.name }}</td>
+                                        <td style="width: 10%">{{ product.amount }}</td>
+                                        <td style="width: 15%">{{ product.price|price }}</td>
+                                        <td style="width: 15%">{{ (product.price * product.amount)|price }}</td>
+
+                                    </tr>
+                                    {% set firstTabLoopIndex = loop.index %}
+                                    {%  set summaryNetto = summaryNetto + (product.price * product.amount) %}
+                                {% endfor %}
+
+                                {% for service in offert.offServices%}
+                                    <tr>
+                                        <td style="width: 6%">{{ loop.index + firstTabLoopIndex }}</td>
+                                        <td style="width: 25%">{{ service.name }}</td>
+                                        <td style="width: 10%">{{ service.amount }}</td>
+                                        <td style="width: 15%">{{ service.price|price }}</td>
+                                        <td style="width: 15%">{{ (service.price * service.amount)|price }}</td>
+
+                                    </tr>
+                                    {%  set summaryNetto = summaryNetto + (service.price * service.amount) %}
+                                {% endfor %}
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><b>Razem netto</b></td>
+                                <td><b>{{ summaryNetto|price }}</b></td>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <div class="row" style="page-break-inside: avoid">
+                        <div class="col-sm-12">
+                            <p><b>Uwagi:</b><br>
+                                {{ offert.comment|nl2br }}</p>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!--------------------->
+        </td>
+    </tr>
+    </tbody>
+
+</table>
+
+</body>
+</html>
+
+

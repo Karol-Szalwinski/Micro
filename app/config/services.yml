@@ -3,7 +3,8 @@
 parameters:
     micro.service.buildingupdate.class: MicroBundle\Services\BuildingUpdateService
     micro.service.mycompany.class: MicroBundle\Services\MyCompanyService
-    micro.service.prepareHtmlToPdf.class: MicroBundle\Services\PrepareHtmlToPdfService
+    micro.service.generateHtmlFromDocumentService.class: MicroBundle\Services\GenerateHtmlFromDocumentService
+    micro.service.generateHtmlFromOffertService.class: MicroBundle\Services\GenerateHtmlFromOffertService
     micro.service.parameters.class: MicroBundle\Services\ParametersService
     micro.service.serialize.class: MicroBundle\Services\SerializeService
     #parameter_name: value
@@ -50,12 +51,12 @@ services:
         class: %micro.service.mycompany.class%
         public: true
 
-    prepareHtmlToPdf:
-        class: %micro.service.prepareHtmlToPdf.class%
+    generateHtmlFromDocument:
+        class: %micro.service.generateHtmlFromDocumentService.class%
         public: true
 
-    parameters:
-        class: %micro.service.parameters.class%
+    generateHtmlFromOffert:
+        class: %micro.service.generateHtmlFromOffertService.class%
         public: true
 
     serialize:

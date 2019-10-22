@@ -2,9 +2,11 @@
 
 namespace MicroBundle\Controller;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use MicroBundle\Entity\Client;
 use MicroBundle\Entity\Offert;
+use MicroBundle\Enums\OffertStatusEnum;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -28,6 +30,24 @@ class OffertController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $offerts = $em->getRepository('MicroBundle:Offert')->findAll();
+
+        $today = new DateTime;
+        $nextWeek = new DateTime("+1 Week");
+        foreach ($offerts as $k => $offert) {
+            if ($offert->getStatus() != OffertStatusEnum::BASKET) {
+
+                if ($offert->getExpireDate() < $today) {
+                    $offert->setStatus(OffertStatusEnum::CLOSED);
+                } else if ($offert->getExpireDate() < $nextWeek) {
+                    $offert->setStatus(OffertStatusEnum::EXPIRE);
+                } else {
+                    $offert->setStatus(OffertStatusEnum::ACTIVE);
+                }
+            } else {
+                unset($offerts[$k]);
+            }
+        }
+        $em->flush();
 
         return $this->render('offert/index.html.twig', array('offerts' => $offerts,));
     }
@@ -84,7 +104,7 @@ class OffertController extends Controller
         $oldClient = $offert->getClients()->first();
 
         if ($oldClient) {
-            $oldClientId=$oldClient->getId();
+            $oldClientId = $oldClient->getId();
         } else {
             $offert->addClient(new Client("Klient detaliczny"));
         }
@@ -125,60 +145,59 @@ class OffertController extends Controller
             $clientForm = $offert->getClients()->first();
             $clientId = $clientForm->getId();
             dump($oldClient);
-           dump($offert);
+            dump($offert);
             //todo refactor
             //if client have no id - is new
-           if(!$clientId){
+            if (!$clientId) {
                 //if was old one before
-               if($oldClientId){
-                   //create new
-                   $newClient = new Client();
+                if ($oldClientId) {
+                    //create new
+                    $newClient = new Client();
 
-                   $newClient->SetName($clientForm->getName());
-                   $newClient->SetStreet($clientForm->getStreet());
-                   $newClient->SetHouseNo($clientForm->getHouseNo());
-                   $newClient->SetFlatNo($clientForm->getFlatNo());
-                   $newClient->SetCity($clientForm->getCity());
-                   $newClient->SetPostalCode($clientForm->getPostalCode());
+                    $newClient->SetName($clientForm->getName());
+                    $newClient->SetStreet($clientForm->getStreet());
+                    $newClient->SetHouseNo($clientForm->getHouseNo());
+                    $newClient->SetFlatNo($clientForm->getFlatNo());
+                    $newClient->SetCity($clientForm->getCity());
+                    $newClient->SetPostalCode($clientForm->getPostalCode());
 
 
-                   $offert->addClient($newClient);
-                   $em->persist($newClient);
+                    $offert->addClient($newClient);
+                    $em->persist($newClient);
 
                     //remove old
-                   $offert->removeClient($clientForm);
+                    $offert->removeClient($clientForm);
 
 
-               } else {
-                   //if dont was old we must only persist new one from form
-                   $em->persist($clientForm);
-               }
+                } else {
+                    //if dont was old we must only persist new one from form
+                    $em->persist($clientForm);
+                }
 
 
-           }
+            }
 
-           if($clientId  && $clientId != $oldClientId){
-               $dbClient = $em->getRepository('MicroBundle:Client')->findOneBy(['id' => $clientId]);
-               $dbClient->SetName($clientForm->getName());
-               $dbClient->SetStreet($clientForm->getStreet());
-               $dbClient->SetHouseNo($clientForm->getHouseNo());
-               $dbClient->SetFlatNo($clientForm->getFlatNo());
-               $dbClient->SetCity($clientForm->getCity());
-               $dbClient->SetPostalCode($clientForm->getPostalCode());
+            if ($clientId && $clientId != $oldClientId) {
+                $dbClient = $em->getRepository('MicroBundle:Client')->findOneBy(['id' => $clientId]);
+                $dbClient->SetName($clientForm->getName());
+                $dbClient->SetStreet($clientForm->getStreet());
+                $dbClient->SetHouseNo($clientForm->getHouseNo());
+                $dbClient->SetFlatNo($clientForm->getFlatNo());
+                $dbClient->SetCity($clientForm->getCity());
+                $dbClient->SetPostalCode($clientForm->getPostalCode());
 
 
+                $offert->addClient($dbClient);
+                $offert->removeClient($clientForm);
 
-               $offert->addClient($dbClient);
-               $offert->removeClient($clientForm);
-
-               //odpuść zmiany w starym elemencie
-               dump($dbClient);
-               dump($offert);
-           }
+                //odpuść zmiany w starym elemencie
+                dump($dbClient);
+                dump($offert);
+            }
             dump($offert);
             dump($offert->getClients()->first());
-           $em->flush($offert->getClients()->first());
-           $em->flush($offert);
+            $em->flush($offert->getClients()->first());
+            $em->flush($offert);
             return $this->redirectToRoute('offert_index');
         }
 

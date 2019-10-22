@@ -9,10 +9,10 @@
                         <div class="col-12">
                             <div class="input-group group-fixed-width-120 float-md-right" role="group"
                                  aria-label="Button group with nested dropdown">
-                                <input class="form-control" type="text" placeholder="Ilość" name="quantity"
-                                       autocomplete="off">
-                                <button type="submit" class="form-control btn btn-outline-info "
-                                        href="#"><i class="ft-shopping-cart"></i></button>
+                                <input id="quantity-input-modal" class="form-control" type="number" placeholder="Ilość" name="quantity"
+                                       autocomplete="off" value="{{ cartAmount }}">
+                                <button id="quantity-submit-modal-btn" type="button" class="form-control btn btn-outline-info "
+                                        href="" data-product-id="{{ product.id }}"><i class="ft-shopping-cart"></i></button>
 
                             </div>
                             {#<div class="input-group col-3 float-md-right">#}
@@ -30,12 +30,21 @@
                     <div class="row">
                         <div class="col-5">
                             <div class="product-img d-flex align-items-center">
-                                <img alt="Card image cap" class="img-fluid mb-1"
-                                     src="../../../app-assets/images/elements/fitbit-watch.png">
-                                </img>
+                                {% if product.image %}
+                                <a href="{{ asset('uploads/images/' ~ product.image) }}">
+                                    <img
+                                            src="{{ asset('uploads/images/' ~ product.image) }}"
+                                            style="width:600px; "
+                                            class="img-fluid"
+                                            alt="Pieczątka firmy">
+
+                                </a>
+                                {%  else %}
+                                <img id="preview" width="600" src="https://via.placeholder.com/600x600">
+                                        {% endif %}
                             </div>
                             <div>
-                                <table class="table table-borderless  table-striped">
+                                <table class="table table-borderless table-striped" >
                                     <tbody>
                                     <tr>
                                         <th>

@@ -100,7 +100,7 @@ class Client
     private $buildings;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Offert", mappedBy="client")
+     * @ORM\ManyToMany(targetEntity="Offert", mappedBy="clients")
      */
     private $offerts;
 

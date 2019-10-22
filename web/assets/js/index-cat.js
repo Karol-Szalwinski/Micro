@@ -138,6 +138,12 @@ $(document).on('click', '.quantity-input-btn', function () {
     updateCart(id, quantity);
 
 });
+$(document).on('click', '#quantity-submit-modal-btn', function () {
+    var id = $(this).data('product-id');
+    var quantity = $('#quantity-input-modal').val();
+    updateCart(id, quantity);
+
+});
 
 $(document).on('click', '.delete-cart-position', function () {
     var $tr = $(this).closest('tr');

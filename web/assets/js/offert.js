@@ -95,14 +95,21 @@ jQuery(document).ready(function () {
     //     addTagForm($collectionHolder, $newLinkTr);
     // });
     $addProductsButton.on('click', function (e) {
-        priceDec = $(this).data("price") / 100;
-        var purchasePrice = priceDec;
-        var price = priceDec + priceDec * 15 / 100;
+        var purchasePrice = $(this).data("price") / 100;
+        var priceCount = purchasePrice + purchasePrice * 15 / 100;
+        var price = priceCount.toLocaleString('pl-PL', {
+            style: 'currency',
+            currency: 'PLN',
+        });
+        var imageData = $(this).data("image");
+        var image = (typeof imageData !== 'undefined') ? imageData : "";
 
         var product =
             {
                 id: $(this).data("id"),
                 name: $(this).data("name"),
+                image: image,
+                thumb: makeThumbFromImage(image),
                 purchasePrice: purchasePrice,
                 price: price,
             }
@@ -113,11 +120,21 @@ jQuery(document).ready(function () {
     });
 });
 
+function makeThumbFromImage(image) {
+
+    return image.replace(".", "thumb70.");
+}
+
 function addTagForm($collectionHolder, $newLinkTr, product) {
     // Get the data-prototype explained earlier
 //            var prototype = $collectionHolder.data('prototype');
 
     var prototype =
+        "<td><input type='hidden' id='microbundle_offert_offPositions___name___image'" +
+        "           name='microbundle_offert[offPositions][__name__][image]' value='" + product.image + "'>" +
+        "    <a href='/uploads/images/" + product.image + "'>" +
+        "        <img src='/uploads/images/thumb70/" + product.thumb + "' alt='Desktop' height='70'>" +
+        "    </a></td>" +
         "<td><input type='text' id='microbundle_offert_offPositions___name___name' name='microbundle_offert[offPositions][__name__][name]'" +
         " required='required' maxlength='255' class='form-control' placeholder='Wprowadź nazwę' value='" + product.name + "'></td>\n" +
         "<td>\n" +
@@ -210,7 +227,7 @@ function refreshTotalValues() {
 
 
         if (!isNaN(amount)) {
-            var purchasePriceInput= tr.find(".purchasePrice input");
+            var purchasePriceInput = tr.find(".purchasePrice input");
             var purchasePrice = parseFloat(purchasePriceInput.val().replace(",", "."));
             summaryPurchaseValue += purchasePrice * amount;
 
@@ -244,7 +261,7 @@ function refreshInputValuesAfterChangeSlider(profit) {
 
     $('tbody.positions').find('tr').each(function () {
         var tr = $(this);
-        var purchasePriceInput= tr.find(".purchasePrice input");
+        var purchasePriceInput = tr.find(".purchasePrice input");
         var purchasePrice = parseFloat(purchasePriceInput.val().replace(",", "."));
         var priceInput = tr.find('input[id$="price"]');
 
@@ -475,6 +492,7 @@ function updateFooter(totalPurchase, totalProducts, totalServices) {
 
 
 }
+
 /****************************************************
  *        Choose Client                             *
  ****************************************************/
@@ -527,16 +545,15 @@ function updateClientInput(client) {
 }
 
 
-
 $newClientBtn.on('click', function (e) {
     updateClientInput(nullClient);
     setNewClientLabelAndButton()
 });
 
-function setNewClientLabelAndButton(){
+function setNewClientLabelAndButton() {
     var clientId = $('#microbundle_offert_clients_0_id').val();
     var isNew = (clientId === '');
-    if(isNew) {
+    if (isNew) {
         $('#new-client-label').show();
         $('#new-client-btn').hide();
     } else {

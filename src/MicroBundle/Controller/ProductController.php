@@ -222,8 +222,19 @@ class ProductController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $product = $em->getRepository('MicroBundle:Product')->findOneBy(['id' => $productId]);
+        $cart = $em->getRepository('MicroBundle:Offert')->findOneBy(['status' => OffertStatusEnum::BASKET]);
+        $cartAmount = 0;
+        //search product in cart
+        foreach ($cart->getOffPositions() as $position) {
+            if($position->getProduct()->getId() == $productId){
+                $cartAmount = $position->getAmount();
+            }
+        }
 
-        $productView = $this->render('product/modal_content.html.twig', array('product' => $product))->getContent();
+        $productView = $this->render('product/modal_content.html.twig', array(
+            'product' => $product,
+            'cartAmount' => $cartAmount,
+        ))->getContent();
 
 
         if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
@@ -278,6 +289,7 @@ class ProductController extends Controller
             $newCartPosition->setPurchasePrice($product->getPrice());
             $newCartPosition->setAmount($quantity);
             $newCartPosition->setProduct($product);
+            $newCartPosition->setImage($product->getImage());
             $newCartPosition->setProductId($product->getId());
             $newCartPosition->setOffert($cart);
             $cart->addOffPosition($newCartPosition);

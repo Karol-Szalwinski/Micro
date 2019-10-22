@@ -289,4 +289,28 @@ class Product
     {
         return $this->productParameters->removeElement($productParameter);
     }
+
+    /**
+     * Set image.
+     *
+     * @param string|null $image
+     *
+     * @return Product
+     */
+    public function setImage($image = null)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image.
+     *
+     * @return string|null
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
 }

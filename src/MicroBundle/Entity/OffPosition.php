@@ -75,6 +75,13 @@ class OffPosition
      */
     private $offert;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="image", type="string", nullable=true)
+     */
+    private $image;
+
 
     /**
      * Get id.
@@ -276,5 +283,29 @@ class OffPosition
     public function getProductId()
     {
         return $this->productId;
+    }
+
+    /**
+     * Set image.
+     *
+     * @param string|null $image
+     *
+     * @return OffPosition
+     */
+    public function setImage($image = null)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image.
+     *
+     * @return string|null
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 }

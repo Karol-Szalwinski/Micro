@@ -96,3 +96,13 @@ background-color: #d4e1ef;
 .width-min-300 {
     min-width: 300px;
 }
+
+.bg-light-green {
+    background-color: #e8f7d2;
+}
+.bg-light-orange {
+    background-color: #f7efd8;
+}
+.bg-light-red {
+    background-color: #f7efe8;
+}

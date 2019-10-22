@@ -6,10 +6,10 @@ namespace MicroBundle\Services;
 use MicroBundle\Entity\Document;
 
 /**
- * Class PrepareFireInspectionToPdfService
+ * Class GenerateHtmlFromDocumentService
  * @package MicroBundle\Services
  */
-final class PrepareHtmlToPdfService
+final class GenerateHtmlFromDocumentService
 {
     private $myCompany;
     private $templating;
@@ -35,10 +35,9 @@ final class PrepareHtmlToPdfService
     }
 
     /**
-     * @param Document $document
      * @return string
      */
-    public function getHeader(Document $document): string
+    public function getHeader(): string
     {
         $header = $this->templating->render( 'pdf/fire-inspection-header.html.twig',
             array( 'mycompany' => $this->myCompany->getOrCreateDefaultMyCompany()) );
