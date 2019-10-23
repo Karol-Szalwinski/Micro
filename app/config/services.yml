@@ -63,6 +63,10 @@ services:
         class: %micro.service.serialize.class%
         public: true
 
+    parameters:
+        class: %micro.service.parameters.class%
+        public: true
+
     MicroBundle\Services\FileUploader:
         arguments:
             $targetDirectory: '%target_directory%'

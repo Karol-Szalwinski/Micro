@@ -53,6 +53,17 @@
 
                                     </div>
                                 </div>
+                                <div class="form-group row">
+                                    {{ form_label(form.icon, 'Ikona', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    <div class="col-md-6 mx-auto">
+                                        {{ form_widget(form.icon, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}
+                                        <b><i id="icon-preview" class=""></i></b>
+                                        <!-- Button to Open the Modal -->
+                                    </div>
+                                        <button type="button" class="btn btn-outline-info btn-sm " data-toggle="modal" data-target="#icon-modal">
+                                            <i class="la la-search"></i> Wybierz ikonę
+                                        </button>
+                                </div>
                                 <div class="form-group row" id="wrap">
                                     {{ form_label(form.parent, 'Kategoria nadrzędna', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto " style="display:none">
@@ -182,6 +193,10 @@
         </div>
     </div>
     <!-- Modal Category -->
+
+
+
+{% include 'category/modal-icon.html.twig' %}
 
 {% endblock %}
 

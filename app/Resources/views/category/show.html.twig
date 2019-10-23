@@ -58,9 +58,13 @@
                                         <td>{{ category.name }}</td>
                                     </tr>
                                     <tr>
+                                        <th>Ikona</th>
+                                        <td><b><i class="{{ category.icon }}" style="font-size:30px"></i></b></td>
+                                    </tr>
+                                    <tr>
                                         <th>Kategoria nadrzędna:</th>
                                         <td>
-                                            {% if category.parent %}{{ category.parent.name }}{% else %}To jest kategoria główna{% endif %}
+                                            {% if category.parent %}{{ category.parent.name }}{% else %}Nie ma bo to jest jedna z głównych kategorii{% endif %}
                                         </td>
                                     </tr>
 
@@ -85,6 +89,8 @@
                                         <th>Lista kategorii:</th>
                                         <td>{% for subCategory in category.children %}
                                                 {{ subCategory.name }}
+                                                {% else %}
+                                                Brak kategorii podrzędnych
                                             {% endfor %}
                                         </td>
                                     </tr>

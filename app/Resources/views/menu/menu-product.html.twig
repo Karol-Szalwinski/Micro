@@ -40,7 +40,7 @@
                 </li>
                 {% if mainCategories is defined %}
                     {% for mainCategory in mainCategories %}
-                        <li class=" nav-item"><a href="{{ path('product_index_category', { categoryId : mainCategory.id}) }}"><i class="la la-laptop "></i><span
+                        <li class=" nav-item"><a href="{{ path('product_index_category', { categoryId : mainCategory.id}) }}"><i class="{{ mainCategory.icon }}"></i><span
                                         class="menu-title"
                                         data-i18n="nav.dash.main">{{ mainCategory.name }}</span><span
                                         id="counter-users"

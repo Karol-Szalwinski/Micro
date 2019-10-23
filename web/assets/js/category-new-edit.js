@@ -334,3 +334,15 @@ $(document).on('keydown', 'li > input:not(.editing)', function () {
     $(this).addClass('editing');
 
 });
+
+/****************************************************
+ *                  Chose icon in form              *
+ ****************************************************/
+
+$(document).on('click', '.fonticon-wrap', function () {
+    var icon = $(this).find('i').attr("class");
+    $('#microbundle_category_icon').val(icon);
+    $('#icon-preview').removeAttr('class').addClass(icon);
+    $('#icon-modal').modal('hide');
+    $(".modal-backdrop").remove();
+});
