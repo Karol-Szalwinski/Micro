@@ -30,6 +30,7 @@ class OffertController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $offerts = $em->getRepository('MicroBundle:Offert')->findAll();
+        $mainCategories = $em->getRepository('MicroBundle:Category')->findBy(['parent' => null]);
 
         $today = new DateTime;
         $nextWeek = new DateTime("+1 Week");
@@ -49,7 +50,7 @@ class OffertController extends Controller
         }
         $em->flush();
 
-        return $this->render('offert/index.html.twig', array('offerts' => $offerts,));
+        return $this->render('offert/index.html.twig', array('offerts' => $offerts, 'mainCategories' => $mainCategories));
     }
 
     /**
@@ -60,19 +61,25 @@ class OffertController extends Controller
      */
     public function newAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+        $mainCategories = $em->getRepository('MicroBundle:Category')->findBy(['parent' => null]);
         $offert = new Offert();
         $form = $this->createForm('MicroBundle\Form\OffertType', $offert);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+
             $em->persist($offert);
             $em->flush();
 
             return $this->redirectToRoute('offert_show', array('id' => $offert->getId()));
         }
 
-        return $this->render('offert/new.html.twig', array('offert' => $offert, 'form' => $form->createView(),));
+        return $this->render('offert/new.html.twig', array(
+            'offert' => $offert,
+            'form' => $form->createView(),
+            'mainCategories' => $mainCategories
+            ));
     }
 
     /**
@@ -89,6 +96,7 @@ class OffertController extends Controller
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('MicroBundle:Product')->findAll();
         $clients = $em->getRepository('MicroBundle:Client')->findAll();
+        $mainCategories = $em->getRepository('MicroBundle:Category')->findBy(['parent' => null]);
 
         //backup OffPositions and OffServices
         $originalOffPositions = new ArrayCollection();
@@ -201,59 +209,13 @@ class OffertController extends Controller
             return $this->redirectToRoute('offert_index');
         }
 
-        return $this->render('offert/show.html.twig', array('offert' => $offert, 'products' => $products, 'clients' => $clients, 'form' => $form->createView(),));
+        return $this->render('offert/show.html.twig', array(
+            'offert' => $offert,
+            'products' => $products,
+            'clients' => $clients,
+            'form' => $form->createView(),
+            'mainCategories' => $mainCategories
+            ));
     }
 
-    /**
-     * Displays a form to edit an existing offert entity.
-     *
-     * @Route("/{id}/edit", name="offert_edit")
-     * @Method({"GET", "POST"})
-     */
-    public function editAction(Request $request, Offert $offert)
-    {
-        $deleteForm = $this->createDeleteForm($offert);
-        $editForm = $this->createForm('MicroBundle\Form\OffertType', $offert);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('offert_edit', array('id' => $offert->getId()));
-        }
-
-        return $this->render('offert/edit.html.twig', array('offert' => $offert, 'edit_form' => $editForm->createView(), 'delete_form' => $deleteForm->createView(),));
-    }
-
-    /**
-     * Deletes a offert entity.
-     *
-     * @Route("/{id}", name="offert_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, Offert $offert)
-    {
-        $form = $this->createDeleteForm($offert);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($offert);
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('offert_index');
-    }
-
-    /**
-     * Creates a form to delete a offert entity.
-     *
-     * @param Offert $offert The offert entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Offert $offert)
-    {
-        return $this->createFormBuilder()->setAction($this->generateUrl('offert_delete', array('id' => $offert->getId())))->setMethod('DELETE')->getForm();
-    }
 }

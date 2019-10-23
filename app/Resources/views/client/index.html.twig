@@ -23,7 +23,7 @@
         <div class="content-header-left col-md-6 col-12">
             <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
                 <div class="btn-group" role="group">
-                    <a class="btn btn-outline-info round" href="{{ path('client_new') }}"><i
+                    <a class="btn btn-outline-info" href="{{ path('client_new') }}"><i
                                 class="la la-user-plus"></i> Dodaj nowego</a>
 
                     {#<button class="btn btn-outline-info round dropdown-toggle dropdown-menu-right" id="btnGroupDrop1"#}
@@ -62,7 +62,8 @@
                                 <tr>
                                     <th>Id</th>
                                     <th>Nazwa</th>
-                                    <th>Skrót</th>
+                                    <th>Ulica</th>
+                                    <th>Miasto</th>
                                     <th>Email</th>
                                     <th>Telefon</th>
                                     {% if menu=="product" or menu=="admin" %}
@@ -90,10 +91,13 @@
                                         </td>
                                         <td class="text-center"
                                             onclick='location.href = "{{ path('client_show', { 'id': client.id }) }}";'>
-                                            <div>{{ client.shortname }}</div>
+                                            <div>{{ client.street }}{{ client.houseNo }}{%  if client.flatNo %} / {{ client.flatNo }}{% endif %}</div>
                                         </td>
                                         <td class="text-center">
-                                            <a class="email" href="mailto:email@example.com">{{ client.email }}</a>
+                                            <div>{{ client.city }}</div>
+                                        </td>
+                                        <td class="text-center">
+                                            <a class="email" href="mailto:{{ client.email }}">{{ client.email }}</a>
                                         </td>
                                         <td class="phone"
                                             onclick='location.href = "{{ path('client_show', { 'id': client.id }) }}";'>

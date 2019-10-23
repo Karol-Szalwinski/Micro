@@ -40,7 +40,7 @@ class FileUploader
 
                     foreach ($thumbs as $thumbSize) {
                         $this->makeThumb($downloadDirectory . "/" . $fileName, $downloadDirectory . "/thumb" .
-                            $thumbSize . "/" . $fileFirstName . "thumb" . $thumbSize . "." . $extension, $thumbSize);
+                            $thumbSize . "/" . $fileFirstName . "thumb" . $thumbSize . "." . $extension, $thumbSize, $extension);
                     }
                 }
         } catch (FileException $e) {
@@ -105,10 +105,40 @@ class FileUploader
         return false;
     }
 
-    private function makeThumb($src, $dest, $desired_height)
+    private function makeThumb($src, $dest, $desired_height, $extension) {
+        if ($extension == 'jpg' || $extension == 'jpeg') {
+            $this->makeThumbJpeg($src, $dest, $desired_height);
+        }
+        if ($extension == 'png') {
+            $this->makeThumbPng($src, $dest, $desired_height);
+        }
+    }
+
+    private function makeThumbJpeg($src, $dest, $desired_height)
     {
         /* read the source image */
         $source_image = imagecreatefromjpeg($src);
+        $virtual_image = $this->resizeImage($desired_height, $source_image);
+        /* create the physical thumbnail image to its destination */
+        imagejpeg($virtual_image, $dest);
+    }
+
+    private function makeThumbPng($src, $dest, $desired_height)
+    {
+        /* read the source image */
+        $source_image = imagecreatefrompng($src);
+        $virtual_image = $this->resizeImage($desired_height, $source_image);
+        /* create the physical thumbnail image to its destination */
+        imagepng($virtual_image, $dest);
+    }
+
+    /**
+     * @param $desired_height
+     * @param $source_image
+     * @return resource
+     */
+    private function resizeImage($desired_height, $source_image)
+    {
         $width = imagesx($source_image);
         $height = imagesy($source_image);
         /* find the "desired height" of this thumbnail, relative to the desired width  */
@@ -117,7 +147,7 @@ class FileUploader
         $virtual_image = imagecreatetruecolor($desired_width, $desired_height);
         /* copy source image at a resized size */
         imagecopyresampled($virtual_image, $source_image, 0, 0, 0, 0, $desired_width, $desired_height, $width, $height);
-        /* create the physical thumbnail image to its destination */
-        imagejpeg($virtual_image, $dest);
+        return $virtual_image;
+
     }
 }

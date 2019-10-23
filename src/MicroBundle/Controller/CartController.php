@@ -32,6 +32,7 @@ class CartController extends Controller
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('MicroBundle:Product')->findAll();
         $offert = $em->getRepository('MicroBundle:Offert')->findOneBy(['status' => OffertStatusEnum::BASKET]);
+        $mainCategories = $em->getRepository('MicroBundle:Category')->findBy(['parent' => null]);
 
         //backup OffPositions and OffServices
         $originalOffPositions = new ArrayCollection();
@@ -79,7 +80,12 @@ class CartController extends Controller
             return $this->redirectToRoute('offert_show', ['id' => $offert->getId()]);
         }
 
-        return $this->render('cart/show.html.twig', array('offert' => $offert, 'products' => $products, 'form' => $form->createView(),));
+        return $this->render('cart/show.html.twig', array(
+            'offert' => $offert,
+            'products' => $products,
+            'form' => $form->createView(),
+            'mainCategories' => $mainCategories,
+            ));
     }
 
 

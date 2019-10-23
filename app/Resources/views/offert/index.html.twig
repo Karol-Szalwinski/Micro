@@ -73,7 +73,7 @@
                                         {% set bgColor = "bg-light-red" %}
                                     {% endif %}
 
-                                    <tr class="{{ bgColor }}">
+                                    <tr class="{{ bgColor }}" onclick='location.href = "{{ path('offert_show', { 'id': offert.id }) }}";'>
                                         <td><a href="{{ path('offert_show', { 'id': offert.id }) }}">{{ offert.id }}</a>
                                         </td>
                                         <td>{{ offert.name }}</td>

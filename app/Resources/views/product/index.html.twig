@@ -52,8 +52,10 @@
                                    class="table table-borderless mb-0 row-grouping display no-wrap icheck table-middle text-center">
                                 <thead>
                                 <tr>
+                                    <th>Numer</th>
                                     <th>Zdjęcie</th>
                                     <th>Nazwa</th>
+                                    <th>Kategoria</th>
                                     <th>Cena netto</th>
                                     <th>Akcje</th>
                                 </tr>
@@ -61,6 +63,7 @@
                                 <tbody>
                                 {% for product in products %}
                                     <tr>
+                                        <td>{{ product.id }}</td>
                                         <td>
                                             <div class="media">
                                                 <div class="media-left pr-1">
@@ -81,6 +84,9 @@
                                         <td class="text-center">
                                             <a href="{{ path('product_show', { 'id': product.id }) }}">{{ product.name }}
                                                 ({{ product.id }})</a>
+                                        </td>
+                                        <td>
+                                            {% if product.category %}{{ product.category.name}}{% endif %}
                                         </td>
                                         <td>
 

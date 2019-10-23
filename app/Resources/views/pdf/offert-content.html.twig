@@ -111,7 +111,7 @@
 
                     <div class="row" style="page-break-inside: avoid">
                         <div class="col-sm-12">
-                            <p class="text-center"><b>Produkty i usługi</b></p>
+                            <p class="text-center"><b>Lista produktów i usług</b></p>
                             <table class="table table-bordered table-striped text-center col-sm-12 table-sm"
                             >
                                 <thead>
@@ -161,6 +161,7 @@
                         </div>
 
                     </div>
+                    {%  if offert.comment %}
                     <div class="row" style="page-break-inside: avoid">
                         <div class="col-sm-12">
                             <p><b>Uwagi:</b><br>
@@ -168,6 +169,7 @@
 
                         </div>
                     </div>
+                    {% endif %}
 
                 </div>
             </div>

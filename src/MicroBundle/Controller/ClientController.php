@@ -26,9 +26,11 @@ class ClientController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $clients = $em->getRepository('MicroBundle:Client')->findAll();
+        $mainCategories = $em->getRepository('MicroBundle:Category')->findBy(['parent' => null]);
 
         return $this->render('client/index.html.twig', array(
             'clients' => $clients,
+            'mainCategories' => $mainCategories
         ));
     }
 
@@ -40,6 +42,8 @@ class ClientController extends Controller
      */
     public function newAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+        $mainCategories = $em->getRepository('MicroBundle:Category')->findBy(['parent' => null]);
         $client = new Client();
         $form = $this->createForm('MicroBundle\Form\ClientType', $client);
         $form->handleRequest($request);
@@ -47,7 +51,6 @@ class ClientController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
 
 
-            $em = $this->getDoctrine()->getManager();
             $em->persist($client);
             $em->flush();
 
@@ -57,6 +60,7 @@ class ClientController extends Controller
         return $this->render('client/new.html.twig', array(
             'client' => $client,
             'form' => $form->createView(),
+            'mainCategories' => $mainCategories
         ));
     }
 
@@ -68,11 +72,14 @@ class ClientController extends Controller
      */
     public function showAction(Client $client)
     {
+        $em = $this->getDoctrine()->getManager();
+        $mainCategories = $em->getRepository('MicroBundle:Category')->findBy(['parent' => null]);
         $deleteForm = $this->createDeleteForm($client);
 
         return $this->render('client/show.html.twig', array(
             'client' => $client,
             'delete_form' => $deleteForm->createView(),
+            'mainCategories' => $mainCategories
         ));
     }
 
@@ -84,20 +91,23 @@ class ClientController extends Controller
      */
     public function editAction(Request $request, Client $client)
     {
+        $em = $this->getDoctrine()->getManager();
+        $mainCategories = $em->getRepository('MicroBundle:Category')->findBy(['parent' => null]);
         $deleteForm = $this->createDeleteForm($client);
         $editForm = $this->createForm('MicroBundle\Form\ClientType', $client);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $em->flush();
 
-            return $this->redirectToRoute('client_index');
+            return $this->redirectToRoute('client_show', array('id' => $client->getId()));
         }
 
         return $this->render('client/edit.html.twig', array(
             'client' => $client,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'mainCategories' => $mainCategories
         ));
     }
 
