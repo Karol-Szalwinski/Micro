@@ -1,5 +1,6 @@
-<td><input type='hidden' id='microbundle_offert_offPositions_0_image'
-           name='microbundle_offert[offPositions][0][image]' value='cart-5dab13afb8d9f.jpeg'>
-    <a href='/uploads/images/cart-5dab13afb8d9f.jpeg'>
-        <img src='/uploads/images/thumb70/cart-5dab13afb8d9fthumb70.jpeg' alt='Desktop' height='70'>
-    </a></td>
+{% set menu = app.session.get('menu') %}
+<li class="nav-item d-none d-lg-block">
+    {% if menu=="product" %}<h2>Ofertownik</h2>{% endif %}
+    {% if menu=="document" %}<h2>Przeglądy</h2>{% endif %}
+    {% if menu=="admin" %}<h2>Panel administracyjny</h2>{% endif %}
+</li>

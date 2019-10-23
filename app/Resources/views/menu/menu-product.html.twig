@@ -35,9 +35,13 @@
                         <li><a class="menu-item" href="{{ path('offert_index') }}"><i></i><span
                                         data-i18n="nav.dash.ecommerce">Lista ofert</span></a>
                         </li>
+                        <li><a class="menu-item" href="{{ path('cart_show') }}"><i></i><span
+                                        data-i18n="nav.dash.ecommerce">Koszyk</span></a>
+                        </li>
 
                     </ul>
                 </li>
+                <li><span>&nbsp</span></li>
                 {% if mainCategories is defined %}
                     {% for mainCategory in mainCategories %}
                         <li class=" nav-item"><a href="{{ path('product_index_category', { categoryId : mainCategory.id}) }}"><i class="{{ mainCategory.icon }}"></i><span
