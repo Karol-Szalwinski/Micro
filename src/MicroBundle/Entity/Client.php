@@ -4,6 +4,7 @@ namespace MicroBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Client
@@ -23,20 +24,37 @@ class Client
     private $id;
 
     /**
+     * @Assert\NotBlank(message= "Nazwa nie może być pusta")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 100,
+     *      minMessage = "Nazwa musi zawierać co najmniej {{ limit }} znaki",
+     *      maxMessage = "Nazwa nie może być dłuższa niż {{ limit }} znaków"
+     * )
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=100)
      */
     private $name;
 
     /**
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 30,
+     *      maxMessage = "Skrót nie może być dłuższy niż {{ limit }} znaków",
+     *      minMessage = "Skrót musi zawierać co najmniej {{ limit }} znaki",
+     * )
      * @var string|null
      *
-     * @ORM\Column(name="shortname", type="string", length=100, nullable=true)
+     * @ORM\Column(name="shortname", type="string", length=30, nullable=true)
      */
     private $shortname;
 
     /**
+     * @Assert\Email(
+     *     message = "Adres email '{{ value }}' nie jest poprawny",
+     *     checkMX = true
+     * )
      * @var string|null
      *
      * @ORM\Column(name="email", type="string", length=100, nullable=true)
@@ -51,6 +69,12 @@ class Client
     private $phoneNumber;
 
     /**
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 40,
+     *      maxMessage = "Ulica nie może być dłuższy niż {{ limit }} znaków",
+     *      minMessage = "Ulica musi zawierać co najmniej {{ limit }} znaki",
+     * )
      * @var string
      *
      * @ORM\Column(name="street", type="string", length=255, nullable=true)
@@ -58,27 +82,46 @@ class Client
     private $street;
 
     /**
+     *
+     * @Assert\Length(
+     *      max = 5,
+     *      maxMessage = "Numer domu nie może być dłuższy niż {{ limit }} znaków",
+     * )
      * @var string
      *
-     * @ORM\Column(name="house_no", type="string", length=255, nullable=true)
+     * @ORM\Column(name="house_no", type="string", length=5, nullable=true)
      */
     private $houseNo;
 
     /**
+     * @Assert\Length(
+     *      max = 5,
+     *      maxMessage = "Numer lokalu nie może być dłuższy niż {{ limit }} znaków",
+     * )
+     *
      * @var string
      *
-     * @ORM\Column(name="flat_no", type="string", length=255, nullable=true)
+     * @ORM\Column(name="flat_no", type="string", length=5, nullable=true)
      */
     private $flatNo;
 
     /**
+     * @Assert\Length(
+     *      max = 100,
+     *      maxMessage = "Numer lokalu nie może być dłuższy niż {{ limit }} znaków",
+     * )
      * @var string
      *
-     * @ORM\Column(name="city", type="string", length=255, nullable=true)
+     * @ORM\Column(name="city", type="string", length=100, nullable=true)
      */
     private $city;
 
     /**
+     * @Assert\Regex(
+     *     pattern     = "/\d{2}-\d{3}/",
+     *     htmlPattern = "/\d{2}-\d{3}/",
+     *     message = "Wprowadź poprawny kod pocztowy w formacie 00-000"
+     * )
      * @var string
      *
      * @ORM\Column(name="postal_code", type="string", length=255, nullable=true)

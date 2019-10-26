@@ -60,28 +60,39 @@
                             <div class="form-body">
                                 <h4 class="form-section"><i class="ft-user"></i> Dane Klienta</h4>
                                 <div class="form-group row">
-                                    {{ form_label(form.name, 'Nazwa klienta', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    {{ form_label(form.name, 'Nazwa klienta(*)', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}
-
+                                        <div class="form-error">
+                                            {{ form_errors(form.name) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(form.shortname, 'Skrót', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(form.shortname, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź skrót'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(form.shortname) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(form.street, 'Ulica', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(form.street, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź ulicę'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(form.street) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(form.houseNo, 'Nr domu / Nr mieszkania', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-4 ">
                                         {{ form_widget(form.houseNo, { 'attr': {'class': 'form-control ', 'placeholder': 'Numer domu'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(form.houseNo) }}
+                                        </div>
                                     </div>
                                     <h2>/</h2>
                                     {#</div>#}
@@ -89,30 +100,45 @@
                                     {#{{ form_label(form.flatNo, 'Nr mieszkania', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
                                     <div class="col-md-4 ">
                                         {{ form_widget(form.flatNo, { 'attr': {'class': 'form-control', 'placeholder': 'Numer mieszkania'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(form.flatNo) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(form.city, 'Miasto', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(form.city, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź miasto'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(form.city) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(form.postalCode, 'Kod pocztowy', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(form.postalCode, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź kod pocztowy'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(form.postalCode) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(form.email, 'E-mail', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(form.email, { 'attr': {'class': 'form-control email-inputmask', 'placeholder': 'Wprowadź email', 'im-insert': 'true'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(form.email) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(form.phoneNumber, 'Telefon', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(form.phoneNumber, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź telefon'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(form.phoneNumber) }}
+                                        </div>
                                     </div>
                                 </div>
 

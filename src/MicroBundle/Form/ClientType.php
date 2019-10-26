@@ -34,8 +34,13 @@ class ClientType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'MicroBundle\Entity\Client'
+            'data_class' => 'MicroBundle\Entity\Client',
+            'attr' => [
+                'novalidate' => 'novalidate', // comment me to reactivate the html5 validation!  🚥
+            ]
+
         ));
+
     }
 
     /**

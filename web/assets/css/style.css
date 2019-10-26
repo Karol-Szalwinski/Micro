@@ -106,3 +106,7 @@ background-color: #d4e1ef;
 .bg-light-red {
     background-color: #f7efe8;
 }
+
+.form-error {
+    color : red;
+}

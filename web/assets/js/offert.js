@@ -12,6 +12,17 @@ $('#table-clients').DataTable({
     },
     "paging": false,
 });
+$('#table-products').DataTable({
+    "language": {
+        "lengthMenu": "Pokaż _MENU_ wierszy na stronie",
+        "zeroRecords": "Niestety brak wyników",
+        "info": "Stron _PAGE_ z _PAGES_",
+        "infoEmpty": "Brak wierszy",
+        "infoFiltered": "(znaleziono z _MAX_ wszystkich wierszy)",
+        "search": "Szukaj"
+    },
+    "paging": false,
+});
 jQuery(document).ready(function () {
     updateAllValues();
     setNewClientLabelAndButton();
