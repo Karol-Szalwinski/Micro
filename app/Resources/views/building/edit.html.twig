@@ -75,19 +75,27 @@
                                     {{ form_label(edit_form.name, 'Nazwa budynku', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(edit_form.name, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}
-
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.name) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(edit_form.street, 'Ulica', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(edit_form.street, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź ulicę'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.street) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(edit_form.houseNo, 'Nr domu / Nr mieszkania', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-4 ">
                                         {{ form_widget(edit_form.houseNo, { 'attr': {'class': 'form-control ', 'placeholder': 'Numer domu'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.houseNo) }}
+                                        </div>
                                     </div>
                                     <h2>/</h2>
                                     {#</div>#}
@@ -95,30 +103,46 @@
                                     {#{{ form_label(edit_form.flatNo, 'Nr mieszkania', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}#}
                                     <div class="col-md-4 ">
                                         {{ form_widget(edit_form.flatNo, { 'attr': {'class': 'form-control', 'placeholder': 'Numer mieszkania'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.flatNo) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(edit_form.city, 'Miasto', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
+
                                         {{ form_widget(edit_form.city, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź miasto'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.city) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(edit_form.postalCode, 'Kod pocztowy', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(edit_form.postalCode, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź kod pocztowy'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.postalCode) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(edit_form.description, 'Opis budynku', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(edit_form.description, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź opis'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.description) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(edit_form.deviceShortlistPosition, 'Skrócona lista urządzeń', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(edit_form.deviceShortlistPosition, { 'attr': {'class': 'form-control', 'rows' : 10} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.postalCode) }}
+                                        </div>
                                     </div>
                                 </div>
 

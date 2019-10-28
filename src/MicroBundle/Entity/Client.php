@@ -62,6 +62,11 @@ class Client
     private $email;
 
     /**
+     * @Assert\Regex(
+     *     pattern     = "/^(?:\(?\+?48)?(?:[-\.\(\)\s]*(\d)){9}\)?$/",
+     *     htmlPattern = "/^(?:\(?\+?48)?(?:[-\.\(\)\s]*(\d)){9}\)?$/",
+     *     message = "Wprowadź poprawny polski nr telefonu"
+     * )
      * @var string|null
      *
      * @ORM\Column(name="phone_number", type="string", length=20, nullable=true)

@@ -4,6 +4,7 @@ namespace MicroBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Building
@@ -23,6 +24,13 @@ class Building
     private $id;
 
     /**
+     * @Assert\NotBlank(message= "Nazwa nie może być pusta")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 100,
+     *      minMessage = "Nazwa musi zawierać co najmniej {{ limit }} znaki",
+     *      maxMessage = "Nazwa nie może być dłuższa niż {{ limit }} znaków"
+     * )
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
@@ -30,6 +38,12 @@ class Building
     private $name;
 
     /**
+     * * @Assert\Length(
+     *      min = 3,
+     *      max = 40,
+     *      maxMessage = "Ulica nie może być dłuższy niż {{ limit }} znaków",
+     *      minMessage = "Ulica musi zawierać co najmniej {{ limit }} znaki",
+     * )
      * @var string
      *
      * @ORM\Column(name="street", type="string", length=255)
@@ -37,6 +51,10 @@ class Building
     private $street;
 
     /**
+     * @Assert\Length(
+     *      max = 5,
+     *      maxMessage = "Numer domu nie może być dłuższy niż {{ limit }} znaków",
+     * )
      * @var string
      *
      * @ORM\Column(name="house_no", type="string", length=255)
@@ -51,6 +69,10 @@ class Building
     private $flatNo;
 
     /**
+     * @Assert\Length(
+     *      max = 100,
+     *      maxMessage = "Numer lokalu nie może być dłuższy niż {{ limit }} znaków",
+     * )
      * @var string
      *
      * @ORM\Column(name="city", type="string", length=255)
@@ -58,6 +80,11 @@ class Building
     private $city;
 
     /**
+     * @Assert\Regex(
+     *     pattern     = "/\d{2}-\d{3}/",
+     *     htmlPattern = "/\d{2}-\d{3}/",
+     *     message = "Wprowadź poprawny kod pocztowy w formacie 00-000"
+     * )
      * @var string
      *
      * @ORM\Column(name="postal_code", type="string", length=255)

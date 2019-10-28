@@ -67,25 +67,36 @@
                                     {{ form_label(edit_form.name, 'Nazwa klienta', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(edit_form.name, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}
-
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.name) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(edit_form.shortname, 'Skrót', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(edit_form.shortname, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź skrót'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.shortname) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(edit_form.street, 'Ulica', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(edit_form.street, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź ulicę'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.street) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(edit_form.houseNo, 'Nr domu / Nr mieszkania', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-4 ">
                                         {{ form_widget(edit_form.houseNo, { 'attr': {'class': 'form-control ', 'placeholder': 'Numer domu'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.houseNo) }}
+                                        </div>
                                     </div>
                                     <h2>/</h2>
                                     {#</div>#}
@@ -99,24 +110,36 @@
                                     {{ form_label(edit_form.city, 'Miasto', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(edit_form.city, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź miasto'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.city) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(edit_form.postalCode, 'Kod pocztowy', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(edit_form.postalCode, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź kod pocztowy'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.postalCode) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(edit_form.email, 'E-mail', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
-                                        {{ form_widget(edit_form.email, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź email'} }) }}
+                                        {{ form_widget(edit_form.email, { 'attr': {'class': 'form-control email-inputmask', 'placeholder': 'Wprowadź email'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.email) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(edit_form.phoneNumber, 'Telefon', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(edit_form.phoneNumber, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź telefon'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.phoneNumber) }}
+                                        </div>
                                     </div>
                                 </div>
 
@@ -140,4 +163,11 @@
 
 
 
+{% endblock %}
+
+{% block scripts %}
+    <!-- BEGIN: Page JS-->
+    <script src="{{ asset('app-assets/vendors/js/forms/extended/inputmask/jquery.inputmask.bundle.min.js') }}"></script>
+    <script src="{{ asset('app-assets/js/scripts/forms/extended/form-inputmask.js') }}"></script>
+    <!-- END: Page JS-->
 {% endblock %}
