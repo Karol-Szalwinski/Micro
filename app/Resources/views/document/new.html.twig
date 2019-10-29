@@ -78,6 +78,9 @@
                                             <option value="{{ name }}">
                                                 {% endfor %}
                                         </datalist>
+                                        <div class="form-error">
+                                            {{ form_errors(form.name) }}
+                                        </div>
 
                                     </div>
                                 </div>

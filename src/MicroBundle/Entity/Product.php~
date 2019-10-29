@@ -4,6 +4,8 @@ namespace MicroBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use MicroBundle\Entity\ProductParameter;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * Product
@@ -23,6 +25,13 @@ class Product
     private $id;
 
     /**
+     * @Assert\NotBlank(message= "Nazwa nie może być pusta")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 100,
+     *      minMessage = "Nazwa musi zawierać co najmniej {{ limit }} znaki",
+     *      maxMessage = "Nazwa nie może być dłuższa niż {{ limit }} znaków"
+     * )
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
@@ -30,6 +39,10 @@ class Product
     private $name;
 
     /**
+     * @Assert\Length(
+     *      max = 40,
+     *      maxMessage = "Model nie może być dłuższy niż {{ limit }} znaków",
+     * )
      * @var string
      *
      * @ORM\Column(name="model", type="string", length=100, nullable=true)
@@ -37,6 +50,10 @@ class Product
     private $model;
 
     /**
+     * @Assert\Length(
+     *      max = 30,
+     *      maxMessage = "Producent nie może być dłuższy niż {{ limit }} znaków",
+     * )
      * @var string
      *
      * @ORM\Column(name="producent", type="string", length=100, nullable=true)
@@ -44,6 +61,15 @@ class Product
     private $producent;
 
     /**
+     * @Assert\GreaterThanOrEqual(
+     *     value = 0,
+     *     message = "Cena nie może być ujemna"
+     * )
+     * @Assert\LessThan(
+     *     value = 100000,
+     *     message = "Naprawdę tyle to jest warte? ;-p"
+     * )
+     *
      * @var int
      *
      * @ORM\Column(name="price", type="integer")
@@ -51,6 +77,7 @@ class Product
     private $price = 0;
 
     /**
+     * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="products")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */

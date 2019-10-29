@@ -5,6 +5,7 @@ namespace MicroBundle\Entity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Document
@@ -24,6 +25,13 @@ class Document
     private $id;
 
     /**
+     * @Assert\NotBlank(message= "Nazwa nie może być pusta")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 50,
+     *      minMessage = "Nazwa musi zawierać co najmniej {{ limit }} znaki",
+     *      maxMessage = "Nazwa nie może być dłuższa niż {{ limit }} znaków"
+     * )
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=100)

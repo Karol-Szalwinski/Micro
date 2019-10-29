@@ -24,7 +24,10 @@ class DeviceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'MicroBundle\Entity\Device'
+            'data_class' => 'MicroBundle\Entity\Device',
+            'attr' => [
+                'novalidate' => 'novalidate',
+            ]
         ));
     }
 

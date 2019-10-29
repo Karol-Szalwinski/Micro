@@ -73,7 +73,10 @@ class ProductType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'MicroBundle\Entity\Product'
+            'data_class' => 'MicroBundle\Entity\Product',
+            'attr' => [
+                'novalidate' => 'novalidate',
+            ]
         ));
     }
 

@@ -49,40 +49,52 @@
                             <div class="form-body">
                                 <h4 class="form-section"><i class="ft-user"></i> Produkt</h4>
                                 <div class="form-group row">
-                                    {{ form_label(form.name, 'Nazwa produktu', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    {{ form_label(form.name, 'Nazwa produktu (*)', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}
-
+                                        <div class="form-error">
+                                            {{ form_errors(form.name) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(form.model, 'Model', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(form.model, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź model'} }) }}
-
+                                        <div class="form-error">
+                                            {{ form_errors(form.model) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(form.producent, 'Producent', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(form.producent, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź producenta'} }) }}
-
+                                        <div class="form-error">
+                                            {{ form_errors(form.producent) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    {{ form_label(form.price, 'Cena', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    {{ form_label(form.price, 'Cena  (*)', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(form.price, { 'attr': {'class': 'form-control', 'placeholder': '0.00'} }) }}
-
+                                        <div class="form-error">
+                                            {{ form_errors(form.price) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row" id="wrap">
-                                    {{ form_label(form.category, 'Kategoria', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    {{ form_label(form.category, 'Kategoria (*)', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto " style="display:none">
                                         {{ form_widget(form.category, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź skrót'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(form.category) }}
+                                        </div>
                                     </div>
                                     <div id="temp-input" class="col-md-9 mx-auto ">
-                                        <input class="form-control " id="input-modal-trigger" readonly value="Brak">
+                                        <input class="form-control " id="input-modal-trigger" readonly
+                                               value="{% if product.category %}{{ product.category.fullPath }}{% else %}Brak{% endif %}">
                                         </input>
                                     </div>
                                 </div>
@@ -93,13 +105,13 @@
                                             data-prototype="{{ form_widget(form.productParameters.vars.prototype)|e('html_attr') }}">
                                              {#iterate over each existing tag and render its only field: value#}
                                             {% for productParameters in form.productParameters %}
-                                                <li>{{ form_widget(productParameters.name) }}/{{ form_widget(productParameters.value) }}</li>
+                                                <li>{{ form_widget(productParameters.name) }}{{ form_widget(productParameters.value) }}</li>
                                             {% endfor %}
                                         </ul>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    {{ form_label(form.image, 'Zdjęcie produktu (JPG lub PNG)', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    {{ form_label(form.image, 'Zdjęcie produktu (JPG lub PNG) (*)', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-6 mx-auto">
                                         <div class="custom-file mb-3">
                                             {{ form_widget(form.image, { 'attr': {'class': 'custom-file-input'} }) }}

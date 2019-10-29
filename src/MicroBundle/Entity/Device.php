@@ -3,6 +3,7 @@
 namespace MicroBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Device
@@ -22,6 +23,13 @@ class Device
     private $id;
 
     /**
+     * @Assert\NotBlank(message= "Nazwa urządzenia nie może być pusta")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 15,
+     *      minMessage = "Nazwa musi zawierać co najmniej {{ limit }} znaki",
+     *      maxMessage = "Nazwa nie może być dłuższa niż {{ limit }} znaków"
+     * )
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, unique=true)
@@ -29,6 +37,13 @@ class Device
     private $name;
 
     /**
+     * @Assert\NotBlank(message= "Skrót urządzenia nie może być pusty")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 5,
+     *      minMessage = "Skrót musi zawierać co najmniej {{ limit }} znaki",
+     *      maxMessage = "Skrót nie może być dłuższa niż {{ limit }} znaków"
+     * )
      * @var string
      *
      * @ORM\Column(name="shortname", type="string", length=5, unique=true)
@@ -44,7 +59,6 @@ class Device
 
     /**
      * Device constructor.
-     * @param bool $inBuilding
      */
     public function __construct()
     {

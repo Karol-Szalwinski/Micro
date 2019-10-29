@@ -52,26 +52,28 @@ class Building
 
     /**
      * @Assert\Length(
-     *      max = 5,
+     *      max = 10,
      *      maxMessage = "Numer domu nie może być dłuższy niż {{ limit }} znaków",
      * )
      * @var string
      *
-     * @ORM\Column(name="house_no", type="string", length=255)
+     * @ORM\Column(name="house_no", type="string", length=10)
      */
     private $houseNo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="flat_no", type="string", length=255, nullable=true))
+     * @ORM\Column(name="flat_no", type="string", length=10, nullable=true))
      */
     private $flatNo;
 
     /**
      * @Assert\Length(
-     *      max = 100,
-     *      maxMessage = "Numer lokalu nie może być dłuższy niż {{ limit }} znaków",
+     *      min = 3,
+     *      max = 40,
+     *      maxMessage = "Ulica nie może być dłuższy niż {{ limit }} znaków",
+     *      minMessage = "Ulica musi zawierać co najmniej {{ limit }} znaki",
      * )
      * @var string
      *
@@ -144,7 +146,6 @@ class Building
         $this->documents = new ArrayCollection();
         $this->pdfDocuments = new ArrayCollection();
     }
-
 
 
     /**

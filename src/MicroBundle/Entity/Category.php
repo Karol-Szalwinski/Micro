@@ -5,6 +5,7 @@ namespace MicroBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use MicroBundle\Entity\Parameter;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Category
@@ -24,6 +25,13 @@ class Category
     private $id;
 
     /**
+     * @Assert\NotBlank(message= "Nazwa kategorii nie może być pusta")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 15,
+     *      minMessage = "Nazwa musi zawierać co najmniej {{ limit }} znaki",
+     *      maxMessage = "Nazwa nie może być dłuższa niż {{ limit }} znaków"
+     * )
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=100)
