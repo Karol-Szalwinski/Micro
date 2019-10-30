@@ -5,6 +5,7 @@ namespace MicroBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,9 +18,11 @@ class UserEditType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $permissions = array(
-            'Użytkownik |' => 'ROLE_USER',
-            'Administrator ' => 'ROLE_ADMIN'
+            'Użytkownik' => 'ROLE_USER',
+            'Edytor' => 'ROLE_EDITOR',
+            'Administrator' => 'ROLE_ADMIN'
         );
+
 
         $yesNo = array(
             'Tak ' => 1 ,

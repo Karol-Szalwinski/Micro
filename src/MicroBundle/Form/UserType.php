@@ -19,9 +19,9 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $permissions = array(
-            'ROLE_USER' => 'Użytkownik',
-            'ROLE_EDITOR' => 'Edytor',
-            'ROLE_ADMIN' => 'Administrator'
+            'Użytkownik' => 'ROLE_USER',
+            'Edytor' => 'ROLE_EDITOR',
+            'Administrator' => 'ROLE_ADMIN'
         );
 
         $builder

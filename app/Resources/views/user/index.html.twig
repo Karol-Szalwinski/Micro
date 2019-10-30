@@ -87,15 +87,17 @@
                                             {% endif %}
                                         </td>
                                         <td>
-                                            {% for roles in user.roles %}
-                                                {% if roles == "ROLE_ADMIN" %}
-                                                    admin&nbsp
-                                                {% elseif roles == "ROLE_USER" %}
-                                                    user&nbsp
-                                                {% elseif roles == "ROLE_SUPER_ADMIN" %}
+                                            {% for role in user.roles %}
+                                                {% if role == "ROLE_SUPER_ADMIN" %}
                                                     superadmin&nbsp
+                                                {% elseif role == "ROLE_ADMIN" %}
+                                                    admin&nbsp
+                                                {% elseif role == "ROLE_EDITOR" %}
+                                                    editor&nbsp
+                                                {% elseif role == "ROLE_USER" %}
+                                                    user&nbsp
                                                 {% else %}
-                                                    {{ roles }}&nbsp
+                                                    {{ role }}&nbsp
                                                 {% endif %}
                                             {% endfor %}
                                         </td>

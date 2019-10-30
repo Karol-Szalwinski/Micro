@@ -32,13 +32,6 @@ class User extends BaseUser
      */
     protected $username;
 
-    /**
-     * @Assert\NotBlank(message= "Hasło nie może być puste")
-     *
-     * @var string
-     */
-    protected $plainPassword;
-
 
     /**
      * @Assert\NotBlank(message= "Imię nie może być puste")
@@ -84,11 +77,7 @@ class User extends BaseUser
      */
     private $icon;
 
-    /**
-     * @Assert\NotBlank(message= "Musisz wybrać rolę")
-     * @var array
-     */
-    protected $roles;
+
 
     public function __construct()
     {
@@ -176,4 +165,6 @@ class User extends BaseUser
     {
         return $this->icon;
     }
+
+
 }
