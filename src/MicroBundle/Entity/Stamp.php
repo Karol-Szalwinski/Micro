@@ -3,6 +3,7 @@
 namespace MicroBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Stamp
@@ -22,9 +23,16 @@ class Stamp
     private $id;
 
     /**
+     * @Assert\NotBlank(message= "Nazwa nie może być pusta")
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 20,
+     *      minMessage = "Nazwa musi zawierać co najmniej {{ limit }} znak",
+     *      maxMessage = "Nazwa nie może być dłuższa niż {{ limit }} znaków"
+     * )
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=20)
      */
     private $name;
 

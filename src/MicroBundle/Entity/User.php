@@ -5,6 +5,7 @@ namespace MicroBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -19,20 +20,62 @@ class User extends BaseUser
      */
     protected $id;
 
+    /**
+     * @Assert\NotBlank(message= "Login nie może być pusty")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 100,
+     *      minMessage = "Login musi zawierać co najmniej {{ limit }} znaki",
+     *      maxMessage = "Login nie może być dłuższa niż {{ limit }} znaków"
+     * )
+     * @var string
+     */
+    protected $username;
 
     /**
+     * @Assert\NotBlank(message= "Hasło nie może być puste")
+     *
+     * @var string
+     */
+    protected $plainPassword;
+
+
+    /**
+     * @Assert\NotBlank(message= "Imię nie może być puste")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 100,
+     *      minMessage = "Imię musi zawierać co najmniej {{ limit }} znaki",
+     *      maxMessage = "Imię nie może być dłuższa niż {{ limit }} znaków"
+     * )
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     * @ORM\Column(name="name", type="string", length=100, nullable=true)
      */
     private $name;
 
     /**
+     * @Assert\NotBlank(message= "Nazwisko nie może być puste")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 100,
+     *      minMessage = "Nazwisko musi zawierać co najmniej {{ limit }} znaki",
+     *      maxMessage = "Nazwisko nie może być dłuższa niż {{ limit }} znaków"
+     * )
      * @var string
      *
-     * @ORM\Column(name="surname", type="string", length=255, nullable=true)
+     * @ORM\Column(name="surname", type="string", length=100, nullable=true)
      */
     private $surname;
+
+    /**
+     * @Assert\Email(
+     *     message = "Adres email '{{ value }}' nie jest poprawny",
+     *     checkMX = true
+     * )
+     * @var string
+     */
+    protected $email;
 
     /**
      * @var string
@@ -40,6 +83,12 @@ class User extends BaseUser
      * @ORM\Column(name="icon", type="string", length=255, nullable=true)
      */
     private $icon;
+
+    /**
+     * @Assert\NotBlank(message= "Musisz wybrać rolę")
+     * @var array
+     */
+    protected $roles;
 
     public function __construct()
     {

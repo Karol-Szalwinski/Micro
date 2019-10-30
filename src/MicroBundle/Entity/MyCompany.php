@@ -3,6 +3,7 @@
 namespace MicroBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * MyCompany
@@ -22,20 +23,40 @@ class MyCompany
     private $id;
 
     /**
+     * @Assert\NotBlank(message= "Nazwa nie może być pusta")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 100,
+     *      minMessage = "Nazwa musi zawierać co najmniej {{ limit }} znaki",
+     *      maxMessage = "Nazwa nie może być dłuższa niż {{ limit }} znaków"
+     * )
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     * @ORM\Column(name="name", type="string", length=100, nullable=true)
      */
     private $name;
 
     /**
+     * @Assert\NotBlank(message= "Ulica nie może być pusta")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 40,
+     *      maxMessage = "Ulica nie może być dłuższa niż {{ limit }} znaków",
+     *      minMessage = "Ulica musi zawierać co najmniej {{ limit }} znaki",
+     * )
      * @var string
      *
-     * @ORM\Column(name="street", type="string", length=255, nullable=true)
+     * @ORM\Column(name="street", type="string", length=40, nullable=true)
      */
     private $street;
 
     /**
+     * @Assert\NotBlank(message= "Kod pocztowy nie może być pusty")
+     * @Assert\Regex(
+     *     pattern     = "/\d{2}-\d{3}/",
+     *     htmlPattern = "/\d{2}-\d{3}/",
+     *     message = "Wprowadź poprawny kod pocztowy w formacie 00-000"
+     * )
      * @var string
      *
      * @ORM\Column(name="postCode", type="string", length=10, nullable=true)
@@ -43,23 +64,40 @@ class MyCompany
     private $postCode;
 
     /**
+     * @Assert\NotBlank(message= "Miasto nie może być puste")
+     * @Assert\Length(
+     *      max = 100,
+     *      maxMessage = "Miasto nie może być dłuższy niż {{ limit }} znaków",
+     * )
      * @var string
      *
-     * @ORM\Column(name="city", type="string", length=255, nullable=true)
+     * @ORM\Column(name="city", type="string", length=100, nullable=true)
      */
     private $city;
 
     /**
+     * @Assert\NotBlank(message= "Podaj NIP")
+     * @Assert\Regex(
+     *     pattern     = "/^((\d{3}[- ]\d{3}[- ]\d{2}[- ]\d{2})|(\d{3}[- ]\d{2}[- ]\d{2}[- ]\d{3}))$/",
+     *     htmlPattern = "^((\d{3}[- ]\d{3}[- ]\d{2}[- ]\d{2})|(\d{3}[- ]\d{2}[- ]\d{2}[- ]\d{3}))$",
+     *     message = "Wprowadź poprawny NIP 000-000-00-00 lub 000-00-00-000"
+     * )
      * @var string
      *
-     * @ORM\Column(name="taxNumber", type="string", length=10, nullable=true)
+     * @ORM\Column(name="taxNumber", type="string", length=15, nullable=true)
      */
     private $taxNumber;
 
     /**
-     * @var string
+     * @Assert\NotBlank(message= "Podaj Numer telefonu")
+     * @Assert\Regex(
+     *     pattern     = "/^(?:\(?\+?48)?(?:[-\.\(\)\s]*(\d)){9}\)?$/",
+     *     htmlPattern = "/^(?:\(?\+?48)?(?:[-\.\(\)\s]*(\d)){9}\)?$/",
+     *     message = "Wprowadź poprawny polski nr telefonu np. 000-000-000"
+     * )
+     * @var string|null
      *
-     * @ORM\Column(name="phoneNo", type="string", length=255, nullable=true)
+     * @ORM\Column(name="phone_no", type="string", length=20, nullable=true)
      */
     private $phoneNo;
 
@@ -90,14 +128,13 @@ class MyCompany
         $output = "";
         $output .= $this->name . "\n";
         $output .= $this->street . " ";
-        $output .= $this->postCode . " " . $this->city ."\n";
-        $output .= "tel: " . $this->phoneNo ."\n";
+        $output .= $this->postCode . " " . $this->city . "\n";
+        $output .= "tel: " . $this->phoneNo . "\n";
         return $output;
     }
 
 
-
-        /**
+    /**
      * Get id.
      *
      * @return int

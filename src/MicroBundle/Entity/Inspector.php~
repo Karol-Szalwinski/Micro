@@ -4,6 +4,7 @@ namespace MicroBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Inspector
@@ -23,23 +24,44 @@ class Inspector
     private $id;
 
     /**
+     * @Assert\NotBlank(message= "Imię nie może być puste")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 15,
+     *      minMessage = "Imię musi zawierać co najmniej {{ limit }} znaki",
+     *      maxMessage = "Imię nie może być dłuższe niż {{ limit }} znaków"
+     * )
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=15)
      */
     private $name;
 
     /**
+     * @Assert\NotBlank(message= "Nazwisko nie może być puste")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 25,
+     *      minMessage = "Nazwisko musi zawierać co najmniej {{ limit }} znaki",
+     *      maxMessage = "Nazwisko nie może być dłuższa niż {{ limit }} znaków"
+     * )
      * @var string
      *
-     * @ORM\Column(name="surname", type="string", length=255)
+     * @ORM\Column(name="surname", type="string", length=25)
      */
     private $surname;
 
     /**
+     * @Assert\NotBlank(message= "Musisz wpisać numer uprawnienia")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 25,
+     *      minMessage = "Numer musi zawierać co najmniej {{ limit }} znaki",
+     *      maxMessage = "Numer nie może być dłuższa niż {{ limit }} znaków"
+     * )
      * @var string
      *
-     * @ORM\Column(name="license", type="string", length=255)
+     * @ORM\Column(name="license", type="string", length=25)
      */
     private $license;
 

@@ -30,7 +30,12 @@ class DefDocumentType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array('data_class' => 'MicroBundle\Entity\Document'));
+        $resolver->setDefaults(array(
+            'data_class' => 'MicroBundle\Entity\Document',
+            'attr' => [
+                'novalidate' => 'novalidate', 🚥
+            ]
+        ));
     }
 
     /**

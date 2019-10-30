@@ -37,7 +37,7 @@ class UserType extends AbstractType
                 ),
                 'first_options' => array('label' => 'form.password'),
                 'second_options' => array('label' => 'form.password_confirmation'),
-                'invalid_message' => 'fos_user.password.mismatch',
+                'invalid_message' => 'Hasła muszą być identyczne',
             ))
             ->add('roles', ChoiceType::class, array(
                     'label' => 'Roles',
@@ -55,7 +55,10 @@ class UserType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'MicroBundle\Entity\User'
+            'data_class' => 'MicroBundle\Entity\User',
+            'attr' => [
+                'novalidate' => 'novalidate'
+            ]
         ));
     }
 

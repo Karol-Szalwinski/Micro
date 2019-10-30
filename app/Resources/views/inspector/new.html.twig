@@ -71,19 +71,27 @@
                                     {{ form_label(form.name, 'Imię', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-6 mx-auto">
                                         {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'Podaj imię'} }) }}
-
+                                        <div class="form-error">
+                                            {{ form_errors(form.name) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(form.surname, 'Nazwisko', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-6 mx-auto">
                                         {{ form_widget(form.surname, { 'attr': {'class': 'form-control', 'placeholder': 'Podaj nazwisko'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(form.surname) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(form.license, 'Nr uprawnienia', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-6 mx-auto">
                                         {{ form_widget(form.license, { 'attr': {'class': 'form-control', 'placeholder': 'Podaj numer uprawnienia'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(form.license) }}
+                                        </div>
                                     </div>
                                 </div>
 

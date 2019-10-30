@@ -63,7 +63,9 @@
                                     {{ form_label(form.name, 'Nazwa', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-6 mx-auto">
                                         {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'Podaj nazwę'} }) }}
-
+                                        <div class="form-error">
+                                            {{ form_errors(form.name) }}
+                                        </div>
                                     </div>
                                 </div>
                                 {%  if type=='main' %}
@@ -71,7 +73,9 @@
                                     {{ form_label(form.main, 'Pieczątka główna', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-6 mx-auto">
                                         {{ form_widget(form.main, { 'attr': {'class': 'form-control'} }) }}
-
+                                        <div class="form-error">
+                                            {{ form_errors(form.main) }}
+                                        </div>
                                     </div>
                                 </div>
                                 {% endif %}
@@ -80,7 +84,9 @@
                                     {{ form_label(form.inspector, 'Inspektor', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-6 mx-auto">
                                         {{ form_widget(form.inspector, { 'attr': {'class': 'form-control'} }) }}
-
+                                        <div class="form-error">
+                                            {{ form_errors(form.inspector) }}
+                                        </div>
                                     </div>
                                 </div>
                                 {% endif %}
@@ -91,7 +97,9 @@
                                             {{ form_widget(form.image, { 'attr': {'class': 'custom-file-input'} }) }}
                                             <label class="custom-file-label" for="microbundle_stamp_image">Wybierz
                                                 plik</label>
-                                            {{ form_errors(form.image, {'attr': {'class': 'text-danger'} }) }}
+                                            <div class="form-error">
+                                                {{ form_errors(form.image) }}
+                                            </div>
                                         </div>
 
                                     </div>
@@ -101,8 +109,10 @@
                                     <div class="col-md-3 label-control">Podgląd pieczątki</div>
                                     <div class="col-md-6 mx-auto">
 
-                                        <a href="https://placeholder.com"><img id="preview"
-                                                                               src="https://via.placeholder.com/200x80"></a>
+                                        <a href="https://placeholder.com">
+                                            <img id="preview" src="https://via.placeholder.com/200x80"
+                                                 width="200" height="80">
+                                        </a>
 
                                     </div>
 

@@ -63,7 +63,9 @@
                                     {{ form_label(edit_form.name, 'Nazwa', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-6 mx-auto">
                                         {{ form_widget(edit_form.name, { 'attr': {'class': 'form-control', 'placeholder': 'Podaj nazwę'} }) }}
-
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.name) }}
+                                        </div>
                                     </div>
                                 </div>
                                 {%  if type=='main' %}
@@ -71,7 +73,9 @@
                                         {{ form_label(edit_form.main, 'Pieczątka główna', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                         <div class="col-md-6 mx-auto">
                                             {{ form_widget(edit_form.main, { 'attr': {'class': 'form-control'} }) }}
-
+                                            <div class="form-error">
+                                                {{ form_errors(edit_form.main) }}
+                                            </div>
                                         </div>
                                     </div>
                                 {% endif %}
@@ -80,7 +84,9 @@
                                         {{ form_label(edit_form.inspector, 'Inspektor', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                         <div class="col-md-6 mx-auto">
                                             {{ form_widget(edit_form.inspector, { 'attr': {'class': 'form-control'} }) }}
-
+                                            <div class="form-error">
+                                                {{ form_errors(edit_form.inspector) }}
+                                            </div>
                                         </div>
                                     </div>
                                 {% endif %}
@@ -101,7 +107,8 @@
                                     <div class="col-md-3 label-control">Podgląd pieczątki</div>
                                     <div class="col-md-6 mx-auto">
 
-                                            <img id="preview" src="{{ asset('uploads/images/' ~ stamp.image) }}">
+                                            <img id="preview" src="{{ asset('uploads/images/' ~ stamp.image) }}"
+                                                 width="200" height="80">
 
                                     </div>
 

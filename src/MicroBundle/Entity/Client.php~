@@ -113,7 +113,7 @@ class Client
     /**
      * @Assert\Length(
      *      max = 100,
-     *      maxMessage = "Numer lokalu nie może być dłuższy niż {{ limit }} znaków",
+     *      maxMessage = "Miasto nie może być dłuższy niż {{ limit }} znaków",
      * )
      * @var string
      *

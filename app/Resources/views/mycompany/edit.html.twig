@@ -71,37 +71,54 @@
                                     {{ form_label(edit_form.name, 'Nazwa firmy', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(edit_form.name, { 'attr': {'class': 'form-control'} }) }}
-
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.name) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(edit_form.street, 'Ulica i numer', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(edit_form.street, { 'attr': {'class': 'form-control'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.street) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(edit_form.postCode, 'Kod pocztowy', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(edit_form.postCode, { 'attr': {'class': 'form-control'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.postCode) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(edit_form.city, 'Miasto', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(edit_form.city, { 'attr': {'class': 'form-control'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.city) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(edit_form.taxNumber, 'NIP', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(edit_form.taxNumber, { 'attr': {'class': 'form-control'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.taxNumber) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     {{ form_label(edit_form.phoneNo, 'Telefon', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
                                         {{ form_widget(edit_form.phoneNo, { 'attr': {'class': 'form-control'} }) }}
+                                        <div class="form-error">
+                                            {{ form_errors(edit_form.phoneNo) }}
+                                        </div>
                                     </div>
                                 </div>
 

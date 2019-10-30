@@ -4,6 +4,7 @@ namespace MicroBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
@@ -21,7 +22,7 @@ class MyCompanyType extends AbstractType
             ->add('postCode')
             ->add('city')
             ->add('taxNumber')
-            ->add('phoneNo')
+            ->add('phoneNo', TelType::class, ['required' => false])
         ;
     }/**
      * {@inheritdoc}
@@ -29,7 +30,10 @@ class MyCompanyType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'MicroBundle\Entity\MyCompany'
+            'data_class' => 'MicroBundle\Entity\MyCompany',
+            'attr' => [
+                'novalidate' => 'novalidate',
+            ]
         ));
     }
 
