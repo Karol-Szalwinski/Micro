@@ -23,7 +23,7 @@
         <div class="content-header-left col-md-6 col-12">
             <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
                 <div class="btn-group" role="group">
-                    <a class="btn btn-outline-info round" href="{{ path('user_new') }}"><i
+                    <a class="btn btn-outline-info " href="{{ path('user_new') }}"><i
                                 class="la la-user-plus"></i> Dodaj nowego</a>
 
                     {#<button class="btn btn-outline-info round dropdown-toggle dropdown-menu-right" id="btnGroupDrop1"#}
@@ -60,20 +60,22 @@
                                    class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
                                 <thead>
                                 <tr>
-                                    <th>Id</th>
+                                    <th>Pokaż</th>
                                     <th>Login</th>
                                     <th>Imię</th>
                                     <th>Nazwisko</th>
                                     <th>Email</th>
-                                    <th>Zablokowany</th>
+                                    <th>Usunięty</th>
                                     <th>Rola</th>
                                     <th>Akcje</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for user in users %}
-                                    <tr onclick='location.href="{{ path('user_show', { 'id': user.id }) }}"'>
-                                        <td><a href="{{ path('user_show', { 'id': user.id }) }}">{{ user.id }}</a>
+                                    <tr class="{% if user.enabled == false %}text-warning{% endif %}" >
+                                        <td><a class="btn btn-outline-info btn-sm"
+                                               href="{{ path('user_show', { 'id': user.id }) }}">
+                                                <i class="la la-search"></i> Pokaż</a>
                                         </td>
                                         <td>{{ user.username }}</td>
                                         <td>{{ user.name }}</td>
@@ -81,9 +83,9 @@
                                         <td>{{ user.email }}</td>
                                         <td>
                                             {% if user.enabled == true %}
-                                                nie
+                                                Nie
                                             {% else %}
-                                                tak
+                                                Tak
                                             {% endif %}
                                         </td>
                                         <td>
@@ -105,26 +107,12 @@
                                         <td>
                                             <a href="{{ path('user_edit', { 'id': user.id }) }}"
                                                class="primary edit mr-1"><i class="la la-pencil"></i></a>
-                                            <a class="danger delete mr-1"><i class="la la-trash-o"></i></a>
-                                            <span class="dropdown">
-                                                                <a id="btnSearchDrop2" data-toggle="dropdown"
-                                                                   aria-haspopup="true" aria-expanded="true"
-                                                                   class="dropdown-toggle dropdown-menu-right"><i
-                                                                            class="la la-ellipsis-v"></i></a>
-                                                                <span aria-labelledby="btnSearchDrop2"
-                                                                      class="dropdown-menu mt-1 dropdown-menu-right">
-                                                                    <a href="{{ path('user_edit', { 'id': user.id }) }}"
-                                                                       class="dropdown-item"><i
-                                                                                class="ft-edit-2"></i>
-                                                                        Edytuj</a>
-                                                                    <a href="#" class="dropdown-item delete"><i
-                                                                                class="ft-trash-2"></i> Usuń</a>
-                                                                    <a href="{{ path('user_new') }}"
-                                                                       class="dropdown-item"><i
-                                                                                class="ft-plus-circle warning"></i> Dodaj</a>
-
-                                                                </span>
-                                                            </span>
+                                            {% if user.enabled %}
+                                                <a
+                                                        data-href="{{ path('user_delete', { 'id': user.id }) }}"
+                                                        class="danger delete-user-btn mr-1"><i
+                                                            class="la la-trash-o"></i></a>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -153,21 +141,9 @@
 
 {% block scripts %}
     <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
-
     <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/extensions/sweetalert.min.js') }}"></script>
 
-    <script>
-        $('#table-users').DataTable({
-            "language": {
-                "lengthMenu": "Pokaż _MENU_ wierszy na stronie",
-                "zeroRecords": "Niestety brak wyników",
-                "info": "Stron _PAGE_ z _PAGES_",
-                "infoEmpty": "Brak wierszy",
-                "infoFiltered": "(znaleziono z _MAX_ wszystkich wierszy)",
-                "search": "Szukaj"
-            },
-            "paging": false,
-        });
-    </script>
+    <script src="{{ asset('assets/js/user.js') }}"></script>
 
 {% endblock %}

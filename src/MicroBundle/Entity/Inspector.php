@@ -72,11 +72,20 @@ class Inspector
     private $stamps;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="deleted", type="boolean")
+     */
+    private $deleted;
+
+
+    /**
      * Inspector constructor.
      */
     public function __construct()
     {
         $this->stamps = new ArrayCollection();
+        $this->deleted = false;
     }
 
     /**
@@ -205,5 +214,29 @@ class Inspector
     public function getStamps()
     {
         return $this->stamps;
+    }
+
+    /**
+     * Set deleted.
+     *
+     * @param bool $deleted
+     *
+     * @return Inspector
+     */
+    public function setDeleted($deleted = true)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted.
+     *
+     * @return bool
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
     }
 }

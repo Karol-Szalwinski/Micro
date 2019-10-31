@@ -120,7 +120,7 @@ class StampController extends Controller
     }
 
     /**
-     * Deletes a stamp entity.
+     * Set stamp as deleted
      *
      * @Route("/{id}", name="stamp_delete")
      * @Method("POST")
@@ -130,9 +130,8 @@ class StampController extends Controller
     public function deleteAction(Stamp $stamp)
     {
 
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($stamp);
-            $em->flush();
+        $stamp->setDeleted();
+        $this->getDoctrine()->getManager()->flush();
 
         return $this->redirectToRoute('stamp_index');
     }

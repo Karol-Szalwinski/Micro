@@ -51,6 +51,13 @@ class Stamp
     private $main;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="deleted", type="boolean")
+     */
+    private $deleted;
+
+    /**
      * Many stamps have one inspector. This is the owning side.
      * @ORM\ManyToOne(targetEntity="Inspector", inversedBy="stamps")
      * @ORM\JoinColumn(name="inspector_id", referencedColumnName="id")
@@ -65,6 +72,7 @@ class Stamp
     public function __construct()
     {
         $this->main = false;
+        $this->deleted = false;
     }
 
 
@@ -184,5 +192,29 @@ class Stamp
     public function getInspector()
     {
         return $this->inspector;
+    }
+
+    /**
+     * Set deleted.
+     *
+     * @param bool $deleted
+     *
+     * @return Stamp
+     */
+    public function setDeleted($deleted = true)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted.
+     *
+     * @return bool
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
     }
 }

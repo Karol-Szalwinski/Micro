@@ -102,10 +102,10 @@ class DocumentController extends Controller
 // todo update
         $this->container->get('micro')->updateLastServiceDateDocument($document);
         $em = $this->getDoctrine()->getManager();
-        $mainStamps = $em->getRepository('MicroBundle:Stamp')->findBy(['main' => true]);
+        $mainStamps = $em->getRepository('MicroBundle:Stamp')->findBy(['main' => true, 'deleted' => false]);
         $stamps = [];
         foreach ($document->getInspectors() as $inspector) {
-            $inspectorStamps = $em->getRepository('MicroBundle:Stamp')->findBy(['inspector' => $inspector->getId()]);
+            $inspectorStamps = $em->getRepository('MicroBundle:Stamp')->findBy(['inspector' => $inspector->getId(), 'deleted' => false]);
             $stamps = array_merge($inspectorStamps, $stamps);
         }
 

@@ -65,11 +65,9 @@ class InspectorController extends Controller
      */
     public function showAction(Inspector $inspector)
     {
-        $deleteForm = $this->createDeleteForm($inspector);
 
         return $this->render('inspector/show.html.twig', array(
             'inspector' => $inspector,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -81,7 +79,6 @@ class InspectorController extends Controller
      */
     public function editAction(Request $request, Inspector $inspector)
     {
-        $deleteForm = $this->createDeleteForm($inspector);
         $editForm = $this->createForm('MicroBundle\Form\InspectorType', $inspector);
         $editForm->handleRequest($request);
 
@@ -94,43 +91,24 @@ class InspectorController extends Controller
         return $this->render('inspector/edit.html.twig', array(
             'inspector' => $inspector,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Deletes a inspector entity.
+     * Set inspector as deleted
      *
-     * @Route("/{id}", name="inspector_delete")
-     * @Method("DELETE")
+     * @Route("/delete/{id}", name="inspector_delete")
+     * @Method("POST")
+     * @param Inspector $inspector
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction(Request $request, Inspector $inspector)
+    public function deleteAction(Inspector $inspector)
     {
-        $form = $this->createDeleteForm($inspector);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($inspector);
-            $em->flush();
-        }
+        $inspector->setDeleted();
+        $this->getDoctrine()->getManager()->flush();
 
         return $this->redirectToRoute('inspector_index');
     }
 
-    /**
-     * Creates a form to delete a inspector entity.
-     *
-     * @param Inspector $inspector The inspector entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Inspector $inspector)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('inspector_delete', array('id' => $inspector->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
 }

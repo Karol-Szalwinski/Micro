@@ -65,11 +65,9 @@ class UserController extends Controller
      */
     public function showAction(User $user)
     {
-        $deleteForm = $this->createDeleteForm($user);
 
         return $this->render('user/show.html.twig', array(
             'user' => $user,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -81,7 +79,6 @@ class UserController extends Controller
      */
     public function editAction(Request $request, User $user)
     {
-        $deleteForm = $this->createDeleteForm($user);
         $editForm = $this->createForm('MicroBundle\Form\UserEditType', $user);
         $editForm->handleRequest($request);
 
@@ -94,26 +91,22 @@ class UserController extends Controller
         return $this->render('user/edit.html.twig', array(
             'user' => $user,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Deletes a user entity.
+     * Set user as deleted entity.
      *
-     * @Route("/{id}", name="user_delete")
-     * @Method("DELETE")
+     * @Route("/delete/{id}", name="user_delete")
+     * @Method("POST")
+     * @param User $user
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction(Request $request, User $user)
+    public function deleteAction(User $user)
     {
-        $form = $this->createDeleteForm($user);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($user);
-            $em->flush();
-        }
+        $user->setEnabled(false);
+        $this->getDoctrine()->getManager()->flush();
 
         return $this->redirectToRoute('user_index');
     }
@@ -139,20 +132,5 @@ class UserController extends Controller
             'user' => $user,
             'change_password_form' => $changePasswordForm->createView(),
         ));
-    }
-    /**
-     * Creates a form to delete a user entity.
-     *
-     * @param User $user The user entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(User $user)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('user_delete', array('id' => $user->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
     }
 }

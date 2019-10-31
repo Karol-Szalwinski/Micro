@@ -37,6 +37,7 @@ class MyCompany
     private $name;
 
     /**
+     * @Assert\NotBlank(message= "Ulica nie może być pusta")
      * @Assert\Length(
      *      min = 3,
      *      max = 40,
@@ -50,6 +51,7 @@ class MyCompany
     private $street;
 
     /**
+     * @Assert\NotBlank(message= "Kod pocztowy nie może być pusty")
      * @Assert\Regex(
      *     pattern     = "/\d{2}-\d{3}/",
      *     htmlPattern = "/\d{2}-\d{3}/",
@@ -62,6 +64,7 @@ class MyCompany
     private $postCode;
 
     /**
+     * @Assert\NotBlank(message= "Miasto nie może być puste")
      * @Assert\Length(
      *      max = 100,
      *      maxMessage = "Miasto nie może być dłuższy niż {{ limit }} znaków",
@@ -73,27 +76,28 @@ class MyCompany
     private $city;
 
     /**
+     * @Assert\NotBlank(message= "Podaj NIP")
      * @Assert\Regex(
-     *     pattern     = "/([0-9]{3})([0-9]{3})([0-9]{2})([0-9]{2})/i",
-     *     htmlPattern = "/([0-9]{3})([0-9]{3})([0-9]{2})([0-9]{2})/i",
-     *     message = "Wprowadź poprawny NIP"
+     *     pattern     = "/^((\d{3}[- ]\d{3}[- ]\d{2}[- ]\d{2})|(\d{3}[- ]\d{2}[- ]\d{2}[- ]\d{3}))$/",
+     *     htmlPattern = "^((\d{3}[- ]\d{3}[- ]\d{2}[- ]\d{2})|(\d{3}[- ]\d{2}[- ]\d{2}[- ]\d{3}))$",
+     *     message = "Wprowadź poprawny NIP 000-000-00-00 lub 000-00-00-000"
      * )
      * @var string
      *
-     * @ORM\Column(name="taxNumber", type="string", length=10, nullable=true)
+     * @ORM\Column(name="taxNumber", type="string", length=15, nullable=true)
      */
     private $taxNumber;
 
-
     /**
+     * @Assert\NotBlank(message= "Podaj Numer telefonu")
      * @Assert\Regex(
      *     pattern     = "/^(?:\(?\+?48)?(?:[-\.\(\)\s]*(\d)){9}\)?$/",
      *     htmlPattern = "/^(?:\(?\+?48)?(?:[-\.\(\)\s]*(\d)){9}\)?$/",
-     *     message = "Wprowadź poprawny polski nr telefonu"
+     *     message = "Wprowadź poprawny polski nr telefonu np. 000-000-000"
      * )
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="phoneNo", type="string", length=15, nullable=true)
+     * @ORM\Column(name="phone_no", type="string", length=20, nullable=true)
      */
     private $phoneNo;
 

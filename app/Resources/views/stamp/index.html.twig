@@ -90,26 +90,9 @@
                                         <td>
                                             <a href="{{ path('stamp_edit', { 'id': stamp.id }) }}"
                                                class="primary edit mr-1"><i class="la la-pencil"></i></a>
-                                            <a href="{{ path('stamp_delete', { 'id': stamp.id }) }}"
-                                               class="danger delete mr-1"><i class="la la-trash-o"></i></a>
+                                            <a data-href="{{ path('stamp_delete', { 'id': stamp.id }) }}"
+                                               class="danger delete-stamp-btn mr-1"><i class="la la-trash-o"></i></a>
 
-                                            <span class="dropdown">
-                                                                <a id="btnSearchDrop2" data-toggle="dropdown"
-                                                                   aria-haspopup="true" aria-expanded="true"
-                                                                   class="dropdown-toggle dropdown-menu-right"><i
-                                                                            class="la la-ellipsis-v"></i></a>
-                                                                <span aria-labelledby="btnSearchDrop2"
-                                                                      class="dropdown-menu mt-1 dropdown-menu-right">
-                                                                    <a href="{{ path('stamp_edit', { 'id': stamp.id }) }}"
-                                                                       class="dropdown-item"><i
-                                                                                class="ft-edit-2"></i>
-                                                                        Edytuj</a>
-                                                                    <a href="{{ path('stamp_delete', { 'id': stamp.id }) }}"
-                                                                       class="dropdown-item delete"><i
-                                                                                class="ft-trash-2"></i> Usuń</a>
-
-                                                                </span>
-                                                            </span>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -137,6 +120,11 @@
 
     <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
     <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/extensions/sweetalert.min.js') }}"></script>
+
+    <script src="{{ asset('assets/js/stamp.js') }}"></script>
+
+
 
 {% endblock %}
 

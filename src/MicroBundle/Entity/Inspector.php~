@@ -72,11 +72,20 @@ class Inspector
     private $stamps;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="deleted", type="boolean")
+     */
+    private $deleted;
+
+
+    /**
      * Inspector constructor.
      */
     public function __construct()
     {
         $this->stamps = new ArrayCollection();
+        $this->deleted = false;
     }
 
     /**
