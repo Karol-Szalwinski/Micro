@@ -139,6 +139,12 @@ class Document
      */
     private $pdfSettings;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="deleted", type="boolean")
+     */
+    private $deleted;
 
 
     /**
@@ -151,6 +157,7 @@ class Document
         $this->inspectionDate = new DateTime();
         $this->nextInspectionDate = new DateTime('now + 6 month');
         $this->pdfSettings = new PdfSettings($this);
+        $this->deleted = false;
     }
 
 
@@ -558,5 +565,29 @@ class Document
     public function getPdfSettings()
     {
         return $this->pdfSettings;
+    }
+
+    /**
+     * Set deleted.
+     *
+     * @param bool $deleted
+     *
+     * @return Document
+     */
+    public function setDeleted($deleted = true)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted.
+     *
+     * @return bool
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
     }
 }

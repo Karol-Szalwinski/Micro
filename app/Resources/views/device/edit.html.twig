@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Dodaj Urządzenie{% endblock %}
+{% block title %}Modyfikuj Urządzenie{% endblock %}
 
 {% block body %}
     <!-- Content header -->
@@ -12,10 +12,10 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ path('micro_default_index') }}">Główna</a>
                         </li>
-                        <li class="breadcrumb-item"><a href="{{ path('devicename_index') }}">Słownik Urządzeń</a>
+                        <li class="breadcrumb-item"><a href="{{ path('device_index') }}">Słownik Urządzeń</a>
                         </li>
 
-                        <li class="breadcrumb-item active">Dodaj Urządzenie
+                        <li class="breadcrumb-item active">Modyfikuj Urządzenie
                         </li>
 
                     </ol>
@@ -25,17 +25,9 @@
         <div class="content-header-left col-md-6 col-12">
             <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
                 <div class="btn-group" role="group">
-                    <a class="btn btn-outline-info round" href="{{ path('devicename_index') }}"><i
+                    <a class="btn btn-outline-info " href="{{ path('device_index') }}"><i
                                 class="la la-backward"></i> Wróć do słownika urządzeń</a>
 
-                    <button class="btn btn-outline-info round dropdown-toggle dropdown-menu-right" id="btnGroupDrop1"
-                            type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
-                                class="icon-cog3 icon-left"></i> Ustawienia
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1"><a class="dropdown-item"
-                                                                                  href="card-bootstrap.html">Bootstrap
-                            Cards</a><a class="dropdown-item" href="component-buttons-extended.html">Buttons
-                            Extended</a></div>
                 </div>
             </div>
         </div>
@@ -48,7 +40,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title" id="horz-layout-basic">Formularz tworzenia nowego urządzenia</h4>
+                        <h4 class="card-title" id="horz-layout-basic">Formularz modyfikacji urządzenia</h4>
                         <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                         <div class="heading-elements">
                             <ul class="list-inline mb-0">
@@ -62,26 +54,26 @@
                     <div class="card-content collpase show">
                         <div class="card-body">
 
-                            {{ form_start(form, { 'attr': {'class': 'form form-horizontal inputmask'} }) }}
+                            {{ form_start(edit_form, { 'attr': {'class': 'form form-horizontal inputmask'} }) }}
 
 
                             <div class="form-body">
-                                <h4 class="form-section"><i class="ft-user"></i> Dane Klienta</h4>
+                                <h4 class="form-section"><i class="ft-user"></i> Dane Urządzenia</h4>
                                 <div class="form-group row">
-                                    {{ form_label(form.name, 'Nazwa Urządzenia (*)', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    {{ form_label(edit_form.name, 'Nazwa Urządzenia (*)', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
-                                        {{ form_widget(form.name, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}
+                                        {{ form_widget(edit_form.name, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź nazwę'} }) }}
                                         <div class="form-error">
-                                            {{ form_errors(form.name) }}
+                                            {{ form_errors(edit_form.name) }}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    {{ form_label(form.shortname, 'Skrót widoczny w protokole (3-5 znaków) (*)', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
+                                    {{ form_label(edit_form.shortname, 'Skrót widoczny w protokole (3-5 znaków) (*)', { 'label_attr': {'class': 'col-md-3 label-control'} }) }}
                                     <div class="col-md-9 mx-auto">
-                                        {{ form_widget(form.shortname, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź skrót'} }) }}
+                                        {{ form_widget(edit_form.shortname, { 'attr': {'class': 'form-control', 'placeholder': 'Wprowadź skrót'} }) }}
                                         <div class="form-error">
-                                            {{ form_errors(form.shortname) }}
+                                            {{ form_errors(edit_form.name) }}
                                         </div>
                                     </div>
                                 </div>
@@ -95,7 +87,7 @@
                                         <i class="la la-check-square-o"></i> Zapisz
                                     </button>
                                 </div>
-                                {{ form_end(form) }}
+                                {{ form_end(edit_form) }}
                             </div>
                         </div>
                     </div>

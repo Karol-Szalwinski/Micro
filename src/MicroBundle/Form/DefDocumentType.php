@@ -33,7 +33,7 @@ class DefDocumentType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'MicroBundle\Entity\Document',
             'attr' => [
-                'novalidate' => 'novalidate', 🚥
+                'novalidate' => 'novalidate'
             ]
         ));
     }

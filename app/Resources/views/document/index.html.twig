@@ -20,24 +20,6 @@
                     </div>
                 </div>
             </div>
-            {#<div class="content-header-left col-md-6 col-12">#}
-                {#<div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">#}
-                    {#<div class="btn-group" role="group">#}
-                        {#<a class="btn btn-outline-info round" href="{{ path('document_index') }}"><i#}
-                                    {#class="la la-user-plus"></i> Dodaj nowy</a>#}
-
-                        {#<button class="btn btn-outline-info round dropdown-toggle dropdown-menu-right"#}
-                                {#id="btnGroupDrop1"#}
-                                {#type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i#}
-                                    {#class="icon-cog3 icon-left"></i> Ustawienia#}
-                        {#</button>#}
-                        {#<div class="dropdown-menu" aria-labelledby="btnGroupDrop1"><a class="dropdown-item"#}
-                                                                                      {#href="card-bootstrap.html">Bootstrap#}
-                                {#Cards</a><a class="dropdown-item" href="component-buttons-extended.html">Buttons#}
-                                {#Extended</a></div>#}
-                    {#</div>#}
-                {#</div>#}
-            {#</div>#}
         </div>
         <!-- Content header -->
 
@@ -47,7 +29,7 @@
                 <div class="card">
                     <div class="card-head">
                         <div class="card-header">
-                            <h4 class="card-title">Lista przeglądów PPOŻ</h4>
+                            <h4 class="card-title">Lista przeglądów</h4>
                             <div class="heading-elements mt-0">
                             </div>
                         </div>
@@ -61,7 +43,7 @@
                                        class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
                                     <thead>
                                     <tr>
-                                        <th>Numer</th>
+                                        <th>Pokaż</th>
                                         <th>Nazwa</th>
                                         <th>Klient</th>
                                         <th>Budynek</th>
@@ -75,8 +57,9 @@
                                     <tbody>
                                     {% for document in documents %}
                                         <tr>
-                                            <td>
-                                                <a href="{{ path('document_show', { 'id': document.id }) }}">{{ document.id }}</a>
+                                            <td><a class="btn btn-outline-info btn-sm"
+                                                   href="{{ path('document_show', { 'id': document.id }) }}">
+                                                    <i class="la la-search"></i> Pokaż</a>
                                             </td>
                                             <td>{{ document.name }}</td>
                                             <td>{{ document.building.client.name }}</td>
@@ -87,7 +70,9 @@
                                             <td>
                                                 <a href="{{ path('document_edit', { 'id': document.id }) }}"
                                                    class="primary edit mr-1"><i class="la la-pencil"></i></a>
-                                                <a class="danger delete mr-1"><i class="la la-trash-o"></i></a>
+                                                <a data-href="{{ path('document_delete', { 'id': document.id }) }}"
+                                                   class="danger delete-document-btn mr-1"><i
+                                                            class="la la-trash-o"></i></a>
 
                                             </td>
                                         </tr>
@@ -119,17 +104,8 @@
         <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
 
         <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>
-        <script>
-            $('#table-documents').DataTable({
-                "language": {
-                    "lengthMenu": "Pokaż _MENU_ wierszy na stronie",
-                    "zeroRecords": "Niestety brak wyników",
-                    "info": "Stron _PAGE_ z _PAGES_",
-                    "infoEmpty": "Brak wierszy",
-                    "infoFiltered": "(znaleziono z _MAX_ wszystkich wierszy)",
-                    "search": "Szukaj"
-                },
-                "paging": false,
-            });
-        </script>
+        <script src="{{ asset('app-assets/vendors/js/extensions/sweetalert.min.js') }}"></script>
+
+        <script src="{{ asset('assets/js/document-index.js') }}"></script>
+
     {% endblock %}

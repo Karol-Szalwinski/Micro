@@ -2,6 +2,7 @@
 
 namespace MicroBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -45,6 +46,10 @@ class DocumentType extends AbstractType
             ->add('scope')
             ->add('inspectors', EntityType::class, [// looks for choices from this entity
                 'class' => Inspector::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('i')
+                        ->where('i.deleted = false');
+                },
 
                 // uses the User.username property as the visible option string
                 'choice_label' => 'fullname',
@@ -63,7 +68,7 @@ class DocumentType extends AbstractType
     {
         $resolver->setDefaults(array('data_class' => 'MicroBundle\Entity\Document',
             'attr' => [
-                'novalidate' => 'novalidate', // comment me to reactivate the html5 validation!  🚥
+                'novalidate' => 'novalidate'
             ]
         ));
     }

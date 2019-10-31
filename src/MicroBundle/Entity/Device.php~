@@ -57,12 +57,22 @@ class Device
      */
     private $inBuilding;
 
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="deleted", type="boolean")
+     */
+    private $deleted;
+
+
     /**
      * Device constructor.
      */
     public function __construct()
     {
         $this->inBuilding = true;
+        $this->deleted = false;
     }
 
 
@@ -146,5 +156,29 @@ class Device
     public function getInBuilding()
     {
         return $this->inBuilding;
+    }
+
+    /**
+     * Set deleted.
+     *
+     * @param bool $deleted
+     *
+     * @return Device
+     */
+    public function setDeleted($deleted = true)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted.
+     *
+     * @return bool
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
     }
 }

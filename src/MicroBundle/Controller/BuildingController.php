@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use MicroBundle\Entity\Building;
 use MicroBundle\Entity\Client;
 use MicroBundle\Entity\BuildDevice;
+use MicroBundle\Entity\Document;
 use MicroBundle\Entity\LoopDev;
 use MicroBundle\Entity\PdfDocument;
 use MicroBundle\Services\FileUploader;
@@ -264,6 +265,55 @@ class BuildingController extends Controller
 
             return new JsonResponse($jsonData);
         }
+    }
+
+    /**
+     * Set building as deleted
+     *
+     * @Route("/delete/{id}", name="building_delete")
+     * @Method("POST")
+     * @param Building $building
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+//    public function deleteAction(Building $building)
+//    {
+//
+//        $building->setDeleted();
+
+//        foreach($document->getDocDevices() as $docDevice){
+//            $docDevice->setVisible(false);
+//        }
+//        $document->getBuilding()->removeDocument($document);
+//        $document->setBuilding(null);
+//        $this->getDoctrine()->getManager()->flush();
+//
+//        return $this->redirectToRoute('document_index');
+//    }
+
+    /**
+     * Set document in building as deleted
+     *
+     * @Route("/{{id}/delete/{document}", name="building_delete_document")
+     * @Method("POST")
+     * @param Building $building
+     * @param Document $document
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function deleteDocumentAction(Building $building, Document $document)
+    {
+
+        $document->setDeleted();
+
+        foreach($document->getDocDevices() as $docDevice){
+            $docDevice->setVisible(false);
+        }
+        $building->removeDocument($document);
+        $document->setBuilding(null);
+        $this->getDoctrine()->getManager()->flush();
+
+        return $this->redirectToRoute('building_show', [
+            'id' => $building->getId()
+        ]);
     }
 
 }

@@ -23,10 +23,10 @@
         <div class="content-header-left col-md-6 col-12">
             <div class="btn-group float-md-right" role="group" aria-label="Button group with nested dropdown">
                 <div class="btn-group" role="group">
-                    <a class="btn btn-outline-info round" href="{{ path('devicename_new') }}"><i
+                    <a class="btn btn-outline-info" href="{{ path('device_new') }}"><i
                                 class="la la-user-plus"></i> Dodaj nowe</a>
 
-                    <button class="btn btn-outline-info round dropdown-toggle dropdown-menu-right" id="btnGroupDrop1"
+                    <button class="btn btn-outline-info dropdown-toggle dropdown-menu-right" id="btnGroupDrop1"
                             type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
                                 class="icon-cog3 icon-left"></i> Ustawienia
                     </button>
@@ -67,45 +67,32 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for deviceName in deviceNames %}
+                                {% for device in deviceNames %}
                                     <tr>
-                                        <td>{{ deviceName.id }}</td>
-                                        <td onclick='location.href = "{{ path('devicename_show', { 'id': deviceName.id }) }}";'>
+                                        <td><a class="btn btn-outline-info btn-sm"
+                                               href="{{ path('device_show', { 'id': device.id }) }}">
+                                                <i class="la la-search"></i> Pokaż</a>
+                                        </td>
+                                        <td >
                                             <div class="media">
 
                                                 <div class="media-body media-middle">
-                                                    <a class="media-heading name">{{ deviceName.name }}</a>
+                                                    <a class="media-heading name">{{ device.name }}</a>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="text-center"
-                                            onclick='location.href = "{{ path('devicename_show', { 'id': deviceName.id }) }}";'>
-                                            <div>{{ deviceName.shortname }}</div>
+                                            >
+                                            <div>{{ device.shortname }}</div>
                                         </td>
 
                                         <td>
-                                            <a href="{{ path('devicename_edit', { 'id': deviceName.id }) }}"
+                                            <a href="{{ path('device_edit', { 'id': device.id }) }}"
                                                class="primary edit mr-1"><i class="la la-pencil"></i></a>
-                                            <a class="danger delete mr-1"><i class="la la-trash-o"></i></a>
-                                            <span class="dropdown">
-                                                                <a id="btnSearchDrop2" data-toggle="dropdown"
-                                                                   aria-haspopup="true" aria-expanded="true"
-                                                                   class="dropdown-toggle dropdown-menu-right"><i
-                                                                            class="la la-ellipsis-v"></i></a>
-                                                                <span aria-labelledby="btnSearchDrop2"
-                                                                      class="dropdown-menu mt-1 dropdown-menu-right">
-                                                                    <a href="{{ path('devicename_edit', { 'id': deviceName.id }) }}"
-                                                                       class="dropdown-item"><i
-                                                                                class="ft-edit-2"></i>
-                                                                        Edytuj</a>
-                                                                    <a href="#" class="dropdown-item delete"><i
-                                                                                class="ft-trash-2"></i> Usuń</a>
-                                                                    <a href="{{ path('devicename_new') }}"
-                                                                       class="dropdown-item"><i
-                                                                                class="ft-plus-circle warning"></i> Dodaj</a>
+                                            <a data-href="{{ path('device_delete', { 'id': device.id }) }}"
+                                               class="danger delete-device-btn mr-1"><i
+                                                        class="la la-trash-o"></i></a>
 
-                                                                </span>
-                                                            </span>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -132,5 +119,10 @@
     <script src="{{ asset('app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
 
     <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>
+
+    <script src="{{ asset('app-assets/vendors/js/extensions/sweetalert.min.js') }}"></script>
+
+    <script src="{{ asset('assets/js/device.js') }}"></script>
+
 
 {% endblock %}

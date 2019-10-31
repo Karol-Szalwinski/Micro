@@ -162,19 +162,21 @@
                                 <thead>
 
                                 <tr>
-                                    <th>Numer</th>
+                                    <th>Pokaż</th>
                                     <th>Nazwa</th>
                                     <th>Data przeglądu</th>
                                     <th>Data następnego</th>
                                     <th>Ilość urządzeń</th>
+                                    <th>Akcje</th>
 
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for document in building.documents|sort %}
-                                    <tr onclick='location.href = "{{ path('document_show', { 'id': document.id }) }}";'>
-                                        <td>
-                                            <a href="{{ path('document_show', { 'id': document.id }) }}">{{ document.id }}</a>
+                                    <tr>
+                                        <td><a class="btn btn-outline-info btn-sm"
+                                               href="{{ path('document_show', { 'id': document.id }) }}">
+                                                <i class="la la-search"></i> Pokaż</a>
                                         </td>
                                         <td>
                                             {{ document.name }}
@@ -182,17 +184,24 @@
                                         <td>{% if document.inspectionDate %}{{ document.inspectionDate|date('d-m-Y') }}{% endif %}</td>
                                         <td>{% if document.nextInspectionDate %}{{ document.nextInspectionDate|date('d-m-Y') }}{% endif %}</td>
                                         <td>{{ document.docDevices|length }}</td>
+                                        <td>
 
+                                            <a data-href="{{ path('building_delete_document', { 'id': building.id, 'document': document.id }) }}"
+                                               class="danger delete-document-btn mr-1"><i
+                                                        class="la la-trash-o"></i></a>
+
+                                        </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <th>Numer</th>
+                                    <th>Pokaż</th>
                                     <th>Nazwa</th>
                                     <th>Data przeglądu</th>
                                     <th>Data następnego</th>
                                     <th>Ilość urządzeń</th>
+                                    <th>Akcje</th>
                                 </tfoot>
                             </table>
                         </div>

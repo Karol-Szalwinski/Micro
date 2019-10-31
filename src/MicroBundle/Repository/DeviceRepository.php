@@ -23,4 +23,12 @@ class DeviceRepository extends \Doctrine\ORM\EntityRepository
         return $dql;
     }
 
+    /**
+     * @return array
+     */
+    public function findAll()
+    {
+        return $this->findBy(['deleted' => false], ['name' => 'ASC']);
+    }
+
 }

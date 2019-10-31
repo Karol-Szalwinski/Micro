@@ -20,7 +20,8 @@ class DocumentRepository extends \Doctrine\ORM\EntityRepository
         $qb = $this->createQueryBuilder('Document');
         $qb->add('select', 'f')
             ->add('from', 'MicroBundle:Document f')
-            ->add('where', 'f != :id')
+            ->where('f != :id')
+            ->andWhere('f.deleted = false')
             ->setParameter('id', $id);
         return $qb->getQuery()->getResult();
     }
@@ -100,6 +101,14 @@ AND build_device.loop_no = ?
         $result = $statement->fetchAll(PDO::FETCH_OBJ, 'MicroBundle\Entity\BuildDevice');
 
         return $result;
+    }
+
+    /**
+     * @return array
+     */
+    public function findAll()
+    {
+        return $this->findBy(['deleted' => false], ['name' => 'ASC']);
     }
 
 }

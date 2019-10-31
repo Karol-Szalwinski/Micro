@@ -10,14 +10,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component
 /**
  * Devicename controller.
  *
- * @Route("devicename")
+ * @Route("device")
  */
 class DeviceController extends Controller
 {
     /**
      * Lists all deviceName entities.
      *
-     * @Route("/", name="devicename_index")
+     * @Route("/", name="device_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -26,15 +26,13 @@ class DeviceController extends Controller
 
         $deviceNames = $em->getRepository('MicroBundle:Device')->findAll();
 
-        return $this->render('devicename/index.html.twig', array(
-            'deviceNames' => $deviceNames,
-        ));
+        return $this->render('device/index.html.twig', array('deviceNames' => $deviceNames,));
     }
 
     /**
      * Creates a new deviceName entity.
      *
-     * @Route("/new", name="devicename_new")
+     * @Route("/new", name="device_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -48,89 +46,59 @@ class DeviceController extends Controller
             $em->persist($deviceName);
             $em->flush();
 
-            return $this->redirectToRoute('devicename_show', array('id' => $deviceName->getId()));
+            return $this->redirectToRoute('device_show', array('id' => $deviceName->getId()));
         }
 
-        return $this->render('devicename/new.html.twig', array(
-            'deviceName' => $deviceName,
-            'form' => $form->createView(),
-        ));
+        return $this->render('device/new.html.twig', array('deviceName' => $deviceName, 'form' => $form->createView(),));
     }
 
     /**
      * Finds and displays a deviceName entity.
      *
-     * @Route("/{id}", name="devicename_show")
+     * @Route("/{id}", name="device_show")
      * @Method("GET")
      */
     public function showAction(Device $deviceName)
     {
-        $deleteForm = $this->createDeleteForm($deviceName);
 
-        return $this->render('devicename/show.html.twig', array(
-            'deviceName' => $deviceName,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('device/show.html.twig', array('deviceName' => $deviceName));
     }
 
     /**
      * Displays a form to edit an existing deviceName entity.
      *
-     * @Route("/{id}/edit", name="devicename_edit")
+     * @Route("/{id}/edit", name="device_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, Device $deviceName)
     {
-        $deleteForm = $this->createDeleteForm($deviceName);
         $editForm = $this->createForm('MicroBundle\Form\DeviceType', $deviceName);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('devicename_edit', array('id' => $deviceName->getId()));
+            return $this->redirectToRoute('device_edit', array('id' => $deviceName->getId()));
         }
 
-        return $this->render('devicename/edit.html.twig', array(
-            'deviceName' => $deviceName,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('device/edit.html.twig', array('deviceName' => $deviceName, 'edit_form' => $editForm->createView()));
     }
 
     /**
-     * Deletes a deviceName entity.
+     * Set device as deleted
      *
-     * @Route("/{id}", name="devicename_delete")
-     * @Method("DELETE")
+     * @Route("/delete/{id}", name="device_delete")
+     * @Method("POST")
+     * @param Device $device
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction(Request $request, Device $deviceName)
+    public function deleteAction(Device $device)
     {
-        $form = $this->createDeleteForm($deviceName);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($deviceName);
-            $em->flush();
-        }
+        $device->setDeleted();
+        $this->getDoctrine()->getManager()->flush();
 
-        return $this->redirectToRoute('devicename_index');
+        return $this->redirectToRoute('device_index');
     }
 
-    /**
-     * Creates a form to delete a deviceName entity.
-     *
-     * @param Device $deviceName The deviceName entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Device $deviceName)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('devicename_delete', array('id' => $deviceName->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
 }

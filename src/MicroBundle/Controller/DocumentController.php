@@ -315,4 +315,27 @@ class DocumentController extends Controller
         }
     }
 
+    /**
+     * Set inspector as deleted
+     *
+     * @Route("/delete/{id}", name="document_delete")
+     * @Method("POST")
+     * @param Document $document
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function deleteAction(Document $document)
+    {
+
+        $document->setDeleted();
+
+        foreach($document->getDocDevices() as $docDevice){
+            $docDevice->setVisible(false);
+        }
+        $document->getBuilding()->removeDocument($document);
+        $document->setBuilding(null);
+        $this->getDoctrine()->getManager()->flush();
+
+        return $this->redirectToRoute('document_index');
+    }
+
 }
