@@ -113,4 +113,12 @@ SET Tabela1.temp_service_date = Tabela2.new_date
         $statement->execute();
 
     }
+
+    /**
+     * @return array
+     */
+    public function findAll()
+    {
+        return $this->findBy(['deleted' => false]);
+    }
 }

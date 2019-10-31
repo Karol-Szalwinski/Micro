@@ -2,6 +2,7 @@
 
 namespace MicroBundle\Controller;
 
+use MicroBundle\Entity\Building;
 use MicroBundle\Entity\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -74,11 +75,9 @@ class ClientController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $mainCategories = $em->getRepository('MicroBundle:Category')->findBy(['parent' => null]);
-        $deleteForm = $this->createDeleteForm($client);
 
         return $this->render('client/show.html.twig', array(
             'client' => $client,
-            'delete_form' => $deleteForm->createView(),
             'mainCategories' => $mainCategories
         ));
     }
@@ -93,7 +92,6 @@ class ClientController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $mainCategories = $em->getRepository('MicroBundle:Category')->findBy(['parent' => null]);
-        $deleteForm = $this->createDeleteForm($client);
         $editForm = $this->createForm('MicroBundle\Form\ClientType', $client);
         $editForm->handleRequest($request);
 
@@ -106,44 +104,87 @@ class ClientController extends Controller
         return $this->render('client/edit.html.twig', array(
             'client' => $client,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
             'mainCategories' => $mainCategories
         ));
     }
 
     /**
-     * Deletes a client entity.
+     * Set client as deleted
      *
-     * @Route("/{id}", name="client_delete")
-     * @Method("DELETE")
+     * @Route("/delete/{id}", name="client_delete")
+     * @Method("POST")
+     * @param Client $client
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction(Request $request, Client $client)
+    public function deleteAction(Client $client)
     {
-        $form = $this->createDeleteForm($client);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($client);
-            $em->flush();
+        $em = $this->getDoctrine()->getManager();
+
+        $client->setDeleted();
+
+        foreach($client->getBuildings() as $building){
+
+
+            foreach($building->getDocuments() as $document){
+
+                $document->setDeleted();
+
+                foreach($document->getDocDevices() as $docDevice){
+                    $docDevice->setVisible(false);
+                }
+                $building->removeDocument($document);
+                $document->setBuilding(null);
+
+            }
+            $building->getClient()->removeBuilding($building);
+            $building->setClient(null);
+
         }
+
+        foreach($client->getOfferts() as $offert) {
+            $client->removeOffert($offert);
+            $offert->removeClient($client);
+
+        }
+
+        $em->flush();
 
         return $this->redirectToRoute('client_index');
     }
 
     /**
-     * Creates a form to delete a client entity.
+     * Set Client's building as deleted
      *
-     * @param Client $client The client entity
-     *
-     * @return \Symfony\Component\Form\Form The form
+     * @Route("/{{id}/delete/{building}", name="client_delete_building")
+     * @Method("POST")
+     * @param Client $client
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    private function createDeleteForm(Client $client)
+    public function deleteBuildingAction(Client $client, Building $building)
     {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('client_delete', array('id' => $client->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
+
+        $building->setDeleted();
+
+        foreach($building->getDocuments() as $document){
+
+            $document->setDeleted();
+
+            foreach($document->getDocDevices() as $docDevice){
+                $docDevice->setVisible(false);
+            }
+            $building->removeDocument($document);
+            $document->setBuilding(null);
+
+        }
+        $client->removeBuilding($building);
+        $building->setClient(null);
+        $this->getDoctrine()->getManager()->flush();
+
+        return $this->redirectToRoute('client_show', [
+            'id' => $client->getId()
+        ]);
     }
+
+
 }

@@ -10,4 +10,11 @@ namespace MicroBundle\Repository;
  */
 class ClientRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * @return array
+     */
+    public function findAll()
+    {
+        return $this->findBy(['deleted' => false]);
+    }
 }

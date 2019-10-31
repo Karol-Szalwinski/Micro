@@ -275,20 +275,28 @@ class BuildingController extends Controller
      * @param Building $building
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-//    public function deleteAction(Building $building)
-//    {
-//
-//        $building->setDeleted();
+    public function deleteAction(Building $building)
+    {
 
-//        foreach($document->getDocDevices() as $docDevice){
-//            $docDevice->setVisible(false);
-//        }
-//        $document->getBuilding()->removeDocument($document);
-//        $document->setBuilding(null);
-//        $this->getDoctrine()->getManager()->flush();
-//
-//        return $this->redirectToRoute('document_index');
-//    }
+        $building->setDeleted();
+
+        foreach($building->getDocuments() as $document){
+
+            $document->setDeleted();
+
+            foreach($document->getDocDevices() as $docDevice){
+                $docDevice->setVisible(false);
+            }
+            $building->removeDocument($document);
+            $document->setBuilding(null);
+
+        }
+        $building->getClient()->removeBuilding($building);
+        $building->setClient(null);
+        $this->getDoctrine()->getManager()->flush();
+
+        return $this->redirectToRoute('building_index');
+    }
 
     /**
      * Set document in building as deleted

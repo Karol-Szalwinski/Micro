@@ -147,7 +147,6 @@ class Document
     private $deleted;
 
 
-
     /**
      * Constructor
      */
@@ -566,5 +565,29 @@ class Document
     public function getPdfSettings()
     {
         return $this->pdfSettings;
+    }
+
+    /**
+     * Set deleted.
+     *
+     * @param bool $deleted
+     *
+     * @return Document
+     */
+    public function setDeleted($deleted = true)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted.
+     *
+     * @return bool
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
     }
 }

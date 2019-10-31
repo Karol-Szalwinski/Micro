@@ -136,6 +136,13 @@ class Building
      */
     private $pdfDocuments;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="deleted", type="boolean")
+     */
+    private $deleted;
+
 
     /**
      * Constructor
@@ -145,6 +152,7 @@ class Building
         $this->buildDevices = new ArrayCollection();
         $this->documents = new ArrayCollection();
         $this->pdfDocuments = new ArrayCollection();
+        $this->deleted = false;
     }
 
 
@@ -480,5 +488,29 @@ class Building
     public function getPdfDocuments()
     {
         return $this->pdfDocuments;
+    }
+
+    /**
+     * Set deleted.
+     *
+     * @param bool $deleted
+     *
+     * @return Building
+     */
+    public function setDeleted($deleted = true)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted.
+     *
+     * @return bool
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
     }
 }

@@ -52,7 +52,7 @@
                                    class="table table-white-space table-bordered row-grouping display no-wrap icheck table-middle text-center">
                                 <thead>
                                 <tr>
-                                    <th>Id</th>
+                                    <th>Pokaz</th>
                                     <th>Nazwa</th>
                                     <th>Klient</th>
                                     <th>Ulica</th>
@@ -65,8 +65,11 @@
                                 <tbody>
                                 {% for building in buildings %}
                                     <tr>
-                                        <td>{{ building.id }}</td>
-                                        <td onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>
+                                        <td><a class="btn btn-outline-info btn-sm"
+                                               href="{{ path('building_show', { 'id': building.id }) }}">
+                                                <i class="la la-search"></i> Pokaż</a>
+                                        </td>
+                                        <td>
                                             <div class="media">
                                                 {#<div class="media-left pr-1"><span#}
                                                             {#class="avatar avatar-sm avatar-online rounded-circle"><img#}
@@ -78,53 +81,37 @@
                                             </div>
                                         </td>
                                         <td class="text-center"
-                                            onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>
+                                            >
                                             <div>{{ building.client.name }}</div>
                                         </td>
                                         <td class="text-center"
-                                            onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>
+                                            >
                                             <div>{{ building.street }} {{ building.houseNo }}
                                                 {% if building.flatNo is not null %}/ {{ building.flatNo }}{%  endif %}</div>
                                         </td>
                                         <td class="text-center"
-                                            onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>
+                                            >
                                             {{ building.city }}
                                         </td>
                                         <td class="text-center"
-                                            onclick='location.href = "{{ path('building_show', { 'id': building.id }) }}";'>
+                                            >
                                             {{ building.documents|length }}
                                         </td>
 
                                         <td>
                                             <a href="{{ path('building_edit', { 'id': building.id }) }}"
                                                class="primary edit mr-1"><i class="la la-pencil"></i></a>
-                                            <a class="danger delete mr-1"><i class="la la-trash-o"></i></a>
-                                            <span class="dropdown">
-                                                                <a id="btnSearchDrop2" data-toggle="dropdown"
-                                                                   aria-haspopup="true" aria-expanded="true"
-                                                                   class="dropdown-toggle dropdown-menu-right"><i
-                                                                            class="la la-ellipsis-v"></i></a>
-                                                                <span aria-labelledby="btnSearchDrop2"
-                                                                      class="dropdown-menu mt-1 dropdown-menu-right">
-                                                                    <a href="{{ path('building_edit', { 'id': building.id }) }}"
-                                                                       class="dropdown-item"><i
-                                                                                class="ft-edit-2"></i>
-                                                                        Edytuj</a>
-                                                                    <a href="#" class="dropdown-item delete"><i
-                                                                                class="ft-trash-2"></i> Usuń</a>
-                                                                    {#<a href="{{ path('building_new') }}"#}
-                                                                       {#class="dropdown-item"><i#}
-                                                                                {#class="ft-plus-circle warning"></i> Dodaj</a>#}
+                                            <a data-href="{{ path('building_delete', { 'id': building.id }) }}"
+                                               class="danger delete-building-btn mr-1"><i
+                                                        class="la la-trash-o"></i></a>
 
-                                                                </span>
-                                                            </span>
                                         </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <th>Id</th>
+                                    <th>Pokaż</th>
                                     <th>Nazwa</th>
                                     <th>Klient</th>
                                     <th>Ulica</th>
@@ -148,18 +135,9 @@
 
     <script src="{{ asset('app-assets/js/scripts/tables/datatables/datatable-basic.js') }}"></script>
 
-    <script>
-        $('#table-buildings').DataTable({
-            "language": {
-                "lengthMenu": "Pokaż _MENU_ wierszy na stronie",
-                "zeroRecords": "Niestety brak wyników",
-                "info": "Stron _PAGE_ z _PAGES_",
-                "infoEmpty": "Brak wierszy",
-                "infoFiltered": "(znaleziono z _MAX_ wszystkich wierszy)",
-                "search": "Szukaj"
-            },
-            "paging": false,
-        });
-    </script>
+    <script src="{{ asset('app-assets/vendors/js/extensions/sweetalert.min.js') }}"></script>
 
+    <script src="{{ asset('assets/js/building-index.js') }}"></script>
+
+  
 {% endblock %}

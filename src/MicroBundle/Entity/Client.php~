@@ -152,6 +152,13 @@ class Client
      */
     private $offerts;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="deleted", type="boolean")
+     */
+    private $deleted;
+
 
     
 
@@ -164,6 +171,7 @@ class Client
         $this->buildings = new ArrayCollection();
         $this->offerts = new ArrayCollection();
         $this->addDate = new \DateTime();
+        $this->deleted = false;
     }
 
     /**

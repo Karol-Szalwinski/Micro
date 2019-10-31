@@ -108,7 +108,7 @@ AND build_device.loop_no = ?
      */
     public function findAll()
     {
-        return $this->findBy(['deleted' => false], ['name' => 'ASC']);
+        return $this->findBy(['deleted' => false]);
     }
 
 }

@@ -173,6 +173,7 @@
                                 </thead>
                                 <tbody>
                                 {% for document in building.documents|sort %}
+
                                     <tr>
                                         <td><a class="btn btn-outline-info btn-sm"
                                                href="{{ path('document_show', { 'id': document.id }) }}">
