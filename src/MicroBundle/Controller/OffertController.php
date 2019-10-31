@@ -152,8 +152,6 @@ class OffertController extends Controller
             }//client from form
             $clientForm = $offert->getClients()->first();
             $clientId = $clientForm->getId();
-            dump($oldClient);
-            dump($offert);
             //todo refactor
             //if client have no id - is new
             if (!$clientId) {
@@ -199,11 +197,7 @@ class OffertController extends Controller
                 $offert->removeClient($clientForm);
 
                 //odpuść zmiany w starym elemencie
-                dump($dbClient);
-                dump($offert);
             }
-            dump($offert);
-            dump($offert->getClients()->first());
             $em->flush($offert->getClients()->first());
             $em->flush($offert);
             return $this->redirectToRoute('offert_index');
